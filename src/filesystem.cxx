@@ -2,9 +2,14 @@
 #include <pane/system.hxx>
 
 namespace pane::fs {
-file::file(HANDLE handle)
-    : handle { handle } {
-    //
+auto file::create(const std::filesystem::path& path) -> std::expected<Self, std::u8string> {
+    if (auto handle {
+            ::CreateFile2(path.c_str(), GENERIC_READ | GENERIC_WRITE, 0, CREATE_NEW, nullptr) };
+        handle != INVALID_HANDLE_VALUE) {
+        return Self { .handle { handle } };
+    } else {
+        return std::unexpected(pane::sys::last_error());
+    }
 }
 
 auto app_data() -> std::expected<std::filesystem::path, std::u8string> {
@@ -47,16 +52,6 @@ auto create_directory(const std::filesystem::path& path,
     if (auto result { ::CreateDirectoryExW(template_directory.c_str(), path.c_str(), nullptr) };
         result != 0) {
         return path;
-    } else {
-        return std::unexpected(pane::sys::last_error());
-    }
-}
-
-auto create_file(const std::filesystem::path& path) -> std::expected<file, std::u8string> {
-    if (auto result {
-            ::CreateFile2(path.c_str(), GENERIC_READ | GENERIC_WRITE, 0, CREATE_NEW, nullptr) };
-        result != 0) {
-        return file { result };
     } else {
         return std::unexpected(pane::sys::last_error());
     }

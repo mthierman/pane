@@ -10,7 +10,9 @@
 
 namespace pane::fs {
 struct file {
-    explicit file(::HANDLE);
+    using Self = file;
+
+    auto create(const std::filesystem::path& path) -> std::expected<Self, std::u8string>;
 
     wil::unique_handle handle;
 };
