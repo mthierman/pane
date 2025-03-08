@@ -6,4 +6,5 @@ target_link_libraries(
     json
     PRIVATE pane::pane
             pane::flags
+            glaze::glaze
     )

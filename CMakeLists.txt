@@ -80,12 +80,12 @@ target_compile_features(
 target_link_libraries(
     ${PROJECT_NAME}
     PRIVATE ${PROJECT_NAME}_flags
-    PUBLIC icu
-           ada::ada
-           glaze::glaze
-           microsoft::webview2
-           microsoft::wil
-           microsoft::cppwinrt
+            icu
+            ada::ada
+            glaze::glaze
+            microsoft::webview2
+            microsoft::wil
+            microsoft::cppwinrt
     )
 
 if(PROJECT_IS_TOP_LEVEL)
