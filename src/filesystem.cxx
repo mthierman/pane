@@ -12,6 +12,16 @@ auto file::create(const std::filesystem::path& path) -> std::expected<Self, std:
     }
 }
 
+auto file::open(const std::filesystem::path& path) -> std::expected<Self, std::u8string> {
+    if (auto handle {
+            ::CreateFile2(path.c_str(), GENERIC_READ | GENERIC_WRITE, 0, OPEN_EXISTING, nullptr) };
+        handle != INVALID_HANDLE_VALUE) {
+        return Self { .handle { handle } };
+    } else {
+        return std::unexpected(pane::sys::last_error());
+    }
+}
+
 auto app_data() -> std::expected<std::filesystem::path, std::u8string> {
     wil::unique_cotaskmem_string buffer;
 
