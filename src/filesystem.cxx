@@ -54,12 +54,12 @@ namespace directory {
 
 namespace file {
     auto move(const std::filesystem::path& origin, const std::filesystem::path& destination)
-        -> bool {
+        -> std::expected<std::filesystem::path, std::u8string> {
         if (auto result { ::MoveFileW(origin.c_str(), destination.c_str()) }; result != 0) {
-            return true;
+            return destination;
+        } else {
+            return std::unexpected(pane::sys::last_error());
         }
-
-        return false;
     }
 
     auto copy(const std::filesystem::path& origin, const std::filesystem::path& destination)

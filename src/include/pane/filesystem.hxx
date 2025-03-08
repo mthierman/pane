@@ -23,7 +23,7 @@ namespace directory {
 
 namespace file {
     auto move(const std::filesystem::path& origin, const std::filesystem::path& destination)
-        -> bool;
+        -> std::expected<std::filesystem::path, std::u8string>;
     auto copy(const std::filesystem::path& origin, const std::filesystem::path& destination)
         -> bool;
     auto erase(const std::filesystem::path& path) -> bool;
