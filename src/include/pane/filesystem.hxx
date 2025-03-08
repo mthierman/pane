@@ -17,7 +17,8 @@ namespace directory {
     auto from_path(const std::filesystem::path& path)
         -> std::expected<std::filesystem::path, std::u8string>;
     auto from_template(const std::filesystem::path& path,
-                       const std::filesystem::path& template_directory) -> bool;
+                       const std::filesystem::path& template_directory)
+        -> std::expected<std::filesystem::path, std::u8string>;
 } // namespace directory
 
 namespace file {

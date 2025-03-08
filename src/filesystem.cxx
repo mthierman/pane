@@ -41,8 +41,14 @@ namespace directory {
     }
 
     auto from_template(const std::filesystem::path& path,
-                       const std::filesystem::path& template_directory) -> bool {
-        return ::CreateDirectoryExW(template_directory.c_str(), path.c_str(), nullptr);
+                       const std::filesystem::path& template_directory)
+        -> std::expected<std::filesystem::path, std::u8string> {
+        if (auto result { ::CreateDirectoryExW(template_directory.c_str(), path.c_str(), nullptr) };
+            result != 0) {
+            return path;
+        } else {
+            return std::unexpected(pane::sys::last_error());
+        }
     }
 } // namespace directory
 
