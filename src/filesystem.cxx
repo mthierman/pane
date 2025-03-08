@@ -31,8 +31,13 @@ namespace paths {
 } // namespace paths
 
 namespace directory {
-    auto from_path(const std::filesystem::path& path) -> bool {
-        return ::CreateDirectoryW(path.c_str(), nullptr);
+    auto from_path(const std::filesystem::path& path)
+        -> std::expected<std::filesystem::path, std::u8string> {
+        if (auto result { ::CreateDirectoryW(path.c_str(), nullptr) }; result != 0) {
+            return path;
+        } else {
+            return std::unexpected(pane::sys::last_error());
+        }
     }
 
     auto from_template(const std::filesystem::path& path,
