@@ -1,12 +1,12 @@
 add_executable(
-    window
+    example_window
     WIN32
     )
 
-target_sources(window PRIVATE "src/main.cxx")
+target_sources(example_window PRIVATE "src/main.cxx")
 
 target_link_libraries(
-    window
+    example_window
     PRIVATE pane::pane
             pane::flags
     )
