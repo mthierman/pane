@@ -7,34 +7,30 @@
 #include <initializer_list>
 #include <string>
 
-namespace pane::filesystem {
-namespace folder {
-    auto app_data() -> std::expected<std::filesystem::path, std::u8string>;
-    auto temp() -> std::expected<std::filesystem::path, std::u8string>;
-} // namespace folder
+namespace pane::fs {
+struct file {
+    explicit file(::HANDLE);
 
-namespace directory {
-    auto from_path(const std::filesystem::path& path)
-        -> std::expected<std::filesystem::path, std::u8string>;
-    auto from_template(const std::filesystem::path& path,
-                       const std::filesystem::path& template_directory)
-        -> std::expected<std::filesystem::path, std::u8string>;
-} // namespace directory
+    wil::unique_handle handle;
+};
 
-namespace file {
-    auto move(const std::filesystem::path& origin, const std::filesystem::path& destination)
-        -> std::expected<std::filesystem::path, std::u8string>;
-    auto copy(const std::filesystem::path& origin, const std::filesystem::path& destination)
-        -> std::expected<std::filesystem::path, std::u8string>;
-    auto erase(const std::filesystem::path& path)
-        -> std::expected<std::filesystem::path, std::u8string>;
-} // namespace file
-
-namespace symlink {
-    auto create(const std::filesystem::path& target, const std::filesystem::path& destination)
-        -> std::expected<std::filesystem::path, std::u8string>;
-}
-} // namespace pane::filesystem
+auto app_data() -> std::expected<std::filesystem::path, std::u8string>;
+auto temp() -> std::expected<std::filesystem::path, std::u8string>;
+auto create_directory(const std::filesystem::path& path)
+    -> std::expected<std::filesystem::path, std::u8string>;
+auto create_directory(const std::filesystem::path& path,
+                      const std::filesystem::path& template_directory)
+    -> std::expected<std::filesystem::path, std::u8string>;
+auto create_file(const std::filesystem::path& path) -> std::expected<File, std::u8string>;
+auto move_file(const std::filesystem::path& origin, const std::filesystem::path& destination)
+    -> std::expected<std::filesystem::path, std::u8string>;
+auto copy_file(const std::filesystem::path& origin, const std::filesystem::path& destination)
+    -> std::expected<std::filesystem::path, std::u8string>;
+auto erase_file(const std::filesystem::path& path)
+    -> std::expected<std::filesystem::path, std::u8string>;
+auto create_symlink(const std::filesystem::path& target, const std::filesystem::path& destination)
+    -> std::expected<std::filesystem::path, std::u8string>;
+} // namespace pane::fs
 
 namespace std {
 template <> struct formatter<std::filesystem::path> : formatter<string_view> {
