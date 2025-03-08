@@ -50,7 +50,7 @@ auto file::from_url(std::u8string_view url, const std::filesystem::path& path)
         // We need to check if the directories exist on path
         if (auto result {
                 ::URLDownloadToFileW(nullptr, u16url.value().c_str(), path.c_str(), 0, nullptr) };
-            SUCCEEDED(result)) {
+            result == S_OK) {
             return open_existing(path);
         } else {
             return std::unexpected(pane::sys::last_error());
