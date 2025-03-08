@@ -84,7 +84,7 @@ namespace file {
 
 namespace symlink {
     auto create(const std::filesystem::path& target, const std::filesystem::path& destination)
-        -> bool {
+        -> std::expected<std::filesystem::path, std::u8string> {
         auto flags { std::filesystem::is_directory(target)
                          ? SYMBOLIC_LINK_FLAG_DIRECTORY
                              | SYMBOLIC_LINK_FLAG_ALLOW_UNPRIVILEGED_CREATE
@@ -93,10 +93,10 @@ namespace symlink {
         if (auto result { ::CreateSymbolicLinkW(
                 destination.c_str(), target.c_str(), static_cast<::DWORD>(flags)) };
             result != 0) {
-            return true;
+            return destination;
+        } else {
+            return std::unexpected(pane::sys::last_error());
         }
-
-        return false;
     }
 } // namespace symlink
 } // namespace pane::filesystem

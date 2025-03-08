@@ -32,7 +32,7 @@ namespace file {
 
 namespace symlink {
     auto create(const std::filesystem::path& target, const std::filesystem::path& destination)
-        -> bool;
+        -> std::expected<std::filesystem::path, std::u8string>;
 }
 } // namespace pane::filesystem
 
