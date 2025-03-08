@@ -18,7 +18,11 @@ struct file {
 
     static auto open_always(const std::filesystem::path& path)
         -> std::expected<Self, std::u8string>;
-    static auto open_existing(const std::filesystem::path& path) -> std::expected<Self, std::u8string>;
+    static auto open_existing(const std::filesystem::path& path)
+        -> std::expected<Self, std::u8string>;
+
+    static auto from_url(std::u8string_view url, const std::filesystem::path& path)
+        -> std::expected<Self, std::u8string>;
 
     wil::unique_handle handle;
 };

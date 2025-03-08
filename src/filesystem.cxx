@@ -1,5 +1,7 @@
 #include <pane/filesystem.hxx>
 #include <pane/system.hxx>
+#include <pane/hstring.hxx>
+#include <urlmon.h>
 
 namespace pane::fs {
 auto file::create_always(const std::filesystem::path& path) -> std::expected<Self, std::u8string> {
@@ -39,6 +41,22 @@ auto file::open_existing(const std::filesystem::path& path) -> std::expected<Sel
         return Self { .handle { handle } };
     } else {
         return std::unexpected(pane::sys::last_error());
+    }
+}
+
+auto file::from_url(std::u8string_view url, const std::filesystem::path& path)
+    -> std::expected<Self, std::u8string> {
+    if (auto u16url { pane::hstring::from_utf8(url) }) {
+        // We need to check if the directories exist on path
+        if (auto result {
+                ::URLDownloadToFileW(nullptr, u16url.value().c_str(), path.c_str(), 0, nullptr) };
+            SUCCEEDED(result)) {
+            return open_existing(path);
+        } else {
+            return std::unexpected(pane::sys::last_error());
+        }
+    } else {
+        return std::unexpected(u16url.error());
     }
 }
 
