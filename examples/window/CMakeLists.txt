@@ -5,4 +5,8 @@ add_executable(
 
 target_sources(window PRIVATE "src/main.cxx")
 
-target_link_libraries(window PRIVATE pane::pane)
+target_link_libraries(
+    window
+    PRIVATE pane::pane
+            pane::flags
+    )
