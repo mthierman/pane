@@ -10,16 +10,55 @@ list(
 
 add_subdirectory("libs")
 
-add_library(pane_pane)
+add_library(
+    ${PROJECT_NAME}_flags
+    INTERFACE
+    )
+
+add_library(
+    pane::flags
+    ALIAS
+    ${PROJECT_NAME}_flags
+    )
+
+target_compile_definitions(
+    ${PROJECT_NAME}_flags
+    INTERFACE UNICODE
+              WIN32_LEAN_AND_MEAN
+              NOMINMAX
+              GDIPVER=0x0110
+    )
+
+# https://learn.microsoft.com/en-us/cpp/build/reference/compiler-options
+target_compile_options(
+    ${PROJECT_NAME}_flags
+    INTERFACE /W4
+              /WX
+              /MP
+              /utf-8
+              /bigobj
+              /diagnostics:caret
+              /permissive-
+              /Zc:__cplusplus,__STDC__,enumTypes,templateScope,throwingNew,preprocessor
+    )
+
+# https://learn.microsoft.com/en-us/cpp/build/reference/linker-options
+target_link_options(
+    ${PROJECT_NAME}_flags
+    INTERFACE
+    /WX
+    )
+
+add_library(${PROJECT_NAME})
 
 add_library(
     pane::pane
     ALIAS
-    pane_pane
+    ${PROJECT_NAME}
     )
 
 target_sources(
-    pane_pane
+    ${PROJECT_NAME}
     PRIVATE "src/filesystem.cxx"
             "src/hstring.cxx"
             "src/string.cxx"
@@ -33,41 +72,14 @@ target_sources(
     )
 
 target_compile_features(
-    pane_pane
+    ${PROJECT_NAME}
     PUBLIC c_std_17
            cxx_std_23
     )
 
-target_compile_definitions(
-    pane_pane
-    PUBLIC UNICODE
-           WIN32_LEAN_AND_MEAN
-           NOMINMAX
-           GDIPVER=0x0110
-    )
-
-# https://learn.microsoft.com/en-us/cpp/build/reference/compiler-options
-target_compile_options(
-    pane_pane
-    PUBLIC /W4
-           /WX
-           /MP
-           /utf-8
-           /bigobj
-           /diagnostics:caret
-           /permissive-
-           /Zc:__cplusplus,__STDC__,enumTypes,templateScope,throwingNew,preprocessor
-    )
-
-# https://learn.microsoft.com/en-us/cpp/build/reference/linker-options
-target_link_options(
-    pane_pane
-    PUBLIC
-    /WX
-    )
-
 target_link_libraries(
-    pane_pane
+    ${PROJECT_NAME}
+    PRIVATE ${PROJECT_NAME}_flags
     PUBLIC icu
            ada::ada
            glaze::glaze
