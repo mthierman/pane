@@ -6,6 +6,7 @@
 #include <format>
 #include <initializer_list>
 #include <string>
+#include <wil/resource.h>
 
 namespace pane::fs {
 struct file {
@@ -21,7 +22,7 @@ auto create_directory(const std::filesystem::path& path)
 auto create_directory(const std::filesystem::path& path,
                       const std::filesystem::path& template_directory)
     -> std::expected<std::filesystem::path, std::u8string>;
-auto create_file(const std::filesystem::path& path) -> std::expected<File, std::u8string>;
+auto create_file(const std::filesystem::path& path) -> std::expected<file, std::u8string>;
 auto move_file(const std::filesystem::path& origin, const std::filesystem::path& destination)
     -> std::expected<std::filesystem::path, std::u8string>;
 auto copy_file(const std::filesystem::path& origin, const std::filesystem::path& destination)

@@ -1,8 +1,12 @@
 #include <pane/filesystem.hxx>
 #include <pane/system.hxx>
-#include <wil/resource.h>
 
 namespace pane::fs {
+file::file(HANDLE handle)
+    : handle { handle } {
+    //
+}
+
 auto app_data() -> std::expected<std::filesystem::path, std::u8string> {
     wil::unique_cotaskmem_string buffer;
 
@@ -48,10 +52,11 @@ auto create_directory(const std::filesystem::path& path,
     }
 }
 
-auto create_file(const std::filesystem::path& path) -> std::expected<File, std::u8string> {
-
-    if (auto result { ::CreateFile2(path.c_str(), GENERIC_READ | GENERIC_WRITE, 0) }; result != 0) {
-        return File(result);
+auto create_file(const std::filesystem::path& path) -> std::expected<file, std::u8string> {
+    if (auto result {
+            ::CreateFile2(path.c_str(), GENERIC_READ | GENERIC_WRITE, 0, CREATE_NEW, nullptr) };
+        result != 0) {
+        return file { result };
     } else {
         return std::unexpected(pane::sys::last_error());
     }
