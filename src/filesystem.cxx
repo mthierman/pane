@@ -63,21 +63,22 @@ namespace file {
     }
 
     auto copy(const std::filesystem::path& origin, const std::filesystem::path& destination)
-        -> bool {
+        -> std::expected<std::filesystem::path, std::u8string> {
         if (auto result { ::CopyFile2(origin.c_str(), destination.c_str(), nullptr) };
-            result == S_OK) {
-            return true;
+            SUCCEEDED(result)) {
+            return destination;
+        } else {
+            return std::unexpected(pane::sys::last_error());
         }
-
-        return false;
     }
 
-    auto erase(const std::filesystem::path& path) -> bool {
+    auto erase(const std::filesystem::path& path)
+        -> std::expected<std::filesystem::path, std::u8string> {
         if (auto result { ::DeleteFileW(path.c_str()) }; result != 0) {
-            return true;
+            return path;
+        } else {
+            return std::unexpected(pane::sys::last_error());
         }
-
-        return false;
     }
 } // namespace file
 

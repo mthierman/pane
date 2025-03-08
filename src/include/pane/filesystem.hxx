@@ -25,8 +25,9 @@ namespace file {
     auto move(const std::filesystem::path& origin, const std::filesystem::path& destination)
         -> std::expected<std::filesystem::path, std::u8string>;
     auto copy(const std::filesystem::path& origin, const std::filesystem::path& destination)
-        -> bool;
-    auto erase(const std::filesystem::path& path) -> bool;
+        -> std::expected<std::filesystem::path, std::u8string>;
+    auto erase(const std::filesystem::path& path)
+        -> std::expected<std::filesystem::path, std::u8string>;
 } // namespace file
 
 namespace symlink {
