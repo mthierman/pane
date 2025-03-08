@@ -21,6 +21,12 @@ add_library(
     ${PROJECT_NAME}_flags
     )
 
+target_compile_features(
+    ${PROJECT_NAME}_flags
+    INTERFACE c_std_17
+              cxx_std_23
+    )
+
 target_compile_definitions(
     ${PROJECT_NAME}_flags
     INTERFACE UNICODE
@@ -69,12 +75,6 @@ target_sources(
            HEADERS
            BASE_DIRS
            "src/include"
-    )
-
-target_compile_features(
-    ${PROJECT_NAME}
-    PUBLIC c_std_17
-           cxx_std_23
     )
 
 target_link_libraries(
