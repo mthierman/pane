@@ -12,8 +12,13 @@ namespace pane::fs {
 struct file {
     using Self = file;
 
-    static auto create(const std::filesystem::path& path) -> std::expected<Self, std::u8string>;
-    static auto open(const std::filesystem::path& path) -> std::expected<Self, std::u8string>;
+    static auto create_always(const std::filesystem::path& path)
+        -> std::expected<Self, std::u8string>;
+    static auto create_new(const std::filesystem::path& path) -> std::expected<Self, std::u8string>;
+
+    static auto open_always(const std::filesystem::path& path)
+        -> std::expected<Self, std::u8string>;
+    static auto open_existing(const std::filesystem::path& path) -> std::expected<Self, std::u8string>;
 
     wil::unique_handle handle;
 };

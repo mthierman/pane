@@ -2,7 +2,17 @@
 #include <pane/system.hxx>
 
 namespace pane::fs {
-auto file::create(const std::filesystem::path& path) -> std::expected<Self, std::u8string> {
+auto file::create_always(const std::filesystem::path& path) -> std::expected<Self, std::u8string> {
+    if (auto handle {
+            ::CreateFile2(path.c_str(), GENERIC_READ | GENERIC_WRITE, 0, CREATE_ALWAYS, nullptr) };
+        handle != INVALID_HANDLE_VALUE) {
+        return Self { .handle { handle } };
+    } else {
+        return std::unexpected(pane::sys::last_error());
+    }
+}
+
+auto file::create_new(const std::filesystem::path& path) -> std::expected<Self, std::u8string> {
     if (auto handle {
             ::CreateFile2(path.c_str(), GENERIC_READ | GENERIC_WRITE, 0, CREATE_NEW, nullptr) };
         handle != INVALID_HANDLE_VALUE) {
@@ -12,7 +22,17 @@ auto file::create(const std::filesystem::path& path) -> std::expected<Self, std:
     }
 }
 
-auto file::open(const std::filesystem::path& path) -> std::expected<Self, std::u8string> {
+auto file::open_always(const std::filesystem::path& path) -> std::expected<Self, std::u8string> {
+    if (auto handle {
+            ::CreateFile2(path.c_str(), GENERIC_READ | GENERIC_WRITE, 0, OPEN_ALWAYS, nullptr) };
+        handle != INVALID_HANDLE_VALUE) {
+        return Self { .handle { handle } };
+    } else {
+        return std::unexpected(pane::sys::last_error());
+    }
+}
+
+auto file::open_existing(const std::filesystem::path& path) -> std::expected<Self, std::u8string> {
     if (auto handle {
             ::CreateFile2(path.c_str(), GENERIC_READ | GENERIC_WRITE, 0, OPEN_EXISTING, nullptr) };
         handle != INVALID_HANDLE_VALUE) {
