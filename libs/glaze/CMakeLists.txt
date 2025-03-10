@@ -1,28 +1,28 @@
 include(FetchContent)
 
 FetchContent_Declare(
-    glaze
+    pane_glaze
     GIT_REPOSITORY "https://github.com/stephenberry/glaze.git"
     GIT_TAG "v5.0.0"
     SOURCE_SUBDIR
     "NULL"
     )
 
-FetchContent_MakeAvailable(glaze)
+FetchContent_MakeAvailable(pane_glaze)
 
 add_library(
-    glaze
+    pane_glaze
     INTERFACE
     )
 
 add_library(
-    glaze::glaze
+    pane::glaze
     ALIAS
-    glaze
+    pane_glaze
     )
 
 target_include_directories(
-    glaze
+    pane_glaze
     SYSTEM
-    INTERFACE "${glaze_SOURCE_DIR}/include"
+    INTERFACE "${pane_glaze_SOURCE_DIR}/include"
     )

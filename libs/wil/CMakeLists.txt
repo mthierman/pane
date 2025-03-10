@@ -1,27 +1,27 @@
 include(FetchContent)
 
 FetchContent_Declare(
-    wil
+    pane_wil
     URL "https://www.nuget.org/api/v2/package/Microsoft.Windows.ImplementationLibrary/1.0.240803.1"
         SOURCE_SUBDIR
         "NULL"
     )
 
-FetchContent_MakeAvailable(wil)
+FetchContent_MakeAvailable(pane_wil)
 
 add_library(
-    wil
+    pane_wil
     INTERFACE
     )
 
 add_library(
-    microsoft::wil
+    pane::wil
     ALIAS
-    wil
+    pane_wil
     )
 
 target_include_directories(
-    wil
+    pane_wil
     SYSTEM
-    INTERFACE "${wil_SOURCE_DIR}/include"
+    INTERFACE "${pane_wil_SOURCE_DIR}/include"
     )

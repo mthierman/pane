@@ -22,11 +22,11 @@ target_sources(
 
 target_link_libraries(
     ${PROJECT_NAME}
-    PRIVATE pane::config
+    PRIVATE ${PROJECT_NAME}_config
             icu
-            ada::ada
-            glaze::glaze
-            microsoft::webview2
-            microsoft::wil
-            microsoft::cppwinrt
+            pane::ada
+            pane::glaze
+            pane::webview2
+            pane::wil
+            pane::cppwinrt
     )

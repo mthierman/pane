@@ -1,35 +1,35 @@
 include(FetchContent)
 
 FetchContent_Declare(
-    webview2
+    pane_webview2
     URL "https://www.nuget.org/api/v2/package/Microsoft.Web.WebView2/1.0.3065.39"
         SOURCE_SUBDIR
         "NULL"
     )
 
-FetchContent_MakeAvailable(webview2)
+FetchContent_MakeAvailable(pane_webview2)
 
 add_library(
-    webview2
+    pane_webview2
     INTERFACE
     )
 
 add_library(
-    microsoft::webview2
+    pane::webview2
     ALIAS
-    webview2
+    pane_webview2
     )
 
 target_include_directories(
-    webview2
+    pane_webview2
     SYSTEM
-    INTERFACE "${webview2_SOURCE_DIR}/build/native/include"
+    INTERFACE "${pane_webview2_SOURCE_DIR}/build/native/include"
     )
 
 target_link_directories(
-    webview2
+    pane_webview2
     INTERFACE
-    "${webview2_SOURCE_DIR}/build/native/x64"
+    "${pane_webview2_SOURCE_DIR}/build/native/x64"
     )
 
-target_link_libraries(webview2 INTERFACE WebView2LoaderStatic)
+target_link_libraries(pane_webview2 INTERFACE WebView2LoaderStatic)
