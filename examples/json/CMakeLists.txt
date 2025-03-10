@@ -6,5 +6,5 @@ target_link_libraries(
     example_json
     PRIVATE pane::pane
             pane::config
-            glaze::glaze
+            pane::glaze
     )
