@@ -5,6 +5,6 @@ target_sources(example_json PRIVATE "src/main.cxx")
 target_link_libraries(
     example_json
     PRIVATE pane::pane
-            pane::flags
+            pane::config
             glaze::glaze
     )
