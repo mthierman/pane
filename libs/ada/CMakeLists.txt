@@ -2,7 +2,7 @@ include(FetchContent)
 
 FetchContent_Declare(
     pane_ada
-    URL "https://github.com/ada-url/ada/releases/download/v3.1.3/singleheader.zip"
+    URL "https://github.com/ada-url/ada/releases/download/v3.2.1/singleheader.zip"
         SOURCE_SUBDIR
         "NULL"
     )
