@@ -2,10 +2,9 @@ include(FetchContent)
 
 FetchContent_Declare(
     pane_glaze
-    GIT_REPOSITORY "https://github.com/stephenberry/glaze.git"
-    GIT_TAG "v5.0.0"
-    SOURCE_SUBDIR
-    "NULL"
+    URL "https://github.com/stephenberry/glaze/archive/refs/tags/v5.0.0.zip"
+        SOURCE_SUBDIR
+        "NULL"
     )
 
 FetchContent_MakeAvailable(pane_glaze)
