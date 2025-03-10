@@ -12,7 +12,7 @@ FetchContent_MakeAvailable(pane_cppwinrt)
 execute_process(
     COMMAND
         "${pane_cppwinrt_SOURCE_DIR}/bin/cppwinrt" -input sdk -output
-        "${CMAKE_CURRENT_BINARY_DIR}/include"
+        "${pane_cppwinrt_BINARY_DIR}/include"
     )
 
 add_library(
@@ -29,5 +29,5 @@ add_library(
 target_include_directories(
     pane_cppwinrt
     SYSTEM
-    INTERFACE "${CMAKE_CURRENT_BINARY_DIR}/include"
+    INTERFACE "${pane_cppwinrt_BINARY_DIR}/include"
     )
