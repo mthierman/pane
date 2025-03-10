@@ -22,7 +22,7 @@ target_sources(
 
 target_link_libraries(
     ${PROJECT_NAME}
-    PRIVATE ${PROJECT_NAME}_config
+    PRIVATE pane::config
             icu
             ada::ada
             glaze::glaze
