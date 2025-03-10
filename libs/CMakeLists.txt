@@ -1,4 +1,3 @@
-add_subdirectory("config")
 add_subdirectory("ada")
 add_subdirectory("glaze")
 add_subdirectory("wil")
