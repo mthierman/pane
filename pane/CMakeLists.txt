@@ -24,7 +24,7 @@ target_link_libraries(
     ${PROJECT_NAME}
     PRIVATE ${PROJECT_NAME}_config
             icu
-            # ada::ada
+            ada::ada
             glaze::glaze
             microsoft::webview2
             microsoft::wil
