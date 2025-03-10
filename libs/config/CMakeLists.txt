@@ -1,22 +1,22 @@
 add_library(
-    ${PROJECT_NAME}_config
+    config
     INTERFACE
     )
 
 add_library(
     pane::config
     ALIAS
-    ${PROJECT_NAME}_config
+    config
     )
 
 target_compile_features(
-    ${PROJECT_NAME}_config
+    config
     INTERFACE c_std_17
               cxx_std_23
     )
 
 target_compile_definitions(
-    ${PROJECT_NAME}_config
+    config
     INTERFACE UNICODE
               WIN32_LEAN_AND_MEAN
               NOMINMAX
@@ -25,7 +25,7 @@ target_compile_definitions(
 
 # https://learn.microsoft.com/en-us/cpp/build/reference/compiler-options
 target_compile_options(
-    ${PROJECT_NAME}_config
+    config
     INTERFACE /W4
               /WX
               /MP
@@ -38,7 +38,7 @@ target_compile_options(
 
 # https://learn.microsoft.com/en-us/cpp/build/reference/linker-options
 target_link_options(
-    ${PROJECT_NAME}_config
+    config
     INTERFACE
     /WX
     )
