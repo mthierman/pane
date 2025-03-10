@@ -8,16 +8,16 @@ add_library(
 
 target_sources(
     ${PROJECT_NAME}
+    PUBLIC FILE_SET
+           HEADERS
+           BASE_DIRS
+           "include"
     PRIVATE "filesystem.cxx"
             "hstring.cxx"
             "string.cxx"
             "system.cxx"
             "text.cxx"
             "window.cxx"
-    PUBLIC FILE_SET
-           HEADERS
-           BASE_DIRS
-           "include"
     )
 
 target_link_libraries(
