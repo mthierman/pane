@@ -1,10 +1,10 @@
-add_executable(example_json)
+add_executable(${PROJECT_NAME}_example_json)
 
-target_sources(example_json PRIVATE "src/main.cxx")
+target_sources(${PROJECT_NAME}_example_json PRIVATE "json.cxx")
 
 target_link_libraries(
-    example_json
-    PRIVATE pane::pane
-            pane::config
-            pane::glaze
+    ${PROJECT_NAME}_example_json
+    PRIVATE ${PROJECT_NAME}::${PROJECT_NAME}
+            ${PROJECT_NAME}::config
+            ${PROJECT_NAME}::glaze
     )

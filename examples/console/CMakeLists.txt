@@ -1,9 +1,9 @@
-add_executable(example_console)
+add_executable(${PROJECT_NAME}_example_console)
 
-target_sources(example_console PRIVATE "src/main.cxx")
+target_sources(${PROJECT_NAME}_example_console PRIVATE "console.cxx")
 
 target_link_libraries(
-    example_console
-    PRIVATE pane::pane
-            pane::config
+    ${PROJECT_NAME}_example_console
+    PRIVATE ${PROJECT_NAME}::${PROJECT_NAME}
+            ${PROJECT_NAME}::config
     )
