@@ -1,7 +1,7 @@
 add_library(${PROJECT_NAME})
 
 add_library(
-    pane::pane
+    ${PROJECT_NAME}::${PROJECT_NAME}
     ALIAS
     ${PROJECT_NAME}
     )
@@ -22,11 +22,11 @@ target_sources(
 
 target_link_libraries(
     ${PROJECT_NAME}
-    PRIVATE ${PROJECT_NAME}_config
+    PRIVATE ${PROJECT_NAME}::config
+            ${PROJECT_NAME}::ada
+            ${PROJECT_NAME}::glaze
+            ${PROJECT_NAME}::webview2
+            ${PROJECT_NAME}::wil
+            ${PROJECT_NAME}::cppwinrt
             icu
-            pane::ada
-            pane::glaze
-            pane::webview2
-            pane::wil
-            pane::cppwinrt
     )
