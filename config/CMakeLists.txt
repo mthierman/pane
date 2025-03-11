@@ -4,7 +4,7 @@ add_library(
     )
 
 add_library(
-    pane::config
+    ${PROJECT_NAME}::config
     ALIAS
     ${PROJECT_NAME}_config
     )
