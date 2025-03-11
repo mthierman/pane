@@ -1,3 +1,7 @@
+Push-Location
+
+Set-Location ($PSScriptRoot | Split-Path)
+
 if (-not (Test-Path "packages/ada-url/ada"))
 {
     gh release -R ada-url/ada download -p "singleheader.zip" -D "packages/ada-url"
@@ -16,3 +20,5 @@ if (-not (Test-Path "packages/stephenberry/glaze-5.0.0"))
 nuget install "Microsoft.Web.WebView2" -Version "1.0.3124.44" -x -OutputDirectory "packages"
 nuget install "Microsoft.Windows.CppWinRT" -Version "2.0.240405.15" -x -OutputDirectory "packages"
 nuget install "Microsoft.Windows.ImplementationLibrary" -Version "1.0.240803.1" -x -OutputDirectory "packages"
+
+Pop-Location
