@@ -1,38 +1,38 @@
 include(FetchContent)
 
 FetchContent_Declare(
-    pane_ada
+    ${PROJECT_NAME}_ada
     URL "https://github.com/ada-url/ada/releases/download/v3.2.1/singleheader.zip"
         SOURCE_SUBDIR
         "NULL"
     )
 
-FetchContent_MakeAvailable(pane_ada)
+FetchContent_MakeAvailable(${PROJECT_NAME}_ada)
 
-add_library(pane_ada)
+add_library(${PROJECT_NAME}_ada)
 
 add_library(
-    pane::ada
+    ${PROJECT_NAME}::ada
     ALIAS
-    pane_ada
+    ${PROJECT_NAME}_ada
     )
 
-target_sources(pane_ada PRIVATE "${pane_ada_SOURCE_DIR}/ada.cpp")
+target_sources(${PROJECT_NAME}_ada PRIVATE "${${PROJECT_NAME}_ada_SOURCE_DIR}/ada.cpp")
 
 target_include_directories(
-    pane_ada
+    ${PROJECT_NAME}_ada
     SYSTEM
-    INTERFACE "${pane_ada_SOURCE_DIR}/include"
+    INTERFACE "${${PROJECT_NAME}_ada_SOURCE_DIR}/include"
     )
 
 target_compile_features(
-    pane_ada
+    ${PROJECT_NAME}_ada
     PRIVATE c_std_17
             cxx_std_23
     )
 
 target_compile_options(
-    pane_ada
+    ${PROJECT_NAME}_ada
     PRIVATE /W0
             /WX
             /MP
@@ -44,7 +44,7 @@ target_compile_options(
     )
 
 target_link_options(
-    pane_ada
+    ${PROJECT_NAME}_ada
     PRIVATE
     /WX
     )

@@ -1,27 +1,27 @@
 include(FetchContent)
 
 FetchContent_Declare(
-    pane_glaze
+    ${PROJECT_NAME}_glaze
     URL "https://github.com/stephenberry/glaze/archive/refs/tags/v5.0.0.zip"
         SOURCE_SUBDIR
         "NULL"
     )
 
-FetchContent_MakeAvailable(pane_glaze)
+FetchContent_MakeAvailable(${PROJECT_NAME}_glaze)
 
 add_library(
-    pane_glaze
+    ${PROJECT_NAME}_glaze
     INTERFACE
     )
 
 add_library(
-    pane::glaze
+    ${PROJECT_NAME}::glaze
     ALIAS
-    pane_glaze
+    ${PROJECT_NAME}_glaze
     )
 
 target_include_directories(
-    pane_glaze
+    ${PROJECT_NAME}_glaze
     SYSTEM
-    INTERFACE "${pane_glaze_SOURCE_DIR}/include"
+    INTERFACE "${${PROJECT_NAME}_glaze_SOURCE_DIR}/include"
     )
