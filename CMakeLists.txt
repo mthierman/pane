@@ -8,7 +8,7 @@ list(
 
 project(pane)
 
-add_subdirectory("config")
+include("config")
 add_subdirectory("libs")
 
 add_subdirectory("pane")
