@@ -1,5 +1,0 @@
-add_subdirectory("ada")
-add_subdirectory("glaze")
-add_subdirectory("webview2")
-add_subdirectory("wil")
-add_subdirectory("cppwinrt")

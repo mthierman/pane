@@ -8,8 +8,12 @@ list(
 
 project(pane)
 
-include("config")
-add_subdirectory("libs")
+include("libs/config")
+include("libs/ada")
+include("libs/cppwinrt")
+include("libs/glaze")
+include("libs/webview2")
+include("libs/wil")
 
 add_subdirectory("pane")
 
