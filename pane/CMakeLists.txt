@@ -1,9 +1,9 @@
 include("libs/config")
-include("libs/ada")
-include("libs/cppwinrt")
-include("libs/glaze")
 include("libs/webview2")
 include("libs/wil")
+include("libs/cppwinrt")
+include("libs/ada")
+include("libs/glaze")
 
 add_custom_target(
     ${PROJECT_NAME}_install WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
