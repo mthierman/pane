@@ -9,9 +9,9 @@ list(
 project(pane)
 
 include("install_packages")
-
 add_subdirectory("config")
 add_subdirectory("libs")
+
 add_subdirectory("pane")
 
 if(PROJECT_IS_TOP_LEVEL)
