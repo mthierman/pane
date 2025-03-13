@@ -1,3 +1,11 @@
+include("config")
+
+include("libs/ada")
+include("libs/cppwinrt")
+include("libs/glaze")
+include("libs/webview2")
+include("libs/wil")
+
 add_library(${PROJECT_NAME})
 
 add_library(

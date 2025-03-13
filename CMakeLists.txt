@@ -6,14 +6,7 @@ list(
     "${CMAKE_CURRENT_SOURCE_DIR}/cmake"
     )
 
-project(pane)
-
-include("libs/config")
-include("libs/ada")
-include("libs/cppwinrt")
-include("libs/glaze")
-include("libs/webview2")
-include("libs/wil")
+project("pane")
 
 add_subdirectory("pane")
 
