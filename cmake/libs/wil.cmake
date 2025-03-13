@@ -2,6 +2,7 @@ include(FetchContent)
 
 FetchContent_Declare(
     ${PROJECT_NAME}_wil
+    DOWNLOAD_NO_PROGRESS ON
     URL "https://www.nuget.org/api/v2/package/Microsoft.Windows.ImplementationLibrary/1.0.240803.1"
         SOURCE_SUBDIR
         "NULL"

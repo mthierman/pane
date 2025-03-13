@@ -2,6 +2,7 @@ include(FetchContent)
 
 FetchContent_Declare(
     ${PROJECT_NAME}_cppwinrt
+    DOWNLOAD_NO_PROGRESS ON
     URL "https://www.nuget.org/api/v2/package/Microsoft.Windows.CppWinRT/2.0.240405.15"
         SOURCE_SUBDIR
         "NULL"

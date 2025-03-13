@@ -2,6 +2,7 @@ include(FetchContent)
 
 FetchContent_Declare(
     ${PROJECT_NAME}_ada
+    DOWNLOAD_NO_PROGRESS ON
     URL "https://github.com/ada-url/ada/releases/download/v3.2.1/singleheader.zip"
         SOURCE_SUBDIR
         "NULL"

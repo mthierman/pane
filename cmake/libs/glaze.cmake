@@ -2,6 +2,7 @@ include(FetchContent)
 
 FetchContent_Declare(
     ${PROJECT_NAME}_glaze
+    DOWNLOAD_NO_PROGRESS ON
     URL "https://github.com/stephenberry/glaze/archive/refs/tags/v5.0.0.zip"
         SOURCE_SUBDIR
         "NULL"

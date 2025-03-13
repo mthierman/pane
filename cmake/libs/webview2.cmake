@@ -2,6 +2,7 @@ include(FetchContent)
 
 FetchContent_Declare(
     ${PROJECT_NAME}_webview2
+    DOWNLOAD_NO_PROGRESS ON
     URL "https://www.nuget.org/api/v2/package/Microsoft.Web.WebView2/1.0.3124.44"
         SOURCE_SUBDIR
         "NULL"
