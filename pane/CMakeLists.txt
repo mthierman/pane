@@ -1,5 +1,4 @@
-include("config")
-
+include("libs/config")
 include("libs/ada")
 include("libs/cppwinrt")
 include("libs/glaze")
