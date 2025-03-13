@@ -9,7 +9,7 @@ if (-not (Test-Path "packages/ada-url/ada"))
     Remove-Item -Path "packages/ada-url/singleheader.zip"
 }
 
-if (-not (Test-Path "packages/stephenberry/glaze-5.0.0"))
+if (-not (Test-Path "packages/stephenberry/glaze"))
 {
     gh release -R stephenberry/glaze download "v5.0.0" -A zip -D "packages/stephenberry"
     Expand-Archive -Path "packages/stephenberry/glaze-5.0.0.zip" -DestinationPath "packages/stephenberry"
