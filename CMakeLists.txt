@@ -8,7 +8,6 @@ list(
 
 project(pane)
 
-include("install_packages")
 add_subdirectory("config")
 add_subdirectory("libs")
 
