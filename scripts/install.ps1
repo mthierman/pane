@@ -25,21 +25,21 @@ if (-not (Test-Path "$glaze_src"))
 $webview2_src = "pane_webview2-src"
 if (-not (Test-Path "$webview2_src"))
 {
-    nuget install Microsoft.Web.WebView2 -x
+    nuget install Microsoft.Web.WebView2 -Version "1.0.3124.44" -x
     Rename-Item -Path "Microsoft.Web.WebView2" -NewName $webview2_src
 }
 
 $cppwinrt_src = "pane_cppwinrt-src"
 if (-not (Test-Path "$cppwinrt_src"))
 {
-    nuget install Microsoft.Windows.CppWinRT -x
+    nuget install Microsoft.Windows.CppWinRT -Version "2.0.240405.15" -x
     Rename-Item -Path "Microsoft.Windows.CppWinRT" -NewName $cppwinrt_src
 }
 
 $wil_src = "pane_wil-src"
 if (-not (Test-Path "$wil_src"))
 {
-    nuget install Microsoft.Windows.ImplementationLibrary -x
+    nuget install Microsoft.Windows.ImplementationLibrary -Version "1.0.240803.1" -x
     Rename-Item -Path "Microsoft.Windows.ImplementationLibrary" -NewName $wil_src
 }
 
