@@ -31,7 +31,7 @@ target_compile_options(
               /MP
               /utf-8
               /bigobj
-              /diagnostics:caret
+              /diagnostics:color
               /permissive-
               /Zc:__cplusplus,__STDC__,enumTypes,templateScope,throwingNew,preprocessor
     )
