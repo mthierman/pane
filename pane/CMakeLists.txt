@@ -21,9 +21,19 @@ add_library(
 target_sources(
     ${PROJECT_NAME}
     PUBLIC FILE_SET
+           ${PROJECT_NAME}_headers
+           TYPE
            HEADERS
            BASE_DIRS
            "include"
+           FILES
+           "include/pane/pane.hxx"
+           "include/pane/filesystem.hxx"
+           "include/pane/hstring.hxx"
+           "include/pane/string.hxx"
+           "include/pane/system.hxx"
+           "include/pane/text.hxx"
+           "include/pane/window.hxx"
     PRIVATE "src/filesystem.cxx"
             "src/hstring.cxx"
             "src/string.cxx"
