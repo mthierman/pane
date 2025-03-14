@@ -1,15 +1,15 @@
 list(
     APPEND
     CMAKE_MODULE_PATH
-    "${CMAKE_CURRENT_SOURCE_DIR}/cmake"
+    "${CMAKE_CURRENT_SOURCE_DIR}/libs"
     )
 
-include("libs/config")
-include("libs/webview2")
-include("libs/wil")
-include("libs/cppwinrt")
-include("libs/ada")
-include("libs/glaze")
+include("config")
+include("webview2")
+include("wil")
+include("cppwinrt")
+include("ada")
+include("glaze")
 
 add_custom_target(
     ${PROJECT_NAME}_install WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
