@@ -69,3 +69,39 @@ install(TARGETS ${PROJECT_NAME}_cppwinrt EXPORT ${PROJECT_NAME}_targets)
 install(TARGETS ${PROJECT_NAME}_wil EXPORT ${PROJECT_NAME}_targets)
 
 install(EXPORT ${PROJECT_NAME}_targets DESTINATION "share" NAMESPACE ${PROJECT_NAME}::)
+
+if(PROJECT_IS_TOP_LEVEL)
+    add_executable(${PROJECT_NAME}_example_console)
+
+    target_sources(${PROJECT_NAME}_example_console PRIVATE "example/console.cxx")
+
+    target_link_libraries(
+        ${PROJECT_NAME}_example_console
+        PRIVATE ${PROJECT_NAME}::${PROJECT_NAME}
+                ${PROJECT_NAME}::config
+        )
+
+    add_executable(${PROJECT_NAME}_example_json)
+
+    target_sources(${PROJECT_NAME}_example_json PRIVATE "example/json.cxx")
+
+    target_link_libraries(
+        ${PROJECT_NAME}_example_json
+        PRIVATE ${PROJECT_NAME}::${PROJECT_NAME}
+                ${PROJECT_NAME}::config
+                ${PROJECT_NAME}::glaze
+        )
+
+    add_executable(
+        ${PROJECT_NAME}_example_window
+        WIN32
+        )
+
+    target_sources(${PROJECT_NAME}_example_window PRIVATE "example/window.cxx")
+
+    target_link_libraries(
+        ${PROJECT_NAME}_example_window
+        PRIVATE ${PROJECT_NAME}::${PROJECT_NAME}
+                ${PROJECT_NAME}::config
+        )
+endif()
