@@ -31,21 +31,3 @@ target_compile_features(
     PRIVATE c_std_17
             cxx_std_23
     )
-
-target_compile_options(
-    ${PROJECT_NAME}_ada
-    PRIVATE /W0
-            /WX
-            /MP
-            /utf-8
-            /bigobj
-            /diagnostics:caret
-            /permissive-
-            /Zc:__cplusplus,__STDC__,enumTypes,templateScope,throwingNew,preprocessor
-    )
-
-target_link_options(
-    ${PROJECT_NAME}_ada
-    PRIVATE
-    /WX
-    )
