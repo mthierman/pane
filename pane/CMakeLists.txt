@@ -52,3 +52,20 @@ target_link_libraries(
             ${PROJECT_NAME}::cppwinrt
             icu
     )
+
+install(
+    TARGETS ${PROJECT_NAME}
+    EXPORT ${PROJECT_NAME}_targets
+    FILE_SET
+    ${PROJECT_NAME}_headers
+    )
+
+install(TARGETS ${PROJECT_NAME}_config EXPORT ${PROJECT_NAME}_targets)
+
+install(TARGETS ${PROJECT_NAME}_ada EXPORT ${PROJECT_NAME}_targets)
+install(TARGETS ${PROJECT_NAME}_glaze EXPORT ${PROJECT_NAME}_targets)
+install(TARGETS ${PROJECT_NAME}_webview2 EXPORT ${PROJECT_NAME}_targets)
+install(TARGETS ${PROJECT_NAME}_cppwinrt EXPORT ${PROJECT_NAME}_targets)
+install(TARGETS ${PROJECT_NAME}_wil EXPORT ${PROJECT_NAME}_targets)
+
+install(EXPORT ${PROJECT_NAME}_targets DESTINATION "share" NAMESPACE ${PROJECT_NAME}::)
