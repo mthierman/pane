@@ -24,12 +24,12 @@ target_sources(
            HEADERS
            BASE_DIRS
            "include"
-    PRIVATE "src/pane/filesystem.cxx"
-            "src/pane/hstring.cxx"
-            "src/pane/string.cxx"
-            "src/pane/system.cxx"
-            "src/pane/text.cxx"
-            "src/pane/window.cxx"
+    PRIVATE "src/filesystem.cxx"
+            "src/hstring.cxx"
+            "src/string.cxx"
+            "src/system.cxx"
+            "src/text.cxx"
+            "src/window.cxx"
     )
 
 target_link_libraries(
