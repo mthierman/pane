@@ -5,7 +5,7 @@ project("pane")
 list(
     APPEND
     CMAKE_MODULE_PATH
-    "${PROJECT_SOURCE_DIR}/cmake"
+    "${PROJECT_SOURCE_DIR}/${PROJECT_NAME}/cmake"
     )
 
-add_subdirectory("pane")
+add_subdirectory(${PROJECT_NAME})
