@@ -1,3 +1,9 @@
+list(
+    APPEND
+    CMAKE_MODULE_PATH
+    "${CMAKE_CURRENT_SOURCE_DIR}/cmake"
+    )
+
 include("libs/config")
 include("libs/webview2")
 include("libs/wil")
