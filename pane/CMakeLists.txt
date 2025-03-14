@@ -5,12 +5,13 @@ list(
     )
 
 include("config")
+
+include("install_packages")
 include("webview2")
 include("wil")
 include("cppwinrt")
 include("ada")
 include("glaze")
-include("install")
 
 add_library(${PROJECT_NAME})
 
