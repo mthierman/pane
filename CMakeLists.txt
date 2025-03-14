@@ -8,6 +8,4 @@ list(
 
 project("pane")
 
-message(STATUS ${CMAKE_MODULE_PATH})
-
 add_subdirectory(${PROJECT_NAME})
