@@ -1,6 +1,6 @@
 Push-Location
 
-$packages = $PSScriptRoot | Split-Path | Join-Path -ChildPath "packages"
+$packages = $PSScriptRoot | Split-Path | Split-Path | Join-Path -ChildPath "packages"
 
 New-Item -ItemType Directory $packages -ErrorAction SilentlyContinue
 Set-Location -Path $packages
