@@ -24,13 +24,15 @@ add_library(
 target_include_directories(
     ${PROJECT_NAME}_webview2
     SYSTEM
-    INTERFACE "${${PROJECT_NAME}_webview2_SOURCE_DIR}/build/native/include"
+    INTERFACE $<BUILD_INTERFACE:${${PROJECT_NAME}_webview2_SOURCE_DIR}/build/native/include>
+              $<INSTALL_INTERFACE:include>
     )
 
 target_link_directories(
     ${PROJECT_NAME}_webview2
     INTERFACE
-    "${${PROJECT_NAME}_webview2_SOURCE_DIR}/build/native/x64"
+    $<BUILD_INTERFACE:${${PROJECT_NAME}_webview2_SOURCE_DIR}/build/native/x64>
+    $<INSTALL_INTERFACE:lib>
     )
 
 target_link_libraries(${PROJECT_NAME}_webview2 INTERFACE WebView2LoaderStatic)

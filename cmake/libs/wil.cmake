@@ -24,5 +24,6 @@ add_library(
 target_include_directories(
     ${PROJECT_NAME}_wil
     SYSTEM
-    INTERFACE "${${PROJECT_NAME}_wil_SOURCE_DIR}/include"
+    INTERFACE $<BUILD_INTERFACE:${${PROJECT_NAME}_wil_SOURCE_DIR}/include>
+              $<INSTALL_INTERFACE:include>
     )

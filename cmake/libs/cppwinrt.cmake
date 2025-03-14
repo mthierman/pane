@@ -30,5 +30,6 @@ add_library(
 target_include_directories(
     ${PROJECT_NAME}_cppwinrt
     SYSTEM
-    INTERFACE "${${PROJECT_NAME}_cppwinrt_BINARY_DIR}/include"
+    INTERFACE $<BUILD_INTERFACE:${${PROJECT_NAME}_cppwinrt_BINARY_DIR}/include>
+              $<INSTALL_INTERFACE:include>
     )
