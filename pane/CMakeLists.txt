@@ -43,6 +43,7 @@ target_link_libraries(
            ${PROJECT_NAME}::wil
            ${PROJECT_NAME}::cppwinrt
            icu
+           Urlmon
     )
 
 add_subdirectory("examples")

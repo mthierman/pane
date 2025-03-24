@@ -2,14 +2,8 @@
 #include <print>
 
 auto main() -> int {
-    auto string { pane::string() };
-    auto from { std::u8string(u8"TEST") };
-
-    std::println("{}", from);
-
-    string = from;
-
-    std::println("{}", from);
+    auto lib { pane::fs::library::create_from_name() };
+    std::println("{}", pane::sys::format_message(lib));
 
     return 0;
 }
