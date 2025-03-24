@@ -28,6 +28,7 @@ target_sources(
            "include"
     PRIVATE "src/filesystem.cxx"
             "src/hstring.cxx"
+            "src/path.cxx"
             "src/string.cxx"
             "src/system.cxx"
             "src/text.cxx"
