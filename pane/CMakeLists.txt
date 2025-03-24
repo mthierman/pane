@@ -46,4 +46,6 @@ target_link_libraries(
             Urlmon
     )
 
-add_subdirectory("examples")
+if(PROJECT_IS_TOP_LEVEL)
+    add_subdirectory("examples")
+endif()
