@@ -23,8 +23,7 @@ target_sources(${PROJECT_NAME}_ada PRIVATE "${${PROJECT_NAME}_ada_SOURCE_DIR}/ad
 target_include_directories(
     ${PROJECT_NAME}_ada
     SYSTEM
-    INTERFACE $<BUILD_INTERFACE:${${PROJECT_NAME}_ada_SOURCE_DIR}/include>
-              $<INSTALL_INTERFACE:include>
+    INTERFACE "${${PROJECT_NAME}_ada_SOURCE_DIR}/include"
     )
 
 target_compile_features(
