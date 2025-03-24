@@ -8,7 +8,7 @@
 #include <string>
 #include <wil/resource.h>
 
-namespace pane::fs {
+namespace pane {
 struct file {
     using Self = file;
 
@@ -51,7 +51,7 @@ auto erase_file(const std::filesystem::path& path)
     -> std::expected<std::filesystem::path, std::u8string>;
 auto create_symlink(const std::filesystem::path& target, const std::filesystem::path& destination)
     -> std::expected<std::filesystem::path, std::u8string>;
-} // namespace pane::fs
+} // namespace pane
 
 namespace std {
 template <> struct formatter<std::filesystem::path> : formatter<string_view> {

@@ -16,13 +16,13 @@ struct window {
                                  .lpfnWndProc { window_procedure },
                                  .cbClsExtra { 0 },
                                  .cbWndExtra { sizeof(Self) },
-                                 .hInstance { pane::sys::module_handle() },
-                                 .hIcon { pane::sys::icon::application() },
-                                 .hCursor { pane::sys::cursor::arrow() },
+                                 .hInstance { pane::module_handle() },
+                                 .hIcon { pane::icon::application() },
+                                 .hCursor { pane::cursor::arrow() },
                                  .hbrBackground { nullptr },
                                  .lpszMenuName { nullptr },
                                  .lpszClassName { L"DefaultWindow" },
-                                 .hIconSm { pane::sys::icon::application() } };
+                                 .hIconSm { pane::icon::application() } };
     ::HWND window_handle;
 };
 } // namespace pane

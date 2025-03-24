@@ -4,7 +4,7 @@
 #include <cstdlib>
 #include <wil/resource.h>
 
-namespace pane::sys {
+namespace pane {
 auto module_handle() -> ::HMODULE {
     ::HMODULE hmodule;
 
@@ -77,4 +77,4 @@ auto message_loop() -> int {
 
     return static_cast<int>(msg.wParam);
 }
-} // namespace pane::sys
+} // namespace pane

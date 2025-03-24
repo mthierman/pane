@@ -8,8 +8,8 @@ auto main() -> int {
     // std::println("{}", pane::sys::format_message(lib));
 
     auto init { wil::CoInitializeEx() };
-    auto lib { pane::fs::library::create() };
-    auto folders { pane::fs::library::get_folders(lib) };
+    auto lib { pane::library::create() };
+    auto folders { pane::library::get_folders(lib) };
     // std::println("{}", pane::sys::format_message(lib));
 
     return 0;

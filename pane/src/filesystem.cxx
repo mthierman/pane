@@ -3,14 +3,14 @@
 #include <pane/hstring.hxx>
 #include <urlmon.h>
 
-namespace pane::fs {
+namespace pane {
 auto file::create_always(const std::filesystem::path& path) -> std::expected<Self, std::u8string> {
     if (auto handle {
             ::CreateFile2(path.c_str(), GENERIC_READ | GENERIC_WRITE, 0, CREATE_ALWAYS, nullptr) };
         handle != INVALID_HANDLE_VALUE) {
         return Self { .handle { handle } };
     } else {
-        return std::unexpected(pane::sys::last_error());
+        return std::unexpected(pane::last_error());
     }
 }
 
@@ -20,7 +20,7 @@ auto file::create_new(const std::filesystem::path& path) -> std::expected<Self, 
         handle != INVALID_HANDLE_VALUE) {
         return Self { .handle { handle } };
     } else {
-        return std::unexpected(pane::sys::last_error());
+        return std::unexpected(pane::last_error());
     }
 }
 
@@ -30,7 +30,7 @@ auto file::open_always(const std::filesystem::path& path) -> std::expected<Self,
         handle != INVALID_HANDLE_VALUE) {
         return Self { .handle { handle } };
     } else {
-        return std::unexpected(pane::sys::last_error());
+        return std::unexpected(pane::last_error());
     }
 }
 
@@ -40,7 +40,7 @@ auto file::open_existing(const std::filesystem::path& path) -> std::expected<Sel
         handle != INVALID_HANDLE_VALUE) {
         return Self { .handle { handle } };
     } else {
-        return std::unexpected(pane::sys::last_error());
+        return std::unexpected(pane::last_error());
     }
 }
 
@@ -53,7 +53,7 @@ auto file::from_url(std::u8string_view url, const std::filesystem::path& path)
             result == S_OK) {
             return open_existing(path);
         } else {
-            return std::unexpected(pane::sys::last_error());
+            return std::unexpected(pane::last_error());
         }
     } else {
         return std::unexpected(u16url.error());
@@ -124,7 +124,7 @@ auto app_data() -> std::expected<std::filesystem::path, std::u8string> {
         result == S_OK) {
         return buffer.get();
     } else {
-        return std::unexpected(pane::sys::format_message(result));
+        return std::unexpected(pane::format_message(result));
     }
 }
 
@@ -138,7 +138,7 @@ auto temp() -> std::expected<std::filesystem::path, std::u8string> {
 
         return buffer;
     } else {
-        return std::unexpected(pane::sys::last_error());
+        return std::unexpected(pane::last_error());
     }
 }
 
@@ -147,7 +147,7 @@ auto create_directory(const std::filesystem::path& path)
     if (auto result { ::CreateDirectoryW(path.c_str(), nullptr) }; result != 0) {
         return path;
     } else {
-        return std::unexpected(pane::sys::last_error());
+        return std::unexpected(pane::last_error());
     }
 }
 
@@ -158,7 +158,7 @@ auto create_directory(const std::filesystem::path& path,
         result != 0) {
         return path;
     } else {
-        return std::unexpected(pane::sys::last_error());
+        return std::unexpected(pane::last_error());
     }
 }
 
@@ -167,7 +167,7 @@ auto move_file(const std::filesystem::path& origin, const std::filesystem::path&
     if (auto result { ::MoveFileW(origin.c_str(), destination.c_str()) }; result != 0) {
         return destination;
     } else {
-        return std::unexpected(pane::sys::last_error());
+        return std::unexpected(pane::last_error());
     }
 }
 
@@ -177,7 +177,7 @@ auto copy_file(const std::filesystem::path& origin, const std::filesystem::path&
         SUCCEEDED(result)) {
         return destination;
     } else {
-        return std::unexpected(pane::sys::last_error());
+        return std::unexpected(pane::last_error());
     }
 }
 
@@ -186,7 +186,7 @@ auto erase_file(const std::filesystem::path& path)
     if (auto result { ::DeleteFileW(path.c_str()) }; result != 0) {
         return path;
     } else {
-        return std::unexpected(pane::sys::last_error());
+        return std::unexpected(pane::last_error());
     }
 }
 
@@ -201,7 +201,7 @@ auto create_symlink(const std::filesystem::path& target, const std::filesystem::
         result != 0) {
         return destination;
     } else {
-        return std::unexpected(pane::sys::last_error());
+        return std::unexpected(pane::last_error());
     }
 }
-} // namespace pane::fs
+} // namespace pane

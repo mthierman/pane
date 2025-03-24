@@ -3,7 +3,7 @@
 #include <optional>
 #include <string>
 
-namespace pane::sys {
+namespace pane {
 auto module_handle() -> ::HMODULE;
 auto format_message(::HRESULT errorCode) -> std::u8string;
 auto last_error() -> std::u8string;
@@ -22,4 +22,4 @@ namespace icon {
 } // namespace icon
 
 auto message_loop() -> int;
-} // namespace pane::sys
+} // namespace pane

@@ -31,7 +31,6 @@ target_sources(
             "src/path.cxx"
             "src/string.cxx"
             "src/system.cxx"
-            "src/text.cxx"
             "src/window.cxx"
     )
 
