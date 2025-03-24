@@ -27,12 +27,12 @@ struct file {
     wil::unique_handle handle;
 };
 
-// struct library {
-//     using Self = library;
+struct library {
+    using Self = library;
 
-//     static auto create_from_name() -> ::HRESULT;
-//     // static auto create() -> std::expected<Self, std::u8string>;
-// };
+    static auto create_from_name() -> ::HRESULT;
+    // static auto create() -> std::expected<Self, std::u8string>;
+};
 
 auto app_data() -> std::expected<std::filesystem::path, std::u8string>;
 auto temp() -> std::expected<std::filesystem::path, std::u8string>;

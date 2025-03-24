@@ -60,6 +60,21 @@ auto file::from_url(std::u8string_view url, const std::filesystem::path& path)
     }
 }
 
+auto library::create_from_name() -> ::HRESULT {
+    IShellLibrary* lib;
+    auto result { SHLoadLibraryFromParsingName(L"TEST", STGM_READWRITE, IID_PPV_ARGS(&lib)) };
+
+    return result;
+}
+
+// auto library::create() -> std::expected<Self, std::u8string> {
+//     //
+//     // auto shell_library { wil::CoCreateInstance<::IShellLibrary>(CLSID_ShellLibrary) };
+//     IShellLibrary* lib;
+//     auto result { SHLoadLibraryFromParsingName(
+//         L"TEST", STGM_READWRITE, IID_PPV_ARGS(&i_shell_library)) };
+// }
+
 auto app_data() -> std::expected<std::filesystem::path, std::u8string> {
     wil::unique_cotaskmem_string buffer;
 
