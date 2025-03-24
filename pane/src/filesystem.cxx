@@ -2,7 +2,6 @@
 #include <pane/system.hxx>
 #include <pane/hstring.hxx>
 #include <urlmon.h>
-#include <print>
 
 namespace pane::fs {
 auto file::create_always(const std::filesystem::path& path) -> std::expected<Self, std::u8string> {
@@ -90,7 +89,7 @@ auto library::create() -> ::IShellLibrary* {
 }
 
 auto library::get_folders(::IShellLibrary* lib) -> std::vector<std::u8string> {
-    IShellItemArray* array;
+    IShellItemArray* array { nullptr };
     // auto folders { lib->GetFolders(LFF_ALLITEMS, IID_PPV_ARGS(&array)) };
     lib->GetFolders(LFF_ALLITEMS, IID_PPV_ARGS(&array));
 
@@ -101,7 +100,7 @@ auto library::get_folders(::IShellLibrary* lib) -> std::vector<std::u8string> {
     wil::unique_cotaskmem_string name;
     item->GetDisplayName(SIGDN_FILESYSPATH, &name);
 
-    std::println("{}", count);
+    // std::println("{}", count);
 
     OutputDebugStringW(name.get());
 
