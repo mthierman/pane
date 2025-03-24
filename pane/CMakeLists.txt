@@ -36,14 +36,14 @@ target_sources(
 
 target_link_libraries(
     ${PROJECT_NAME}
+    PRIVATE ${PROJECT_NAME}::config
+            icu
+            Urlmon
     PUBLIC ${PROJECT_NAME}::ada
            ${PROJECT_NAME}::glaze
            ${PROJECT_NAME}::webview2
            ${PROJECT_NAME}::wil
            ${PROJECT_NAME}::cppwinrt
-    PRIVATE ${PROJECT_NAME}::config
-            icu
-            Urlmon
     )
 
 if(PROJECT_IS_TOP_LEVEL)
