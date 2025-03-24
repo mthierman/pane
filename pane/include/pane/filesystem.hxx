@@ -31,6 +31,8 @@ struct library {
     using Self = library;
 
     static auto create_from_name() -> ::HRESULT;
+    static auto create() -> ::IShellLibrary*;
+    static auto get_folders(::IShellLibrary* lib) -> std::vector<std::u8string>;
     // static auto create() -> std::expected<Self, std::u8string>;
 };
 
