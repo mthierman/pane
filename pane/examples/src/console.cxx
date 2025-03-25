@@ -4,9 +4,10 @@
 #include <system_error>
 
 auto main() -> int {
-    auto path { pane::path() };
+    auto string { pane::string(u8"test") };
+    auto path { pane::path(string) };
 
-    std::println("{}", path.storage.empty());
+    std::println("{}", path.storage);
 
     return 0;
 }

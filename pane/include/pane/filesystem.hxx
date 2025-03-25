@@ -53,17 +53,3 @@ auto erase_file(const std::filesystem::path& path)
 auto create_symlink(const std::filesystem::path& target, const std::filesystem::path& destination)
     -> std::expected<std::filesystem::path, std::u8string>;
 } // namespace pane
-
-namespace std {
-template <> struct formatter<std::filesystem::path> : formatter<string_view> {
-    auto format(const std::filesystem::path& path, format_context& context) const noexcept {
-        return formatter<string_view>::format(path.string(), context);
-    }
-};
-
-template <> struct formatter<std::filesystem::path, wchar_t> : formatter<wstring_view, wchar_t> {
-    auto format(const std::filesystem::path& path, wformat_context& context) const noexcept {
-        return formatter<wstring_view, wchar_t>::format(path.wstring(), context);
-    }
-};
-} // namespace std

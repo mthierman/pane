@@ -9,4 +9,13 @@ auto path::operator=(std::filesystem::path&& path) noexcept -> Self& {
 
     return *this;
 }
+
+path::path(const string& string) noexcept
+    : storage { string.storage } { }
+
+// auto path::operator=(const string& string) noexcept -> Self& {
+//     storage = std::move(path);
+
+//     return *this;
+// }
 } // namespace pane
