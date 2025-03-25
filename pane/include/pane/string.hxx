@@ -14,30 +14,30 @@ struct string {
     string() = default;
     ~string() = default;
 
-    string(Self&& str) noexcept = default;
-    auto operator=(Self&& str) noexcept -> Self& = default;
+    string(Self&& string) noexcept = default;
+    auto operator=(Self&& string) noexcept -> Self& = default;
 
-    string(const Self& str) = default;
-    auto operator=(const Self& str) -> Self& = default;
+    string(const Self& string) = default;
+    auto operator=(const Self& string) -> Self& = default;
 
-    explicit string(std::u8string&& str) noexcept;
-    auto operator=(std::u8string&& str) noexcept -> Self&;
+    explicit string(std::u8string&& string) noexcept;
+    auto operator=(std::u8string&& string) noexcept -> Self&;
 
-    explicit string(const char8_t* str);
-    explicit string(const std::u8string& str);
-    auto operator=(const std::u8string& str) -> Self&;
+    explicit string(const char8_t* string);
+    explicit string(const std::u8string& string);
+    auto operator=(const std::u8string& string) -> Self&;
 
-    explicit string(const char* str);
-    explicit string(const std::string& str);
-    auto operator=(const std::string& str) -> Self&;
+    explicit string(const char* string);
+    explicit string(const std::string& string);
+    auto operator=(const std::string& string) -> Self&;
 
-    static auto from_utf16(std::u16string_view str, bool replacement = true)
+    static auto from_utf16(std::u16string_view string, bool replacement = true)
         -> std::expected<Self, std::error_code>;
 
-    static auto from_utf16(std::wstring_view str, bool replacement = true)
+    static auto from_utf16(std::wstring_view string, bool replacement = true)
         -> std::expected<Self, std::error_code>;
 
-    static auto from_utf16(const hstring& str, bool replacement = true)
+    static auto from_utf16(const hstring& string, bool replacement = true)
         -> std::expected<Self, std::error_code>;
 
     auto c_str() -> char*;
@@ -58,14 +58,15 @@ struct string {
 
 namespace std {
 template <> struct formatter<std::u8string> : formatter<string_view> {
-    auto format(const std::u8string& str, format_context& context) const noexcept {
-        return formatter<string_view>::format(std::string { str.begin(), str.end() }, context);
+    auto format(const std::u8string& string, format_context& context) const noexcept {
+        return formatter<string_view>::format(std::string { string.begin(), string.end() },
+                                              context);
     }
 };
 
 template <> struct formatter<pane::string> : formatter<string_view> {
-    auto format(const pane::string& str, format_context& context) const noexcept {
-        return formatter<string_view>::format(str.to_string(), context);
+    auto format(const pane::string& string, format_context& context) const noexcept {
+        return formatter<string_view>::format(string.to_string(), context);
     }
 };
 } // namespace std
