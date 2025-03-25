@@ -26,11 +26,17 @@ auto module_handle() -> std::expected<HMODULE, std::error_code> {
 auto format_message(HRESULT error_code) -> std::u8string {
     wil::unique_hlocal_string buffer;
 
+    DWORD language_id;
+    GetLocaleInfoEx(L"en-US",
+                    LOCALE_RETURN_NUMBER | LOCALE_ILANGUAGE,
+                    reinterpret_cast<LPWSTR>(&language_id),
+                    sizeof(language_id) / sizeof(WCHAR));
+
     FormatMessageW(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM
                        | FORMAT_MESSAGE_IGNORE_INSERTS | FORMAT_MESSAGE_MAX_WIDTH_MASK,
                    nullptr,
                    error_code,
-                   0,
+                   language_id,
                    wil::out_param_ptr<LPWSTR>(buffer),
                    0,
                    nullptr);
