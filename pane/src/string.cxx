@@ -63,13 +63,13 @@ auto string::from_utf16(std::u16string_view string, bool replacement)
     return std::unexpected(make_error_code(errorCode));
 }
 
-auto string::from_utf16(std::wstring_view str, bool replacement)
+auto string::from_utf16(std::wstring_view string, bool replacement)
     -> std::expected<Self, std::error_code> {
     auto buffer { std::u8string() };
     auto errorCode { U_ZERO_ERROR };
 
     try {
-        buffer.resize(str.length());
+        buffer.resize(string.length());
     } catch (const std::bad_alloc&) {
         return std::unexpected(std::make_error_code(std::errc::not_enough_memory));
     }
@@ -77,8 +77,8 @@ auto string::from_utf16(std::wstring_view str, bool replacement)
     u_strToUTF8WithSub(reinterpret_cast<char*>(buffer.data()),
                        static_cast<int32_t>(buffer.length()),
                        nullptr,
-                       reinterpret_cast<const char16_t*>(str.data()),
-                       static_cast<int32_t>(str.length()),
+                       reinterpret_cast<const char16_t*>(string.data()),
+                       static_cast<int32_t>(string.length()),
                        replacement ? U_SENTINEL : 0xFFFD,
                        nullptr,
                        &errorCode);
@@ -90,9 +90,9 @@ auto string::from_utf16(std::wstring_view str, bool replacement)
     return std::unexpected(make_error_code(errorCode));
 }
 
-auto string::from_utf16(const hstring& str, bool replacement)
+auto string::from_utf16(const hstring& string, bool replacement)
     -> std::expected<Self, std::error_code> {
-    return string::from_utf16(str.storage, replacement);
+    return string::from_utf16(string.storage, replacement);
 }
 
 auto string::c_str() -> char* { return reinterpret_cast<char*>(storage.data()); }

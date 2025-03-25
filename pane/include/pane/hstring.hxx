@@ -14,30 +14,30 @@ struct hstring {
     hstring() = default;
     ~hstring() = default;
 
-    hstring(Self&& str) noexcept = default;
-    auto operator=(Self&& str) noexcept -> Self& = default;
+    hstring(Self&& string) noexcept = default;
+    auto operator=(Self&& string) noexcept -> Self& = default;
 
-    hstring(const Self& str) = default;
-    auto operator=(const Self& str) -> Self& = default;
+    hstring(const Self& string) = default;
+    auto operator=(const Self& string) -> Self& = default;
 
-    explicit hstring(std::u16string&& str) noexcept;
-    auto operator=(std::u16string&& str) noexcept -> Self&;
+    explicit hstring(std::u16string&& string) noexcept;
+    auto operator=(std::u16string&& string) noexcept -> Self&;
 
-    explicit hstring(const char16_t* str);
-    explicit hstring(const std::u16string& str);
-    auto operator=(const std::u16string& str) -> Self&;
+    explicit hstring(const char16_t* string);
+    explicit hstring(const std::u16string& string);
+    auto operator=(const std::u16string& string) -> Self&;
 
-    explicit hstring(const wchar_t* str);
-    explicit hstring(const std::wstring& str);
-    auto operator=(const std::wstring& str) -> Self&;
+    explicit hstring(const wchar_t* string);
+    explicit hstring(const std::wstring& string);
+    auto operator=(const std::wstring& string) -> Self&;
 
-    static auto from_utf8(std::u8string_view str, bool replacement = true)
+    static auto from_utf8(std::u8string_view string, bool replacement = true)
         -> std::expected<Self, std::error_code>;
 
-    static auto from_utf8(std::string_view str, bool replacement = true)
+    static auto from_utf8(std::string_view string, bool replacement = true)
         -> std::expected<Self, std::error_code>;
 
-    static auto from_utf8(const string& str, bool replacement = true)
+    static auto from_utf8(const string& string, bool replacement = true)
         -> std::expected<Self, std::error_code>;
 
     auto c_str() -> wchar_t*;
@@ -58,15 +58,15 @@ struct hstring {
 
 namespace std {
 template <> struct formatter<std::u16string, wchar_t> : formatter<wstring_view, wchar_t> {
-    auto format(const std::u16string& str, wformat_context& context) const noexcept {
-        return formatter<wstring_view, wchar_t>::format(std::wstring { str.begin(), str.end() },
-                                                        context);
+    auto format(const std::u16string& u16string, wformat_context& context) const noexcept {
+        return formatter<wstring_view, wchar_t>::format(
+            std::wstring { u16string.begin(), u16string.end() }, context);
     }
 };
 
 template <> struct formatter<pane::hstring, wchar_t> : formatter<wstring_view, wchar_t> {
-    auto format(const pane::hstring& str, wformat_context& context) const noexcept {
-        return formatter<wstring_view, wchar_t>::format(str.to_wstring(), context);
+    auto format(const pane::hstring& hstring, wformat_context& context) const noexcept {
+        return formatter<wstring_view, wchar_t>::format(hstring.to_wstring(), context);
     }
 };
 } // namespace std

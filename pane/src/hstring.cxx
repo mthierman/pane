@@ -3,46 +3,46 @@
 #include <new>
 
 namespace pane {
-hstring::hstring(std::u16string&& str) noexcept
-    : storage { std::move(str) } { }
+hstring::hstring(std::u16string&& string) noexcept
+    : storage { std::move(string) } { }
 
-auto hstring::operator=(std::u16string&& str) noexcept -> Self& {
-    storage = std::move(str);
-
-    return *this;
-}
-
-hstring::hstring(const char16_t* str)
-    : storage { str } { }
-
-hstring::hstring(const std::u16string& str)
-    : storage { str } { }
-
-auto hstring::operator=(const std::u16string& str) -> Self& {
-    storage = str;
+auto hstring::operator=(std::u16string&& string) noexcept -> Self& {
+    storage = std::move(string);
 
     return *this;
 }
 
-hstring::hstring(const wchar_t* str)
-    : storage { reinterpret_cast<const char16_t*>(str) } { }
+hstring::hstring(const char16_t* string)
+    : storage { string } { }
 
-hstring::hstring(const std::wstring& str)
-    : storage { str.begin(), str.end() } { }
+hstring::hstring(const std::u16string& string)
+    : storage { string } { }
 
-auto hstring::operator=(const std::wstring& str) -> Self& {
-    storage = std::u16string { str.begin(), str.end() };
+auto hstring::operator=(const std::u16string& string) -> Self& {
+    storage = string;
 
     return *this;
 }
 
-auto hstring::from_utf8(std::u8string_view str, bool replacement)
+hstring::hstring(const wchar_t* string)
+    : storage { reinterpret_cast<const char16_t*>(string) } { }
+
+hstring::hstring(const std::wstring& string)
+    : storage { string.begin(), string.end() } { }
+
+auto hstring::operator=(const std::wstring& string) -> Self& {
+    storage = std::u16string { string.begin(), string.end() };
+
+    return *this;
+}
+
+auto hstring::from_utf8(std::u8string_view string, bool replacement)
     -> std::expected<Self, std::error_code> {
     auto buffer { std::u16string() };
     auto errorCode { U_ZERO_ERROR };
 
     try {
-        buffer.resize(str.length());
+        buffer.resize(string.length());
     } catch (const std::bad_alloc&) {
         return std::unexpected(std::make_error_code(std::errc::not_enough_memory));
     }
@@ -50,8 +50,8 @@ auto hstring::from_utf8(std::u8string_view str, bool replacement)
     u_strFromUTF8WithSub(buffer.data(),
                          static_cast<int32_t>(buffer.length()),
                          nullptr,
-                         reinterpret_cast<const char*>(str.data()),
-                         static_cast<int32_t>(str.length()),
+                         reinterpret_cast<const char*>(string.data()),
+                         static_cast<int32_t>(string.length()),
                          replacement ? U_SENTINEL : 0xFFFD,
                          nullptr,
                          &errorCode);
@@ -63,13 +63,13 @@ auto hstring::from_utf8(std::u8string_view str, bool replacement)
     return std::unexpected(make_error_code(errorCode));
 }
 
-auto hstring::from_utf8(std::string_view str, bool replacement)
+auto hstring::from_utf8(std::string_view string, bool replacement)
     -> std::expected<Self, std::error_code> {
     auto buffer { std::u16string() };
     auto errorCode { U_ZERO_ERROR };
 
     try {
-        buffer.resize(str.length());
+        buffer.resize(string.length());
     } catch (const std::bad_alloc&) {
         return std::unexpected(std::make_error_code(std::errc::not_enough_memory));
     }
@@ -77,8 +77,8 @@ auto hstring::from_utf8(std::string_view str, bool replacement)
     u_strFromUTF8WithSub(buffer.data(),
                          static_cast<int32_t>(buffer.length()),
                          nullptr,
-                         str.data(),
-                         static_cast<int32_t>(str.length()),
+                         string.data(),
+                         static_cast<int32_t>(string.length()),
                          replacement ? U_SENTINEL : 0xFFFD,
                          nullptr,
                          &errorCode);
@@ -90,9 +90,9 @@ auto hstring::from_utf8(std::string_view str, bool replacement)
     return std::unexpected(make_error_code(errorCode));
 }
 
-auto hstring::from_utf8(const string& str, bool replacement)
+auto hstring::from_utf8(const string& string, bool replacement)
     -> std::expected<Self, std::error_code> {
-    return hstring::from_utf8(str.storage, replacement);
+    return hstring::from_utf8(string.storage, replacement);
 }
 
 auto hstring::c_str() -> wchar_t* { return reinterpret_cast<wchar_t*>(storage.data()); }
