@@ -1,4 +1,4 @@
-#include <pane/error.hxx>
+#include <pane/icu.hxx>
 
 auto icu_error::name() const noexcept -> const char* { return "icu"; }
 

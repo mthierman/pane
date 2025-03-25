@@ -1,10 +1,9 @@
 #pragma once
-#include <icu.h>
 #include <expected>
 #include <format>
 #include <string>
 #include <system_error>
-#include <pane/error.hxx>
+#include <pane/icu.hxx>
 
 namespace pane {
 struct hstring;

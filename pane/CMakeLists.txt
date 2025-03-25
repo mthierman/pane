@@ -26,9 +26,9 @@ target_sources(
            HEADERS
            BASE_DIRS
            "include"
-    PRIVATE "src/error.cxx"
-            "src/filesystem.cxx"
+    PRIVATE "src/filesystem.cxx"
             "src/hstring.cxx"
+            "src/icu.cxx"
             "src/path.cxx"
             "src/string.cxx"
             "src/system.cxx"
