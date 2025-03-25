@@ -7,7 +7,7 @@
 
 struct icu_error : std::error_category {
     auto name() const noexcept -> const char* override;
-    auto message(int ev) const -> std::string override;
+    auto message(int value) const -> std::string override;
 };
 
 auto make_error_code(UErrorCode) -> std::error_code;

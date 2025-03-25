@@ -2,8 +2,8 @@
 
 auto icu_error::name() const noexcept -> const char* { return "icu"; }
 
-auto icu_error::message(int ev) const -> std::string {
-    return u_errorName(static_cast<UErrorCode>(ev));
+auto icu_error::message(int value) const -> std::string {
+    return u_errorName(static_cast<UErrorCode>(value));
 }
 
 const std::error_category& icu_error_category() {
