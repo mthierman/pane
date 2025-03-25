@@ -4,6 +4,7 @@
 #include <system_error>
 
 // http://blog.think-async.com/2010/04/system-error-support-in-c0x-part-4.html
+// https://kb.firedaemon.com/support/solutions/articles/4000121648-fitting-com-into-c-system-error-handling
 
 namespace pane {
 struct icu_error : std::error_category {
