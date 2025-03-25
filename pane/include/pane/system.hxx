@@ -1,7 +1,6 @@
 #pragma once
 #include <Windows.h>
 #include <expected>
-#include <string>
 #include <system_error>
 #include <pane/string.hxx>
 

@@ -6,7 +6,7 @@
 auto main() -> int {
     HRESULT hresult { S_OK };
 
-    std::println("{}", pane::format_message(hresult));
+    std::println("{}", pane::format_message(hresult).value_or(pane::string("WOOPS")));
 
     return 0;
 }
