@@ -3,6 +3,16 @@
 #include <expected>
 #include <format>
 #include <string>
+#include <system_error>
+
+// http://blog.think-async.com/2010/04/system-error-support-in-c0x-part-4.html
+
+struct icu_error : std::error_category {
+    auto name() const noexcept -> const char* override;
+    auto message(int ev) const -> std::string override;
+};
+
+auto make_error_code(UErrorCode) -> std::error_code;
 
 namespace pane {
 struct hstring;
@@ -31,13 +41,13 @@ struct string {
     auto operator=(const std::string& str) -> Self&;
 
     static auto from_utf16(std::u16string_view str, bool replacement = true)
-        -> std::expected<Self, std::u8string>;
+        -> std::expected<Self, std::error_code>;
 
     static auto from_utf16(std::wstring_view str, bool replacement = true)
-        -> std::expected<Self, std::u8string>;
+        -> std::expected<Self, std::error_code>;
 
     static auto from_utf16(const hstring& str, bool replacement = true)
-        -> std::expected<Self, std::u8string>;
+        -> std::expected<Self, std::error_code>;
 
     auto c_str() -> char*;
 
@@ -52,6 +62,8 @@ struct string {
 } // namespace pane
 
 namespace std {
+template <> struct is_error_code_enum<UErrorCode> : true_type { };
+
 template <> struct formatter<std::u8string> : formatter<string_view> {
     auto format(const std::u8string& str, format_context& context) const noexcept {
         return formatter<string_view>::format(std::string { str.begin(), str.end() }, context);
