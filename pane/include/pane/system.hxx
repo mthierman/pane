@@ -1,6 +1,5 @@
 #pragma once
 #include <Windows.h>
-#include <optional>
 #include <string>
 
 namespace pane {
@@ -11,6 +10,5 @@ auto null_brush() -> HBRUSH;
 auto arrow_cursor() -> HCURSOR;
 auto application_icon() -> HICON;
 auto resource_icon() -> HICON;
-
 auto message_loop() -> int;
 } // namespace pane
