@@ -8,5 +8,7 @@ auto main() -> int {
 
     std::println("{}", pane::format_message(hresult).value_or(pane::string("WOOPS")));
 
+    std::println("{}", std::system_category().name());
+
     return 0;
 }

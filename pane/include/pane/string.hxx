@@ -4,15 +4,7 @@
 #include <format>
 #include <string>
 #include <system_error>
-
-// http://blog.think-async.com/2010/04/system-error-support-in-c0x-part-4.html
-
-struct icu_error : std::error_category {
-    auto name() const noexcept -> const char* override;
-    auto message(int ev) const -> std::string override;
-};
-
-auto make_error_code(UErrorCode) -> std::error_code;
+#include <pane/error.hxx>
 
 namespace pane {
 struct hstring;
@@ -62,8 +54,6 @@ struct string {
 } // namespace pane
 
 namespace std {
-template <> struct is_error_code_enum<UErrorCode> : true_type { };
-
 template <> struct formatter<std::u8string> : formatter<string_view> {
     auto format(const std::u8string& str, format_context& context) const noexcept {
         return formatter<string_view>::format(std::string { str.begin(), str.end() }, context);
