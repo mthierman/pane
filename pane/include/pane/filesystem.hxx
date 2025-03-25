@@ -6,6 +6,7 @@
 #include <format>
 #include <initializer_list>
 #include <string>
+#include <system_error>
 #include <wil/resource.h>
 
 namespace pane {
@@ -14,8 +15,7 @@ namespace pane {
 
 //     static auto create_always(const std::filesystem::path& path)
 //         -> std::expected<Self, std::u8string>;
-//     static auto create_new(const std::filesystem::path& path) -> std::expected<Self,
-//     std::u8string>;
+//     static auto create_new(const std::filesystem::path& path) -> std::expected<Self, std::u8string>;
 
 //     static auto open_always(const std::filesystem::path& path)
 //         -> std::expected<Self, std::u8string>;
