@@ -1,8 +1,9 @@
 #pragma once
-#include <icu.h>
 #include <expected>
 #include <format>
 #include <string>
+#include <system_error>
+#include <pane/icu.hxx>
 
 namespace pane {
 struct string;
@@ -31,13 +32,13 @@ struct hstring {
     auto operator=(const std::wstring& str) -> Self&;
 
     static auto from_utf8(std::u8string_view str, bool replacement = true)
-        -> std::expected<Self, std::u8string>;
+        -> std::expected<Self, std::error_code>;
 
     static auto from_utf8(std::string_view str, bool replacement = true)
-        -> std::expected<Self, std::u8string>;
+        -> std::expected<Self, std::error_code>;
 
     static auto from_utf8(const string& str, bool replacement = true)
-        -> std::expected<Self, std::u8string>;
+        -> std::expected<Self, std::error_code>;
 
     auto c_str() -> wchar_t*;
 

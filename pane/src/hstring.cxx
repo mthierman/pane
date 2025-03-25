@@ -37,14 +37,14 @@ auto hstring::operator=(const std::wstring& str) -> Self& {
 }
 
 auto hstring::from_utf8(std::u8string_view str, bool replacement)
-    -> std::expected<Self, std::u8string> {
+    -> std::expected<Self, std::error_code> {
     auto buffer { std::u16string() };
     auto errorCode { U_ZERO_ERROR };
 
     try {
         buffer.resize(str.length());
-    } catch (const std::bad_alloc& error) {
-        return std::unexpected(reinterpret_cast<const char8_t*>(error.what()));
+    } catch (const std::bad_alloc&) {
+        return std::unexpected(std::make_error_code(std::errc::not_enough_memory));
     }
 
     u_strFromUTF8WithSub(buffer.data(),
@@ -60,18 +60,18 @@ auto hstring::from_utf8(std::u8string_view str, bool replacement)
         return Self(buffer);
     }
 
-    return std::unexpected(reinterpret_cast<const char8_t*>(u_errorName(errorCode)));
+    return std::unexpected(make_error_code(errorCode));
 }
 
 auto hstring::from_utf8(std::string_view str, bool replacement)
-    -> std::expected<Self, std::u8string> {
+    -> std::expected<Self, std::error_code> {
     auto buffer { std::u16string() };
     auto errorCode { U_ZERO_ERROR };
 
     try {
         buffer.resize(str.length());
-    } catch (const std::bad_alloc& error) {
-        return std::unexpected(reinterpret_cast<const char8_t*>(error.what()));
+    } catch (const std::bad_alloc&) {
+        return std::unexpected(std::make_error_code(std::errc::not_enough_memory));
     }
 
     u_strFromUTF8WithSub(buffer.data(),
@@ -87,10 +87,11 @@ auto hstring::from_utf8(std::string_view str, bool replacement)
         return Self(buffer);
     }
 
-    return std::unexpected(reinterpret_cast<const char8_t*>(u_errorName(errorCode)));
+    return std::unexpected(make_error_code(errorCode));
 }
 
-auto hstring::from_utf8(const string& str, bool replacement) -> std::expected<Self, std::u8string> {
+auto hstring::from_utf8(const string& str, bool replacement)
+    -> std::expected<Self, std::error_code> {
     return hstring::from_utf8(str.data, replacement);
 }
 
