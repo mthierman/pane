@@ -23,6 +23,9 @@ struct path {
     explicit path(const string& string) noexcept;
     auto operator=(const string& string) noexcept -> Self&;
 
+    explicit path(const hstring& string) noexcept;
+    auto operator=(const hstring& string) noexcept -> Self&;
+
     std::filesystem::path storage;
 };
 } // namespace pane

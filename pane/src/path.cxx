@@ -18,4 +18,13 @@ auto path::operator=(const string& string) noexcept -> Self& {
 
     return *this;
 }
+
+path::path(const hstring& string) noexcept
+    : storage { string.storage } { }
+
+auto path::operator=(const hstring& string) noexcept -> Self& {
+    storage = string.storage;
+
+    return *this;
+}
 } // namespace pane
