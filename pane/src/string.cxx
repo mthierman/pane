@@ -102,4 +102,8 @@ auto string::c_str() const -> const char* { return reinterpret_cast<const char*>
 auto string::u8_str() -> char8_t* { return storage.data(); }
 
 auto string::u8_str() const -> const char8_t* { return storage.data(); }
+
+auto string::to_string() -> std::string { return { storage.begin(), storage.end() }; }
+
+auto string::to_string() const -> const std::string { return { storage.begin(), storage.end() }; }
 } // namespace pane
