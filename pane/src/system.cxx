@@ -1,6 +1,4 @@
 #include <pane/system.hxx>
-#include <pane/string.hxx>
-#include <pane/hstring.hxx>
 #include <cstdlib>
 #include <wil/resource.h>
 
@@ -23,7 +21,7 @@ auto module_handle() -> std::expected<HMODULE, std::error_code> {
     return hmodule;
 }
 
-auto format_message(HRESULT error_code) -> std::u8string {
+auto format_message(HRESULT error_code) -> string {
     wil::unique_hlocal_string buffer;
 
     DWORD language_id;
@@ -41,11 +39,13 @@ auto format_message(HRESULT error_code) -> std::u8string {
                    0,
                    nullptr);
 
-    if (auto converted { pane::string::from_utf16(buffer.get()) }) {
-        return converted.value().data;
+    auto message { string::from_utf16(buffer.get()) };
+
+    if (!message.has_value()) {
+        return {};
     }
 
-    return {};
+    return *message;
 }
 
 auto null_brush() -> HBRUSH { return static_cast<HBRUSH>(GetStockObject(NULL_BRUSH)); }
