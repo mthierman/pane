@@ -21,7 +21,7 @@ auto module_handle() -> std::expected<HMODULE, std::error_code> {
     return hmodule;
 }
 
-auto format_message(HRESULT error_code) -> string {
+auto format_message(HRESULT error_code) -> std::expected<string, std::error_code> {
     wil::unique_hlocal_string buffer;
 
     DWORD language_id;
@@ -42,7 +42,7 @@ auto format_message(HRESULT error_code) -> string {
     auto message { string::from_utf16(buffer.get()) };
 
     if (!message.has_value()) {
-        return {};
+        return std::unexpected(last_error());
     }
 
     return *message;

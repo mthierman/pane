@@ -8,7 +8,7 @@
 namespace pane {
 auto get_last_error() -> std::error_code;
 auto module_handle() -> std::expected<HMODULE, std::error_code>;
-auto format_message(HRESULT error_code) -> string;
+auto format_message(HRESULT error_code) -> std::expected<string, std::error_code>;
 auto null_brush() -> HBRUSH;
 auto arrow_cursor() -> HCURSOR;
 auto application_icon() -> HICON;
