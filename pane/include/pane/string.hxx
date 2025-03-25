@@ -48,7 +48,7 @@ struct string {
 
     auto u8_str() const -> const char8_t*;
 
-    std::u8string data;
+    std::u8string storage;
 };
 } // namespace pane
 
@@ -61,8 +61,8 @@ template <> struct formatter<std::u8string> : formatter<string_view> {
 
 template <> struct formatter<pane::string> : formatter<string_view> {
     auto format(const pane::string& str, format_context& context) const noexcept {
-        return formatter<string_view>::format(std::string { str.data.begin(), str.data.end() },
-                                              context);
+        return formatter<string_view>::format(
+            std::string { str.storage.begin(), str.storage.end() }, context);
     }
 };
 } // namespace std

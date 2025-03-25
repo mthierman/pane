@@ -92,7 +92,7 @@ auto hstring::from_utf8(std::string_view str, bool replacement)
 
 auto hstring::from_utf8(const string& str, bool replacement)
     -> std::expected<Self, std::error_code> {
-    return hstring::from_utf8(str.data, replacement);
+    return hstring::from_utf8(str.storage, replacement);
 }
 
 auto hstring::c_str() -> wchar_t* { return reinterpret_cast<wchar_t*>(data.data()); }

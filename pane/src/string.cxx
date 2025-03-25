@@ -4,34 +4,34 @@
 
 namespace pane {
 string::string(std::u8string&& str) noexcept
-    : data { std::move(str) } { }
+    : storage { std::move(str) } { }
 
 auto string::operator=(std::u8string&& str) noexcept -> Self& {
-    data = std::move(str);
+    storage = std::move(str);
 
     return *this;
 }
 
 string::string(const char8_t* str)
-    : data { str } { }
+    : storage { str } { }
 
 string::string(const std::u8string& str)
-    : data { str } { }
+    : storage { str } { }
 
 auto string::operator=(const std::u8string& str) -> Self& {
-    data = str;
+    storage = str;
 
     return *this;
 }
 
 string::string(const char* str)
-    : data { reinterpret_cast<const char8_t*>(str) } { }
+    : storage { reinterpret_cast<const char8_t*>(str) } { }
 
 string::string(const std::string& str)
-    : data { str.begin(), str.end() } { }
+    : storage { str.begin(), str.end() } { }
 
 auto string::operator=(const std::string& str) -> Self& {
-    data = std::u8string { str.begin(), str.end() };
+    storage = std::u8string { str.begin(), str.end() };
 
     return *this;
 }
@@ -95,11 +95,11 @@ auto string::from_utf16(const hstring& str, bool replacement)
     return string::from_utf16(str.data, replacement);
 }
 
-auto string::c_str() -> char* { return reinterpret_cast<char*>(data.data()); }
+auto string::c_str() -> char* { return reinterpret_cast<char*>(storage.data()); }
 
-auto string::c_str() const -> const char* { return reinterpret_cast<const char*>(data.data()); }
+auto string::c_str() const -> const char* { return reinterpret_cast<const char*>(storage.data()); }
 
-auto string::u8_str() -> char8_t* { return data.data(); }
+auto string::u8_str() -> char8_t* { return storage.data(); }
 
-auto string::u8_str() const -> const char8_t* { return data.data(); }
+auto string::u8_str() const -> const char8_t* { return storage.data(); }
 } // namespace pane
