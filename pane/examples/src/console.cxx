@@ -4,11 +4,9 @@
 #include <system_error>
 
 auto main() -> int {
-    HRESULT hresult { S_OK };
+    auto path { pane::path() };
 
-    std::println("{}", pane::format_message(hresult).value_or(pane::string("WOOPS")));
-
-    std::println("{}", std::system_category().name());
+    std::println("{}", path.storage.empty());
 
     return 0;
 }
