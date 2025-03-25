@@ -38,7 +38,7 @@ auto path::from_known_folder(KNOWNFOLDERID known_folder) -> std::expected<Self, 
     if (SUCCEEDED(result)) {
         return Self(buffer.get());
     } else {
-        return std::unexpected(last_error());
+        return std::unexpected(std::error_code(HRESULT_CODE(result), std::system_category()));
     }
 }
 } // namespace pane
