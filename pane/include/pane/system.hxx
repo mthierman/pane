@@ -12,6 +12,6 @@ auto format_message(HRESULT error_code) -> std::expected<string, std::error_code
 auto null_brush() -> HBRUSH;
 auto arrow_cursor() -> HCURSOR;
 auto application_icon() -> HICON;
-auto resource_icon() -> HICON;
+auto resource_icon() -> std::expected<HICON, std::error_code>;
 auto message_loop() -> int;
 } // namespace pane

@@ -60,15 +60,21 @@ auto application_icon() -> HICON {
         LoadImageW(nullptr, IDI_APPLICATION, IMAGE_ICON, 0, 0, LR_SHARED | LR_DEFAULTSIZE));
 }
 
-auto resource_icon() -> HICON {
+auto resource_icon() -> std::expected<HICON, std::error_code> {
     auto module { module_handle() };
 
-    if (module) {
-        return static_cast<HICON>(
-            LoadImageW(*module, MAKEINTRESOURCEW(1), IMAGE_ICON, 0, 0, LR_DEFAULTSIZE));
+    if (!module) {
+        return std::unexpected(last_error());
     }
 
-    return application_icon();
+    auto icon { static_cast<HICON>(
+        LoadImageW(*module, MAKEINTRESOURCEW(1), IMAGE_ICON, 0, 0, LR_DEFAULTSIZE)) };
+
+    if (!icon) {
+        return std::unexpected(last_error());
+    }
+
+    return icon;
 }
 
 auto message_loop() -> int {
