@@ -5,6 +5,10 @@
 #include <wil/resource.h>
 
 namespace pane {
+auto get_last_error() -> std::error_code {
+    return std::error_code(GetLastError(), std::system_category());
+}
+
 auto module_handle() -> HMODULE {
     HMODULE hmodule;
 
@@ -34,8 +38,6 @@ auto format_message(HRESULT error_code) -> std::u8string {
 
     return {};
 }
-
-auto last_error() -> std::u8string { return format_message(GetLastError()); }
 
 auto null_brush() -> HBRUSH { return static_cast<HBRUSH>(GetStockObject(NULL_BRUSH)); }
 
