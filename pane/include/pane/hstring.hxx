@@ -48,7 +48,7 @@ struct hstring {
 
     auto u16_str() const -> const char16_t*;
 
-    std::u16string data;
+    std::u16string storage;
 };
 } // namespace pane
 
@@ -63,7 +63,7 @@ template <> struct formatter<std::u16string, wchar_t> : formatter<wstring_view, 
 template <> struct formatter<pane::hstring, wchar_t> : formatter<wstring_view, wchar_t> {
     auto format(const pane::hstring& str, wformat_context& context) const noexcept {
         return formatter<wstring_view, wchar_t>::format(
-            std::wstring { str.data.begin(), str.data.end() }, context);
+            std::wstring { str.storage.begin(), str.storage.end() }, context);
     }
 };
 } // namespace std

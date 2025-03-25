@@ -4,34 +4,34 @@
 
 namespace pane {
 hstring::hstring(std::u16string&& str) noexcept
-    : data { std::move(str) } { }
+    : storage { std::move(str) } { }
 
 auto hstring::operator=(std::u16string&& str) noexcept -> Self& {
-    data = std::move(str);
+    storage = std::move(str);
 
     return *this;
 }
 
 hstring::hstring(const char16_t* str)
-    : data { str } { }
+    : storage { str } { }
 
 hstring::hstring(const std::u16string& str)
-    : data { str } { }
+    : storage { str } { }
 
 auto hstring::operator=(const std::u16string& str) -> Self& {
-    data = str;
+    storage = str;
 
     return *this;
 }
 
 hstring::hstring(const wchar_t* str)
-    : data { reinterpret_cast<const char16_t*>(str) } { }
+    : storage { reinterpret_cast<const char16_t*>(str) } { }
 
 hstring::hstring(const std::wstring& str)
-    : data { str.begin(), str.end() } { }
+    : storage { str.begin(), str.end() } { }
 
 auto hstring::operator=(const std::wstring& str) -> Self& {
-    data = std::u16string { str.begin(), str.end() };
+    storage = std::u16string { str.begin(), str.end() };
 
     return *this;
 }
@@ -95,13 +95,13 @@ auto hstring::from_utf8(const string& str, bool replacement)
     return hstring::from_utf8(str.storage, replacement);
 }
 
-auto hstring::c_str() -> wchar_t* { return reinterpret_cast<wchar_t*>(data.data()); }
+auto hstring::c_str() -> wchar_t* { return reinterpret_cast<wchar_t*>(storage.data()); }
 
 auto hstring::c_str() const -> const wchar_t* {
-    return reinterpret_cast<const wchar_t*>(data.data());
+    return reinterpret_cast<const wchar_t*>(storage.data());
 }
 
-auto hstring::u16_str() -> char16_t* { return data.data(); }
+auto hstring::u16_str() -> char16_t* { return storage.data(); }
 
-auto hstring::u16_str() const -> const char16_t* { return data.data(); }
+auto hstring::u16_str() const -> const char16_t* { return storage.data(); }
 } // namespace pane

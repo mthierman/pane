@@ -92,7 +92,7 @@ auto string::from_utf16(std::wstring_view str, bool replacement)
 
 auto string::from_utf16(const hstring& str, bool replacement)
     -> std::expected<Self, std::error_code> {
-    return string::from_utf16(str.data, replacement);
+    return string::from_utf16(str.storage, replacement);
 }
 
 auto string::c_str() -> char* { return reinterpret_cast<char*>(storage.data()); }
