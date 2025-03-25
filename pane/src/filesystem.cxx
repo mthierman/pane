@@ -1,7 +1,10 @@
 #include <pane/filesystem.hxx>
 #include <pane/system.hxx>
+#include <pane/string.hxx>
 #include <pane/hstring.hxx>
 #include <urlmon.h>
+
+#include <print>
 
 namespace pane {
 auto file::create_always(const std::filesystem::path& path) -> std::expected<Self, std::u8string> {
@@ -78,7 +81,7 @@ auto library::create() -> ::IShellLibrary* {
     //     STGM_READWRITE,
     //     IID_PPV_ARGS(&lib)) };
 
-    // std::println("{}", pane::sys::format_message(result));
+    // std::println("{}", pane::format_message(result));
 
     SHLoadLibraryFromParsingName(
         L"C:\\Users\\mthie\\AppData\\Roaming\\Microsoft\\Windows\\Libraries\\Samples.library-ms",
@@ -100,7 +103,7 @@ auto library::get_folders(::IShellLibrary* lib) -> std::vector<std::u8string> {
     wil::unique_cotaskmem_string name;
     item->GetDisplayName(SIGDN_FILESYSPATH, &name);
 
-    // std::println("{}", count);
+    std::println("{}", count);
 
     OutputDebugStringW(name.get());
 

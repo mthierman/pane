@@ -23,8 +23,8 @@ auto format_message(HRESULT error_code) -> std::u8string {
                        | FORMAT_MESSAGE_IGNORE_INSERTS | FORMAT_MESSAGE_MAX_WIDTH_MASK,
                    nullptr,
                    error_code,
-                   MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-                   wil::out_param_ptr<wchar_t*>(buffer),
+                   0,
+                   wil::out_param_ptr<LPWSTR>(buffer),
                    0,
                    nullptr);
 
