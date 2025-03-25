@@ -3,6 +3,10 @@
 #include <wil/resource.h>
 
 namespace pane {
+auto hresult_error(HRESULT hresult) -> std::error_code {
+    return std::error_code(HRESULT_CODE(hresult), std::system_category());
+}
+
 auto last_error() -> std::error_code {
     return std::error_code(GetLastError(), std::system_category());
 }

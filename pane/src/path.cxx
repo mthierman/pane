@@ -2,6 +2,10 @@
 #include <pane/system.hxx>
 #include <wil/resource.h>
 
+// TEMPORARY LOGGING INCLUDE:
+#include <comdef.h>
+#include <print>
+
 namespace pane {
 path::path(std::filesystem::path&& path) noexcept
     : storage { std::move(path) } { }
@@ -38,7 +42,7 @@ auto path::from_known_folder(KNOWNFOLDERID known_folder) -> std::expected<Self, 
     if (SUCCEEDED(result)) {
         return Self(buffer.get());
     } else {
-        return std::unexpected(std::error_code(HRESULT_CODE(result), std::system_category()));
+        return std::unexpected(hresult_error(result));
     }
 }
 } // namespace pane
