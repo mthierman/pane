@@ -104,4 +104,10 @@ auto hstring::c_str() const -> const wchar_t* {
 auto hstring::u16_str() -> char16_t* { return storage.data(); }
 
 auto hstring::u16_str() const -> const char16_t* { return storage.data(); }
+
+auto hstring::to_wstring() -> std::wstring { return { storage.begin(), storage.end() }; }
+
+auto hstring::to_wstring() const -> const std::wstring {
+    return { storage.begin(), storage.end() };
+}
 } // namespace pane

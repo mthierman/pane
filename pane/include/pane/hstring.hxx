@@ -48,6 +48,10 @@ struct hstring {
 
     auto u16_str() const -> const char16_t*;
 
+    auto to_wstring() -> std::wstring;
+
+    auto to_wstring() const -> const std::wstring;
+
     std::u16string storage;
 };
 } // namespace pane
@@ -62,8 +66,7 @@ template <> struct formatter<std::u16string, wchar_t> : formatter<wstring_view, 
 
 template <> struct formatter<pane::hstring, wchar_t> : formatter<wstring_view, wchar_t> {
     auto format(const pane::hstring& str, wformat_context& context) const noexcept {
-        return formatter<wstring_view, wchar_t>::format(
-            std::wstring { str.storage.begin(), str.storage.end() }, context);
+        return formatter<wstring_view, wchar_t>::format(str.to_wstring(), context);
     }
 };
 } // namespace std
