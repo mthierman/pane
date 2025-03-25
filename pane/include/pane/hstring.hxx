@@ -3,7 +3,7 @@
 #include <format>
 #include <string>
 #include <system_error>
-#include <pane/icu.hxx>
+#include "../../src/icu.hxx"
 
 namespace pane {
 struct string;
