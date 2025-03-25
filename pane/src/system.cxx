@@ -5,17 +5,20 @@
 #include <wil/resource.h>
 
 namespace pane {
-auto get_last_error() -> std::error_code {
+auto last_error() -> std::error_code {
     return std::error_code(GetLastError(), std::system_category());
 }
 
-auto module_handle() -> HMODULE {
+auto module_handle() -> std::expected<HMODULE, std::error_code> {
     HMODULE hmodule;
 
-    GetModuleHandleExW(GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT
-                           | GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS,
-                       reinterpret_cast<LPCWSTR>(&module_handle),
-                       &hmodule);
+    if (GetModuleHandleExW(GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT
+                               | GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS,
+                           reinterpret_cast<LPCWSTR>(&module_handle),
+                           &hmodule)
+        == 0) {
+        return std::unexpected(last_error());
+    };
 
     return hmodule;
 }
@@ -52,8 +55,14 @@ auto application_icon() -> HICON {
 }
 
 auto resource_icon() -> HICON {
-    return static_cast<HICON>(
-        LoadImageW(module_handle(), MAKEINTRESOURCEW(1), IMAGE_ICON, 0, 0, LR_DEFAULTSIZE));
+    auto module { module_handle() };
+
+    if (module) {
+        return static_cast<HICON>(
+            LoadImageW(*module, MAKEINTRESOURCEW(1), IMAGE_ICON, 0, 0, LR_DEFAULTSIZE));
+    }
+
+    return application_icon();
 }
 
 auto message_loop() -> int {
