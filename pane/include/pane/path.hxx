@@ -1,6 +1,10 @@
 #pragma once
-#include <string>
+#include <Windows.h>
+#include <ShlObj.h>
+#include <expected>
 #include <filesystem>
+#include <string>
+#include <system_error>
 #include <pane/string.hxx>
 #include <pane/hstring.hxx>
 
@@ -25,6 +29,9 @@ struct path {
 
     explicit path(const hstring& string) noexcept;
     auto operator=(const hstring& string) noexcept -> Self&;
+
+    static auto from_known_folder(KNOWNFOLDERID known_folder = FOLDERID_LocalAppData)
+        -> std::expected<Self, std::error_code>;
 
     std::filesystem::path storage;
 };

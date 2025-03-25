@@ -1,4 +1,6 @@
 #include <pane/path.hxx>
+#include <pane/system.hxx>
+#include <wil/resource.h>
 
 namespace pane {
 path::path(std::filesystem::path&& path) noexcept
@@ -26,5 +28,17 @@ auto path::operator=(const hstring& string) noexcept -> Self& {
     storage = string.storage;
 
     return *this;
+}
+
+auto path::from_known_folder(KNOWNFOLDERID known_folder) -> std::expected<Self, std::error_code> {
+    wil::unique_cotaskmem_string buffer;
+
+    auto result { ::SHGetKnownFolderPath(known_folder, 0, nullptr, &buffer) };
+
+    if (SUCCEEDED(result)) {
+        return Self(buffer.get());
+    } else {
+        return std::unexpected(last_error());
+    }
 }
 } // namespace pane
