@@ -2,7 +2,7 @@
 #include <print>
 
 auto main() -> int {
-    // auto test {pane}
+    // auto test { pane::temp() };
 
     return 0;
 }
