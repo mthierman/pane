@@ -21,7 +21,7 @@ struct path {
     auto operator=(std::filesystem::path&& path) noexcept -> Self&;
 
     explicit path(const string& string) noexcept;
-    // auto operator=(const string& string) noexcept -> Self&;
+    auto operator=(const string& string) noexcept -> Self&;
 
     std::filesystem::path storage;
 };
