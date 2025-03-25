@@ -125,31 +125,6 @@ auto library::get_folders(::IShellLibrary* lib) -> std::vector<std::u8string> {
 //         L"TEST", STGM_READWRITE, IID_PPV_ARGS(&i_shell_library)) };
 // }
 
-// auto app_data() -> std::expected<std::filesystem::path, std::u8string> {
-//     wil::unique_cotaskmem_string buffer;
-
-//     if (auto result { ::SHGetKnownFolderPath(FOLDERID_LocalAppData, 0, nullptr, &buffer) };
-//         result == S_OK) {
-//         return buffer.get();
-//     } else {
-//         return std::unexpected(pane::format_message(result));
-//     }
-// }
-
-// auto temp() -> std::expected<std::filesystem::path, std::u8string> {
-//     std::wstring buffer;
-//     buffer.resize(::GetTempPathW(0, buffer.data()));
-
-//     if (auto result { ::GetTempPathW(static_cast<::DWORD>(buffer.size()), buffer.data()) };
-//         result != 0) {
-//         buffer.resize(buffer.size() - 2);
-
-//         return buffer;
-//     } else {
-//         return std::unexpected(pane::last_error());
-//     }
-// }
-
 // auto create_directory(const std::filesystem::path& path)
 //     -> std::expected<std::filesystem::path, std::u8string> {
 //     if (auto result { ::CreateDirectoryW(path.c_str(), nullptr) }; result != 0) {

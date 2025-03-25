@@ -15,7 +15,8 @@ namespace pane {
 
 //     static auto create_always(const std::filesystem::path& path)
 //         -> std::expected<Self, std::u8string>;
-//     static auto create_new(const std::filesystem::path& path) -> std::expected<Self, std::u8string>;
+//     static auto create_new(const std::filesystem::path& path) -> std::expected<Self,
+//     std::u8string>;
 
 //     static auto open_always(const std::filesystem::path& path)
 //         -> std::expected<Self, std::u8string>;
@@ -37,8 +38,6 @@ struct library {
     // static auto create() -> std::expected<Self, std::u8string>;
 };
 
-auto app_data() -> std::expected<std::filesystem::path, std::u8string>;
-auto temp() -> std::expected<std::filesystem::path, std::u8string>;
 auto create_directory(const std::filesystem::path& path)
     -> std::expected<std::filesystem::path, std::u8string>;
 auto create_directory(const std::filesystem::path& path,
