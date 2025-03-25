@@ -33,6 +33,8 @@ struct path {
     static auto from_known_folder(KNOWNFOLDERID known_folder = FOLDERID_LocalAppData)
         -> std::expected<Self, std::error_code>;
 
+    static auto temp_folder() -> std::expected<Self, std::error_code>;
+
     std::filesystem::path storage;
 };
 } // namespace pane

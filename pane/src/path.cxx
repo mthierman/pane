@@ -45,4 +45,23 @@ auto path::from_known_folder(KNOWNFOLDERID known_folder) -> std::expected<Self, 
         return std::unexpected(hresult_error(result));
     }
 }
+
+auto path::temp_folder() -> std::expected<Self, std::error_code> {
+    std::wstring buffer;
+    auto length { ::GetTempPath2W(0, buffer.data()) };
+
+    if (length == 0) {
+        return std::unexpected(last_error());
+    }
+
+    buffer.resize(length);
+
+    if (::GetTempPath2W(length, buffer.data()) == 0) {
+        return std::unexpected(last_error());
+    }
+
+    buffer.resize(buffer.size() - 2);
+
+    return Self(buffer);
+}
 } // namespace pane
