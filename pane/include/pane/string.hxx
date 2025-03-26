@@ -40,17 +40,17 @@ struct string {
     static auto from_utf16(const hstring& string, bool replacement = true)
         -> std::expected<Self, std::error_code>;
 
-    auto c_str() -> char*;
+    auto c_str(this Self& self) -> char*;
 
-    auto c_str() const -> const char*;
+    auto c_str(this const Self& self) -> const char*;
 
-    auto u8_str() -> char8_t*;
+    auto u8_str(this Self& self) -> char8_t*;
 
-    auto u8_str() const -> const char8_t*;
+    auto u8_str(this const Self& self) -> const char8_t*;
 
-    auto to_string() -> std::string;
+    auto to_string(this Self& self) -> std::string;
 
-    auto to_string() const -> const std::string;
+    auto to_string(this const Self& self) -> const std::string;
 
     std::u8string storage;
 };

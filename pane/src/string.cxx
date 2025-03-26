@@ -95,15 +95,23 @@ auto string::from_utf16(const hstring& string, bool replacement)
     return string::from_utf16(string.storage, replacement);
 }
 
-auto string::c_str() -> char* { return reinterpret_cast<char*>(storage.data()); }
+auto string::c_str(this Self& self) -> char* {
+    return reinterpret_cast<char*>(self.storage.data());
+}
 
-auto string::c_str() const -> const char* { return reinterpret_cast<const char*>(storage.data()); }
+auto string::c_str(this const Self& self) -> const char* {
+    return reinterpret_cast<const char*>(self.storage.data());
+}
 
-auto string::u8_str() -> char8_t* { return storage.data(); }
+auto string::u8_str(this Self& self) -> char8_t* { return self.storage.data(); }
 
-auto string::u8_str() const -> const char8_t* { return storage.data(); }
+auto string::u8_str(this const Self& self) -> const char8_t* { return self.storage.data(); }
 
-auto string::to_string() -> std::string { return { storage.begin(), storage.end() }; }
+auto string::to_string(this Self& self) -> std::string {
+    return { self.storage.begin(), self.storage.end() };
+}
 
-auto string::to_string() const -> const std::string { return { storage.begin(), storage.end() }; }
+auto string::to_string(this const Self& self) -> const std::string {
+    return { self.storage.begin(), self.storage.end() };
+}
 } // namespace pane
