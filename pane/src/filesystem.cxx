@@ -160,11 +160,10 @@ auto file::open_library() -> std::expected<wil::com_ptr<IShellLibrary>, std::err
     return lib;
 }
 
-auto file::library_directories(const wil::com_ptr<IShellLibrary>& lib)
-    -> std::vector<std::u8string> {
+auto file::library_directories(const wil::com_ptr<IShellLibrary>& lib) -> std::vector<string> {
     auto co_initialize { wil::CoInitializeEx() };
 
-    IShellItemArray* array { nullptr };
+    wil::com_ptr<IShellItemArray> array;
     // auto folders { lib->GetFolders(LFF_ALLITEMS, IID_PPV_ARGS(&array)) };
     lib->GetFolders(LFF_ALLITEMS, IID_PPV_ARGS(&array));
 
