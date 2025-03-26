@@ -93,16 +93,13 @@ auto file::create_directory() -> bool {
     return true;
 }
 
-// auto create_directory(const std::filesystem::path& path,
-//                       const std::filesystem::path& template_directory)
-//     -> std::expected<std::filesystem::path, std::u8string> {
-//     if (auto result { ::CreateDirectoryExW(template_directory.c_str(), path.c_str(), nullptr) };
-//         result != 0) {
-//         return path;
-//     } else {
-//         return std::unexpected(pane::last_error());
-//     }
-// }
+auto file::create_directory_from_template(const Self& template_directory) -> bool {
+    if (::CreateDirectoryExW(template_directory.storage.c_str(), storage.c_str(), nullptr) == 0) {
+        return false;
+    }
+
+    return true;
+}
 
 auto library::create_from_name() -> ::HRESULT {
     IShellLibrary* lib;
