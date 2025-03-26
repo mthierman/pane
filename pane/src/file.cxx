@@ -192,8 +192,8 @@ auto file::library_directories(const wil::com_ptr<IShellLibrary>& lib)
     return files;
 }
 
-auto file::download_from_url(string url) -> std::expected<void, std::error_code> {
-    auto hstring { pane::hstring::from_utf8(url) };
+auto file::download_from_url(url url) -> std::expected<void, std::error_code> {
+    auto hstring { pane::hstring::from_utf8(url.storage.get_href()) };
 
     if (!hstring) {
         return std::unexpected(hstring.error());

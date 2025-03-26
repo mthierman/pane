@@ -12,6 +12,7 @@
 #include <wil/resource.h>
 #include <pane/string.hxx>
 #include <pane/hstring.hxx>
+#include <pane/url.hxx>
 
 namespace pane {
 struct file {
@@ -55,7 +56,7 @@ struct file {
     static auto library_directories(const wil::com_ptr<IShellLibrary>& lib)
         -> std::expected<std::vector<Self>, std::error_code>;
 
-    auto download_from_url(string url) -> std::expected<void, std::error_code>;
+    auto download_from_url(url url) -> std::expected<void, std::error_code>;
 
     std::filesystem::path storage;
 };
