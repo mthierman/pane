@@ -52,11 +52,11 @@ struct file {
     auto create_symlink(const Self& destination) -> std::expected<void, std::error_code>;
 
     auto open_library() -> std::expected<wil::com_ptr<IShellLibrary>, std::error_code>;
+    static auto library_directories(const wil::com_ptr<IShellLibrary>& lib)
+        -> std::vector<std::u8string>;
 
     std::filesystem::path storage;
 };
-
-auto library_directories(const wil::com_ptr<IShellLibrary>& lib) -> std::vector<std::u8string>;
 
 // auto download(std::u8string_view url, const std::filesystem::path& path)
 //     -> std::expected<Self, std::u8string>;

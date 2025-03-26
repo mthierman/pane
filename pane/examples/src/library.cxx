@@ -11,7 +11,7 @@ auto main() -> int {
 
     if (load.has_value()) {
         std::println("Lib exists!");
-        pane::library_directories(load.value().get());
+        pane::file::library_directories(load.value());
     } else {
         std::println("{}", load.error().message());
     }

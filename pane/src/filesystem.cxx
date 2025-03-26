@@ -160,7 +160,8 @@ auto file::open_library() -> std::expected<wil::com_ptr<IShellLibrary>, std::err
     return lib;
 }
 
-auto library_directories(const wil::com_ptr<IShellLibrary>& lib) -> std::vector<std::u8string> {
+auto file::library_directories(const wil::com_ptr<IShellLibrary>& lib)
+    -> std::vector<std::u8string> {
     auto co_initialize { wil::CoInitializeEx() };
 
     IShellItemArray* array { nullptr };
