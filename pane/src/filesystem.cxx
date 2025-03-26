@@ -85,59 +85,13 @@ auto file::open() -> std::expected<wil::unique_handle, std::error_code> {
     return handle;
 }
 
-// auto file::create_always(const std::filesystem::path& path)
-//     -> std::expected<Self, std::error_code> {
-//     if (auto handle {
-//             ::CreateFile2(path.c_str(), GENERIC_READ | GENERIC_WRITE, 0, CREATE_ALWAYS, nullptr)
-//             };
-//         handle != INVALID_HANDLE_VALUE) {
-//         return Self { .handle { handle } };
-//     } else {
-//         return std::unexpected(pane::last_error());
-//     }
-// }
+auto file::create_directory() -> bool {
+    if (CreateDirectoryW(storage.c_str(), nullptr) == 0) {
+        return false;
+    }
 
-// auto file::create_new(const std::filesystem::path& path) -> std::expected<Self, std::error_code>
-// {
-//     if (auto handle {
-//             ::CreateFile2(path.c_str(), GENERIC_READ | GENERIC_WRITE, 0, CREATE_NEW, nullptr) };
-//         handle != INVALID_HANDLE_VALUE) {
-//         return Self { .handle { handle } };
-//     } else {
-//         return std::unexpected(pane::last_error());
-//     }
-// }
-
-// auto file::open_always(const std::filesystem::path& path) -> std::expected<Self, std::u8string> {
-//     if (auto handle {
-//             ::CreateFile2(path.c_str(), GENERIC_READ | GENERIC_WRITE, 0, OPEN_ALWAYS, nullptr) };
-//         handle != INVALID_HANDLE_VALUE) {
-//         return Self { .handle { handle } };
-//     } else {
-//         return std::unexpected(pane::last_error());
-//     }
-// }
-
-// auto file::open_existing(const std::filesystem::path& path) -> std::expected<Self, std::u8string>
-// {
-//     if (auto handle {
-//             ::CreateFile2(path.c_str(), GENERIC_READ | GENERIC_WRITE, 0, OPEN_EXISTING, nullptr)
-//             };
-//         handle != INVALID_HANDLE_VALUE) {
-//         return Self { .handle { handle } };
-//     } else {
-//         return std::unexpected(pane::last_error());
-//     }
-// }
-
-// auto create_directory(const std::filesystem::path& path)
-//     -> std::expected<std::filesystem::path, std::u8string> {
-//     if (auto result { ::CreateDirectoryW(path.c_str(), nullptr) }; result != 0) {
-//         return path;
-//     } else {
-//         return std::unexpected(pane::last_error());
-//     }
-// }
+    return true;
+}
 
 // auto create_directory(const std::filesystem::path& path,
 //                       const std::filesystem::path& template_directory)

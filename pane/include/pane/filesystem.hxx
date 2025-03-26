@@ -39,19 +39,8 @@ struct file {
 
     auto create() -> bool;
     auto open() -> std::expected<wil::unique_handle, std::error_code>;
+    auto create_directory() -> bool;
 
-    // static auto create_always(const std::filesystem::path& path)
-    //     -> std::expected<Self, std::error_code>;
-    // static auto create_new(const std::filesystem::path& path)
-    //     -> std::expected<Self, std::error_code>;
-
-    // static auto open_always(const std::filesystem::path& path)
-    //     -> std::expected<Self, std::u8string>;
-    // static auto open_existing(const std::filesystem::path& path)
-    //     -> std::expected<Self, std::u8string>;
-
-    // auto create_directory(const std::filesystem::path& path)
-    //     -> std::expected<std::filesystem::path, std::u8string>;
     // auto create_directory(const std::filesystem::path& path,
     //                       const std::filesystem::path& template_directory)
     //     -> std::expected<std::filesystem::path, std::u8string>;
