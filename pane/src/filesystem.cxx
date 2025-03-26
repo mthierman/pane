@@ -46,7 +46,7 @@ auto file::from_known_folder(KNOWNFOLDERID known_folder) -> std::expected<Self, 
     }
 }
 
-auto file::temp_folder() -> std::expected<Self, std::error_code> {
+auto file::from_temp_folder() -> std::expected<Self, std::error_code> {
     std::wstring buffer;
     auto length { ::GetTempPath2W(0, buffer.data()) };
 

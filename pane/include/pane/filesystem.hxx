@@ -35,8 +35,7 @@ struct file {
 
     static auto from_known_folder(KNOWNFOLDERID known_folder = FOLDERID_LocalAppData)
         -> std::expected<Self, std::error_code>;
-
-    static auto temp_folder() -> std::expected<Self, std::error_code>;
+    static auto from_temp_folder() -> std::expected<Self, std::error_code>;
 
     static auto create_always(const std::filesystem::path& path)
         -> std::expected<Self, std::error_code>;
