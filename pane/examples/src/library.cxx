@@ -19,7 +19,7 @@ auto main() -> int {
 
     if (load.has_value()) {
         std::println("Lib exists!");
-        pane::file::get_folders(load.value());
+        pane::file::get_folders(load.value().get());
     } else {
         std::println("{}", load.error().message());
     }

@@ -3,8 +3,8 @@
 #include <pane/string.hxx>
 #include <pane/hstring.hxx>
 #include <urlmon.h>
-#include <wil/com.h>
 
+// LOGGING
 #include <print>
 
 namespace pane {
@@ -143,10 +143,10 @@ auto file::create_symlink(const Self& destination) -> std::expected<void, std::e
     return {};
 }
 
-auto file::load_library() -> std::expected<IShellLibrary*, std::error_code> {
+auto file::load_library() -> std::expected<wil::com_ptr<IShellLibrary>, std::error_code> {
     // auto lib { wil::CoCreateInstance<::IShellLibrary>(CLSID_ShellLibrary) };
-    // wil::com_ptr<IShellLibrary> lib;
-    IShellLibrary* lib;
+    wil::com_ptr<IShellLibrary> lib;
+    // IShellLibrary* lib;
 
     // auto result { SHLoadLibraryFromParsingName(
     //     L"C:\\Users\\mthie\\AppData\\Roaming\\Microsoft\\Windows\\Libraries\\Samples.library-ms",

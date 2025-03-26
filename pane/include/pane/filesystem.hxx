@@ -8,6 +8,7 @@
 #include <vector>
 #include <string>
 #include <system_error>
+#include <wil/com.h>
 #include <wil/resource.h>
 #include <pane/string.hxx>
 #include <pane/hstring.hxx>
@@ -50,7 +51,7 @@ struct file {
 
     auto create_symlink(const Self& destination) -> std::expected<void, std::error_code>;
 
-    auto load_library() -> std::expected<IShellLibrary*, std::error_code>;
+    auto load_library() -> std::expected<wil::com_ptr<IShellLibrary>, std::error_code>;
     static auto get_folders(::IShellLibrary* lib) -> std::vector<std::u8string>;
 
     // static auto create() -> std::expected<Self, std::u8string>;
