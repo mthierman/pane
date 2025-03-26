@@ -37,13 +37,13 @@ auto file::operator=(const hstring& string) noexcept -> Self& {
 auto file::from_known_folder(KNOWNFOLDERID known_folder) -> std::expected<Self, std::error_code> {
     wil::unique_cotaskmem_string buffer;
 
-    auto result { ::SHGetKnownFolderPath(known_folder, 0, nullptr, &buffer) };
+    auto result { ::SHGetKnownFolderPath(known_folder, KF_FLAG_DONT_VERIFY, nullptr, &buffer) };
 
-    if (SUCCEEDED(result)) {
-        return Self(buffer.get());
-    } else {
+    if (FAILED(result)) {
         return std::unexpected(hresult_error(result));
     }
+
+    return Self(buffer.get());
 }
 
 auto file::from_temp_folder() -> std::expected<Self, std::error_code> {
