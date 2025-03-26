@@ -2,23 +2,19 @@
 #include <print>
 
 auto main() -> int {
-    auto lib_path { pane::file(
+    auto samples { pane::file(
         L"C:\\Users\\mthie\\AppData\\Roaming\\Microsoft\\Windows\\Libraries\\Samples.library-ms") };
 
-    std::println("Library: {}", lib_path.storage);
+    auto lib { samples.open_library() };
 
-    auto load { lib_path.open_library() };
-
-    if (load.has_value()) {
-        std::println("Lib exists!");
-        pane::file::library_directories(load.value());
+    if (lib) {
+        auto dirs { pane::file::library_directories(lib.value()) };
+        for (auto& dir : dirs) {
+            std::println("{}", dir.storage);
+        }
     } else {
-        std::println("{}", load.error().message());
+        std::println("{}", lib.error().message());
     }
-
-    // if (lib_path.load_library()) {
-    //     std::println("Lib exists!");
-    // }
 
     return 0;
 }
