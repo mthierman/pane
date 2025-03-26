@@ -38,9 +38,8 @@ auto file::operator=(const hstring& string) noexcept -> Self& {
 auto file::from_known_folder(KNOWNFOLDERID known_folder) -> std::expected<Self, std::error_code> {
     wil::unique_cotaskmem_string buffer;
 
-    auto result { ::SHGetKnownFolderPath(known_folder, KF_FLAG_DONT_VERIFY, nullptr, &buffer) };
-
-    if (FAILED(result)) {
+    if (auto result { ::SHGetKnownFolderPath(known_folder, KF_FLAG_DONT_VERIFY, nullptr, &buffer) };
+        FAILED(result)) {
         return std::unexpected(hresult_error(result));
     }
 
@@ -112,9 +111,8 @@ auto file::move(const Self& destination) -> std::expected<void, std::error_code>
 }
 
 auto file::copy(const Self& destination) -> std::expected<void, std::error_code> {
-    auto result { ::CopyFile2(storage.c_str(), destination.storage.c_str(), nullptr) };
-
-    if (FAILED(result)) {
+    if (auto result { ::CopyFile2(storage.c_str(), destination.storage.c_str(), nullptr) };
+        FAILED(result)) {
         return std::unexpected(hresult_error(result));
     }
 
