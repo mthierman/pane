@@ -1,5 +1,6 @@
 #pragma once
-#include <ada.h>
+#include <optional>
+#include <pane/string.hxx>
 
 namespace pane {
 struct url {
@@ -13,5 +14,9 @@ struct url {
 
     url(const Self& str) = default;
     auto operator=(const Self& str) -> Self& = default;
+
+    static auto from_string(string string) -> std::optional<Self>;
+
+    ada::url storage;
 };
 } // namespace pane
