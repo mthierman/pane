@@ -5,6 +5,7 @@
 #include <filesystem>
 #include <format>
 #include <initializer_list>
+#include <vector>
 #include <string>
 #include <system_error>
 #include <wil/resource.h>
@@ -49,11 +50,12 @@ struct file {
 
     auto create_symlink(const Self& destination) -> std::expected<void, std::error_code>;
 
-    // auto create_library() -> std::expected<void, std::error_code>;
+    auto load_library() -> std::expected<IShellLibrary*, std::error_code>;
+    static auto get_folders(::IShellLibrary* lib) -> std::vector<std::u8string>;
+
     // static auto create() -> std::expected<Self, std::u8string>;
     // static auto create_from_name() -> ::HRESULT;
     // static auto create() -> ::IShellLibrary*;
-    // static auto get_folders(::IShellLibrary* lib) -> std::vector<std::u8string>;
 
     std::filesystem::path storage;
 };

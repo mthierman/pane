@@ -143,12 +143,48 @@ auto file::create_symlink(const Self& destination) -> std::expected<void, std::e
     return {};
 }
 
-// auto file::create_library() -> std::expected<void, std::error_code> {
-//     auto lib { wil::CoCreateInstance<::IShellLibrary>(CLSID_ShellLibrary) };
+auto file::load_library() -> std::expected<IShellLibrary*, std::error_code> {
+    // auto lib { wil::CoCreateInstance<::IShellLibrary>(CLSID_ShellLibrary) };
+    // wil::com_ptr<IShellLibrary> lib;
+    IShellLibrary* lib;
 
-//     auto result { SHLoadLibraryFromParsingName(
-//         storage.c_str(), STGM_READWRITE, IID_PPV_ARGS(&lib)) };
-// }
+    // auto result { SHLoadLibraryFromParsingName(
+    //     L"C:\\Users\\mthie\\AppData\\Roaming\\Microsoft\\Windows\\Libraries\\Samples.library-ms",
+    //     STGM_READWRITE,
+    //     IID_PPV_ARGS(&lib)) };
+
+    // if (result != S_OK) {
+    //     return std::unexpected(hresult_error(result));
+    // }
+
+    SHLoadLibraryFromParsingName(
+        L"C:\\Users\\mthie\\AppData\\Roaming\\Microsoft\\Windows\\Libraries\\Samples.library-ms",
+        STGM_READWRITE,
+        IID_PPV_ARGS(&lib));
+
+    return lib;
+}
+
+auto file::get_folders(::IShellLibrary* lib) -> std::vector<std::u8string> {
+    IShellItemArray* array { nullptr };
+    // auto folders { lib->GetFolders(LFF_ALLITEMS, IID_PPV_ARGS(&array)) };
+    lib->GetFolders(LFF_ALLITEMS, IID_PPV_ARGS(&array));
+
+    DWORD count;
+    IShellItem* item;
+    array->GetCount(&count);
+    array->GetItemAt(0, &item);
+    wil::unique_cotaskmem_string name;
+    item->GetDisplayName(SIGDN_FILESYSPATH, &name);
+
+    std::println("{}", count);
+
+    OutputDebugStringW(name.get());
+
+    // std::println("{}", name);
+
+    return {};
+}
 
 // auto library::create_from_name() -> ::HRESULT {
 //     IShellLibrary* lib;
@@ -177,27 +213,6 @@ auto file::create_symlink(const Self& destination) -> std::expected<void, std::e
 //         IID_PPV_ARGS(&lib));
 
 //     return lib;
-// }
-
-// auto library::get_folders(::IShellLibrary* lib) -> std::vector<std::u8string> {
-//     IShellItemArray* array { nullptr };
-//     // auto folders { lib->GetFolders(LFF_ALLITEMS, IID_PPV_ARGS(&array)) };
-//     lib->GetFolders(LFF_ALLITEMS, IID_PPV_ARGS(&array));
-
-//     DWORD count;
-//     IShellItem* item;
-//     array->GetCount(&count);
-//     array->GetItemAt(0, &item);
-//     wil::unique_cotaskmem_string name;
-//     item->GetDisplayName(SIGDN_FILESYSPATH, &name);
-
-//     std::println("{}", count);
-
-//     OutputDebugStringW(name.get());
-
-//     // std::println("{}", name);
-
-//     return {};
 // }
 
 // auto download(std::u8string_view url, const std::filesystem::path& path)
