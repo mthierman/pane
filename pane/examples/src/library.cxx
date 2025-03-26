@@ -2,18 +2,10 @@
 #include <print>
 
 auto main() -> int {
-    auto init { wil::CoInitializeEx() };
+    auto lib_path { pane::file(
+        L"C:\\Users\\mthie\\AppData\\Roaming\\Microsoft\\Windows\\Libraries\\Samples.library-ms") };
 
-    auto samples {
-        L"C:\\Users\\mthie\\AppData\\Roaming\\Microsoft\\Windows\\Libraries\\Samples.library-ms",
-    };
-
-    // auto samples {
-    //     L"Test",
-    // };
-
-    auto lib_path { pane::file(samples) };
-    std::println("{}", lib_path.storage);
+    std::println("Library: {}", lib_path.storage);
 
     auto load { lib_path.load_library() };
 

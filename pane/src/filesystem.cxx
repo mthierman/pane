@@ -144,23 +144,18 @@ auto file::create_symlink(const Self& destination) -> std::expected<void, std::e
 }
 
 auto file::load_library() -> std::expected<wil::com_ptr<IShellLibrary>, std::error_code> {
-    // auto lib { wil::CoCreateInstance<::IShellLibrary>(CLSID_ShellLibrary) };
+    auto co_initialize { wil::CoInitializeEx() };
+
     wil::com_ptr<IShellLibrary> lib;
-    // IShellLibrary* lib;
 
-    // auto result { SHLoadLibraryFromParsingName(
-    //     L"C:\\Users\\mthie\\AppData\\Roaming\\Microsoft\\Windows\\Libraries\\Samples.library-ms",
-    //     STGM_READWRITE,
-    //     IID_PPV_ARGS(&lib)) };
-
-    // if (result != S_OK) {
-    //     return std::unexpected(hresult_error(result));
-    // }
-
-    SHLoadLibraryFromParsingName(
-        L"C:\\Users\\mthie\\AppData\\Roaming\\Microsoft\\Windows\\Libraries\\Samples.library-ms",
-        STGM_READWRITE,
-        IID_PPV_ARGS(&lib));
+    if (auto result { SHLoadLibraryFromParsingName(
+            L"C:\\Users\\mthie\\AppData\\Roaming\\Microsoft\\Windows\\Libraries\\Samples.library-"
+            L"ms",
+            STGM_READWRITE,
+            IID_PPV_ARGS(&lib)) };
+        result != S_OK) {
+        return std::unexpected(hresult_error(result));
+    }
 
     return lib;
 }
