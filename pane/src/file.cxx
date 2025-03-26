@@ -1,4 +1,4 @@
-#include <pane/filesystem.hxx>
+#include <pane/file.hxx>
 #include <pane/system.hxx>
 #include <pane/string.hxx>
 #include <pane/hstring.hxx>
