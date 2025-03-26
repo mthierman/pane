@@ -160,27 +160,28 @@ auto file::open_library() -> std::expected<wil::com_ptr<IShellLibrary>, std::err
     return lib;
 }
 
-auto file::library_directories(const wil::com_ptr<IShellLibrary>& lib) -> std::vector<string> {
+auto file::library_directories(const wil::com_ptr<IShellLibrary>& lib) -> std::vector<Self> {
     auto co_initialize { wil::CoInitializeEx() };
 
     wil::com_ptr<IShellItemArray> array;
     [[maybe_unused]] auto folders { lib->GetFolders(LFF_ALLITEMS, IID_PPV_ARGS(&array)) };
 
     DWORD count;
-    wil::com_ptr<IShellItem> item;
     array->GetCount(&count);
 
-    array->GetItemAt(0, &item);
-    wil::unique_cotaskmem_string name;
-    item->GetDisplayName(SIGDN_FILESYSPATH, &name);
+    std::vector<Self> files;
+    files.resize(count);
 
-    std::println("{}", count);
+    for (DWORD i = 0; i < count; ++i) {
+        wil::com_ptr<IShellItem> item;
+        array->GetItemAt(i, &item);
+        wil::unique_cotaskmem_string path;
+        item->GetDisplayName(SIGDN_FILESYSPATH, &path);
 
-    OutputDebugStringW(name.get());
+        files[i] = path.get();
+    }
 
-    // std::println("{}", name);
-
-    return {};
+    return files;
 }
 
 // auto download(std::u8string_view url, const std::filesystem::path& path)
