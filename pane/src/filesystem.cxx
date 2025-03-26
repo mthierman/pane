@@ -69,7 +69,7 @@ auto file::from_temp_folder() -> std::expected<Self, std::error_code> {
 auto file::create() -> bool {
     auto handle { ::CreateFile2(storage.c_str(), 0, 0, CREATE_NEW, nullptr) };
 
-    if (::CreateFile2(storage.c_str(), 0, 0, CREATE_NEW, nullptr) == INVALID_HANDLE) {
+    if (::CreateFile2(storage.c_str(), 0, 0, CREATE_NEW, nullptr) == INVALID_HANDLE_VALUE) {
         return false;
     }
 
