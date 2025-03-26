@@ -10,11 +10,11 @@ struct url {
     url() = default;
     ~url() = default;
 
-    url(Self&& str) noexcept = default;
-    auto operator=(Self&& str) noexcept -> Self& = default;
+    url(Self&& url) noexcept = default;
+    auto operator=(Self&& url) noexcept -> Self& = default;
 
-    url(const Self& str) = default;
-    auto operator=(const Self& str) -> Self& = default;
+    url(const Self& url) = default;
+    auto operator=(const Self& url) -> Self& = default;
 
     static auto from_string(const string& string) -> std::optional<Self>;
 
