@@ -67,13 +67,22 @@ auto file::from_temp_folder() -> std::expected<Self, std::error_code> {
 }
 
 auto file::create() -> bool {
-    auto handle { ::CreateFile2(storage.c_str(), 0, 0, CREATE_NEW, nullptr) };
-
     if (::CreateFile2(storage.c_str(), 0, 0, CREATE_NEW, nullptr) == INVALID_HANDLE_VALUE) {
         return false;
     }
 
     return true;
+}
+
+auto file::open() -> std::expected<wil::unique_handle, std::error_code> {
+    auto handle { wil::unique_handle(
+        ::CreateFile2(storage.c_str(), GENERIC_READ | GENERIC_WRITE, 0, OPEN_EXISTING, nullptr)) };
+
+    if (handle.get() == INVALID_HANDLE_VALUE) {
+        return std::unexpected(last_error());
+    }
+
+    return handle;
 }
 
 // auto file::create_always(const std::filesystem::path& path)

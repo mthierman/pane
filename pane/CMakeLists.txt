@@ -29,7 +29,6 @@ target_sources(
     PRIVATE "src/filesystem.cxx"
             "src/hstring.cxx"
             "src/icu.cxx"
-            "src/path.cxx"
             "src/string.cxx"
             "src/system.cxx"
             "src/window.cxx"

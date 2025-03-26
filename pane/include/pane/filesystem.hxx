@@ -38,7 +38,7 @@ struct file {
     static auto from_temp_folder() -> std::expected<Self, std::error_code>;
 
     auto create() -> bool;
-    // auto open() -> std::expected<wil::unique_handle, std::error_code>;
+    auto open() -> std::expected<wil::unique_handle, std::error_code>;
 
     // static auto create_always(const std::filesystem::path& path)
     //     -> std::expected<Self, std::error_code>;
