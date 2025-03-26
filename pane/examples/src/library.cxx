@@ -2,6 +2,8 @@
 #include <print>
 
 auto main() -> int {
+    auto init { wil::CoInitializeEx() };
+
     auto samples {
         L"C:\\Users\\mthie\\AppData\\Roaming\\Microsoft\\Windows\\Libraries\\Samples.library-ms",
     };
