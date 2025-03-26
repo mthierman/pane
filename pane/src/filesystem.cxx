@@ -66,6 +66,16 @@ auto file::from_temp_folder() -> std::expected<Self, std::error_code> {
     return Self(buffer);
 }
 
+auto file::create() -> bool {
+    auto handle { ::CreateFile2(storage.c_str(), 0, 0, CREATE_NEW, nullptr) };
+
+    if (::CreateFile2(storage.c_str(), 0, 0, CREATE_NEW, nullptr) == INVALID_HANDLE) {
+        return false;
+    }
+
+    return true;
+}
+
 // auto file::create_always(const std::filesystem::path& path)
 //     -> std::expected<Self, std::error_code> {
 //     if (auto handle {
@@ -106,6 +116,26 @@ auto file::from_temp_folder() -> std::expected<Self, std::error_code> {
 //             };
 //         handle != INVALID_HANDLE_VALUE) {
 //         return Self { .handle { handle } };
+//     } else {
+//         return std::unexpected(pane::last_error());
+//     }
+// }
+
+// auto create_directory(const std::filesystem::path& path)
+//     -> std::expected<std::filesystem::path, std::u8string> {
+//     if (auto result { ::CreateDirectoryW(path.c_str(), nullptr) }; result != 0) {
+//         return path;
+//     } else {
+//         return std::unexpected(pane::last_error());
+//     }
+// }
+
+// auto create_directory(const std::filesystem::path& path,
+//                       const std::filesystem::path& template_directory)
+//     -> std::expected<std::filesystem::path, std::u8string> {
+//     if (auto result { ::CreateDirectoryExW(template_directory.c_str(), path.c_str(), nullptr) };
+//         result != 0) {
+//         return path;
 //     } else {
 //         return std::unexpected(pane::last_error());
 //     }
@@ -166,26 +196,6 @@ auto library::get_folders(::IShellLibrary* lib) -> std::vector<std::u8string> {
 //     IShellLibrary* lib;
 //     auto result { SHLoadLibraryFromParsingName(
 //         L"TEST", STGM_READWRITE, IID_PPV_ARGS(&i_shell_library)) };
-// }
-
-// auto create_directory(const std::filesystem::path& path)
-//     -> std::expected<std::filesystem::path, std::u8string> {
-//     if (auto result { ::CreateDirectoryW(path.c_str(), nullptr) }; result != 0) {
-//         return path;
-//     } else {
-//         return std::unexpected(pane::last_error());
-//     }
-// }
-
-// auto create_directory(const std::filesystem::path& path,
-//                       const std::filesystem::path& template_directory)
-//     -> std::expected<std::filesystem::path, std::u8string> {
-//     if (auto result { ::CreateDirectoryExW(template_directory.c_str(), path.c_str(), nullptr) };
-//         result != 0) {
-//         return path;
-//     } else {
-//         return std::unexpected(pane::last_error());
-//     }
 // }
 
 // auto move_file(const std::filesystem::path& origin, const std::filesystem::path& destination)

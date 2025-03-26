@@ -37,33 +37,35 @@ struct file {
         -> std::expected<Self, std::error_code>;
     static auto from_temp_folder() -> std::expected<Self, std::error_code>;
 
-    static auto create_always(const std::filesystem::path& path)
-        -> std::expected<Self, std::error_code>;
-    static auto create_new(const std::filesystem::path& path)
-        -> std::expected<Self, std::error_code>;
+    auto create() -> bool;
+    // auto open() -> std::expected<wil::unique_handle, std::error_code>;
 
-    static auto open_always(const std::filesystem::path& path)
-        -> std::expected<Self, std::u8string>;
-    static auto open_existing(const std::filesystem::path& path)
-        -> std::expected<Self, std::u8string>;
+    // static auto create_always(const std::filesystem::path& path)
+    //     -> std::expected<Self, std::error_code>;
+    // static auto create_new(const std::filesystem::path& path)
+    //     -> std::expected<Self, std::error_code>;
 
-    auto create_directory(const std::filesystem::path& path)
-        -> std::expected<std::filesystem::path, std::u8string>;
-    auto create_directory(const std::filesystem::path& path,
-                          const std::filesystem::path& template_directory)
-        -> std::expected<std::filesystem::path, std::u8string>;
-    auto move_file(const std::filesystem::path& origin, const std::filesystem::path& destination)
-        -> std::expected<std::filesystem::path, std::u8string>;
-    auto copy_file(const std::filesystem::path& origin, const std::filesystem::path& destination)
-        -> std::expected<std::filesystem::path, std::u8string>;
-    auto erase_file(const std::filesystem::path& path)
-        -> std::expected<std::filesystem::path, std::u8string>;
-    auto create_symlink(const std::filesystem::path& target,
-                        const std::filesystem::path& destination)
-        -> std::expected<std::filesystem::path, std::u8string>;
+    // static auto open_always(const std::filesystem::path& path)
+    //     -> std::expected<Self, std::u8string>;
+    // static auto open_existing(const std::filesystem::path& path)
+    //     -> std::expected<Self, std::u8string>;
+
+    // auto create_directory(const std::filesystem::path& path)
+    //     -> std::expected<std::filesystem::path, std::u8string>;
+    // auto create_directory(const std::filesystem::path& path,
+    //                       const std::filesystem::path& template_directory)
+    //     -> std::expected<std::filesystem::path, std::u8string>;
+    // auto move_file(const std::filesystem::path& origin, const std::filesystem::path& destination)
+    //     -> std::expected<std::filesystem::path, std::u8string>;
+    // auto copy_file(const std::filesystem::path& origin, const std::filesystem::path& destination)
+    //     -> std::expected<std::filesystem::path, std::u8string>;
+    // auto erase_file(const std::filesystem::path& path)
+    //     -> std::expected<std::filesystem::path, std::u8string>;
+    // auto create_symlink(const std::filesystem::path& target,
+    //                     const std::filesystem::path& destination)
+    //     -> std::expected<std::filesystem::path, std::u8string>;
 
     std::filesystem::path storage;
-    wil::unique_handle handle;
 };
 
 struct library {
