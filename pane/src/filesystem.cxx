@@ -164,12 +164,12 @@ auto file::library_directories(const wil::com_ptr<IShellLibrary>& lib) -> std::v
     auto co_initialize { wil::CoInitializeEx() };
 
     wil::com_ptr<IShellItemArray> array;
-    // auto folders { lib->GetFolders(LFF_ALLITEMS, IID_PPV_ARGS(&array)) };
-    lib->GetFolders(LFF_ALLITEMS, IID_PPV_ARGS(&array));
+    [[maybe_unused]] auto folders { lib->GetFolders(LFF_ALLITEMS, IID_PPV_ARGS(&array)) };
 
     DWORD count;
-    IShellItem* item;
+    wil::com_ptr<IShellItem> item;
     array->GetCount(&count);
+
     array->GetItemAt(0, &item);
     wil::unique_cotaskmem_string name;
     item->GetDisplayName(SIGDN_FILESYSPATH, &name);
