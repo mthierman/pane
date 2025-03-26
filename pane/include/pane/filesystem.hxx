@@ -55,8 +55,7 @@ struct file {
     static auto library_directories(const wil::com_ptr<IShellLibrary>& lib)
         -> std::expected<std::vector<Self>, std::error_code>;
 
-    // static auto download(std::u8string_view url, const std::filesystem::path& path)
-    //     -> std::expected<Self, std::u8string>;
+    auto download_from_url(string url) -> std::expected<void, std::error_code>;
 
     std::filesystem::path storage;
 };

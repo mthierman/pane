@@ -192,20 +192,19 @@ auto file::library_directories(const wil::com_ptr<IShellLibrary>& lib)
     return files;
 }
 
-// auto file::download(std::u8string_view url, const std::filesystem::path& path)
-//     -> std::expected<Self, std::u8string> {
-//     if (auto u16url { pane::hstring::from_utf8(url) }) {
-//         // We need to check if the directories exist on path
-//         if (auto result {
-//                 ::URLDownloadToFileW(nullptr, u16url.value().c_str(), path.c_str(), 0, nullptr)
-//                 };
-//             result == S_OK) {
-//             return open_existing(path);
-//         } else {
-//             return std::unexpected(pane::last_error());
-//         }
-//     } else {
-//         return std::unexpected(u16url.error());
-//     }
-// }
+auto file::download_from_url(string url) -> std::expected<void, std::error_code> {
+    auto hstring { pane::hstring::from_utf8(url) };
+
+    if (!hstring) {
+        return std::unexpected(hstring.error());
+    }
+
+    if (auto result {
+            ::URLDownloadToFileW(nullptr, hstring.value().c_str(), storage.c_str(), 0, nullptr) };
+        FAILED(result)) {
+        return std::unexpected(hresult_error(result));
+    }
+
+    return {};
+}
 } // namespace pane
