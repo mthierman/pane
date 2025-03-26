@@ -95,19 +95,23 @@ auto hstring::from_utf8(const string& string, bool replacement)
     return hstring::from_utf8(string.storage, replacement);
 }
 
-auto hstring::c_str() -> wchar_t* { return reinterpret_cast<wchar_t*>(storage.data()); }
-
-auto hstring::c_str() const -> const wchar_t* {
-    return reinterpret_cast<const wchar_t*>(storage.data());
+auto hstring::c_str(this Self& self) -> wchar_t* {
+    return reinterpret_cast<wchar_t*>(self.storage.data());
 }
 
-auto hstring::u16_str() -> char16_t* { return storage.data(); }
+auto hstring::c_str(this const Self& self) -> const wchar_t* {
+    return reinterpret_cast<const wchar_t*>(self.storage.data());
+}
 
-auto hstring::u16_str() const -> const char16_t* { return storage.data(); }
+auto hstring::u16_str(this Self& self) -> char16_t* { return self.storage.data(); }
 
-auto hstring::to_wstring() -> std::wstring { return { storage.begin(), storage.end() }; }
+auto hstring::u16_str(this const Self& self) -> const char16_t* { return self.storage.data(); }
 
-auto hstring::to_wstring() const -> const std::wstring {
-    return { storage.begin(), storage.end() };
+auto hstring::to_wstring(this Self& self) -> std::wstring {
+    return { self.storage.begin(), self.storage.end() };
+}
+
+auto hstring::to_wstring(this const Self& self) -> const std::wstring {
+    return { self.storage.begin(), self.storage.end() };
 }
 } // namespace pane

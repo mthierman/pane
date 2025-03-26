@@ -40,17 +40,17 @@ struct hstring {
     static auto from_utf8(const string& string, bool replacement = true)
         -> std::expected<Self, std::error_code>;
 
-    auto c_str() -> wchar_t*;
+    auto c_str(this Self& self) -> wchar_t*;
 
-    auto c_str() const -> const wchar_t*;
+    auto c_str(this const Self& self) -> const wchar_t*;
 
-    auto u16_str() -> char16_t*;
+    auto u16_str(this Self& self) -> char16_t*;
 
-    auto u16_str() const -> const char16_t*;
+    auto u16_str(this const Self& self) -> const char16_t*;
 
-    auto to_wstring() -> std::wstring;
+    auto to_wstring(this Self& self) -> std::wstring;
 
-    auto to_wstring() const -> const std::wstring;
+    auto to_wstring(this const Self& self) -> const std::wstring;
 
     std::u16string storage;
 };
