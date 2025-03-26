@@ -1,5 +1,6 @@
 #pragma once
 #include <optional>
+#include <ada.h>
 #include <pane/string.hxx>
 
 namespace pane {

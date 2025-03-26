@@ -1,5 +1,4 @@
 #include <pane/url.hxx>
-#include <ada.h>
 
 namespace pane {
 auto url::from_string(string string) -> std::optional<Self> {
