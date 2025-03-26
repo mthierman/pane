@@ -40,23 +40,25 @@ struct file {
         -> std::expected<Self, std::error_code>;
     static auto from_temp_folder() -> std::expected<Self, std::error_code>;
 
-    auto create_directory() -> std::expected<void, std::error_code>;
-    auto create_directory_from_template(const Self& template_directory)
+    auto create_directory(this Self& self) -> std::expected<void, std::error_code>;
+    auto create_directory_from_template(this Self& self, const Self& template_directory)
         -> std::expected<void, std::error_code>;
 
-    auto create() -> bool;
-    auto open() -> std::expected<wil::unique_handle, std::error_code>;
-    auto move(const Self& destination) -> std::expected<void, std::error_code>;
-    auto copy(const Self& destination) -> std::expected<void, std::error_code>;
-    auto erase() -> std::expected<void, std::error_code>;
+    auto create(this Self& self) -> bool;
+    auto open(this Self& self) -> std::expected<wil::unique_handle, std::error_code>;
+    auto move(this Self& self, const Self& destination) -> std::expected<void, std::error_code>;
+    auto copy(this Self& self, const Self& destination) -> std::expected<void, std::error_code>;
+    auto erase(this Self& self) -> std::expected<void, std::error_code>;
 
-    auto create_symlink(const Self& destination) -> std::expected<void, std::error_code>;
+    auto create_symlink(this Self& self, const Self& destination)
+        -> std::expected<void, std::error_code>;
 
-    auto open_library() -> std::expected<wil::com_ptr<IShellLibrary>, std::error_code>;
+    auto open_library(this Self& self)
+        -> std::expected<wil::com_ptr<IShellLibrary>, std::error_code>;
     static auto library_directories(const wil::com_ptr<IShellLibrary>& lib)
         -> std::expected<std::vector<Self>, std::error_code>;
 
-    auto download_from_url(url url) -> std::expected<void, std::error_code>;
+    auto download_from_url(this Self& self, url url) -> std::expected<void, std::error_code>;
 
     std::filesystem::path storage;
 };

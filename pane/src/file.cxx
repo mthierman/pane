@@ -66,34 +66,35 @@ auto file::from_temp_folder() -> std::expected<Self, std::error_code> {
     return Self(buffer);
 }
 
-auto file::create_directory() -> std::expected<void, std::error_code> {
-    if (CreateDirectoryW(storage.c_str(), nullptr) == 0) {
+auto file::create_directory(this Self& self) -> std::expected<void, std::error_code> {
+    if (CreateDirectoryW(self.storage.c_str(), nullptr) == 0) {
         return std::unexpected(last_error());
     }
 
     return {};
 }
 
-auto file::create_directory_from_template(const Self& template_directory)
+auto file::create_directory_from_template(this Self& self, const Self& template_directory)
     -> std::expected<void, std::error_code> {
-    if (::CreateDirectoryExW(template_directory.storage.c_str(), storage.c_str(), nullptr) == 0) {
+    if (::CreateDirectoryExW(template_directory.storage.c_str(), self.storage.c_str(), nullptr)
+        == 0) {
         return std::unexpected(last_error());
     }
 
     return {};
 }
 
-auto file::create() -> bool {
-    if (::CreateFile2(storage.c_str(), 0, 0, CREATE_NEW, nullptr) == INVALID_HANDLE_VALUE) {
+auto file::create(this Self& self) -> bool {
+    if (::CreateFile2(self.storage.c_str(), 0, 0, CREATE_NEW, nullptr) == INVALID_HANDLE_VALUE) {
         return false;
     }
 
     return true;
 }
 
-auto file::open() -> std::expected<wil::unique_handle, std::error_code> {
-    auto handle { wil::unique_handle(
-        ::CreateFile2(storage.c_str(), GENERIC_READ | GENERIC_WRITE, 0, OPEN_EXISTING, nullptr)) };
+auto file::open(this Self& self) -> std::expected<wil::unique_handle, std::error_code> {
+    auto handle { wil::unique_handle(::CreateFile2(
+        self.storage.c_str(), GENERIC_READ | GENERIC_WRITE, 0, OPEN_EXISTING, nullptr)) };
 
     if (handle.get() == INVALID_HANDLE_VALUE) {
         return std::unexpected(last_error());
@@ -102,16 +103,16 @@ auto file::open() -> std::expected<wil::unique_handle, std::error_code> {
     return handle;
 }
 
-auto file::move(const Self& destination) -> std::expected<void, std::error_code> {
-    if (::MoveFileW(storage.c_str(), destination.storage.c_str()) == 0) {
+auto file::move(this Self& self, const Self& destination) -> std::expected<void, std::error_code> {
+    if (::MoveFileW(self.storage.c_str(), destination.storage.c_str()) == 0) {
         return std::unexpected(last_error());
     }
 
     return {};
 }
 
-auto file::copy(const Self& destination) -> std::expected<void, std::error_code> {
-    if (auto result { ::CopyFile2(storage.c_str(), destination.storage.c_str(), nullptr) };
+auto file::copy(this Self& self, const Self& destination) -> std::expected<void, std::error_code> {
+    if (auto result { ::CopyFile2(self.storage.c_str(), destination.storage.c_str(), nullptr) };
         FAILED(result)) {
         return std::unexpected(hresult_error(result));
     }
@@ -119,21 +120,22 @@ auto file::copy(const Self& destination) -> std::expected<void, std::error_code>
     return {};
 }
 
-auto file::erase() -> std::expected<void, std::error_code> {
-    if (::DeleteFileW(storage.c_str()) == 0) {
+auto file::erase(this Self& self) -> std::expected<void, std::error_code> {
+    if (::DeleteFileW(self.storage.c_str()) == 0) {
         return std::unexpected(last_error());
     }
 
     return {};
 }
 
-auto file::create_symlink(const Self& destination) -> std::expected<void, std::error_code> {
-    auto flags { std::filesystem::is_directory(storage)
+auto file::create_symlink(this Self& self, const Self& destination)
+    -> std::expected<void, std::error_code> {
+    auto flags { std::filesystem::is_directory(self.storage)
                      ? SYMBOLIC_LINK_FLAG_DIRECTORY | SYMBOLIC_LINK_FLAG_ALLOW_UNPRIVILEGED_CREATE
                      : SYMBOLIC_LINK_FLAG_ALLOW_UNPRIVILEGED_CREATE };
 
     if (::CreateSymbolicLinkW(
-            destination.storage.c_str(), storage.c_str(), static_cast<::DWORD>(flags))
+            destination.storage.c_str(), self.storage.c_str(), static_cast<::DWORD>(flags))
         == 0) {
         return std::unexpected(last_error());
     }
@@ -141,16 +143,14 @@ auto file::create_symlink(const Self& destination) -> std::expected<void, std::e
     return {};
 }
 
-auto file::open_library() -> std::expected<wil::com_ptr<IShellLibrary>, std::error_code> {
+auto file::open_library(this Self& self)
+    -> std::expected<wil::com_ptr<IShellLibrary>, std::error_code> {
     auto co_initialize { wil::CoInitializeEx() };
 
     wil::com_ptr<IShellLibrary> lib;
 
     if (auto result { SHLoadLibraryFromParsingName(
-            L"C:\\Users\\mthie\\AppData\\Roaming\\Microsoft\\Windows\\Libraries\\Samples.library-"
-            L"ms",
-            STGM_READWRITE,
-            IID_PPV_ARGS(&lib)) };
+            self.storage.c_str(), STGM_READWRITE, IID_PPV_ARGS(&lib)) };
         result != S_OK) {
         return std::unexpected(hresult_error(result));
     }
@@ -192,15 +192,15 @@ auto file::library_directories(const wil::com_ptr<IShellLibrary>& lib)
     return files;
 }
 
-auto file::download_from_url(url url) -> std::expected<void, std::error_code> {
-    auto hstring { pane::hstring::from_utf8(url.storage.get_href()) };
+auto file::download_from_url(this Self& self, url url) -> std::expected<void, std::error_code> {
+    auto converted_url { pane::hstring::from_utf8(url.storage.get_href()) };
 
-    if (!hstring) {
-        return std::unexpected(hstring.error());
+    if (!converted_url) {
+        return std::unexpected(converted_url.error());
     }
 
-    if (auto result {
-            ::URLDownloadToFileW(nullptr, hstring.value().c_str(), storage.c_str(), 0, nullptr) };
+    if (auto result { ::URLDownloadToFileW(
+            nullptr, converted_url.value().c_str(), self.storage.c_str(), 0, nullptr) };
         FAILED(result)) {
         return std::unexpected(hresult_error(result));
     }
