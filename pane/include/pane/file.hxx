@@ -21,11 +21,11 @@ struct file {
     file() = default;
     ~file() = default;
 
-    file(Self&& str) noexcept = default;
-    auto operator=(Self&& str) noexcept -> Self& = default;
+    file(Self&& file) noexcept = default;
+    auto operator=(Self&& file) noexcept -> Self& = default;
 
-    file(const Self& str) = default;
-    auto operator=(const Self& str) -> Self& = default;
+    file(const Self& file) = default;
+    auto operator=(const Self& file) -> Self& = default;
 
     explicit file(std::filesystem::path&& path) noexcept;
     auto operator=(std::filesystem::path&& path) noexcept -> Self&;
@@ -33,8 +33,8 @@ struct file {
     explicit file(const string& string) noexcept;
     auto operator=(const string& string) noexcept -> Self&;
 
-    explicit file(const hstring& string) noexcept;
-    auto operator=(const hstring& string) noexcept -> Self&;
+    explicit file(const hstring& hstring) noexcept;
+    auto operator=(const hstring& hstring) noexcept -> Self&;
 
     static auto from_known_folder(KNOWNFOLDERID known_folder = FOLDERID_LocalAppData)
         -> std::expected<Self, std::error_code>;

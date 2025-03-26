@@ -26,11 +26,11 @@ auto file::operator=(const string& string) noexcept -> Self& {
     return *this;
 }
 
-file::file(const hstring& string) noexcept
-    : storage { string.storage } { }
+file::file(const hstring& hstring) noexcept
+    : storage { hstring.storage } { }
 
-auto file::operator=(const hstring& string) noexcept -> Self& {
-    storage = string.storage;
+auto file::operator=(const hstring& hstring) noexcept -> Self& {
+    storage = hstring.storage;
 
     return *this;
 }
