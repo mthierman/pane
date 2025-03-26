@@ -11,7 +11,9 @@ auto main() -> int {
     if (temp_dir) {
         auto file = pane::file(temp_dir.value());
         file.storage /= "test.txt";
-        file.create();
+        auto create { file.create() };
+
+        std::println("{}, {}", temp_dir.value().storage, create);
     }
 
     return 0;
