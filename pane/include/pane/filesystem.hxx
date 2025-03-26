@@ -47,9 +47,6 @@ struct file {
     static auto open_existing(const std::filesystem::path& path)
         -> std::expected<Self, std::u8string>;
 
-    static auto from_url(std::u8string_view url, const std::filesystem::path& path)
-        -> std::expected<Self, std::u8string>;
-
     auto create_directory(const std::filesystem::path& path)
         -> std::expected<std::filesystem::path, std::u8string>;
     auto create_directory(const std::filesystem::path& path,
@@ -77,6 +74,9 @@ struct library {
     static auto get_folders(::IShellLibrary* lib) -> std::vector<std::u8string>;
     // static auto create() -> std::expected<Self, std::u8string>;
 };
+
+// auto download(std::u8string_view url, const std::filesystem::path& path)
+//     -> std::expected<Self, std::u8string>;
 } // namespace pane
 
 namespace std {

@@ -110,23 +110,6 @@ auto file::from_temp_folder() -> std::expected<Self, std::error_code> {
 //     }
 // }
 
-// auto file::from_url(std::u8string_view url, const std::filesystem::path& path)
-//     -> std::expected<Self, std::u8string> {
-//     if (auto u16url { pane::hstring::from_utf8(url) }) {
-//         // We need to check if the directories exist on path
-//         if (auto result {
-//                 ::URLDownloadToFileW(nullptr, u16url.value().c_str(), path.c_str(), 0, nullptr)
-//                 };
-//             result == S_OK) {
-//             return open_existing(path);
-//         } else {
-//             return std::unexpected(pane::last_error());
-//         }
-//     } else {
-//         return std::unexpected(u16url.error());
-//     }
-// }
-
 auto library::create_from_name() -> ::HRESULT {
     IShellLibrary* lib;
     auto result { SHLoadLibraryFromParsingName(
@@ -246,6 +229,23 @@ auto library::get_folders(::IShellLibrary* lib) -> std::vector<std::u8string> {
 //         return destination;
 //     } else {
 //         return std::unexpected(pane::last_error());
+//     }
+// }
+
+// auto download(std::u8string_view url, const std::filesystem::path& path)
+//     -> std::expected<Self, std::u8string> {
+//     if (auto u16url { pane::hstring::from_utf8(url) }) {
+//         // We need to check if the directories exist on path
+//         if (auto result {
+//                 ::URLDownloadToFileW(nullptr, u16url.value().c_str(), path.c_str(), 0, nullptr)
+//                 };
+//             result == S_OK) {
+//             return open_existing(path);
+//         } else {
+//             return std::unexpected(pane::last_error());
+//         }
+//     } else {
+//         return std::unexpected(u16url.error());
 //     }
 // }
 } // namespace pane
