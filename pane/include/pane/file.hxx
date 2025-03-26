@@ -73,7 +73,7 @@ template <> struct formatter<std::filesystem::path> : formatter<string_view> {
 
 template <> struct formatter<std::filesystem::path, wchar_t> : formatter<wstring_view, wchar_t> {
     auto format(const std::filesystem::path& path, wformat_context& context) const noexcept {
-        return formatter<wstring_view, wchar_t>::format(path.wstring(), context);
+        return formatter<wstring_view, wchar_t>::format(path.c_str(), context);
     }
 };
 } // namespace std
