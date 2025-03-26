@@ -55,11 +55,12 @@ struct file {
     static auto library_directories(const wil::com_ptr<IShellLibrary>& lib)
         -> std::expected<std::vector<Self>, std::error_code>;
 
+    // static auto download(std::u8string_view url, const std::filesystem::path& path)
+    //     -> std::expected<Self, std::u8string>;
+
     std::filesystem::path storage;
 };
 
-// auto download(std::u8string_view url, const std::filesystem::path& path)
-//     -> std::expected<Self, std::u8string>;
 } // namespace pane
 
 namespace std {

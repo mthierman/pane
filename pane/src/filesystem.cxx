@@ -192,7 +192,7 @@ auto file::library_directories(const wil::com_ptr<IShellLibrary>& lib)
     return files;
 }
 
-// auto download(std::u8string_view url, const std::filesystem::path& path)
+// auto file::download(std::u8string_view url, const std::filesystem::path& path)
 //     -> std::expected<Self, std::u8string> {
 //     if (auto u16url { pane::hstring::from_utf8(url) }) {
 //         // We need to check if the directories exist on path
