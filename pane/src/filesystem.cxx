@@ -7,8 +7,66 @@
 #include <print>
 
 namespace pane {
-// auto file::create_always(const std::filesystem::path& path) -> std::expected<Self, std::u8string>
-// {
+file::file(std::filesystem::path&& path) noexcept
+    : storage { std::move(path) } { }
+
+auto file::operator=(std::filesystem::path&& path) noexcept -> Self& {
+    storage = std::move(path);
+
+    return *this;
+}
+
+file::file(const string& string) noexcept
+    : storage { string.storage } { }
+
+auto file::operator=(const string& string) noexcept -> Self& {
+    storage = string.storage;
+
+    return *this;
+}
+
+file::file(const hstring& string) noexcept
+    : storage { string.storage } { }
+
+auto file::operator=(const hstring& string) noexcept -> Self& {
+    storage = string.storage;
+
+    return *this;
+}
+
+auto file::from_known_folder(KNOWNFOLDERID known_folder) -> std::expected<Self, std::error_code> {
+    wil::unique_cotaskmem_string buffer;
+
+    auto result { ::SHGetKnownFolderPath(known_folder, 0, nullptr, &buffer) };
+
+    if (SUCCEEDED(result)) {
+        return Self(buffer.get());
+    } else {
+        return std::unexpected(hresult_error(result));
+    }
+}
+
+auto file::temp_folder() -> std::expected<Self, std::error_code> {
+    std::wstring buffer;
+    auto length { ::GetTempPath2W(0, buffer.data()) };
+
+    if (length == 0) {
+        return std::unexpected(last_error());
+    }
+
+    buffer.resize(length);
+
+    if (::GetTempPath2W(length, buffer.data()) == 0) {
+        return std::unexpected(last_error());
+    }
+
+    buffer.resize(buffer.size() - 2);
+
+    return Self(buffer);
+}
+
+// auto file::create_always(const std::filesystem::path& path)
+//     -> std::expected<Self, std::error_code> {
 //     if (auto handle {
 //             ::CreateFile2(path.c_str(), GENERIC_READ | GENERIC_WRITE, 0, CREATE_ALWAYS, nullptr)
 //             };
@@ -19,7 +77,8 @@ namespace pane {
 //     }
 // }
 
-// auto file::create_new(const std::filesystem::path& path) -> std::expected<Self, std::u8string> {
+// auto file::create_new(const std::filesystem::path& path) -> std::expected<Self, std::error_code>
+// {
 //     if (auto handle {
 //             ::CreateFile2(path.c_str(), GENERIC_READ | GENERIC_WRITE, 0, CREATE_NEW, nullptr) };
 //         handle != INVALID_HANDLE_VALUE) {
