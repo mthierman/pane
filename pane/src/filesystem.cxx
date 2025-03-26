@@ -128,6 +128,20 @@ auto file::erase() -> std::expected<void, std::error_code> {
     return {};
 }
 
+auto file::create_symlink(const Self& destination) -> std::expected<void, std::error_code> {
+    auto flags { std::filesystem::is_directory(storage)
+                     ? SYMBOLIC_LINK_FLAG_DIRECTORY | SYMBOLIC_LINK_FLAG_ALLOW_UNPRIVILEGED_CREATE
+                     : SYMBOLIC_LINK_FLAG_ALLOW_UNPRIVILEGED_CREATE };
+
+    if (::CreateSymbolicLinkW(
+            destination.storage.c_str(), storage.c_str(), static_cast<::DWORD>(flags))
+        == 0) {
+        return std::unexpected(last_error());
+    }
+
+    return {};
+}
+
 auto library::create_from_name() -> ::HRESULT {
     IShellLibrary* lib;
     auto result { SHLoadLibraryFromParsingName(
@@ -183,23 +197,6 @@ auto library::get_folders(::IShellLibrary* lib) -> std::vector<std::u8string> {
 //     IShellLibrary* lib;
 //     auto result { SHLoadLibraryFromParsingName(
 //         L"TEST", STGM_READWRITE, IID_PPV_ARGS(&i_shell_library)) };
-// }
-
-// auto create_symlink(const std::filesystem::path& target, const std::filesystem::path&
-// destination)
-//     -> std::expected<std::filesystem::path, std::u8string> {
-//     auto flags { std::filesystem::is_directory(target)
-//                      ? SYMBOLIC_LINK_FLAG_DIRECTORY |
-//                      SYMBOLIC_LINK_FLAG_ALLOW_UNPRIVILEGED_CREATE :
-//                      SYMBOLIC_LINK_FLAG_ALLOW_UNPRIVILEGED_CREATE };
-
-//     if (auto result { ::CreateSymbolicLinkW(
-//             destination.c_str(), target.c_str(), static_cast<::DWORD>(flags)) };
-//         result != 0) {
-//         return destination;
-//     } else {
-//         return std::unexpected(pane::last_error());
-//     }
 // }
 
 // auto download(std::u8string_view url, const std::filesystem::path& path)

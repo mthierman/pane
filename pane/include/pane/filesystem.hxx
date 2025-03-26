@@ -47,9 +47,7 @@ struct file {
     auto copy(const Self& destination) -> std::expected<void, std::error_code>;
     auto erase() -> std::expected<void, std::error_code>;
 
-    // auto create_symlink(const std::filesystem::path& target,
-    //                     const std::filesystem::path& destination)
-    //     -> std::expected<std::filesystem::path, std::u8string>;
+    auto create_symlink(const Self& destination) -> std::expected<void, std::error_code>;
 
     std::filesystem::path storage;
 };
