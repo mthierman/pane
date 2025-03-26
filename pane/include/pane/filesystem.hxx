@@ -49,7 +49,7 @@ struct file {
 
     auto create_symlink(const Self& destination) -> std::expected<void, std::error_code>;
 
-    auto create_library() -> std::expected<void, std::error_code>;
+    // auto create_library() -> std::expected<void, std::error_code>;
     // static auto create() -> std::expected<Self, std::u8string>;
     // static auto create_from_name() -> ::HRESULT;
     // static auto create() -> ::IShellLibrary*;

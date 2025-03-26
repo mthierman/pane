@@ -1,9 +1,5 @@
 #include <pane/pane.hxx>
-#include <type_traits>
 #include <print>
-#include <system_error>
-
-#include <comdef.h>
 
 auto main() -> int {
     auto temp_dir { pane::file::from_temp_folder() };

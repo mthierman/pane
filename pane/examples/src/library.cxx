@@ -1,16 +1,13 @@
 #include <pane/pane.hxx>
 #include <print>
-#include <wil/resource.h>
 
 auto main() -> int {
-    // auto init { wil::CoInitializeEx() };
-    // auto lib { pane::fs::library::create_from_name() };
-    // std::println("{}", pane::sys::format_message(lib));
+    auto samples {
+        L"C:\\Users\\mthie\\AppData\\Roaming\\Microsoft\\Windows\\Libraries\\Samples.library-ms",
+    };
 
-    auto init { wil::CoInitializeEx() };
-    auto lib { pane::library::create() };
-    auto folders { pane::library::get_folders(lib) };
-    // std::println("{}", pane::sys::format_message(lib));
+    auto lib_path { pane::file(samples) };
+    std::println("{}", lib_path.storage);
 
     return 0;
 }

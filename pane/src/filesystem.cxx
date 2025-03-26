@@ -143,12 +143,12 @@ auto file::create_symlink(const Self& destination) -> std::expected<void, std::e
     return {};
 }
 
-auto file::create_library() -> std::expected<void, std::error_code> {
-    auto lib { wil::CoCreateInstance<::IShellLibrary>(CLSID_ShellLibrary) };
+// auto file::create_library() -> std::expected<void, std::error_code> {
+//     auto lib { wil::CoCreateInstance<::IShellLibrary>(CLSID_ShellLibrary) };
 
-    auto result { SHLoadLibraryFromParsingName(
-        storage.c_str(), STGM_READWRITE, IID_PPV_ARGS(&lib)) };
-}
+//     auto result { SHLoadLibraryFromParsingName(
+//         storage.c_str(), STGM_READWRITE, IID_PPV_ARGS(&lib)) };
+// }
 
 // auto library::create_from_name() -> ::HRESULT {
 //     IShellLibrary* lib;
