@@ -25,7 +25,7 @@ auto module_handle() -> std::expected<HMODULE, std::error_code> {
     return hmodule;
 }
 
-auto format_message(HRESULT error_code) -> std::expected<string, std::error_code> {
+auto format_message(HRESULT hresult) -> std::expected<string, std::error_code> {
     wil::unique_hlocal_string buffer;
 
     DWORD language_id;
@@ -37,7 +37,7 @@ auto format_message(HRESULT error_code) -> std::expected<string, std::error_code
     FormatMessageW(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM
                        | FORMAT_MESSAGE_IGNORE_INSERTS | FORMAT_MESSAGE_MAX_WIDTH_MASK,
                    nullptr,
-                   error_code,
+                   hresult,
                    language_id,
                    wil::out_param_ptr<LPWSTR>(buffer),
                    0,
