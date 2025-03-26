@@ -49,16 +49,13 @@ struct file {
 
     auto create_symlink(const Self& destination) -> std::expected<void, std::error_code>;
 
-    std::filesystem::path storage;
-};
-
-struct library {
-    using Self = library;
-
-    static auto create_from_name() -> ::HRESULT;
-    static auto create() -> ::IShellLibrary*;
-    static auto get_folders(::IShellLibrary* lib) -> std::vector<std::u8string>;
+    auto create_library() -> std::expected<void, std::error_code>;
     // static auto create() -> std::expected<Self, std::u8string>;
+    // static auto create_from_name() -> ::HRESULT;
+    // static auto create() -> ::IShellLibrary*;
+    // static auto get_folders(::IShellLibrary* lib) -> std::vector<std::u8string>;
+
+    std::filesystem::path storage;
 };
 
 // auto download(std::u8string_view url, const std::filesystem::path& path)
