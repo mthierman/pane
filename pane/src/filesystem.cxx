@@ -143,7 +143,7 @@ auto file::create_symlink(const Self& destination) -> std::expected<void, std::e
     return {};
 }
 
-auto file::load_library() -> std::expected<wil::com_ptr<IShellLibrary>, std::error_code> {
+auto file::open_library() -> std::expected<wil::com_ptr<IShellLibrary>, std::error_code> {
     auto co_initialize { wil::CoInitializeEx() };
 
     wil::com_ptr<IShellLibrary> lib;
@@ -160,7 +160,9 @@ auto file::load_library() -> std::expected<wil::com_ptr<IShellLibrary>, std::err
     return lib;
 }
 
-auto file::get_folders(::IShellLibrary* lib) -> std::vector<std::u8string> {
+auto library_directories(const wil::com_ptr<IShellLibrary>& lib) -> std::vector<std::u8string> {
+    auto co_initialize { wil::CoInitializeEx() };
+
     IShellItemArray* array { nullptr };
     // auto folders { lib->GetFolders(LFF_ALLITEMS, IID_PPV_ARGS(&array)) };
     lib->GetFolders(LFF_ALLITEMS, IID_PPV_ARGS(&array));
@@ -180,35 +182,6 @@ auto file::get_folders(::IShellLibrary* lib) -> std::vector<std::u8string> {
 
     return {};
 }
-
-// auto library::create_from_name() -> ::HRESULT {
-//     IShellLibrary* lib;
-
-//     auto result { SHLoadLibraryFromParsingName(
-//         L"C:\\Users\\mthie\\AppData\\Roaming\\Microsoft\\Windows\\Libraries\\Samples.library-ms",
-//         STGM_READWRITE,
-//         IID_PPV_ARGS(&lib)) };
-
-//     return result;
-// }
-
-// auto library::create() -> ::IShellLibrary* {
-//     IShellLibrary* lib;
-
-//     // auto result { SHLoadLibraryFromParsingName(
-//     // L"C:\\Users\\mthie\\AppData\\Roaming\\Microsoft\\Windows\\Libraries\\Samples.library-ms",
-//     //     STGM_READWRITE,
-//     //     IID_PPV_ARGS(&lib)) };
-
-//     // std::println("{}", pane::format_message(result));
-
-//     SHLoadLibraryFromParsingName(
-//         L"C:\\Users\\mthie\\AppData\\Roaming\\Microsoft\\Windows\\Libraries\\Samples.library-ms",
-//         STGM_READWRITE,
-//         IID_PPV_ARGS(&lib));
-
-//     return lib;
-// }
 
 // auto download(std::u8string_view url, const std::filesystem::path& path)
 //     -> std::expected<Self, std::u8string> {

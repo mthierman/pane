@@ -7,11 +7,11 @@ auto main() -> int {
 
     std::println("Library: {}", lib_path.storage);
 
-    auto load { lib_path.load_library() };
+    auto load { lib_path.open_library() };
 
     if (load.has_value()) {
         std::println("Lib exists!");
-        pane::file::get_folders(load.value().get());
+        pane::library_directories(load.value().get());
     } else {
         std::println("{}", load.error().message());
     }
