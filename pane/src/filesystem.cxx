@@ -66,6 +66,23 @@ auto file::from_temp_folder() -> std::expected<Self, std::error_code> {
     return Self(buffer);
 }
 
+auto file::create_directory() -> std::expected<void, std::error_code> {
+    if (CreateDirectoryW(storage.c_str(), nullptr) == 0) {
+        return std::unexpected(last_error());
+    }
+
+    return {};
+}
+
+auto file::create_directory_from_template(const Self& template_directory)
+    -> std::expected<void, std::error_code> {
+    if (::CreateDirectoryExW(template_directory.storage.c_str(), storage.c_str(), nullptr) == 0) {
+        return std::unexpected(last_error());
+    }
+
+    return {};
+}
+
 auto file::create() -> bool {
     if (::CreateFile2(storage.c_str(), 0, 0, CREATE_NEW, nullptr) == INVALID_HANDLE_VALUE) {
         return false;
@@ -85,17 +102,26 @@ auto file::open() -> std::expected<wil::unique_handle, std::error_code> {
     return handle;
 }
 
-auto file::create_directory() -> std::expected<void, std::error_code> {
-    if (CreateDirectoryW(storage.c_str(), nullptr) == 0) {
+auto file::move(const Self& destination) -> std::expected<void, std::error_code> {
+    if (::MoveFileW(storage.c_str(), destination.storage.c_str()) == 0) {
         return std::unexpected(last_error());
     }
 
     return {};
 }
 
-auto file::create_directory_from_template(const Self& template_directory)
-    -> std::expected<void, std::error_code> {
-    if (::CreateDirectoryExW(template_directory.storage.c_str(), storage.c_str(), nullptr) == 0) {
+auto file::copy(const Self& destination) -> std::expected<void, std::error_code> {
+    auto result { ::CopyFile2(storage.c_str(), destination.storage.c_str(), nullptr) };
+
+    if (FAILED(result)) {
+        return std::unexpected(hresult_error(result));
+    }
+
+    return {};
+}
+
+auto file::erase() -> std::expected<void, std::error_code> {
+    if (::DeleteFileW(storage.c_str()) == 0) {
         return std::unexpected(last_error());
     }
 
@@ -157,34 +183,6 @@ auto library::get_folders(::IShellLibrary* lib) -> std::vector<std::u8string> {
 //     IShellLibrary* lib;
 //     auto result { SHLoadLibraryFromParsingName(
 //         L"TEST", STGM_READWRITE, IID_PPV_ARGS(&i_shell_library)) };
-// }
-
-// auto move_file(const std::filesystem::path& origin, const std::filesystem::path& destination)
-//     -> std::expected<std::filesystem::path, std::u8string> {
-//     if (auto result { ::MoveFileW(origin.c_str(), destination.c_str()) }; result != 0) {
-//         return destination;
-//     } else {
-//         return std::unexpected(pane::last_error());
-//     }
-// }
-
-// auto copy_file(const std::filesystem::path& origin, const std::filesystem::path& destination)
-//     -> std::expected<std::filesystem::path, std::u8string> {
-//     if (auto result { ::CopyFile2(origin.c_str(), destination.c_str(), nullptr) };
-//         SUCCEEDED(result)) {
-//         return destination;
-//     } else {
-//         return std::unexpected(pane::last_error());
-//     }
-// }
-
-// auto erase_file(const std::filesystem::path& path)
-//     -> std::expected<std::filesystem::path, std::u8string> {
-//     if (auto result { ::DeleteFileW(path.c_str()) }; result != 0) {
-//         return path;
-//     } else {
-//         return std::unexpected(pane::last_error());
-//     }
 // }
 
 // auto create_symlink(const std::filesystem::path& target, const std::filesystem::path&
