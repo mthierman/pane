@@ -160,11 +160,15 @@ auto file::open_library() -> std::expected<wil::com_ptr<IShellLibrary>, std::err
     return lib;
 }
 
-auto file::library_directories(const wil::com_ptr<IShellLibrary>& lib) -> std::vector<Self> {
+auto file::library_directories(const wil::com_ptr<IShellLibrary>& lib)
+    -> std::expected<std::vector<Self>, std::error_code> {
     auto co_initialize { wil::CoInitializeEx() };
 
     wil::com_ptr<IShellItemArray> array;
-    [[maybe_unused]] auto folders { lib->GetFolders(LFF_ALLITEMS, IID_PPV_ARGS(&array)) };
+
+    if (auto result { lib->GetFolders(LFF_ALLITEMS, IID_PPV_ARGS(&array)) }; FAILED(result)) {
+        return std::unexpected(hresult_error(result));
+    }
 
     DWORD count;
     array->GetCount(&count);
@@ -174,9 +178,15 @@ auto file::library_directories(const wil::com_ptr<IShellLibrary>& lib) -> std::v
 
     for (DWORD i = 0; i < count; ++i) {
         wil::com_ptr<IShellItem> item;
-        array->GetItemAt(i, &item);
+
+        if (auto result { array->GetItemAt(i, &item) }; result != S_OK) {
+            return std::unexpected(hresult_error(result));
+        }
+
         wil::unique_cotaskmem_string path;
-        item->GetDisplayName(SIGDN_FILESYSPATH, &path);
+        if (auto result { item->GetDisplayName(SIGDN_FILESYSPATH, &path) }; result != S_OK) {
+            return std::unexpected(hresult_error(result));
+        }
 
         files[i] = path.get();
     }

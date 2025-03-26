@@ -52,7 +52,8 @@ struct file {
     auto create_symlink(const Self& destination) -> std::expected<void, std::error_code>;
 
     auto open_library() -> std::expected<wil::com_ptr<IShellLibrary>, std::error_code>;
-    static auto library_directories(const wil::com_ptr<IShellLibrary>& lib) -> std::vector<Self>;
+    static auto library_directories(const wil::com_ptr<IShellLibrary>& lib)
+        -> std::expected<std::vector<Self>, std::error_code>;
 
     std::filesystem::path storage;
 };

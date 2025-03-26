@@ -9,8 +9,11 @@ auto main() -> int {
 
     if (lib) {
         auto dirs { pane::file::library_directories(lib.value()) };
-        for (auto& dir : dirs) {
-            std::println("{}", dir.storage);
+
+        if (dirs) {
+            for (auto& dir : dirs.value()) {
+                std::println("{}", dir.storage);
+            }
         }
     } else {
         std::println("{}", lib.error().message());
