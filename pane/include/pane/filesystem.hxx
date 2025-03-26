@@ -39,8 +39,9 @@ struct file {
 
     auto create() -> bool;
     auto open() -> std::expected<wil::unique_handle, std::error_code>;
-    auto create_directory() -> bool;
-    auto create_directory_from_template(const Self& template_directory) -> bool;
+    auto create_directory() -> std::expected<void, std::error_code>;
+    auto create_directory_from_template(const Self& template_directory)
+        -> std::expected<void, std::error_code>;
 
     // auto create_directory(const std::filesystem::path& path,
     //                       const std::filesystem::path& template_directory)

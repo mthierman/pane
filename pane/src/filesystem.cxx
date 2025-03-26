@@ -85,20 +85,21 @@ auto file::open() -> std::expected<wil::unique_handle, std::error_code> {
     return handle;
 }
 
-auto file::create_directory() -> bool {
+auto file::create_directory() -> std::expected<void, std::error_code> {
     if (CreateDirectoryW(storage.c_str(), nullptr) == 0) {
-        return false;
+        return std::unexpected(last_error());
     }
 
-    return true;
+    return {};
 }
 
-auto file::create_directory_from_template(const Self& template_directory) -> bool {
+auto file::create_directory_from_template(const Self& template_directory)
+    -> std::expected<void, std::error_code> {
     if (::CreateDirectoryExW(template_directory.storage.c_str(), storage.c_str(), nullptr) == 0) {
-        return false;
+        return std::unexpected(last_error());
     }
 
-    return true;
+    return {};
 }
 
 auto library::create_from_name() -> ::HRESULT {
