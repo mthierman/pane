@@ -49,7 +49,7 @@ auto format_message(HRESULT error_code) -> std::expected<string, std::error_code
         return std::unexpected(last_error());
     }
 
-    return *message;
+    return message.value();
 }
 
 auto null_brush() -> HBRUSH { return static_cast<HBRUSH>(GetStockObject(NULL_BRUSH)); }
@@ -72,7 +72,7 @@ auto resource_icon() -> std::expected<HICON, std::error_code> {
     }
 
     auto icon { static_cast<HICON>(
-        LoadImageW(*module, MAKEINTRESOURCEW(1), IMAGE_ICON, 0, 0, LR_DEFAULTSIZE)) };
+        LoadImageW(module.value(), MAKEINTRESOURCEW(1), IMAGE_ICON, 0, 0, LR_DEFAULTSIZE)) };
 
     if (!icon) {
         return std::unexpected(last_error());
