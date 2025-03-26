@@ -14,6 +14,12 @@ auto main() -> int {
         auto create { file.create() };
 
         std::println("{}, {}", temp_dir.value().storage, create);
+
+        auto open { file.open() };
+
+        if (open) {
+            std::println("{}", file.storage);
+        }
     }
 
     return 0;
