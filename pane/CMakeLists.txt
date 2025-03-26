@@ -31,6 +31,7 @@ target_sources(
             "src/icu.cxx"
             "src/string.cxx"
             "src/system.cxx"
+            "src/url.cxx"
             "src/window.cxx"
     )
 
