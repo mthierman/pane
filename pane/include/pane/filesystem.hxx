@@ -59,7 +59,6 @@ struct file {
 
     std::filesystem::path storage;
 };
-
 } // namespace pane
 
 namespace std {
