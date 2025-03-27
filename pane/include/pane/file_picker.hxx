@@ -5,6 +5,7 @@
 #include <system_error>
 #include <wil/com.h>
 // #include <pane/file.hxx>
+#include <pane/co_init.hxx>
 
 // https://learn.microsoft.com/en-us/windows/win32/shell/common-file-dialog
 // https://learn.microsoft.com/en-us/windows/win32/shell/library-be-library-aware
@@ -15,7 +16,7 @@ namespace pane {
 struct file_picker {
     using Self = file_picker;
 
-    file_picker() = default;
+    file_picker();
     ~file_picker() = default;
 
     file_picker(Self&& file) noexcept = default;
@@ -26,5 +27,12 @@ struct file_picker {
 
     auto open_directory(this Self& self)
         -> std::expected<wil::com_ptr<IShellItem>, std::error_code>;
+    auto open_file(this Self& self) -> std::expected<wil::com_ptr<IShellItem>, std::error_code>;
+
+private:
+    auto open(this Self& self, FILEOPENDIALOGOPTIONS options)
+        -> std::expected<wil::com_ptr<IShellItem>, std::error_code>;
+
+    co_init { co_init:: }
 };
 } // namespace pane
