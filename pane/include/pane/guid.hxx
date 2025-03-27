@@ -29,3 +29,20 @@ private:
     guid() = default;
 };
 } // namespace pane
+
+namespace std {
+template <> struct hash<GUID> {
+    auto operator()(const GUID& guid) const noexcept {
+        RPC_STATUS status { RPC_S_OK };
+        return static_cast<size_t>(UuidHash(&const_cast<GUID&>(guid), &status));
+    }
+};
+
+template <> struct less<GUID> {
+    auto operator()(const GUID& lhs, const GUID& rhs) const noexcept {
+        RPC_STATUS status { RPC_S_OK };
+        return UuidCompare(&const_cast<GUID&>(lhs), &const_cast<GUID&>(rhs), &status) == -1 ? true
+                                                                                            : false;
+    }
+};
+} // namespace std

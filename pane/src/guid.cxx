@@ -22,7 +22,7 @@ auto guid::to_string(this Self& self) -> std::optional<string> {
     std::wstring buffer;
     buffer.resize(wil::guid_string_buffer_length);
 
-    if (::StringFromGUID2(self.storage, buffer.data(), wil::guid_string_buffer_length) == 0) {
+    if (StringFromGUID2(self.storage, buffer.data(), wil::guid_string_buffer_length) == 0) {
         return std::nullopt;
     }
 
