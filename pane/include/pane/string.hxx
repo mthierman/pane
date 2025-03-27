@@ -31,8 +31,6 @@ struct string {
     explicit string(const std::string& string);
     auto operator=(const std::string& string) -> Self&;
 
-    // auto operator=() -> std::u8string&;
-
     static auto from_utf16(std::u16string_view string, bool replacement = true)
         -> std::expected<Self, std::error_code>;
 
