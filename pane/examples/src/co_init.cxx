@@ -8,7 +8,7 @@ auto main() -> int {
 
     std::println("{}", pane::hresult_error(mta.result));
 
-    auto sta { pane::co_init::multi_threaded() };
+    auto sta { pane::co_init::apartment_threaded() };
 
     switch (sta.result) {
         case S_OK: {
@@ -24,12 +24,6 @@ auto main() -> int {
             std::println("Default case, other error...");
         } break;
     }
-
-    if (SUCCEEDED(sta.result)) {
-        std::println("SUCCEEDED");
-    }
-
-    std::println("{}", pane::hresult_error(sta.result));
 
     return EXIT_SUCCESS;
 }

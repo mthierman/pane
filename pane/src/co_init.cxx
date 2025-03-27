@@ -2,7 +2,7 @@
 
 namespace pane {
 co_init::~co_init() {
-    if (result == S_OK) {
+    if (SUCCEEDED(result)) {
         CoUninitialize();
     }
 }
