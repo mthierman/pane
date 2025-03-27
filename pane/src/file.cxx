@@ -200,6 +200,25 @@ auto file::library_directories(const wil::com_ptr<IShellLibrary>& lib)
     return files;
 }
 
+auto file::get_display_name(const wil::com_ptr<IShellItem>& item)
+    -> std::expected<string, std::error_code> {
+    SFGAOF attributes;
+
+    if (auto result { item->GetAttributes(SFGAO_FILESYSTEM, &attributes) }; result != S_OK) {
+        return std::unexpected(hresult_error(result));
+    }
+
+    wil::unique_cotaskmem_string buffer;
+
+    if (attributes) {
+        item->GetDisplayName(SIGDN_FILESYSPATH, &buffer);
+    } else {
+        item->GetDisplayName(SIGDN_DESKTOPABSOLUTEPARSING, &buffer);
+    }
+
+    return pane::string::from_utf16(buffer.get());
+}
+
 auto file::download_from_url(this Self& self, url url) -> std::expected<void, std::error_code> {
     auto converted_url { pane::hstring::from_utf8(url.storage.get_href()) };
 

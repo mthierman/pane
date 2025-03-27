@@ -27,6 +27,9 @@ auto wWinMain(HINSTANCE, HINSTANCE, wchar_t*, int) -> int {
                     OutputDebugStringA(std::format("{}\n", file.storage).c_str());
                 }
             }
+        } else {
+            OutputDebugStringA(
+                pane::file::get_display_name(dir.value()).value_or(pane::string()).c_str());
         }
     }
 
