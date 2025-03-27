@@ -30,9 +30,9 @@ struct file_picker {
     auto open_file(this Self& self) -> std::expected<wil::com_ptr<IShellItem>, std::error_code>;
 
 private:
+    auto open(this Self& self) -> std::expected<wil::com_ptr<IShellItem>, std::error_code>;
+
     wil::com_ptr<IFileOpenDialog> dialog;
     FILEOPENDIALOGOPTIONS default_options;
-    // auto open(this Self& self, FILEOPENDIALOGOPTIONS options)
-    //     -> std::expected<wil::com_ptr<IShellItem>, std::error_code>;
 };
 } // namespace pane
