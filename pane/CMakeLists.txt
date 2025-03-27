@@ -27,6 +27,7 @@ target_sources(
            BASE_DIRS
            "include"
     PRIVATE "src/file.cxx"
+            "src/guid.cxx"
             "src/hstring.cxx"
             "src/icu.cxx"
             "src/string.cxx"
