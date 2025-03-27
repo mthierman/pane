@@ -26,8 +26,7 @@ struct string {
     explicit string(std::u8string_view string);
     auto operator=(const std::u8string& string) -> Self&;
 
-    explicit string(const char* string);
-    explicit string(const std::string& string);
+    explicit string(std::string_view string);
     auto operator=(const std::string& string) -> Self&;
 
     static auto from_utf16(std::u16string_view string, bool replacement = true)

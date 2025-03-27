@@ -21,11 +21,8 @@ auto string::operator=(const std::u8string& string) -> Self& {
     return *this;
 }
 
-string::string(const char* string)
-    : storage { reinterpret_cast<const char8_t*>(string) } { }
-
-string::string(const std::string& string)
-    : storage { string.begin(), string.end() } { }
+string::string(std::string_view string)
+    : storage { reinterpret_cast<const char8_t*>(string.data()) } { }
 
 auto string::operator=(const std::string& string) -> Self& {
     storage = std::u8string { string.begin(), string.end() };
