@@ -7,7 +7,7 @@ co_init::~co_init() {
     }
 }
 
-co_init::operator HRESULT(this Self & self) noexcept { return self.result; }
+co_init::operator HRESULT(this Self & self) { return self.result; }
 
 auto co_init::apartment_threaded() -> Self {
     Self self;

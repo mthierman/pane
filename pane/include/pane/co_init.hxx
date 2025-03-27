@@ -14,7 +14,7 @@ struct co_init {
     co_init(const Self& color) = delete;
     auto operator=(const Self& color) -> Self& = delete;
 
-    operator HRESULT(this Self & self) noexcept;
+    operator HRESULT(this Self & self);
 
     static auto apartment_threaded() -> Self;
     static auto multi_threaded() -> Self;
