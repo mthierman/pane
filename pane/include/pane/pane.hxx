@@ -1,6 +1,7 @@
 #pragma once
 #include <pane/co_init.hxx>
 #include <pane/color.hxx>
+#include <pane/file_picker.hxx>
 #include <pane/file.hxx>
 #include <pane/guid.hxx>
 #include <pane/hstring.hxx>
