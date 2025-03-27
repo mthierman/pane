@@ -22,6 +22,21 @@ auto file_picker::open(this Self& /* self */) -> void {
     wil::com_ptr<IShellItem> item;
     result = dialog->GetResult(&item);
 
+    SFGAOF attributes;
+    item->GetAttributes(SFGAO_FILESYSTEM, &attributes);
+
+    // wil::com_ptr<IShellItem2> item2;
+    // item->QueryInterface(IID_PPV_ARGS(&item2));
+
+    // SFGAOF attributes;
+    // item2->GetAttributes(SFGAO_FILESYSTEM, &attributes);
+
+    if (attributes) {
+        OutputDebugStringW(L"SFGAO_FILESYSTEM IS TRUE");
+    } else {
+        OutputDebugStringW(L"SFGAO_FILESYSTEM IS FALSE");
+    }
+
     wil::unique_cotaskmem_string buffer;
     // item->GetDisplayName(SIGDN_FILESYSPATH, &buffer);
     // item->GetDisplayName(SIGDN_DESKTOPABSOLUTEPARSING, &buffer);
