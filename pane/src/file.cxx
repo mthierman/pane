@@ -38,7 +38,7 @@ auto file::operator=(const hstring& string) noexcept -> Self& {
 auto file::from_known_folder(KNOWNFOLDERID known_folder) -> std::expected<Self, std::error_code> {
     wil::unique_cotaskmem_string buffer;
 
-    if (auto result { ::SHGetKnownFolderPath(known_folder, KF_FLAG_DONT_VERIFY, nullptr, &buffer) };
+    if (auto result { SHGetKnownFolderPath(known_folder, KF_FLAG_DONT_VERIFY, nullptr, &buffer) };
         FAILED(result)) {
         return std::unexpected(hresult_error(result));
     }
@@ -49,7 +49,7 @@ auto file::from_known_folder(KNOWNFOLDERID known_folder) -> std::expected<Self, 
 auto file::from_temp_folder() -> std::expected<Self, std::error_code> {
     std::wstring buffer;
 
-    auto length { ::GetTempPath2W(0, buffer.data()) };
+    auto length { GetTempPath2W(0, buffer.data()) };
 
     if (length == 0) {
         return std::unexpected(last_error());
@@ -57,7 +57,7 @@ auto file::from_temp_folder() -> std::expected<Self, std::error_code> {
 
     buffer.resize(length);
 
-    if (::GetTempPath2W(length, buffer.data()) == 0) {
+    if (GetTempPath2W(length, buffer.data()) == 0) {
         return std::unexpected(last_error());
     }
 
@@ -76,7 +76,7 @@ auto file::create_directory(this Self& self) -> std::expected<void, std::error_c
 
 auto file::create_directory_from_template(this Self& self, const Self& template_directory)
     -> std::expected<void, std::error_code> {
-    if (::CreateDirectoryExW(template_directory.storage.c_str(), self.storage.c_str(), nullptr)
+    if (CreateDirectoryExW(template_directory.storage.c_str(), self.storage.c_str(), nullptr)
         == 0) {
         return std::unexpected(last_error());
     }
@@ -85,7 +85,7 @@ auto file::create_directory_from_template(this Self& self, const Self& template_
 }
 
 auto file::create(this Self& self) -> bool {
-    if (::CreateFile2(self.storage.c_str(), 0, 0, CREATE_NEW, nullptr) == INVALID_HANDLE_VALUE) {
+    if (CreateFile2(self.storage.c_str(), 0, 0, CREATE_NEW, nullptr) == INVALID_HANDLE_VALUE) {
         return false;
     }
 
@@ -93,7 +93,7 @@ auto file::create(this Self& self) -> bool {
 }
 
 auto file::open(this Self& self) -> std::expected<wil::unique_handle, std::error_code> {
-    auto handle { wil::unique_handle(::CreateFile2(
+    auto handle { wil::unique_handle(CreateFile2(
         self.storage.c_str(), GENERIC_READ | GENERIC_WRITE, 0, OPEN_EXISTING, nullptr)) };
 
     if (handle.get() == INVALID_HANDLE_VALUE) {
@@ -104,7 +104,7 @@ auto file::open(this Self& self) -> std::expected<wil::unique_handle, std::error
 }
 
 auto file::move(this Self& self, const Self& destination) -> std::expected<void, std::error_code> {
-    if (::MoveFileW(self.storage.c_str(), destination.storage.c_str()) == 0) {
+    if (MoveFileW(self.storage.c_str(), destination.storage.c_str()) == 0) {
         return std::unexpected(last_error());
     }
 
@@ -112,7 +112,7 @@ auto file::move(this Self& self, const Self& destination) -> std::expected<void,
 }
 
 auto file::copy(this Self& self, const Self& destination) -> std::expected<void, std::error_code> {
-    if (auto result { ::CopyFile2(self.storage.c_str(), destination.storage.c_str(), nullptr) };
+    if (auto result { CopyFile2(self.storage.c_str(), destination.storage.c_str(), nullptr) };
         FAILED(result)) {
         return std::unexpected(hresult_error(result));
     }
@@ -121,7 +121,7 @@ auto file::copy(this Self& self, const Self& destination) -> std::expected<void,
 }
 
 auto file::erase(this Self& self) -> std::expected<void, std::error_code> {
-    if (::DeleteFileW(self.storage.c_str()) == 0) {
+    if (DeleteFileW(self.storage.c_str()) == 0) {
         return std::unexpected(last_error());
     }
 
@@ -134,7 +134,7 @@ auto file::create_symlink(this Self& self, const Self& destination)
                      ? SYMBOLIC_LINK_FLAG_DIRECTORY | SYMBOLIC_LINK_FLAG_ALLOW_UNPRIVILEGED_CREATE
                      : SYMBOLIC_LINK_FLAG_ALLOW_UNPRIVILEGED_CREATE };
 
-    if (::CreateSymbolicLinkW(
+    if (CreateSymbolicLinkW(
             destination.storage.c_str(), self.storage.c_str(), static_cast<::DWORD>(flags))
         == 0) {
         return std::unexpected(last_error());
@@ -199,7 +199,7 @@ auto file::download_from_url(this Self& self, url url) -> std::expected<void, st
         return std::unexpected(converted_url.error());
     }
 
-    if (auto result { ::URLDownloadToFileW(
+    if (auto result { URLDownloadToFileW(
             nullptr, converted_url.value().c_str(), self.storage.c_str(), 0, nullptr) };
         FAILED(result)) {
         return std::unexpected(hresult_error(result));
