@@ -16,6 +16,7 @@ struct url {
     url(const Self& url) = default;
     auto operator=(const Self& url) -> Self& = default;
 
+    static auto parse(std::string_view string) -> std::optional<Self>;
     static auto parse(std::u8string_view string) -> std::optional<Self>;
     static auto parse(const string& string) -> std::optional<Self>;
 
