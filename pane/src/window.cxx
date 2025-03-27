@@ -2,11 +2,11 @@
 
 namespace pane {
 window::window(bool visible) {
-    if (::GetClassInfoExW(pane::module_handle().value_or(GetModuleHandleW(nullptr)),
-                          window_class.lpszClassName,
-                          &window_class)
+    if (GetClassInfoExW(pane::module_handle().value_or(GetModuleHandleW(nullptr)),
+                        window_class.lpszClassName,
+                        &window_class)
         == 0) {
-        ::RegisterClassExW(&window_class);
+        RegisterClassExW(&window_class);
     }
 
     ::CreateWindowExW(0,
@@ -23,17 +23,17 @@ window::window(bool visible) {
                       this);
 }
 
-auto CALLBACK window::window_procedure(::HWND hwnd, ::UINT msg, ::WPARAM wparam, ::LPARAM lparam)
-    -> ::LRESULT {
+auto CALLBACK window::window_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
+    -> LRESULT {
     if (msg == WM_NCCREATE) {
-        auto create { reinterpret_cast<::CREATESTRUCTW*>(lparam) };
+        auto create { reinterpret_cast<CREATESTRUCTW*>(lparam) };
 
         if (auto self { static_cast<Self*>(create->lpCreateParams) }; self) {
-            ::SetWindowLongPtrW(hwnd, 0, reinterpret_cast<::LONG_PTR>(self));
+            SetWindowLongPtrW(hwnd, 0, reinterpret_cast<LONG_PTR>(self));
             self->window_handle = hwnd;
         }
     }
 
-    return ::DefWindowProcW(hwnd, msg, wparam, lparam);
+    return DefWindowProcW(hwnd, msg, wparam, lparam);
 }
 } // namespace pane

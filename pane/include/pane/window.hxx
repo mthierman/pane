@@ -8,10 +8,10 @@ struct window {
 
     window(bool visible = true);
 
-    static auto CALLBACK window_procedure(::HWND hwnd, ::UINT msg, ::WPARAM wparam, ::LPARAM lparam)
+    static auto CALLBACK window_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
         -> ::LRESULT;
 
-    ::WNDCLASSEXW window_class { .cbSize { sizeof(::WNDCLASSEXW) },
+    ::WNDCLASSEXW window_class { .cbSize { sizeof(WNDCLASSEXW) },
                                  .style { 0 },
                                  .lpfnWndProc { window_procedure },
                                  .cbClsExtra { 0 },
