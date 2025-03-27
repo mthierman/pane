@@ -25,10 +25,7 @@ struct color {
     color(const Self& color) = default;
     auto operator=(const Self& color) -> Self& = default;
 
-    explicit color(uint8_t r,
-                   uint8_t g,
-                   uint8_t b,
-                   uint8_t a = std::numeric_limits<uint8_t>::max());
+    color(uint8_t r, uint8_t g, uint8_t b, uint8_t a = std::numeric_limits<uint8_t>::max());
 
     auto to_hex(this Self& self) -> string;
     auto to_colorref(this Self& self) -> COLORREF;

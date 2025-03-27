@@ -6,7 +6,7 @@ namespace pane {
 struct window {
     using Self = window;
 
-    window(bool visible = true);
+    explicit window(bool visible = true);
 
     static auto CALLBACK window_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
         -> LRESULT;
