@@ -64,7 +64,7 @@ template <> struct formatter<std::u16string, wchar_t> : formatter<wstring_view, 
 
 template <> struct formatter<pane::hstring, wchar_t> : formatter<wstring_view, wchar_t> {
     auto format(const pane::hstring& hstring, wformat_context& context) const noexcept {
-        return formatter<wstring_view, wchar_t>::format(hstring.to_wstring(), context);
+        return formatter<wstring_view, wchar_t>::format(hstring.c_str(), context);
     }
 };
 } // namespace std

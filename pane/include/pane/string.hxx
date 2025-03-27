@@ -64,7 +64,7 @@ template <> struct formatter<std::u8string> : formatter<string_view> {
 
 template <> struct formatter<pane::string> : formatter<string_view> {
     auto format(const pane::string& string, format_context& context) const noexcept {
-        return formatter<string_view>::format(string.to_string(), context);
+        return formatter<string_view>::format(string.c_str(), context);
     }
 };
 } // namespace std
