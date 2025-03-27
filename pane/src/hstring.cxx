@@ -81,11 +81,11 @@ auto hstring::u16_str(this Self& self) -> char16_t* { return self.storage.data()
 
 auto hstring::u16_str(this const Self& self) -> const char16_t* { return self.storage.data(); }
 
-auto hstring::to_wstring(this Self& self) -> std::wstring {
+auto hstring::to_std_wstring(this Self& self) -> std::wstring {
     return { self.storage.begin(), self.storage.end() };
 }
 
-auto hstring::to_wstring(this const Self& self) -> const std::wstring {
+auto hstring::to_std_wstring(this const Self& self) -> const std::wstring {
     return { self.storage.begin(), self.storage.end() };
 }
 } // namespace pane
