@@ -59,34 +59,12 @@ auto string::from_utf16(std::u16string_view string, bool replacement)
 
 auto string::from_utf16(std::wstring_view string, bool replacement)
     -> std::expected<Self, std::error_code> {
-    auto buffer { std::u8string() };
-    auto errorCode { U_ZERO_ERROR };
-
-    try {
-        buffer.resize(string.length());
-    } catch (const std::bad_alloc&) {
-        return std::unexpected(std::make_error_code(std::errc::not_enough_memory));
-    }
-
-    u_strToUTF8WithSub(reinterpret_cast<char*>(buffer.data()),
-                       static_cast<int32_t>(buffer.length()),
-                       nullptr,
-                       reinterpret_cast<const char16_t*>(string.data()),
-                       static_cast<int32_t>(string.length()),
-                       replacement ? U_SENTINEL : 0xFFFD,
-                       nullptr,
-                       &errorCode);
-
-    if (U_SUCCESS(errorCode)) {
-        return Self(buffer);
-    }
-
-    return std::unexpected(make_error_code(errorCode));
+    return from_utf16(reinterpret_cast<const char16_t*>(string.data()), replacement);
 }
 
 auto string::from_utf16(const hstring& string, bool replacement)
     -> std::expected<Self, std::error_code> {
-    return string::from_utf16(string.storage, replacement);
+    return from_utf16(string.storage, replacement);
 }
 
 auto string::c_str(this Self& self) -> char* {
