@@ -6,8 +6,6 @@
 #include <wil/com.h>
 
 namespace pane {
-auto co_init_apartment() -> wil::unique_couninitialize_call;
-auto co_init_multi() -> wil::unique_couninitialize_call;
 auto hresult_error(HRESULT hresult) -> std::error_code;
 auto last_error() -> std::error_code;
 auto module_handle() -> std::expected<HMODULE, std::error_code>;
