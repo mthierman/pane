@@ -4,6 +4,8 @@
 #include <print>
 
 auto main() -> int {
+    auto co_init { pane::co_init_multi() };
+
     auto temp_dir { pane::file::from_temp_folder() };
 
     if (temp_dir) {

@@ -5,7 +5,7 @@
 #include <pane/pane.hxx>
 
 auto wWinMain(HINSTANCE, HINSTANCE, wchar_t*, int) -> int {
-    auto co_initialize { wil::CoInitializeEx(COINIT_APARTMENTTHREADED | COINIT_DISABLE_OLE1DDE) };
+    auto co_init { pane::co_init_apartment() };
 
     auto window { pane::window(true) };
 

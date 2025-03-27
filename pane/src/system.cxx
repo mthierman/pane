@@ -3,6 +3,14 @@
 #include <wil/resource.h>
 
 namespace pane {
+auto co_init_apartment() -> wil::unique_couninitialize_call {
+    return wil::CoInitializeEx(COINIT_APARTMENTTHREADED | COINIT_DISABLE_OLE1DDE);
+}
+
+auto co_init_multi() -> wil::unique_couninitialize_call {
+    return wil::CoInitializeEx(COINIT_MULTITHREADED | COINIT_DISABLE_OLE1DDE);
+}
+
 auto hresult_error(HRESULT hresult) -> std::error_code {
     return std::error_code(HRESULT_CODE(hresult), std::system_category());
 }

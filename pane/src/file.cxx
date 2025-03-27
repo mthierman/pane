@@ -145,8 +145,6 @@ auto file::create_symlink(this Self& self, const Self& destination)
 
 auto file::open_library(this Self& self)
     -> std::expected<wil::com_ptr<IShellLibrary>, std::error_code> {
-    auto co_initialize { wil::CoInitializeEx() };
-
     wil::com_ptr<IShellLibrary> lib;
 
     if (auto result { SHLoadLibraryFromParsingName(
@@ -160,8 +158,6 @@ auto file::open_library(this Self& self)
 
 auto file::library_directories(const wil::com_ptr<IShellLibrary>& lib)
     -> std::expected<std::vector<Self>, std::error_code> {
-    auto co_initialize { wil::CoInitializeEx() };
-
     wil::com_ptr<IShellItemArray> array;
 
     if (auto result { lib->GetFolders(LFF_ALLITEMS, IID_PPV_ARGS(&array)) }; FAILED(result)) {

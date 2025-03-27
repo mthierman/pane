@@ -4,6 +4,8 @@
 #include <print>
 
 auto main() -> int {
+    auto co_init { pane::co_init_multi() };
+
     auto samples { pane::file(
         L"C:\\Users\\mthie\\AppData\\Roaming\\Microsoft\\Windows\\Libraries\\Samples.library-ms") };
 
