@@ -4,7 +4,6 @@
 #include <expected>
 #include <filesystem>
 #include <format>
-#include <initializer_list>
 #include <vector>
 #include <string>
 #include <system_error>
