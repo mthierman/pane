@@ -19,4 +19,8 @@ auto color::to_hbrush(this Self& self) -> HBRUSH { return CreateSolidBrush(self.
 auto color::to_winrt_color(this Self& self) -> winrt::Color {
     return winrt::Color { .A { self.a }, .R { self.r }, .G { self.g }, .B { self.b } };
 }
+
+auto color::to_webview2_color(this Self& self) -> COREWEBVIEW2_COLOR {
+    return COREWEBVIEW2_COLOR { .A { self.a }, .R { self.r }, .G { self.g }, .B { self.b } };
+}
 } // namespace pane

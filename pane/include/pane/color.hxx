@@ -34,6 +34,7 @@ struct color {
     auto to_colorref(this Self& self) -> COLORREF;
     auto to_hbrush(this Self& self) -> HBRUSH;
     auto to_winrt_color(this Self& self) -> winrt::Color;
+    auto to_webview2_color(this Self& self) -> COREWEBVIEW2_COLOR;
 
     uint8_t r { std::numeric_limits<uint8_t>::max() };
     uint8_t g { std::numeric_limits<uint8_t>::max() };
