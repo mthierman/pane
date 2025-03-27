@@ -29,9 +29,9 @@ struct color {
                    uint8_t b,
                    uint8_t a = std::numeric_limits<uint8_t>::max());
 
-    uint8_t r { 0 };
-    uint8_t g { 0 };
-    uint8_t b { 0 };
-    uint8_t a { 0 };
+    uint8_t r { std::numeric_limits<uint8_t>::max() };
+    uint8_t g { std::numeric_limits<uint8_t>::max() };
+    uint8_t b { std::numeric_limits<uint8_t>::max() };
+    uint8_t a { std::numeric_limits<uint8_t>::max() };
 };
 } // namespace pane
