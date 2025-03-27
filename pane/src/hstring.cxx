@@ -22,10 +22,10 @@ auto hstring::operator=(const std::u16string& string) -> Self& {
 }
 
 hstring::hstring(std::wstring_view string)
-    : storage { reinterpret_cast<const char16_t*>(string.data()) } { }
+    : storage { string.begin(), string.end() } { }
 
 auto hstring::operator=(const std::wstring& string) -> Self& {
-    storage = std::u16string { string.begin(), string.end() };
+    storage = { string.begin(), string.end() };
 
     return *this;
 }
@@ -51,7 +51,7 @@ auto hstring::from_utf8(std::u8string_view string, bool replacement)
                          &errorCode);
 
     if (U_SUCCESS(errorCode)) {
-        return Self(buffer);
+        return Self(std::move(buffer));
     }
 
     return std::unexpected(make_error_code(errorCode));
@@ -59,7 +59,9 @@ auto hstring::from_utf8(std::u8string_view string, bool replacement)
 
 auto hstring::from_utf8(std::string_view string, bool replacement)
     -> std::expected<Self, std::error_code> {
-    return from_utf8(reinterpret_cast<const char8_t*>(string.data()), replacement);
+    return from_utf8(
+        std::u8string_view { reinterpret_cast<const char8_t*>(string.data()), string.length() },
+        replacement);
 }
 
 auto hstring::from_utf8(const string& string, bool replacement)
