@@ -23,4 +23,8 @@ auto color::to_winrt_color(this Self& self) -> winrt::Color {
 auto color::to_webview2_color(this Self& self) -> COREWEBVIEW2_COLOR {
     return COREWEBVIEW2_COLOR { .A { self.a }, .R { self.r }, .G { self.g }, .B { self.b } };
 }
+
+auto color::is_dark(this Self& self) -> bool {
+    return (((5 * self.g) + (2 * self.r) + self.b) < (8 * 128)) ? true : false;
+}
 } // namespace pane

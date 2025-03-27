@@ -36,6 +36,8 @@ struct color {
     auto to_winrt_color(this Self& self) -> winrt::Color;
     auto to_webview2_color(this Self& self) -> COREWEBVIEW2_COLOR;
 
+    auto is_dark(this Self& self) -> bool;
+
     uint8_t r { std::numeric_limits<uint8_t>::max() };
     uint8_t g { std::numeric_limits<uint8_t>::max() };
     uint8_t b { std::numeric_limits<uint8_t>::max() };
