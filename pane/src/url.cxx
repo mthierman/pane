@@ -9,7 +9,7 @@ auto url::parse(std::string_view string) -> std::optional<Self> {
     }
 
     Self self;
-    self.storage = url.value();
+    self.storage = std::move(url.value());
 
     return self;
 }
