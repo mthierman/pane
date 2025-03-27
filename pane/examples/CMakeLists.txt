@@ -57,3 +57,14 @@ target_link_libraries(
     PRIVATE ${PROJECT_NAME}::${PROJECT_NAME}
             ${PROJECT_NAME}::config
     )
+
+add_executable(
+    ${PROJECT_NAME}_example_file_picker
+    WIN32
+    )
+target_sources(${PROJECT_NAME}_example_file_picker PRIVATE "src/file_picker.cxx")
+target_link_libraries(
+    ${PROJECT_NAME}_example_file_picker
+    PRIVATE ${PROJECT_NAME}::${PROJECT_NAME}
+            ${PROJECT_NAME}::config
+    )
