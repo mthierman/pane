@@ -30,6 +30,10 @@ struct color {
                    uint8_t b,
                    uint8_t a = std::numeric_limits<uint8_t>::max());
 
+    explicit color(const COLORREF& colorref);
+    explicit color(const winrt::Color& winrt_color);
+    explicit color(const COREWEBVIEW2_COLOR& webview2_color);
+
     auto to_hex(this Self& self) -> string;
     auto to_colorref(this Self& self) -> COLORREF;
     auto to_hbrush(this Self& self) -> HBRUSH;
