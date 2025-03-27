@@ -12,11 +12,8 @@ auto string::operator=(std::u8string&& string) noexcept -> Self& {
     return *this;
 }
 
-string::string(const char8_t* string)
-    : storage { string } { }
-
-string::string(const std::u8string& string)
-    : storage { string } { }
+string::string(std::u8string_view string)
+    : storage { string.data() } { }
 
 auto string::operator=(const std::u8string& string) -> Self& {
     storage = string;

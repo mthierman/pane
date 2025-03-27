@@ -23,8 +23,7 @@ struct string {
     explicit string(std::u8string&& string) noexcept;
     auto operator=(std::u8string&& string) noexcept -> Self&;
 
-    explicit string(const char8_t* string);
-    explicit string(const std::u8string& string);
+    explicit string(std::u8string_view string);
     auto operator=(const std::u8string& string) -> Self&;
 
     explicit string(const char* string);
