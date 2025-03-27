@@ -22,10 +22,12 @@ auto string::operator=(const std::u8string& string) -> Self& {
 }
 
 string::string(std::string_view string)
-    : storage { reinterpret_cast<const char8_t*>(string.data()) } { }
+    : storage { std::u8string_view(reinterpret_cast<const char8_t*>(string.data()),
+                                   string.length()) } { }
 
 auto string::operator=(const std::string& string) -> Self& {
-    storage = std::u8string { string.begin(), string.end() };
+    storage
+        = std::u8string_view { reinterpret_cast<const char8_t*>(string.data()), string.length() };
 
     return *this;
 }
