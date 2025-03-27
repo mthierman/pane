@@ -16,8 +16,7 @@ struct window {
                                  .lpfnWndProc { window_procedure },
                                  .cbClsExtra { 0 },
                                  .cbWndExtra { sizeof(Self) },
-                                 .hInstance {
-                                     pane::module_handle().value_or(GetModuleHandleW(nullptr)) },
+                                 .hInstance { pane::module_handle().value_or(nullptr) },
                                  .hIcon { pane::application_icon() },
                                  .hCursor { pane::arrow_cursor() },
                                  .hbrBackground { nullptr },

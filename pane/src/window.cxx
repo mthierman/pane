@@ -2,9 +2,8 @@
 
 namespace pane {
 window::window(bool visible) {
-    if (GetClassInfoExW(pane::module_handle().value_or(GetModuleHandleW(nullptr)),
-                        window_class.lpszClassName,
-                        &window_class)
+    if (GetClassInfoExW(
+            pane::module_handle().value_or(nullptr), window_class.lpszClassName, &window_class)
         == 0) {
         RegisterClassExW(&window_class);
     }
