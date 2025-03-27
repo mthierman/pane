@@ -16,7 +16,7 @@ namespace pane {
 struct file_picker {
     using Self = file_picker;
 
-    file_picker() = default;
+    file_picker();
     ~file_picker() = default;
 
     file_picker(Self&& file) noexcept = default;
@@ -30,8 +30,8 @@ struct file_picker {
     auto open_file(this Self& self) -> std::expected<wil::com_ptr<IShellItem>, std::error_code>;
 
 private:
-    wil::com_ptr<IFileOpenDialog> dialog { wil::CoCreateInstance<IFileOpenDialog>(
-        CLSID_FileOpenDialog) };
+    wil::com_ptr<IFileOpenDialog> dialog;
+    FILEOPENDIALOGOPTIONS default_options;
     // auto open(this Self& self, FILEOPENDIALOGOPTIONS options)
     //     -> std::expected<wil::com_ptr<IShellItem>, std::error_code>;
 };

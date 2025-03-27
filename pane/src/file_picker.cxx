@@ -2,13 +2,14 @@
 #include <pane/system.hxx>
 
 namespace pane {
+file_picker::file_picker()
+    : dialog { wil::CoCreateInstance<IFileOpenDialog>(CLSID_FileOpenDialog) } {
+    dialog->GetOptions(&default_options);
+}
+
 auto file_picker::open_directory(this Self& self)
     -> std::expected<wil::com_ptr<IShellItem>, std::error_code> {
-    FILEOPENDIALOGOPTIONS options;
-
-    if (auto result { self.dialog->GetOptions(&options) }; result != S_OK) {
-        return std::unexpected(hresult_error(result));
-    }
+    FILEOPENDIALOGOPTIONS options = self.default_options;
 
     if (auto result { self.dialog->SetOptions(options | FOS_PICKFOLDERS & ~FOS_FORCEFILESYSTEM) };
         result != S_OK) {
@@ -30,11 +31,7 @@ auto file_picker::open_directory(this Self& self)
 
 auto file_picker::open_file(this Self& self)
     -> std::expected<wil::com_ptr<IShellItem>, std::error_code> {
-    FILEOPENDIALOGOPTIONS options;
-
-    if (auto result { self.dialog->GetOptions(&options) }; result != S_OK) {
-        return std::unexpected(hresult_error(result));
-    }
+    FILEOPENDIALOGOPTIONS options = self.default_options;
 
     if (auto result { self.dialog->SetOptions(options) }; result != S_OK) {
         return std::unexpected(hresult_error(result));
