@@ -44,3 +44,21 @@ struct color {
     uint8_t a { std::numeric_limits<uint8_t>::max() };
 };
 } // namespace pane
+
+namespace std {
+template <> struct formatter<pane::color> : formatter<string_view> {
+    auto format(const pane::color& color, format_context& context) const noexcept {
+        return formatter<string_view>::format(
+            std::format("#{:0>2x}{:0>2x}{:0>2x}{:0>2x}", color.r, color.g, color.b, color.a),
+            context);
+    }
+};
+
+template <> struct formatter<pane::color, wchar_t> : formatter<wstring_view, wchar_t> {
+    auto format(const pane::color& color, wformat_context& context) const noexcept {
+        return formatter<wstring_view, wchar_t>::format(
+            std::format(L"#{:0>2x}{:0>2x}{:0>2x}{:0>2x}", color.r, color.g, color.b, color.a),
+            context);
+    }
+};
+} // namespace std
