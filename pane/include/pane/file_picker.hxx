@@ -34,5 +34,7 @@ private:
 
     wil::com_ptr<IFileOpenDialog> dialog;
     FILEOPENDIALOGOPTIONS default_options;
+    FILEOPENDIALOGOPTIONS directory_options;
+    FILEOPENDIALOGOPTIONS file_options;
 };
 } // namespace pane
