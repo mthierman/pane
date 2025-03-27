@@ -13,7 +13,7 @@ auto string::operator=(std::u8string&& string) noexcept -> Self& {
 }
 
 string::string(std::u8string_view string)
-    : storage { string.data() } { }
+    : storage { string } { }
 
 auto string::operator=(const std::u8string& string) -> Self& {
     storage = string;

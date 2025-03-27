@@ -12,10 +12,7 @@ auto hstring::operator=(std::u16string&& string) noexcept -> Self& {
     return *this;
 }
 
-hstring::hstring(const char16_t* string)
-    : storage { string } { }
-
-hstring::hstring(const std::u16string& string)
+hstring::hstring(std::u16string_view string)
     : storage { string } { }
 
 auto hstring::operator=(const std::u16string& string) -> Self& {
@@ -24,11 +21,8 @@ auto hstring::operator=(const std::u16string& string) -> Self& {
     return *this;
 }
 
-hstring::hstring(const wchar_t* string)
-    : storage { reinterpret_cast<const char16_t*>(string) } { }
-
-hstring::hstring(const std::wstring& string)
-    : storage { string.begin(), string.end() } { }
+hstring::hstring(std::wstring_view string)
+    : storage { reinterpret_cast<const char16_t*>(string.data()) } { }
 
 auto hstring::operator=(const std::wstring& string) -> Self& {
     storage = std::u16string { string.begin(), string.end() };

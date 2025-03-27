@@ -23,12 +23,10 @@ struct hstring {
     explicit hstring(std::u16string&& string) noexcept;
     auto operator=(std::u16string&& string) noexcept -> Self&;
 
-    explicit hstring(const char16_t* string);
-    explicit hstring(const std::u16string& string);
+    explicit hstring(std::u16string_view string);
     auto operator=(const std::u16string& string) -> Self&;
 
-    explicit hstring(const wchar_t* string);
-    explicit hstring(const std::wstring& string);
+    explicit hstring(std::wstring_view string);
     auto operator=(const std::wstring& string) -> Self&;
 
     static auto from_utf8(std::u8string_view string, bool replacement = true)
