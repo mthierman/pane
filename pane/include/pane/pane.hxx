@@ -1,4 +1,5 @@
 #pragma once
+#include <pane/co_init.hxx>
 #include <pane/color.hxx>
 #include <pane/file.hxx>
 #include <pane/guid.hxx>

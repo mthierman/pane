@@ -6,6 +6,14 @@ target_link_libraries(
             ${PROJECT_NAME}::config
     )
 
+add_executable(${PROJECT_NAME}_example_co_init)
+target_sources(${PROJECT_NAME}_example_co_init PRIVATE "src/co_init.cxx")
+target_link_libraries(
+    ${PROJECT_NAME}_example_co_init
+    PRIVATE ${PROJECT_NAME}::${PROJECT_NAME}
+            ${PROJECT_NAME}::config
+    )
+
 add_executable(${PROJECT_NAME}_example_library)
 target_sources(${PROJECT_NAME}_example_library PRIVATE "src/library.cxx")
 target_link_libraries(

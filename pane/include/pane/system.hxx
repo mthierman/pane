@@ -18,3 +18,11 @@ auto application_icon() -> HICON;
 auto resource_icon() -> std::expected<HICON, std::error_code>;
 auto message_loop() -> int;
 } // namespace pane
+
+namespace std {
+template <> struct formatter<std::error_code> : formatter<string_view> {
+    auto format(const std::error_code& error_code, format_context& context) const noexcept {
+        return formatter<string_view>::format(error_code.message(), context);
+    }
+};
+} // namespace std

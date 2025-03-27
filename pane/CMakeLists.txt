@@ -26,7 +26,8 @@ target_sources(
            HEADERS
            BASE_DIRS
            "include"
-    PRIVATE "src/color.cxx"
+    PRIVATE "src/co_init.cxx"
+            "src/color.cxx"
             "src/file.cxx"
             "src/guid.cxx"
             "src/hstring.cxx"
