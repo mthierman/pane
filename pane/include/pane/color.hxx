@@ -21,5 +21,12 @@ struct color {
 
     color(const Self& color) = default;
     auto operator=(const Self& color) -> Self& = default;
+
+    explicit color(uint8_t r, uint8_t r, uint8_t r, uint8_t a = 255);
+
+    uint8_t r { 0 };
+    uint8_t g { 0 };
+    uint8_t b { 0 };
+    uint8_t a { 0 };
 };
 } // namespace pane
