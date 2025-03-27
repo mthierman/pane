@@ -81,11 +81,11 @@ auto string::u8_str(this Self& self) -> char8_t* { return self.storage.data(); }
 
 auto string::u8_str(this const Self& self) -> const char8_t* { return self.storage.data(); }
 
-auto string::to_string(this Self& self) -> std::string {
+auto string::to_std_string(this Self& self) -> std::string {
     return { self.storage.begin(), self.storage.end() };
 }
 
-auto string::to_string(this const Self& self) -> const std::string {
+auto string::to_std_string(this const Self& self) -> const std::string {
     return { self.storage.begin(), self.storage.end() };
 }
 } // namespace pane
