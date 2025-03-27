@@ -30,6 +30,14 @@ target_link_libraries(
             ${PROJECT_NAME}::config
     )
 
+add_executable(${PROJECT_NAME}_example_color)
+target_sources(${PROJECT_NAME}_example_color PRIVATE "src/color.cxx")
+target_link_libraries(
+    ${PROJECT_NAME}_example_color
+    PRIVATE ${PROJECT_NAME}::${PROJECT_NAME}
+            ${PROJECT_NAME}::config
+    )
+
 add_executable(${PROJECT_NAME}_example_json)
 target_sources(${PROJECT_NAME}_example_json PRIVATE "src/json.cxx")
 target_link_libraries(

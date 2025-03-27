@@ -1,10 +1,12 @@
 #include <pane/pane.hxx>
 #include <glaze/glaze.hpp>
-#include <map>
-#include <string>
 #include <array>
-#include <iostream>
 #include <cstdlib>
+#include <format>
+#include <iostream>
+#include <map>
+#include <print>
+#include <string>
 
 struct my_struct {
     int i = 287;
