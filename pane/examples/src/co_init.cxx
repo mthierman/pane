@@ -4,9 +4,13 @@
 #include <print>
 
 auto main() -> int {
-    auto co_init { pane::co_init::multithreaded() };
+    auto mta { pane::co_init::multi_threaded() };
 
-    std::println("{}", pane::hresult_error(co_init.result));
+    std::println("{}", pane::hresult_error(mta.result));
+
+    auto sta { pane::co_init::apartment_threaded() };
+
+    std::println("{}", pane::hresult_error(sta.result));
 
     return EXIT_SUCCESS;
 }

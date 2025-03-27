@@ -7,14 +7,14 @@ co_init::~co_init() {
     }
 }
 
-auto co_init::apartment() -> Self {
+auto co_init::apartment_threaded() -> Self {
     Self self;
     self.result = CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED | COINIT_DISABLE_OLE1DDE);
 
     return self;
 }
 
-auto co_init::multithreaded() -> Self {
+auto co_init::multi_threaded() -> Self {
     Self self;
     self.result = CoInitializeEx(nullptr, COINIT_MULTITHREADED | COINIT_DISABLE_OLE1DDE);
 

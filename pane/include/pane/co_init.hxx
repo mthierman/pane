@@ -15,8 +15,8 @@ struct co_init {
     co_init(const Self& color) = default;
     auto operator=(const Self& color) -> Self& = default;
 
-    static auto apartment() -> Self;
-    static auto multithreaded() -> Self;
+    static auto apartment_threaded() -> Self;
+    static auto multi_threaded() -> Self;
 
     HRESULT result;
 
