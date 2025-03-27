@@ -2,10 +2,6 @@
 #include <pane/system.hxx>
 
 namespace pane {
-file_picker::file_picker() {
-    auto dialog { wil::CoCreateInstance<IFileOpenDialog>(CLSID_FileOpenDialog) };
-}
-
 // auto file_picker::open_directory(this Self& /* self */)
 //     -> std::expected<wil::com_ptr<IShellItem>, std::error_code> {
 //     auto dialog { wil::CoCreateInstance<IFileOpenDialog>(CLSID_FileOpenDialog) };
