@@ -1,16 +1,8 @@
 #include <pane/file_picker.hxx>
 #include <pane/system.hxx>
 
-// LOGGING
-#include <format>
-#include <print>
-#include <pane/string.hxx>
-
 namespace pane {
-// https://learn.microsoft.com/en-us/windows/win32/shell/common-file-dialog
-// https://learn.microsoft.com/en-us/windows/win32/shell/library-be-library-aware
-// https://learn.microsoft.com/en-us/windows/win32/shell/sfgao
-auto file_picker::open(this Self& /* self */) -> void {
+auto file_picker::open_directory(this Self& /* self */) -> std::expected<file, std::error_code> {
     auto dialog { wil::CoCreateInstance<IFileOpenDialog>(CLSID_FileOpenDialog) };
 
     HRESULT result;

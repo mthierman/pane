@@ -1,7 +1,13 @@
 #pragma once
 #include <Windows.h>
 #include <ShlObj.h>
+#include <expected>
 #include <wil/com.h>
+#include <pane/file.hxx>
+
+// https://learn.microsoft.com/en-us/windows/win32/shell/common-file-dialog
+// https://learn.microsoft.com/en-us/windows/win32/shell/library-be-library-aware
+// https://learn.microsoft.com/en-us/windows/win32/shell/sfgao
 
 namespace pane {
 struct file_picker {
@@ -16,6 +22,6 @@ struct file_picker {
     file_picker(const Self& file) = default;
     auto operator=(const Self& file) -> Self& = default;
 
-    auto open(this Self& self) -> void;
+    auto open_directory(this Self& self) -> std::expected<file, std::error_code>;
 };
 } // namespace pane
