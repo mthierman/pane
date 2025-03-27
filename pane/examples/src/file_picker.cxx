@@ -11,5 +11,7 @@ auto wWinMain(HINSTANCE, HINSTANCE, wchar_t*, int) -> int {
 
     auto file_picker { pane::file_picker() };
 
+    file_picker.open();
+
     return pane::message_loop();
 }

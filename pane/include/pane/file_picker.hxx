@@ -1,5 +1,7 @@
 #pragma once
 #include <Windows.h>
+#include <ShlObj.h>
+#include <wil/com.h>
 
 namespace pane {
 struct file_picker {
@@ -13,5 +15,7 @@ struct file_picker {
 
     file_picker(const Self& file) = default;
     auto operator=(const Self& file) -> Self& = default;
+
+    auto open(this Self& self) -> void;
 };
 } // namespace pane
