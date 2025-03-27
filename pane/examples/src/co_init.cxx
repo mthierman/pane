@@ -8,7 +8,26 @@ auto main() -> int {
 
     std::println("{}", pane::hresult_error(mta.result));
 
-    auto sta { pane::co_init::apartment_threaded() };
+    auto sta { pane::co_init::multi_threaded() };
+
+    switch (sta.result) {
+        case S_OK: {
+            std::println("S_OK");
+        } break;
+        case S_FALSE: {
+            std::println("S_FALSE");
+        } break;
+        case RPC_E_CHANGED_MODE: {
+            std::println("RPC_E_CHANGED_MODE");
+        } break;
+        default: {
+            std::println("Default case, other error...");
+        } break;
+    }
+
+    if (SUCCEEDED(sta.result)) {
+        std::println("SUCCEEDED");
+    }
 
     std::println("{}", pane::hresult_error(sta.result));
 
