@@ -1,5 +1,6 @@
 #include <pane/pane.hxx>
 #include <print>
+#include <cstdlib>
 
 auto main() -> int {
     // auto url { pane::url::parse(pane::string("https://www.google.com/").u8_str()) };
@@ -9,5 +10,5 @@ auto main() -> int {
         std::println("{}", url.value().storage.get_href());
     }
 
-    return 0;
+    return EXIT_SUCCESS;
 }

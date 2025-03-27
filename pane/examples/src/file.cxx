@@ -1,5 +1,6 @@
 #include <pane/pane.hxx>
 #include <print>
+#include <cstdlib>
 
 auto main() -> int {
     auto temp_dir { pane::file::from_temp_folder() };
@@ -18,5 +19,5 @@ auto main() -> int {
         }
     }
 
-    return 0;
+    return EXIT_SUCCESS;
 }

@@ -1,5 +1,6 @@
 #include <pane/pane.hxx>
 #include <print>
+#include <cstdlib>
 
 auto main() -> int {
     auto samples { pane::file(
@@ -19,5 +20,5 @@ auto main() -> int {
         std::println("{}", lib.error().message());
     }
 
-    return 0;
+    return EXIT_SUCCESS;
 }

@@ -4,6 +4,7 @@
 #include <string>
 #include <array>
 #include <iostream>
+#include <cstdlib>
 
 struct my_struct {
     int i = 287;
@@ -16,5 +17,5 @@ auto main() -> int {
     my_struct obj {};
     std::cout << glz::write_json(obj).value_or("error") << '\n';
 
-    return 0;
+    return EXIT_SUCCESS;
 }
