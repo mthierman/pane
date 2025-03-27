@@ -28,6 +28,7 @@ target_sources(
            "include"
     PRIVATE "src/co_init.cxx"
             "src/color.cxx"
+            "src/file_picker.cxx"
             "src/file.cxx"
             "src/guid.cxx"
             "src/hstring.cxx"

@@ -9,5 +9,7 @@ auto wWinMain(HINSTANCE, HINSTANCE, wchar_t*, int) -> int {
 
     auto window { pane::window(true) };
 
+    // auto file_picker{}
+
     return pane::message_loop();
 }
