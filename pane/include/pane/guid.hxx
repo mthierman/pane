@@ -1,7 +1,9 @@
 #pragma once
 #include <Windows.h>
+#include <objbase.h>
 #include <rpc.h>
 #include <expected>
+#include <system_error>
 
 namespace pane {
 struct guid {
@@ -15,7 +17,7 @@ struct guid {
     guid(const Self& file) = default;
     auto operator=(const Self& file) -> Self& = default;
 
-    auto create() -> std::expected<Self, std::error_code>;
+    static auto create() -> std::expected<Self, std::error_code>;
 
     GUID storage;
 
