@@ -57,8 +57,9 @@ struct string {
 namespace std {
 template <> struct formatter<std::u8string> : formatter<string_view> {
     auto format(const std::u8string& u8string, format_context& context) const noexcept {
-        return formatter<string_view>::format(std::string { u8string.begin(), u8string.end() },
-                                              context);
+        return formatter<string_view>::format(
+            std::string_view { reinterpret_cast<const char*>(u8string.data()), u8string.size() },
+            context);
     }
 };
 

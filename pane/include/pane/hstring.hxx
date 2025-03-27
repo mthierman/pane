@@ -58,7 +58,9 @@ namespace std {
 template <> struct formatter<std::u16string, wchar_t> : formatter<wstring_view, wchar_t> {
     auto format(const std::u16string& u16string, wformat_context& context) const noexcept {
         return formatter<wstring_view, wchar_t>::format(
-            std::wstring { u16string.begin(), u16string.end() }, context);
+            std::wstring_view { reinterpret_cast<const wchar_t*>(u16string.data()),
+                                u16string.size() },
+            context);
     }
 };
 
