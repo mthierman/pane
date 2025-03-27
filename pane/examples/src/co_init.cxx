@@ -25,5 +25,9 @@ auto main() -> int {
         } break;
     }
 
+    if (SUCCEEDED(mta)) {
+        std::println("First call succeeded!");
+    }
+
     return EXIT_SUCCESS;
 }
