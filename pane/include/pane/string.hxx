@@ -58,16 +58,14 @@ namespace std {
 template <> struct formatter<std::u8string> : formatter<string_view> {
     auto format(const std::u8string& string, format_context& context) const noexcept {
         return formatter<string_view>::format(
-            std::string_view { reinterpret_cast<const char*>(string.data()), string.length() },
-            context);
+            { reinterpret_cast<const char*>(string.data()), string.length() }, context);
     }
 };
 
 template <> struct formatter<pane::string> : formatter<string_view> {
     auto format(const pane::string& string, format_context& context) const noexcept {
         return formatter<string_view>::format(
-            std::string_view { reinterpret_cast<const char*>(string.storage.data()),
-                               string.storage.length() },
+            { reinterpret_cast<const char*>(string.storage.data()), string.storage.length() },
             context);
     }
 };
