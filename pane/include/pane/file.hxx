@@ -54,6 +54,8 @@ struct file {
 
     auto open_library(this Self& self)
         -> std::expected<wil::com_ptr<IShellLibrary>, std::error_code>;
+    static auto open_library(const wil::com_ptr<IShellItem>& item)
+        -> std::expected<wil::com_ptr<IShellLibrary>, std::error_code>;
     static auto library_directories(const wil::com_ptr<IShellLibrary>& lib)
         -> std::expected<std::vector<Self>, std::error_code>;
 

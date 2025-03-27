@@ -156,6 +156,18 @@ auto file::open_library(this Self& self)
     return lib;
 }
 
+auto file::open_library(const wil::com_ptr<IShellItem>& item)
+    -> std::expected<wil::com_ptr<IShellLibrary>, std::error_code> {
+    wil::com_ptr<IShellLibrary> lib;
+
+    if (auto result { SHLoadLibraryFromItem(item.get(), STGM_READWRITE, IID_PPV_ARGS(&lib)) };
+        result != S_OK) {
+        return std::unexpected(hresult_error(result));
+    }
+
+    return lib;
+}
+
 auto file::library_directories(const wil::com_ptr<IShellLibrary>& lib)
     -> std::expected<std::vector<Self>, std::error_code> {
     wil::com_ptr<IShellItemArray> array;

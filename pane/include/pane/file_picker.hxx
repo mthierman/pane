@@ -2,6 +2,7 @@
 #include <Windows.h>
 #include <ShlObj.h>
 #include <expected>
+#include <system_error>
 #include <wil/com.h>
 // #include <pane/file.hxx>
 
@@ -23,6 +24,7 @@ struct file_picker {
     file_picker(const Self& file) = default;
     auto operator=(const Self& file) -> Self& = default;
 
-    auto open_directory(this Self& self) -> std::expected<wil::com_ptr<IShellItem>, std::error_code>;
+    auto open_directory(this Self& self)
+        -> std::expected<wil::com_ptr<IShellItem>, std::error_code>;
 };
 } // namespace pane
