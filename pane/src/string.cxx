@@ -26,8 +26,7 @@ string::string(std::string_view string)
                                      string.length() } } { }
 
 auto string::operator=(const std::string& string) -> Self& {
-    storage
-        = std::u8string_view { reinterpret_cast<const char8_t*>(string.data()), string.length() };
+    storage = { reinterpret_cast<const char8_t*>(string.data()), string.length() };
 
     return *this;
 }
@@ -61,9 +60,8 @@ auto string::from_utf16(std::u16string_view string, bool replacement)
 
 auto string::from_utf16(std::wstring_view string, bool replacement)
     -> std::expected<Self, std::error_code> {
-    return from_utf16(
-        std::u16string_view { reinterpret_cast<const char16_t*>(string.data()), string.length() },
-        replacement);
+    return from_utf16({ reinterpret_cast<const char16_t*>(string.data()), string.length() },
+                      replacement);
 }
 
 auto string::from_utf16(const hstring& string, bool replacement)
