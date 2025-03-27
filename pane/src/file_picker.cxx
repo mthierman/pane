@@ -9,6 +9,7 @@
 namespace pane {
 // https://learn.microsoft.com/en-us/windows/win32/shell/common-file-dialog
 // https://learn.microsoft.com/en-us/windows/win32/shell/library-be-library-aware
+// https://learn.microsoft.com/en-us/windows/win32/shell/sfgao
 auto file_picker::open(this Self& /* self */) -> void {
     auto dialog { wil::CoCreateInstance<IFileOpenDialog>(CLSID_FileOpenDialog) };
 
