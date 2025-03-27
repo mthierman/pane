@@ -10,6 +10,11 @@ namespace pane {
 auto file_picker::open(this Self& /* self */) -> void {
     //
     auto open_dialog { wil::CoCreateInstance<IFileOpenDialog>(CLSID_FileOpenDialog) };
+
+    DWORD options;
+    open_dialog->GetOptions(&options);
+    open_dialog->SetOptions(options | FOS_FORCEFILESYSTEM | FOS_PICKFOLDERS);
+
     auto result { open_dialog->Show(nullptr) };
 
     wil::com_ptr<IShellItem> item;
