@@ -8,10 +8,11 @@ color::color(uint8_t r, uint8_t g, uint8_t b, uint8_t a)
       b { b },
       a { a } { }
 
-color::color(const COLORREF& colorref)
+color::color(const COLORREF& colorref, uint8_t a)
     : r { GetRValue(colorref) },
       g { GetGValue(colorref) },
-      b { GetBValue(colorref) } { }
+      b { GetBValue(colorref) },
+      a { a } { }
 
 color::color(const winrt::Color& winrt_color)
     : r { winrt_color.R },
@@ -19,11 +20,23 @@ color::color(const winrt::Color& winrt_color)
       b { winrt_color.B },
       a { winrt_color.A } { }
 
+color::color(const winrt::Color& winrt_color, uint8_t a)
+    : r { winrt_color.R },
+      g { winrt_color.G },
+      b { winrt_color.B },
+      a { a } { }
+
 color::color(const COREWEBVIEW2_COLOR& webview2_color)
     : r { webview2_color.R },
       g { webview2_color.G },
       b { webview2_color.B },
       a { webview2_color.A } { }
+
+color::color(const COREWEBVIEW2_COLOR& webview2_color, uint8_t a)
+    : r { webview2_color.R },
+      g { webview2_color.G },
+      b { webview2_color.B },
+      a { a } { }
 
 auto color::to_hex(this Self& self) -> string { return string(std::format("{}", self)); }
 
