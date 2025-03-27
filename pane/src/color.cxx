@@ -15,4 +15,8 @@ auto color::to_hex(this Self& self) -> string {
 auto color::to_colorref(this Self& self) -> COLORREF { return RGB(self.r, self.g, self.b); }
 
 auto color::to_hbrush(this Self& self) -> HBRUSH { return CreateSolidBrush(self.to_colorref()); }
+
+auto color::to_winrt_color(this Self& self) -> winrt::Color {
+    return winrt::Color { .A { self.a }, .R { self.r }, .G { self.g }, .B { self.b } };
+}
 } // namespace pane
