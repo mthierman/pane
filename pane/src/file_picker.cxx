@@ -5,24 +5,32 @@ namespace pane {
 auto file_picker::open_directory(this Self& /* self */) -> std::expected<file, std::error_code> {
     auto dialog { wil::CoCreateInstance<IFileOpenDialog>(CLSID_FileOpenDialog) };
 
-    HRESULT result;
-
     FILEOPENDIALOGOPTIONS options;
-    result = dialog->GetOptions(&options);
-    result = dialog->SetOptions(options | FOS_PICKFOLDERS & ~FOS_FORCEFILESYSTEM);
-    result = dialog->Show(nullptr);
+
+    if (auto result { dialog->GetOptions(&options) }; result != S_OK) {
+        return std::unexpected(hresult_error(result));
+    }
+
+    if (auto result { dialog->SetOptions(options | FOS_PICKFOLDERS & ~FOS_FORCEFILESYSTEM) };
+        result != S_OK) {
+        return std::unexpected(hresult_error(result));
+    }
+
+    if (auto result { dialog->Show(nullptr) }; result != S_OK) {
+        return std::unexpected(hresult_error(result));
+    }
 
     wil::com_ptr<IShellItem> item;
-    result = dialog->GetResult(&item);
+
+    if (auto result { dialog->GetResult(&item) }; result != S_OK) {
+        return std::unexpected(hresult_error(result));
+    }
 
     SFGAOF attributes;
-    item->GetAttributes(SFGAO_FILESYSTEM, &attributes);
 
-    // wil::com_ptr<IShellItem2> item2;
-    // item->QueryInterface(IID_PPV_ARGS(&item2));
-
-    // SFGAOF attributes;
-    // item2->GetAttributes(SFGAO_FILESYSTEM, &attributes);
+    if (auto result { item->GetAttributes(SFGAO_FILESYSTEM, &attributes) }; result != S_OK) {
+        return std::unexpected(hresult_error(result));
+    }
 
     if (attributes) {
         OutputDebugStringW(L"SFGAO_FILESYSTEM IS TRUE");
