@@ -17,12 +17,13 @@ struct window {
                                .cbClsExtra { 0 },
                                .cbWndExtra { sizeof(Self) },
                                .hInstance { pane::module_handle().value_or(nullptr) },
-                               .hIcon { pane::application_icon() },
+                               .hIcon { pane::resource_icon().value_or(pane::application_icon()) },
                                .hCursor { pane::arrow_cursor() },
                                .hbrBackground { nullptr },
                                .lpszMenuName { nullptr },
-                               .lpszClassName { L"DefaultWindow" },
-                               .hIconSm { pane::application_icon() } };
+                               .lpszClassName { L"PaneWindow" },
+                               .hIconSm {
+                                   pane::resource_icon().value_or(pane::application_icon()) } };
     HWND window_handle;
 };
 } // namespace pane
