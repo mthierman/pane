@@ -15,8 +15,8 @@ auto url::create(std::string_view string) -> std::optional<Self> {
 }
 
 auto url::create(std::u8string_view string) -> std::optional<Self> {
-    return parse(reinterpret_cast<const char*>(string.data()));
+    return create(reinterpret_cast<const char*>(string.data()));
 }
 
-auto url::create(const string& string) -> std::optional<Self> { return parse(string.c_str()); }
+auto url::create(const string& string) -> std::optional<Self> { return create(string.c_str()); }
 } // namespace pane
