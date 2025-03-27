@@ -11,8 +11,8 @@ struct co_init {
     co_init(Self&& color) noexcept = default;
     auto operator=(Self&& color) noexcept -> Self& = default;
 
-    co_init(const Self& color) = default;
-    auto operator=(const Self& color) -> Self& = default;
+    co_init(const Self& color) = delete;
+    auto operator=(const Self& color) -> Self& = delete;
 
     static auto apartment_threaded() -> Self;
     static auto multi_threaded() -> Self;
