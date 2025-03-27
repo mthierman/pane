@@ -11,7 +11,11 @@ auto wWinMain(HINSTANCE, HINSTANCE, wchar_t*, int) -> int {
 
     auto file_picker { pane::file_picker() };
 
-    file_picker.open();
+    auto dir { file_picker.open_directory() };
+
+    if (dir) {
+        // OutputDebugStringW(dir.value()->GetDisplayName())
+    }
 
     return pane::message_loop();
 }
