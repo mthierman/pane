@@ -14,10 +14,6 @@ auto guid::create() -> std::expected<Self, std::error_code> {
     Self self;
     self.storage = std::move(guid);
 
-    // if (auto errorCode { ::CoCreateGuid(&guid) }; errorCode == S_OK) {
-    //     return guid;
-    // } else {
-    //     return std::unexpected(glow::system::format_message(errorCode));
-    // }
+    return self;
 }
 } // namespace pane
