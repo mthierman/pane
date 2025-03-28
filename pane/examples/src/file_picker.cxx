@@ -32,14 +32,22 @@ auto wWinMain(HINSTANCE, HINSTANCE, wchar_t*, int) -> int {
                 }
             }
         } else {
-            OutputDebugStringA(pane::file::get_path(dir.value()).value_or(pane::string()).c_str());
+            auto path { pane::file::get_path(dir.value()) };
+
+            if (path) {
+                OutputDebugStringA(reinterpret_cast<const char*>(path.value().data()));
+            }
         }
     }
 
     auto file { file_picker.save_file() };
 
     if (file) {
-        OutputDebugStringA(pane::file::get_path(file.value()).value_or(pane::string()).c_str());
+        auto path { pane::file::get_path(file.value()) };
+
+        if (path) {
+            OutputDebugStringA(reinterpret_cast<const char*>(path.value().data()));
+        }
     }
 
     return pane::message_loop();

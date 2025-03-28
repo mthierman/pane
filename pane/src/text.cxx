@@ -20,6 +20,10 @@ auto to_utf16(std::u8string_view string) -> std::u16string {
     return buffer;
 }
 
+auto to_utf16(std::string_view string) -> std::u16string {
+    return to_utf16(reinterpret_cast<const char8_t*>(string.data()));
+}
+
 auto to_utf8(std::u16string_view string) -> std::u8string {
     auto buffer { std::u8string() };
     auto error_code { U_ZERO_ERROR };
@@ -36,5 +40,9 @@ auto to_utf8(std::u16string_view string) -> std::u8string {
                        &error_code);
 
     return buffer;
+}
+
+auto to_utf8(std::wstring_view string) -> std::u8string {
+    return to_utf8(reinterpret_cast<const char16_t*>(string.data()));
 }
 } // namespace pane

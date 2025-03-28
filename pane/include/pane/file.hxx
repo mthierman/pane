@@ -9,8 +9,6 @@
 #include <system_error>
 #include <wil/com.h>
 #include <wil/resource.h>
-#include <pane/string.hxx>
-#include <pane/hstring.hxx>
 #include <ada.h>
 
 namespace pane {
@@ -53,7 +51,7 @@ struct file {
     static auto library_directories(const wil::com_ptr<IShellLibrary>& lib)
         -> std::expected<std::vector<Self>, std::error_code>;
     static auto get_path(const wil::com_ptr<IShellItem>& item)
-        -> std::expected<pane::string, std::error_code>;
+        -> std::expected<std::u8string, std::error_code>;
 
     auto download_from_url(this Self& self, ada::url url) -> std::expected<void, std::error_code>;
 
@@ -65,6 +63,7 @@ namespace std {
 template <> struct formatter<std::filesystem::path> : formatter<string_view> {
     auto format(const std::filesystem::path& path, format_context& context) const noexcept {
         auto u8path { path.u8string() };
+
         return formatter<string_view>::format(
             { reinterpret_cast<const char*>(u8path.data()), u8path.length() }, context);
     }

@@ -1,7 +1,6 @@
 #include <pane/file.hxx>
 #include <pane/system.hxx>
-#include <pane/string.hxx>
-#include <pane/hstring.hxx>
+#include <pane/text.hxx>
 #include <urlmon.h>
 
 // LOGGING
@@ -183,7 +182,7 @@ auto file::library_directories(const wil::com_ptr<IShellLibrary>& lib)
 }
 
 auto file::get_path(const wil::com_ptr<IShellItem>& item)
-    -> std::expected<pane::string, std::error_code> {
+    -> std::expected<std::u8string, std::error_code> {
     SFGAOF attributes;
 
     if (auto result { item->GetAttributes(SFGAO_FILESYSTEM, &attributes) }; result != S_OK) {
@@ -198,19 +197,18 @@ auto file::get_path(const wil::com_ptr<IShellItem>& item)
         item->GetDisplayName(SIGDN_DESKTOPABSOLUTEPARSING, &buffer);
     }
 
-    return pane::string::from_utf16(buffer.get());
+    return pane::to_utf8(buffer.get());
 }
 
 auto file::download_from_url(this Self& self, ada::url url)
     -> std::expected<void, std::error_code> {
-    auto converted_url { pane::hstring::from_utf8(url.get_href()) };
+    auto converted_url { pane::to_utf16(url.get_href()) };
 
-    if (!converted_url) {
-        return std::unexpected(converted_url.error());
-    }
-
-    if (auto result { URLDownloadToFileW(
-            nullptr, converted_url.value().c_str(), self.storage.c_str(), 0, nullptr) };
+    if (auto result { URLDownloadToFileW(nullptr,
+                                         reinterpret_cast<const wchar_t*>(converted_url.c_str()),
+                                         self.storage.c_str(),
+                                         0,
+                                         nullptr) };
         FAILED(result)) {
         return std::unexpected(hresult_error(result));
     }
