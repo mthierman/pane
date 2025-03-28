@@ -15,7 +15,7 @@ auto string::operator=(std::u8string&& string) noexcept -> Self& {
 string::string(std::u8string_view string)
     : storage { string } { }
 
-auto string::operator=(const std::u8string& string) -> Self& {
+auto string::operator=(const std::u8string_view& string) -> Self& {
     storage = string;
 
     return *this;
@@ -24,7 +24,7 @@ auto string::operator=(const std::u8string& string) -> Self& {
 string::string(std::string_view string)
     : storage { string.begin(), string.end() } { }
 
-auto string::operator=(const std::string& string) -> Self& {
+auto string::operator=(const std::string_view& string) -> Self& {
     storage = { string.begin(), string.end() };
 
     return *this;

@@ -24,10 +24,10 @@ struct hstring {
     auto operator=(std::u16string&& string) noexcept -> Self&;
 
     explicit hstring(std::u16string_view string);
-    auto operator=(const std::u16string& string) -> Self&;
+    auto operator=(const std::u16string_view& string) -> Self&;
 
     explicit hstring(std::wstring_view string);
-    auto operator=(const std::wstring& string) -> Self&;
+    auto operator=(const std::wstring_view& string) -> Self&;
 
     static auto from_utf8(std::u8string_view string, bool replacement = true)
         -> std::expected<Self, std::error_code>;

@@ -15,7 +15,7 @@ auto hstring::operator=(std::u16string&& string) noexcept -> Self& {
 hstring::hstring(std::u16string_view string)
     : storage { string } { }
 
-auto hstring::operator=(const std::u16string& string) -> Self& {
+auto hstring::operator=(const std::u16string_view& string) -> Self& {
     storage = string;
 
     return *this;
@@ -24,7 +24,7 @@ auto hstring::operator=(const std::u16string& string) -> Self& {
 hstring::hstring(std::wstring_view string)
     : storage { string.begin(), string.end() } { }
 
-auto hstring::operator=(const std::wstring& string) -> Self& {
+auto hstring::operator=(const std::wstring_view& string) -> Self& {
     storage = { string.begin(), string.end() };
 
     return *this;
