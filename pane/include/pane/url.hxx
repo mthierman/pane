@@ -16,8 +16,6 @@ struct url {
     url(const Self& url) = default;
     auto operator=(const Self& url) -> Self& = default;
 
-    static auto create(std::string_view string) -> std::optional<Self>;
-    static auto create(std::u8string_view string) -> std::optional<Self>;
     static auto create(const string& string) -> std::optional<Self>;
 
     ada::url storage;
