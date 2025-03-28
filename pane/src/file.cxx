@@ -17,23 +17,23 @@ auto file::operator=(std::filesystem::path&& path) noexcept -> Self& {
     return *this;
 }
 
-file::file(const string& string) noexcept
-    : storage { string.get() } { }
+// file::file(const string& string) noexcept
+//     : storage { string.get() } { }
 
-auto file::operator=(const string& string) noexcept -> Self& {
-    storage = string.get();
+// auto file::operator=(const string& string) noexcept -> Self& {
+//     storage = string.get();
 
-    return *this;
-}
+//     return *this;
+// }
 
-file::file(const hstring& string) noexcept
-    : storage { string.get() } { }
+// file::file(const hstring& string) noexcept
+//     : storage { string.get() } { }
 
-auto file::operator=(const hstring& string) noexcept -> Self& {
-    storage = string.get();
+// auto file::operator=(const hstring& string) noexcept -> Self& {
+//     storage = string.get();
 
-    return *this;
-}
+//     return *this;
+// }
 
 auto file::from_known_folder(KNOWNFOLDERID known_folder) -> std::expected<Self, std::error_code> {
     wil::unique_cotaskmem_string buffer;

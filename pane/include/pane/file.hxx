@@ -29,11 +29,11 @@ struct file {
     explicit file(std::filesystem::path&& path) noexcept;
     auto operator=(std::filesystem::path&& path) noexcept -> Self&;
 
-    explicit file(const string& string) noexcept;
-    auto operator=(const string& string) noexcept -> Self&;
+    // explicit file(const string& string) noexcept;
+    // auto operator=(const string& string) noexcept -> Self&;
 
-    explicit file(const hstring& string) noexcept;
-    auto operator=(const hstring& string) noexcept -> Self&;
+    // explicit file(const hstring& string) noexcept;
+    // auto operator=(const hstring& string) noexcept -> Self&;
 
     static auto from_known_folder(KNOWNFOLDERID known_folder = FOLDERID_LocalAppData)
         -> std::expected<Self, std::error_code>;
@@ -70,7 +70,9 @@ struct file {
 namespace std {
 template <> struct formatter<std::filesystem::path> : formatter<string_view> {
     auto format(const std::filesystem::path& path, format_context& context) const noexcept {
-        return formatter<string_view>::format(path.string(), context);
+        auto u8path { path.u8string() };
+        return formatter<string_view>::format(
+            { reinterpret_cast<const char*>(u8path.data()), u8path.length() }, context);
     }
 };
 
