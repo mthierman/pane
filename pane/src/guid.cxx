@@ -1,5 +1,6 @@
 #include <pane/guid.hxx>
 #include <pane/system.hxx>
+#include <pane/hstring.hxx>
 #include <wil/win32_helpers.h>
 
 namespace pane {
@@ -26,7 +27,7 @@ auto guid::to_string(this Self& self) -> std::optional<string> {
         return std::nullopt;
     }
 
-    auto converted_guid { string::from_utf16(buffer) };
+    auto converted_guid { string::from_utf16(hstring(buffer)) };
 
     if (!converted_guid) {
         return std::nullopt;

@@ -1,4 +1,5 @@
 #include <pane/system.hxx>
+#include <pane/hstring.hxx>
 #include <shellapi.h>
 #include <cstdlib>
 #include <wil/resource.h>
@@ -44,7 +45,7 @@ auto format_message(HRESULT hresult) -> std::expected<string, std::error_code> {
                    0,
                    nullptr);
 
-    auto message { string::from_utf16(buffer.get()) };
+    auto message { string::from_utf16(hstring(buffer.get())) };
 
     if (!message.has_value()) {
         return std::unexpected(last_error());
