@@ -8,7 +8,7 @@
 namespace pane {
 template <typename... Args>
 auto debug(std::format_string<Args...> format_string, Args&&... args) -> void {
-    if (auto converted_format_string { hstring::from_utf8(
+    if (auto converted_format_string { pane::hstring::from_utf8(
             std::vformat(format_string.get(), std::make_format_args(args...))) }) {
         OutputDebugStringW(converted_format_string.value().c_str());
     }
@@ -24,7 +24,7 @@ auto debug(std::wformat_string<Args...> format_string, Args&&... args) -> void {
 
 template <typename... Args>
 auto debug_message(std::format_string<Args...> format_string, Args&&... args) -> void {
-    if (auto converted_format_string { hstring::from_utf8(
+    if (auto converted_format_string { pane::hstring::from_utf8(
             std::vformat(format_string.get(), std::make_format_args(args...))) }) {
         MessageBoxW(
             nullptr, converted_format_string.value().c_str(), L"Info", MB_OK | MB_ICONASTERISK);
@@ -41,7 +41,7 @@ auto debug_message(std::wformat_string<Args...> format_string, Args&&... args) -
 
 template <typename... Args>
 auto debug_error(std::format_string<Args...> format_string, Args&&... args) -> void {
-    if (auto converted_format_string { hstring::from_utf8(
+    if (auto converted_format_string { pane::hstring::from_utf8(
             std::vformat(format_string.get(), std::make_format_args(args...))) }) {
         MessageBoxW(
             nullptr, converted_format_string.value().c_str(), L"Error", MB_OK | MB_ICONHAND);
