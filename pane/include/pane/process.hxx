@@ -1,13 +1,15 @@
 #pragma once
 #include <Windows.h>
 #include <string>
-#include <pane/file.hxx>
+// #include <pane/file.hxx>
+#include <filesystem>
+#include <wil/resource.h>
 
 namespace pane {
 struct process {
     using Self = process;
 
-    process(const file& file, std::u8string_view command_line);
+    process(const std::filesystem::path& path, std::u8string_view command_line);
     ~process() = default;
 
     process(Self&& process) noexcept = delete;

@@ -19,20 +19,20 @@ auto wWinMain(HINSTANCE, HINSTANCE, wchar_t*, int) -> int {
 
     if (dir) {
         // OutputDebugStringW(dir.value()->GetDisplayName())
-        auto lib { pane::file::open_library(dir.value()) };
+        auto lib { pane::open_library(dir.value()) };
 
         if (lib) {
-            auto dirs { pane::file::library_directories(lib.value()) };
+            auto dirs { pane::library_directories(lib.value()) };
 
             if (dirs) {
                 auto files = dirs.value();
 
                 for (auto& file : files) {
-                    OutputDebugStringA(std::format("{}\n", file.storage).c_str());
+                    OutputDebugStringA(std::format("{}\n", file).c_str());
                 }
             }
         } else {
-            auto path { pane::file::get_path(dir.value()) };
+            auto path { pane::get_path(dir.value()) };
 
             if (path) {
                 OutputDebugStringA(reinterpret_cast<const char*>(path.value().data()));
@@ -43,7 +43,7 @@ auto wWinMain(HINSTANCE, HINSTANCE, wchar_t*, int) -> int {
     auto file { file_picker.save_file() };
 
     if (file) {
-        auto path { pane::file::get_path(file.value()) };
+        auto path { pane::get_path(file.value()) };
 
         if (path) {
             OutputDebugStringA(reinterpret_cast<const char*>(path.value().data()));
