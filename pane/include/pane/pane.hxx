@@ -2,6 +2,7 @@
 #include <pane/co_init.hxx>
 #include <pane/color.hxx>
 #include <pane/console.hxx>
+#include <pane/debug.hxx>
 #include <pane/file_picker.hxx>
 #include <pane/file.hxx>
 #include <pane/gdi_plus.hxx>

@@ -4,10 +4,24 @@
 #include <pane/system.hxx>
 #include <pane/console.hxx>
 
-auto wWinMain(HINSTANCE, HINSTANCE, wchar_t*, int) -> int {
-    auto console { pane::console() };
+#include <pane/debug.hxx>
 
-    auto window { pane::window(true) };
+#include <string>
+
+auto wWinMain(HINSTANCE, HINSTANCE, wchar_t*, int) -> int {
+    // auto console { pane::console() };
+
+    // auto window { pane::window(true) };
+
+    std::string narrow1 { "TEST1" };
+    std::string narrow2 { "TEST2" };
+
+    pane::debug("{}, {}", narrow1, narrow2);
+
+    std::wstring wide1 { L"TEST1" };
+    std::wstring wide2 { L"TEST2" };
+
+    pane::debug(L"{}, {}", wide1, wide2);
 
     return pane::message_loop();
 }
