@@ -5,16 +5,13 @@
 
 namespace pane {
 auto guid::create() -> std::expected<Self, std::error_code> {
-    GUID guid;
+    Self self;
 
-    auto result { CoCreateGuid(&guid) };
+    auto result { CoCreateGuid(&self.storage) };
 
     if (result != S_OK) {
         return std::unexpected(hresult_error(result));
     }
-
-    Self self;
-    self.storage = std::move(guid);
 
     return self;
 }
