@@ -1,9 +1,9 @@
 #include <pane/process.hxx>
-#include <pane/hstring.hxx>
+#include <pane/text.hxx>
 #include <wil/resource.h>
 
 namespace pane {
-process::process(const file& file, const string& command_line) {
+process::process(const file& file, std::u8string_view command_line) {
     STARTUPINFOW si {};
     si.cb = sizeof(STARTUPINFOW);
 
@@ -11,18 +11,16 @@ process::process(const file& file, const string& command_line) {
     pi.hProcess = process_handle.get();
     pi.hThread = thread_handle.get();
 
-    if (auto converted_command_line { hstring::from_utf8(command_line.get()) }) {
-        CreateProcessW(file.storage.c_str(),
-                       converted_command_line.value().c_str(),
-                       nullptr,
-                       nullptr,
-                       FALSE,
-                       0,
-                       nullptr,
-                       nullptr,
-                       &si,
-                       &pi);
-        WaitForSingleObject(pi.hProcess, INFINITE);
-    }
+    CreateProcessW(file.storage.c_str(),
+                   reinterpret_cast<wchar_t*>(pane::to_utf16(command_line).data()),
+                   nullptr,
+                   nullptr,
+                   FALSE,
+                   0,
+                   nullptr,
+                   nullptr,
+                   &si,
+                   &pi);
+    WaitForSingleObject(pi.hProcess, INFINITE);
 }
 } // namespace pane
