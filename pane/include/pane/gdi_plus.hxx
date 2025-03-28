@@ -16,9 +16,10 @@ struct gdi_plus {
     gdi_plus(const Self& gdi_plus) = delete;
     auto operator=(const Self& gdi_plus) -> Self& = delete;
 
+    Gdiplus::Status status;
+
 private:
     Gdiplus::GdiplusStartupInput startup_input;
     ULONG_PTR token;
-    Gdiplus::Status status;
 };
 } // namespace pane
