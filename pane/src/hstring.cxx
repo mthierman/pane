@@ -84,7 +84,7 @@ auto hstring::from_utf8(std::string_view string, bool replacement)
 
 auto hstring::from_utf8(const string& string, bool replacement)
     -> std::expected<Self, std::error_code> {
-    return from_utf8(string.storage, replacement);
+    return from_utf8(std::u8string_view(string.storage), replacement);
 }
 
 auto hstring::c_str(this Self& self) -> wchar_t* {

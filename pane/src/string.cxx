@@ -84,7 +84,7 @@ auto string::from_utf16(std::wstring_view string, bool replacement)
 
 auto string::from_utf16(const hstring& string, bool replacement)
     -> std::expected<Self, std::error_code> {
-    return from_utf16(string.storage, replacement);
+    return from_utf16(std::u16string_view(string.storage), replacement);
 }
 
 auto string::c_str(this Self& self) -> char* {
