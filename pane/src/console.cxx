@@ -1,12 +1,19 @@
-#include <pane/gdi_plus.hxx>
+#include <pane/console.hxx>
+#include <iostream>
 
 namespace pane {
-gdi_plus::gdi_plus()
-    : status { Gdiplus::GdiplusStartup(&token, &startup_input, nullptr) } { }
+console::console() {
+    AllocConsole();
 
-gdi_plus::~gdi_plus() {
-    if (status == Gdiplus::Status::Ok) {
-        Gdiplus::GdiplusShutdown(token);
-    }
+    freopen_s(file.addressof(), "CONIN$", "r", stdin);
+    freopen_s(file.addressof(), "CONOUT$", "w", stdout);
+    freopen_s(file.addressof(), "CONIN$", "w", stderr);
+
+    std::cin.clear();
+    std::cout.clear();
+    std::cerr.clear();
+    std::clog.clear();
 }
+
+console::~console() { FreeConsole(); }
 } // namespace pane
