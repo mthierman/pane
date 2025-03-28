@@ -82,6 +82,8 @@ auto resource_icon() -> std::expected<HICON, std::error_code> {
     return icon;
 }
 
+auto ui_settings() -> winrt::UISettings { return winrt::UISettings(); }
+
 auto command_line_arguments() -> std::vector<string> {
     int argc { 0 };
     wil::unique_hlocal_ptr<wchar_t*[]> buffer;
