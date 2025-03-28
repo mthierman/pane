@@ -5,6 +5,7 @@
 #include <pane/console.hxx>
 
 #include <pane/debug.hxx>
+#include <pane/message_box.hxx>
 
 #include <string>
 
@@ -22,6 +23,9 @@ auto wWinMain(HINSTANCE, HINSTANCE, wchar_t*, int) -> int {
     std::wstring wide2 { L"TEST2" };
 
     pane::debug(L"{}, {}", wide1, wide2);
+
+    pane::message_box("{}, {}", narrow1, narrow2);
+    pane::message_box(L"{}, {}", wide1, wide2);
 
     return pane::message_loop();
 }
