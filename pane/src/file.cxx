@@ -183,7 +183,7 @@ auto file::library_directories(const wil::com_ptr<IShellLibrary>& lib)
 }
 
 auto file::get_path(const wil::com_ptr<IShellItem>& item)
-    -> std::expected<string, std::error_code> {
+    -> std::expected<pane::string, std::error_code> {
     SFGAOF attributes;
 
     if (auto result { item->GetAttributes(SFGAO_FILESYSTEM, &attributes) }; result != S_OK) {
