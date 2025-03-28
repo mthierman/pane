@@ -3,6 +3,8 @@
 #include <format>
 #include <pane/hstring.hxx>
 
+// https://stackoverflow.com/questions/57547273/how-to-use-source-location-in-a-variadic-template-function
+
 namespace pane {
 template <typename... Args>
 auto debug(std::format_string<Args...> format_string, Args&&... args) -> void {
