@@ -40,7 +40,6 @@ auto wWinMain(HINSTANCE, HINSTANCE, wchar_t*, int) -> int {
     auto file { file_picker.save_file() };
 
     if (file) {
-        OutputDebugStringA("FILE EXISTS!");
         OutputDebugStringA(
             pane::file::get_display_name(file.value()).value_or(pane::string()).c_str());
     }
