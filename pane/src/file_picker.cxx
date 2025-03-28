@@ -63,7 +63,7 @@ auto file_picker::save(this Self& self)
 
     wil::com_ptr<IShellItem> item;
 
-    if (auto result { self.open_dialog->GetResult(&item) }; result != S_OK) {
+    if (auto result { self.save_dialog->GetResult(&item) }; result != S_OK) {
         return std::unexpected(hresult_error(result));
     }
 
