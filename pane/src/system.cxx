@@ -1,4 +1,5 @@
 #include <pane/system.hxx>
+#include <shellapi.h>
 #include <cstdlib>
 #include <wil/resource.h>
 
@@ -79,6 +80,22 @@ auto resource_icon() -> std::expected<HICON, std::error_code> {
     }
 
     return icon;
+}
+
+auto command_line_arguments() -> std::vector<string> {
+    int argc { 0 };
+    wil::unique_hlocal_ptr<wchar_t*[]> buffer;
+    buffer.reset(CommandLineToArgvW(GetCommandLineW(), &argc));
+
+    std::vector<string> vector;
+
+    for (int i = 0; i < argc; i++) {
+        if (auto converted_buffer { string::from_utf16(buffer[i]) }) {
+            vector.emplace_back(converted_buffer.value());
+        }
+    }
+
+    return vector;
 }
 
 auto message_loop() -> int {

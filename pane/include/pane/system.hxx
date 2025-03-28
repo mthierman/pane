@@ -2,6 +2,7 @@
 #include <Windows.h>
 #include <expected>
 #include <system_error>
+#include <vector>
 #include <pane/string.hxx>
 #include <wil/com.h>
 
@@ -14,6 +15,7 @@ auto null_brush() -> HBRUSH;
 auto arrow_cursor() -> HCURSOR;
 auto application_icon() -> HICON;
 auto resource_icon() -> std::expected<HICON, std::error_code>;
+auto command_line_arguments() -> std::vector<string>;
 auto message_loop() -> int;
 } // namespace pane
 
