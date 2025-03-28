@@ -1,16 +1,13 @@
 #include <pane/url.hxx>
 
 namespace pane {
-url::url(ada::url&& url) noexcept
-    : storage { std::move(url) } { }
-
-auto url::create(const string& string) -> std::optional<Self> {
-    auto url { ada::parse<ada::url>(string.c_str()) };
+auto to_url(std::u8string_view string) -> std::optional<ada::url> {
+    auto url { ada::parse<ada::url>(reinterpret_cast<const char*>(string.data())) };
 
     if (!url) {
         return std::nullopt;
     }
 
-    return Self(std::move(url.value()));
+    return url.value();
 }
 } // namespace pane
