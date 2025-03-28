@@ -20,19 +20,20 @@ struct hstring {
 
     hstring(Self&& string) noexcept = default;
     auto operator=(Self&& string) noexcept -> Self& = default;
-
     hstring(std::u16string&& string) noexcept;
     auto operator=(std::u16string&& string) noexcept -> Self&;
 
     hstring(const char16_t* string);
     auto operator=(const char16_t* string) -> Self&;
-
     hstring(const std::u16string& string);
     auto operator=(const std::u16string& string) -> Self&;
-
     hstring(std::u16string_view string);
     auto operator=(std::u16string_view string) -> Self&;
 
+    hstring(const wchar_t* string);
+    auto operator=(const wchar_t* string) -> Self&;
+    hstring(const std::wstring& string);
+    auto operator=(const std::wstring& string) -> Self&;
     hstring(std::wstring_view string);
     auto operator=(std::wstring_view string) -> Self&;
 

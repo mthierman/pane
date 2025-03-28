@@ -39,6 +39,24 @@ auto hstring::operator=(std::u16string_view string) -> Self& {
     return *this;
 }
 
+hstring::hstring(const wchar_t* string)
+    : storage { reinterpret_cast<const char16_t*>(string) } { }
+
+auto hstring::operator=(const wchar_t* string) -> Self& {
+    storage = reinterpret_cast<const char16_t*>(string);
+
+    return *this;
+}
+
+hstring::hstring(const std::wstring& string)
+    : storage { string.begin(), string.end() } { }
+
+auto hstring::operator=(const std::wstring& string) -> Self& {
+    storage = { string.begin(), string.end() };
+
+    return *this;
+}
+
 hstring::hstring(std::wstring_view string)
     : storage { string.begin(), string.end() } { }
 

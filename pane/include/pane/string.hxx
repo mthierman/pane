@@ -20,25 +20,20 @@ struct string {
 
     string(Self&& string) noexcept = default;
     auto operator=(Self&& string) noexcept -> Self& = default;
-
     string(std::u8string&& string) noexcept;
     auto operator=(std::u8string&& string) noexcept -> Self&;
 
     string(const char8_t* string);
     auto operator=(const char8_t* string) -> Self&;
-
     string(const std::u8string& string);
     auto operator=(const std::u8string& string) -> Self&;
-
     string(std::u8string_view string);
     auto operator=(std::u8string_view string) -> Self&;
 
     string(const char* string);
     auto operator=(const char* string) -> Self&;
-
     string(const std::string& string);
     auto operator=(const std::string& string) -> Self&;
-
     string(std::string_view string);
     auto operator=(std::string_view string) -> Self&;
 
