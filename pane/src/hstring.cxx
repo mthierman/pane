@@ -111,4 +111,6 @@ auto hstring::c_str(this const Self& self) -> const wchar_t* {
 auto hstring::data(this Self& self) -> char16_t* { return self.storage.data(); }
 
 auto hstring::data(this const Self& self) -> const char16_t* { return self.storage.data(); }
+
+auto hstring::length(this const Self& self) -> const size_t { return self.storage.length(); }
 } // namespace pane

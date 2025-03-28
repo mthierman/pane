@@ -51,6 +51,8 @@ struct string {
 
     auto data(this const Self& self) -> const char8_t*;
 
+    auto length(this const Self& self) -> const size_t;
+
 private:
     std::u8string storage;
 };
@@ -67,8 +69,7 @@ template <> struct formatter<std::u8string> : formatter<string_view> {
 template <> struct formatter<pane::string> : formatter<string_view> {
     auto format(const pane::string& string, format_context& context) const noexcept {
         return formatter<string_view>::format(
-            { reinterpret_cast<const char*>(string.storage.data()), string.storage.length() },
-            context);
+            { reinterpret_cast<const char*>(string.data()), string.length() }, context);
     }
 };
 } // namespace std

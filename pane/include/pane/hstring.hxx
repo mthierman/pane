@@ -51,6 +51,8 @@ struct hstring {
 
     auto data(this const Self& self) -> const char16_t*;
 
+    auto length(this const Self& self) -> const size_t;
+
 private:
     std::u16string storage;
 };
@@ -67,7 +69,7 @@ template <> struct formatter<std::u16string, wchar_t> : formatter<wstring_view, 
 template <> struct formatter<pane::hstring, wchar_t> : formatter<wstring_view, wchar_t> {
     auto format(const pane::hstring& string, wformat_context& context) const noexcept {
         return formatter<wstring_view, wchar_t>::format(
-            { reinterpret_cast<const wchar_t*>(string.storage.data()), string.storage.length() },
+            { reinterpret_cast<const wchar_t*>(string.data()), string.length() },
             context);
     }
 };
