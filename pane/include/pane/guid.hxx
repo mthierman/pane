@@ -27,8 +27,6 @@ struct guid {
     auto string(this Self& self) -> std::optional<pane::string>;
 
     GUID storage;
-
-private:
 };
 } // namespace pane
 
