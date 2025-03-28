@@ -29,12 +29,6 @@ struct file {
     explicit file(std::filesystem::path&& path) noexcept;
     auto operator=(std::filesystem::path&& path) noexcept -> Self&;
 
-    // explicit file(const string& string) noexcept;
-    // auto operator=(const string& string) noexcept -> Self&;
-
-    // explicit file(const hstring& string) noexcept;
-    // auto operator=(const hstring& string) noexcept -> Self&;
-
     static auto from_known_folder(KNOWNFOLDERID known_folder = FOLDERID_LocalAppData)
         -> std::expected<Self, std::error_code>;
     static auto from_temp_folder() -> std::expected<Self, std::error_code>;
