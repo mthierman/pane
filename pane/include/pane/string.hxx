@@ -37,13 +37,10 @@ struct string {
     string(std::string_view string);
     auto operator=(std::string_view string) -> Self&;
 
-    // static auto from_utf16(std::u16string_view string, bool replacement = true)
-    //     -> std::expected<Self, std::error_code>;
+    static auto from_utf16(std::u16string_view string, bool replacement = true)
+        -> std::expected<Self, std::error_code>;
 
-    // static auto from_utf16(std::wstring_view string, bool replacement = true)
-    //     -> std::expected<Self, std::error_code>;
-
-    static auto from_utf16(const hstring& string, bool replacement = true)
+    static auto from_utf16(std::wstring_view string, bool replacement = true)
         -> std::expected<Self, std::error_code>;
 
     auto c_str(this Self& self) -> char*;

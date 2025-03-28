@@ -27,7 +27,7 @@ auto guid::to_string(this Self& self) -> std::optional<string> {
         return std::nullopt;
     }
 
-    auto converted_guid { string::from_utf16(hstring(buffer)) };
+    auto converted_guid { string::from_utf16(buffer) };
 
     if (!converted_guid) {
         return std::nullopt;

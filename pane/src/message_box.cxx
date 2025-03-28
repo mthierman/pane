@@ -3,8 +3,8 @@
 
 namespace pane {
 auto message_box(string message, string title) -> void {
-    auto converted_message { hstring::from_utf8(message) };
-    auto converted_title { hstring::from_utf8(title) };
+    auto converted_message { hstring::from_utf8(message.storage) };
+    auto converted_title { hstring::from_utf8(title.storage) };
 
     if (converted_message && converted_title) {
         MessageBoxW(nullptr,

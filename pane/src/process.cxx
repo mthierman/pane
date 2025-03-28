@@ -11,7 +11,7 @@ process::process(const file& file, const string& command_line) {
     pi.hProcess = process_handle.get();
     pi.hThread = thread_handle.get();
 
-    if (auto converted_command_line { hstring::from_utf8(command_line) }) {
+    if (auto converted_command_line { hstring::from_utf8(command_line.storage) }) {
         CreateProcessW(file.storage.c_str(),
                        converted_command_line.value().c_str(),
                        nullptr,

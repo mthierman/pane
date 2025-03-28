@@ -37,13 +37,10 @@ struct hstring {
     hstring(std::wstring_view string);
     auto operator=(std::wstring_view string) -> Self&;
 
-    // static auto from_utf8(std::u8string_view string, bool replacement = true)
-    //     -> std::expected<Self, std::error_code>;
+    static auto from_utf8(std::u8string_view string, bool replacement = true)
+        -> std::expected<Self, std::error_code>;
 
-    // static auto from_utf8(std::string_view string, bool replacement = true)
-    //     -> std::expected<Self, std::error_code>;
-
-    static auto from_utf8(const string& string, bool replacement = true)
+    static auto from_utf8(std::string_view string, bool replacement = true)
         -> std::expected<Self, std::error_code>;
 
     auto c_str(this Self& self) -> wchar_t*;
