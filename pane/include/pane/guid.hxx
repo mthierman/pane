@@ -4,8 +4,8 @@
 #include <rpc.h>
 #include <expected>
 #include <optional>
+#include <string>
 #include <system_error>
-#include <pane/string.hxx>
 
 namespace pane {
 struct guid {
@@ -24,7 +24,7 @@ struct guid {
 
     static auto create() -> std::expected<Self, std::error_code>;
 
-    auto string(this Self& self) -> std::optional<pane::string>;
+    auto string(this Self& self) -> std::optional<std::u8string>;
 
     GUID storage;
 };
