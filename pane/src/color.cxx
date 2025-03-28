@@ -38,8 +38,10 @@ color::color(const COREWEBVIEW2_COLOR& webview2_color, uint8_t a)
       b { webview2_color.B },
       a { a } { }
 
-auto color::to_hex(this Self& self) -> pane::string {
-    return pane::string(std::format("{}", self));
+auto color::to_hex(this Self& self) -> std::u8string {
+    auto formatted { std::format("{}", self) };
+
+    return { formatted.begin(), formatted.end() };
 }
 
 auto color::to_colorref(this Self& self) -> COLORREF { return RGB(self.r, self.g, self.b); }

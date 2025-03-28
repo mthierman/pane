@@ -5,7 +5,6 @@
 #include <winrt/Windows.Foundation.h>
 #include <winrt/Windows.UI.ViewManagement.h>
 #include <WebView2.h>
-#include <pane/string.hxx>
 
 namespace winrt {
 using namespace winrt::Windows::UI;
@@ -38,7 +37,7 @@ struct color {
     explicit color(const COREWEBVIEW2_COLOR& webview2_color);
     explicit color(const COREWEBVIEW2_COLOR& webview2_color, uint8_t a);
 
-    auto to_hex(this Self& self) -> pane::string;
+    auto to_hex(this Self& self) -> std::u8string;
     auto to_colorref(this Self& self) -> COLORREF;
     auto to_hbrush(this Self& self) -> HBRUSH;
     auto to_winrt_color(this Self& self) -> winrt::Color;

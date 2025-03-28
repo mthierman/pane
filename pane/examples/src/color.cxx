@@ -9,7 +9,7 @@ auto main() -> int {
 
     std::println("R: {} G: {} B: {} A: {}", color.r, color.g, color.b, color.a);
     std::println("{}", color);
-    std::println("{}", color.to_hex());
+    std::println("{}", color);
 
     return EXIT_SUCCESS;
 }
