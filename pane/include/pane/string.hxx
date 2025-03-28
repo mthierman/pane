@@ -14,20 +14,26 @@ struct string {
     string() = default;
     ~string() = default;
 
-    string(Self&& string) noexcept = default;
-    auto operator=(Self&& string) noexcept -> Self& = default;
-
     string(const Self& string) = default;
     auto operator=(const Self& string) -> Self& = default;
 
-    explicit string(std::u8string&& string) noexcept;
+    string(Self&& string) noexcept = default;
+    auto operator=(Self&& string) noexcept -> Self& = default;
+
+    string(std::u8string&& string) noexcept;
     auto operator=(std::u8string&& string) noexcept -> Self&;
 
-    explicit string(std::u8string_view string);
-    auto operator=(const std::u8string_view& string) -> Self&;
+    string(const char8_t* string);
+    auto operator=(const char8_t* string) -> Self&;
 
-    explicit string(std::string_view string);
-    auto operator=(const std::string_view& string) -> Self&;
+    string(const std::u8string& string);
+    auto operator=(const std::u8string& string) -> Self&;
+
+    string(std::u8string_view string);
+    auto operator=(std::u8string_view string) -> Self&;
+
+    string(std::string_view string);
+    auto operator=(std::string_view string) -> Self&;
 
     static auto from_utf16(std::u16string_view string, bool replacement = true)
         -> std::expected<Self, std::error_code>;
