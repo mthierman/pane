@@ -3,6 +3,7 @@
 #include <pane/color.hxx>
 #include <pane/file_picker.hxx>
 #include <pane/file.hxx>
+#include <pane/gdi_plus.hxx>
 #include <pane/guid.hxx>
 #include <pane/hstring.hxx>
 #include <pane/string.hxx>

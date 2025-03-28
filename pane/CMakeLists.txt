@@ -30,6 +30,7 @@ target_sources(
             "src/color.cxx"
             "src/file_picker.cxx"
             "src/file.cxx"
+            "src/gdi_plus.cxx"
             "src/guid.cxx"
             "src/hstring.cxx"
             "src/icu.cxx"
