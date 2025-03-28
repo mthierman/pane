@@ -35,6 +35,7 @@ target_sources(
             "src/guid.cxx"
             "src/hstring.cxx"
             "src/icu.cxx"
+            "src/process.cxx"
             "src/string.cxx"
             "src/system.cxx"
             "src/url.cxx"
