@@ -19,11 +19,11 @@ struct file_picker {
     file_picker();
     ~file_picker() = default;
 
-    file_picker(Self&& file) noexcept = default;
-    auto operator=(Self&& file) noexcept -> Self& = default;
+    file_picker(Self&& file_picker) noexcept = default;
+    auto operator=(Self&& file_picker) noexcept -> Self& = default;
 
-    file_picker(const Self& file) = default;
-    auto operator=(const Self& file) -> Self& = default;
+    file_picker(const Self& file_picker) = default;
+    auto operator=(const Self& file_picker) -> Self& = default;
 
     auto open_directory(this Self& self)
         -> std::expected<wil::com_ptr<IShellItem>, std::error_code>;
