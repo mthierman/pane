@@ -1,6 +1,7 @@
 #pragma once
 #include <Windows.h>
 #include <combaseapi.h>
+#include <format>
 #include <limits>
 #include <winrt/Windows.Foundation.h>
 #include <winrt/Windows.UI.ViewManagement.h>
