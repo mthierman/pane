@@ -100,9 +100,9 @@ auto command_line_arguments() -> std::vector<string> {
     return vector;
 }
 
-auto exit_process(unsigned int exitCode) -> void { ExitProcess(exitCode); }
+auto exit_process(unsigned int exit_code) -> void { ExitProcess(exit_code); }
 
-auto quit(int exitCode) -> void { PostQuitMessage(exitCode); }
+auto quit(int exit_code) -> void { PostQuitMessage(exit_code); }
 
 auto message_loop() -> int {
     MSG msg {};
