@@ -1,7 +1,5 @@
 #pragma once
 #include <Windows.h>
-#include <objbase.h>
-#include <gdiplus.h>
 
 namespace pane {
 struct process {
