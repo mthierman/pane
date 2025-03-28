@@ -26,7 +26,8 @@ target_compile_definitions(
 # https://learn.microsoft.com/en-us/cpp/build/reference/compiler-options
 target_compile_options(
     ${PROJECT_NAME}_config
-    INTERFACE /W4
+    INTERFACE $<$<CXX_COMPILER_FRONTEND_VARIANT:MSVC>:
+              /W4
               /WX
               /MP
               /utf-8
@@ -34,11 +35,20 @@ target_compile_options(
               /diagnostics:color
               /permissive-
               /Zc:__cplusplus,__STDC__,enumTypes,templateScope,throwingNew,preprocessor
+              >
+              $<$<CXX_COMPILER_FRONTEND_VARIANT:GNU>:
+              # -Wall -Werror
+              >
     )
 
 # https://learn.microsoft.com/en-us/cpp/build/reference/linker-options
 target_link_options(
     ${PROJECT_NAME}_config
     INTERFACE
+    $<$<CXX_COMPILER_FRONTEND_VARIANT:MSVC>:
     /WX
+    >
+    $<$<CXX_COMPILER_FRONTEND_VARIANT:GNU>:
+    # -Wl,/WX
+    >
     )
