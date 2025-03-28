@@ -38,7 +38,7 @@ struct color {
     explicit color(const COREWEBVIEW2_COLOR& webview2_color);
     explicit color(const COREWEBVIEW2_COLOR& webview2_color, uint8_t a);
 
-    auto to_hex(this Self& self) -> string;
+    auto to_hex(this Self& self) -> pane::string;
     auto to_colorref(this Self& self) -> COLORREF;
     auto to_hbrush(this Self& self) -> HBRUSH;
     auto to_winrt_color(this Self& self) -> winrt::Color;
