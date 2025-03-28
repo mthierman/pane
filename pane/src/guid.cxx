@@ -4,16 +4,19 @@
 #include <wil/win32_helpers.h>
 
 namespace pane {
-auto guid::create() -> std::expected<Self, std::error_code> {
-    Self self;
+guid::guid(GUID&& guid) noexcept
+    : storage { std::move(guid) } { }
 
-    auto result { CoCreateGuid(&self.storage) };
+auto guid::create() -> std::expected<Self, std::error_code> {
+    GUID guid;
+
+    auto result { CoCreateGuid(&guid) };
 
     if (result != S_OK) {
         return std::unexpected(hresult_error(result));
     }
 
-    return self;
+    return Self(std::move(guid));
 }
 
 auto guid::string(this Self& self) -> std::optional<pane::string> {
