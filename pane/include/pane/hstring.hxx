@@ -51,10 +51,6 @@ struct hstring {
 
     auto u16_str(this const Self& self) -> const char16_t*;
 
-    auto to_std_wstring(this Self& self) -> std::wstring;
-
-    auto to_std_wstring(this const Self& self) -> const std::wstring;
-
     std::u16string storage;
 };
 } // namespace pane

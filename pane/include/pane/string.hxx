@@ -51,10 +51,6 @@ struct string {
 
     auto u8_str(this const Self& self) -> const char8_t*;
 
-    auto to_std_string(this Self& self) -> std::string;
-
-    auto to_std_string(this const Self& self) -> const std::string;
-
     std::u8string storage;
 };
 } // namespace pane
