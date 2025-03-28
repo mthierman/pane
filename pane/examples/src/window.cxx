@@ -24,8 +24,8 @@ auto wWinMain(HINSTANCE, HINSTANCE, wchar_t*, int) -> int {
 
     pane::debug(L"{}, {}", wide1, wide2);
 
-    pane::message_box("{}, {}", narrow1, narrow2);
-    pane::message_box(L"{}, {}", wide1, wide2);
+    pane::debug_message("{}, {}", narrow1, narrow2);
+    pane::debug_message(L"{}, {}", wide1, wide2);
 
     return pane::message_loop();
 }
