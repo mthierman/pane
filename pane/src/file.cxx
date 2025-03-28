@@ -200,7 +200,7 @@ auto file::library_directories(const wil::com_ptr<IShellLibrary>& lib)
     return files;
 }
 
-auto file::get_display_name(const wil::com_ptr<IShellItem>& item)
+auto file::get_path(const wil::com_ptr<IShellItem>& item)
     -> std::expected<string, std::error_code> {
     SFGAOF attributes;
 

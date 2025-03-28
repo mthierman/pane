@@ -15,33 +15,31 @@ auto wWinMain(HINSTANCE, HINSTANCE, wchar_t*, int) -> int {
 
     auto file_picker { pane::file_picker() };
 
-    // auto dir { file_picker.open_directory() };
+    auto dir { file_picker.open_directory() };
 
-    // if (dir) {
-    //     // OutputDebugStringW(dir.value()->GetDisplayName())
-    //     auto lib { pane::file::open_library(dir.value()) };
+    if (dir) {
+        // OutputDebugStringW(dir.value()->GetDisplayName())
+        auto lib { pane::file::open_library(dir.value()) };
 
-    //     if (lib) {
-    //         auto dirs { pane::file::library_directories(lib.value()) };
+        if (lib) {
+            auto dirs { pane::file::library_directories(lib.value()) };
 
-    //         if (dirs) {
-    //             auto files = dirs.value();
+            if (dirs) {
+                auto files = dirs.value();
 
-    //             for (auto& file : files) {
-    //                 OutputDebugStringA(std::format("{}\n", file.storage).c_str());
-    //             }
-    //         }
-    //     } else {
-    //         OutputDebugStringA(
-    //             pane::file::get_display_name(dir.value()).value_or(pane::string()).c_str());
-    //     }
-    // }
+                for (auto& file : files) {
+                    OutputDebugStringA(std::format("{}\n", file.storage).c_str());
+                }
+            }
+        } else {
+            OutputDebugStringA(pane::file::get_path(dir.value()).value_or(pane::string()).c_str());
+        }
+    }
 
     auto file { file_picker.save_file() };
 
     if (file) {
-        OutputDebugStringA(
-            pane::file::get_display_name(file.value()).value_or(pane::string()).c_str());
+        OutputDebugStringA(pane::file::get_path(file.value()).value_or(pane::string()).c_str());
     }
 
     return pane::message_loop();

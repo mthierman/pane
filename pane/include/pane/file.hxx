@@ -58,7 +58,7 @@ struct file {
         -> std::expected<wil::com_ptr<IShellLibrary>, std::error_code>;
     static auto library_directories(const wil::com_ptr<IShellLibrary>& lib)
         -> std::expected<std::vector<Self>, std::error_code>;
-    static auto get_display_name(const wil::com_ptr<IShellItem>& item)
+    static auto get_path(const wil::com_ptr<IShellItem>& item)
         -> std::expected<string, std::error_code>;
 
     auto download_from_url(this Self& self, url url) -> std::expected<void, std::error_code>;
