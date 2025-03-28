@@ -1,6 +1,5 @@
 #pragma once
 #include <Windows.h>
-// #include <ShlObj.h>
 #include <objbase.h>
 #include <gdiplus.h>
 
