@@ -108,7 +108,7 @@ auto string::c_str(this const Self& self) -> const char* {
     return reinterpret_cast<const char*>(self.storage.data());
 }
 
-auto string::u8_str(this Self& self) -> char8_t* { return self.storage.data(); }
+auto string::data(this Self& self) -> char8_t* { return self.storage.data(); }
 
-auto string::u8_str(this const Self& self) -> const char8_t* { return self.storage.data(); }
+auto string::data(this const Self& self) -> const char8_t* { return self.storage.data(); }
 } // namespace pane

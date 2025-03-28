@@ -108,7 +108,7 @@ auto hstring::c_str(this const Self& self) -> const wchar_t* {
     return reinterpret_cast<const wchar_t*>(self.storage.data());
 }
 
-auto hstring::u16_str(this Self& self) -> char16_t* { return self.storage.data(); }
+auto hstring::data(this Self& self) -> char16_t* { return self.storage.data(); }
 
-auto hstring::u16_str(this const Self& self) -> const char16_t* { return self.storage.data(); }
+auto hstring::data(this const Self& self) -> const char16_t* { return self.storage.data(); }
 } // namespace pane

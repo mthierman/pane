@@ -47,10 +47,11 @@ struct hstring {
 
     auto c_str(this const Self& self) -> const wchar_t*;
 
-    auto u16_str(this Self& self) -> char16_t*;
+    auto data(this Self& self) -> char16_t*;
 
-    auto u16_str(this const Self& self) -> const char16_t*;
+    auto data(this const Self& self) -> const char16_t*;
 
+private:
     std::u16string storage;
 };
 } // namespace pane

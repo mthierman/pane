@@ -47,10 +47,11 @@ struct string {
 
     auto c_str(this const Self& self) -> const char*;
 
-    auto u8_str(this Self& self) -> char8_t*;
+    auto data(this Self& self) -> char8_t*;
 
-    auto u8_str(this const Self& self) -> const char8_t*;
+    auto data(this const Self& self) -> const char8_t*;
 
+private:
     std::u8string storage;
 };
 } // namespace pane
