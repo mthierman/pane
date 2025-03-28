@@ -1,33 +1,25 @@
 #include <pane/message_box.hxx>
 #include <Windows.h>
-#include <pane/hstring.hxx>
+#include <pane/text.hxx>
 
 namespace pane {
-auto message_box(string message, string title) -> int {
-    auto converted_message { hstring::from_utf8(message.get()) };
-    auto converted_title { hstring::from_utf8(title.get()) };
-
-    if (!converted_message || !converted_title) {
-        return 0;
-    }
+auto message_box(std::u8string message, std::u8string title) -> int {
+    auto converted_message { pane::to_utf16(message) };
+    auto converted_title { pane::to_utf16(title) };
 
     return MessageBoxW(nullptr,
-                       converted_message.value().c_str(),
-                       converted_title.value().c_str(),
+                       reinterpret_cast<const wchar_t*>(converted_message.data()),
+                       reinterpret_cast<const wchar_t*>(converted_title.data()),
                        MB_OK | MB_ICONASTERISK);
 }
 
-auto error_box(string message, string title) -> int {
-    auto converted_message { hstring::from_utf8(message.get()) };
-    auto converted_title { hstring::from_utf8(title.get()) };
-
-    if (!converted_message || !converted_title) {
-        return 0;
-    }
+auto error_box(std::u8string message, std::u8string title) -> int {
+    auto converted_message { pane::to_utf16(message) };
+    auto converted_title { pane::to_utf16(title) };
 
     return MessageBoxW(nullptr,
-                       converted_message.value().c_str(),
-                       converted_title.value().c_str(),
+                       reinterpret_cast<const wchar_t*>(converted_message.data()),
+                       reinterpret_cast<const wchar_t*>(converted_title.data()),
                        MB_OK | MB_ICONHAND);
 }
 } // namespace pane
