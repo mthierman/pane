@@ -12,51 +12,37 @@
 #include <ada.h>
 
 namespace pane {
-struct file {
-    using Self = file;
+auto known_folder(KNOWNFOLDERID known_folder = FOLDERID_LocalAppData)
+    -> std::expected<std::filesystem::path, std::error_code>;
+auto temp_folder() -> std::expected<std::filesystem::path, std::error_code>;
 
-    file() = default;
-    ~file() = default;
+auto create_directory(const std::filesystem::path& path) -> std::expected<void, std::error_code>;
+auto create_directory_from_template(const std::filesystem::path& path,
+                                    const std::filesystem::path& template_directory)
+    -> std::expected<void, std::error_code>;
 
-    file(Self&& file) noexcept = default;
-    auto operator=(Self&& file) noexcept -> Self& = default;
+auto create_file(const std::filesystem::path& path) -> bool;
+auto open_file(const std::filesystem::path& path)
+    -> std::expected<wil::unique_handle, std::error_code>;
+auto move_file(const std::filesystem::path& path, const std::filesystem::path& destination)
+    -> std::expected<void, std::error_code>;
+auto copy_file(const std::filesystem::path& path, const std::filesystem::path& destination)
+    -> std::expected<void, std::error_code>;
+auto erase_file(const std::filesystem::path& path) -> std::expected<void, std::error_code>;
+auto download_file(const std::filesystem::path& path, ada::url url)
+    -> std::expected<void, std::error_code>;
 
-    file(const Self& file) = default;
-    auto operator=(const Self& file) -> Self& = default;
+auto create_symlink(const std::filesystem::path& path, const std::filesystem::path& destination)
+    -> std::expected<void, std::error_code>;
 
-    explicit file(std::filesystem::path&& path) noexcept;
-    auto operator=(std::filesystem::path&& path) noexcept -> Self&;
-
-    static auto from_known_folder(KNOWNFOLDERID known_folder = FOLDERID_LocalAppData)
-        -> std::expected<Self, std::error_code>;
-    static auto from_temp_folder() -> std::expected<Self, std::error_code>;
-
-    auto create_directory(this Self& self) -> std::expected<void, std::error_code>;
-    auto create_directory_from_template(this Self& self, const Self& template_directory)
-        -> std::expected<void, std::error_code>;
-
-    auto create(this Self& self) -> bool;
-    auto open(this Self& self) -> std::expected<wil::unique_handle, std::error_code>;
-    auto move(this Self& self, const Self& destination) -> std::expected<void, std::error_code>;
-    auto copy(this Self& self, const Self& destination) -> std::expected<void, std::error_code>;
-    auto erase(this Self& self) -> std::expected<void, std::error_code>;
-
-    auto create_symlink(this Self& self, const Self& destination)
-        -> std::expected<void, std::error_code>;
-
-    auto open_library(this Self& self)
-        -> std::expected<wil::com_ptr<IShellLibrary>, std::error_code>;
-    static auto open_library(const wil::com_ptr<IShellItem>& item)
-        -> std::expected<wil::com_ptr<IShellLibrary>, std::error_code>;
-    static auto library_directories(const wil::com_ptr<IShellLibrary>& lib)
-        -> std::expected<std::vector<Self>, std::error_code>;
-    static auto get_path(const wil::com_ptr<IShellItem>& item)
-        -> std::expected<std::u8string, std::error_code>;
-
-    auto download_from_url(this Self& self, ada::url url) -> std::expected<void, std::error_code>;
-
-    std::filesystem::path storage;
-};
+auto open_library(const std::filesystem::path& path)
+    -> std::expected<wil::com_ptr<IShellLibrary>, std::error_code>;
+auto open_library(const wil::com_ptr<IShellItem>& item)
+    -> std::expected<wil::com_ptr<IShellLibrary>, std::error_code>;
+auto library_directories(const wil::com_ptr<IShellLibrary>& lib)
+    -> std::expected<std::vector<std::filesystem::path>, std::error_code>;
+auto get_path(const wil::com_ptr<IShellItem>& item)
+    -> std::expected<std::u8string, std::error_code>;
 } // namespace pane
 
 namespace std {

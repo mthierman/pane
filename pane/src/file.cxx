@@ -3,20 +3,9 @@
 #include <pane/text.hxx>
 #include <urlmon.h>
 
-// LOGGING
-#include <print>
-
 namespace pane {
-file::file(std::filesystem::path&& path) noexcept
-    : storage { std::move(path) } { }
-
-auto file::operator=(std::filesystem::path&& path) noexcept -> Self& {
-    storage = std::move(path);
-
-    return *this;
-}
-
-auto file::from_known_folder(KNOWNFOLDERID known_folder) -> std::expected<Self, std::error_code> {
+auto known_folder(KNOWNFOLDERID known_folder)
+    -> std::expected<std::filesystem::path, std::error_code> {
     wil::unique_cotaskmem_string buffer;
 
     if (auto result { SHGetKnownFolderPath(known_folder, KF_FLAG_DONT_VERIFY, nullptr, &buffer) };
@@ -24,10 +13,10 @@ auto file::from_known_folder(KNOWNFOLDERID known_folder) -> std::expected<Self, 
         return std::unexpected(hresult_error(result));
     }
 
-    return Self(buffer.get());
+    return buffer.get();
 }
 
-auto file::from_temp_folder() -> std::expected<Self, std::error_code> {
+auto temp_folder() -> std::expected<std::filesystem::path, std::error_code> {
     std::wstring buffer;
 
     auto length { GetTempPath2W(0, buffer.data()) };
@@ -44,38 +33,39 @@ auto file::from_temp_folder() -> std::expected<Self, std::error_code> {
 
     buffer.resize(buffer.size() - 2);
 
-    return Self(buffer);
+    return buffer;
 }
 
-auto file::create_directory(this Self& self) -> std::expected<void, std::error_code> {
-    if (CreateDirectoryW(self.storage.c_str(), nullptr) == 0) {
+auto create_directory(const std::filesystem::path& path) -> std::expected<void, std::error_code> {
+    if (CreateDirectoryW(path.c_str(), nullptr) == 0) {
         return std::unexpected(last_error());
     }
 
     return {};
 }
 
-auto file::create_directory_from_template(this Self& self, const Self& template_directory)
+auto create_directory_from_template(const std::filesystem::path& path,
+                                    const std::filesystem::path& template_directory)
     -> std::expected<void, std::error_code> {
-    if (CreateDirectoryExW(template_directory.storage.c_str(), self.storage.c_str(), nullptr)
-        == 0) {
+    if (CreateDirectoryExW(template_directory.c_str(), path.c_str(), nullptr) == 0) {
         return std::unexpected(last_error());
     }
 
     return {};
 }
 
-auto file::create(this Self& self) -> bool {
-    if (CreateFile2(self.storage.c_str(), 0, 0, CREATE_NEW, nullptr) == INVALID_HANDLE_VALUE) {
+auto create_file(const std::filesystem::path& path) -> bool {
+    if (CreateFile2(path.c_str(), 0, 0, CREATE_NEW, nullptr) == INVALID_HANDLE_VALUE) {
         return false;
     }
 
     return true;
 }
 
-auto file::open(this Self& self) -> std::expected<wil::unique_handle, std::error_code> {
-    auto handle { wil::unique_handle(CreateFile2(
-        self.storage.c_str(), GENERIC_READ | GENERIC_WRITE, 0, OPEN_EXISTING, nullptr)) };
+auto open_file(const std::filesystem::path& path)
+    -> std::expected<wil::unique_handle, std::error_code> {
+    auto handle { wil::unique_handle(
+        CreateFile2(path.c_str(), GENERIC_READ | GENERIC_WRITE, 0, OPEN_EXISTING, nullptr)) };
 
     if (handle.get() == INVALID_HANDLE_VALUE) {
         return std::unexpected(last_error());
@@ -84,16 +74,41 @@ auto file::open(this Self& self) -> std::expected<wil::unique_handle, std::error
     return handle;
 }
 
-auto file::move(this Self& self, const Self& destination) -> std::expected<void, std::error_code> {
-    if (MoveFileW(self.storage.c_str(), destination.storage.c_str()) == 0) {
+auto move_file(const std::filesystem::path& origin, const std::filesystem::path& destination)
+    -> std::expected<void, std::error_code> {
+    if (MoveFileW(origin.c_str(), destination.c_str()) == 0) {
         return std::unexpected(last_error());
     }
 
     return {};
 }
 
-auto file::copy(this Self& self, const Self& destination) -> std::expected<void, std::error_code> {
-    if (auto result { CopyFile2(self.storage.c_str(), destination.storage.c_str(), nullptr) };
+auto copy_file(const std::filesystem::path& origin, const std::filesystem::path& destination)
+    -> std::expected<void, std::error_code> {
+    if (auto result { CopyFile2(origin.c_str(), destination.c_str(), nullptr) }; FAILED(result)) {
+        return std::unexpected(hresult_error(result));
+    }
+
+    return {};
+}
+
+auto erase_file(const std::filesystem::path& path) -> std::expected<void, std::error_code> {
+    if (DeleteFileW(path.c_str()) == 0) {
+        return std::unexpected(last_error());
+    }
+
+    return {};
+}
+
+auto download_file(const std::filesystem::path& path, ada::url url)
+    -> std::expected<void, std::error_code> {
+    auto converted_url { pane::to_utf16(url.get_href()) };
+
+    if (auto result { URLDownloadToFileW(nullptr,
+                                         reinterpret_cast<const wchar_t*>(converted_url.c_str()),
+                                         path.c_str(),
+                                         0,
+                                         nullptr) };
         FAILED(result)) {
         return std::unexpected(hresult_error(result));
     }
@@ -101,22 +116,13 @@ auto file::copy(this Self& self, const Self& destination) -> std::expected<void,
     return {};
 }
 
-auto file::erase(this Self& self) -> std::expected<void, std::error_code> {
-    if (DeleteFileW(self.storage.c_str()) == 0) {
-        return std::unexpected(last_error());
-    }
-
-    return {};
-}
-
-auto file::create_symlink(this Self& self, const Self& destination)
+auto create_symlink(const std::filesystem::path& target, const std::filesystem::path& destination)
     -> std::expected<void, std::error_code> {
-    auto flags { std::filesystem::is_directory(self.storage)
+    auto flags { std::filesystem::is_directory(target)
                      ? SYMBOLIC_LINK_FLAG_DIRECTORY | SYMBOLIC_LINK_FLAG_ALLOW_UNPRIVILEGED_CREATE
                      : SYMBOLIC_LINK_FLAG_ALLOW_UNPRIVILEGED_CREATE };
 
-    if (CreateSymbolicLinkW(
-            destination.storage.c_str(), self.storage.c_str(), static_cast<::DWORD>(flags))
+    if (CreateSymbolicLinkW(destination.c_str(), target.c_str(), static_cast<::DWORD>(flags))
         == 0) {
         return std::unexpected(last_error());
     }
@@ -124,12 +130,12 @@ auto file::create_symlink(this Self& self, const Self& destination)
     return {};
 }
 
-auto file::open_library(this Self& self)
+auto open_library(const std::filesystem::path& path)
     -> std::expected<wil::com_ptr<IShellLibrary>, std::error_code> {
     wil::com_ptr<IShellLibrary> lib;
 
-    if (auto result { SHLoadLibraryFromParsingName(
-            self.storage.c_str(), STGM_READWRITE, IID_PPV_ARGS(&lib)) };
+    if (auto result {
+            SHLoadLibraryFromParsingName(path.c_str(), STGM_READWRITE, IID_PPV_ARGS(&lib)) };
         result != S_OK) {
         return std::unexpected(hresult_error(result));
     }
@@ -137,7 +143,7 @@ auto file::open_library(this Self& self)
     return lib;
 }
 
-auto file::open_library(const wil::com_ptr<IShellItem>& item)
+auto open_library(const wil::com_ptr<IShellItem>& item)
     -> std::expected<wil::com_ptr<IShellLibrary>, std::error_code> {
     wil::com_ptr<IShellLibrary> lib;
 
@@ -149,8 +155,8 @@ auto file::open_library(const wil::com_ptr<IShellItem>& item)
     return lib;
 }
 
-auto file::library_directories(const wil::com_ptr<IShellLibrary>& lib)
-    -> std::expected<std::vector<Self>, std::error_code> {
+auto library_directories(const wil::com_ptr<IShellLibrary>& lib)
+    -> std::expected<std::vector<std::filesystem::path>, std::error_code> {
     wil::com_ptr<IShellItemArray> array;
 
     if (auto result { lib->GetFolders(LFF_ALLITEMS, IID_PPV_ARGS(&array)) }; FAILED(result)) {
@@ -160,7 +166,7 @@ auto file::library_directories(const wil::com_ptr<IShellLibrary>& lib)
     DWORD count;
     array->GetCount(&count);
 
-    std::vector<Self> files;
+    std::vector<std::filesystem::path> files;
     files.resize(count);
 
     for (DWORD i = 0; i < count; ++i) {
@@ -181,7 +187,7 @@ auto file::library_directories(const wil::com_ptr<IShellLibrary>& lib)
     return files;
 }
 
-auto file::get_path(const wil::com_ptr<IShellItem>& item)
+auto get_path(const wil::com_ptr<IShellItem>& item)
     -> std::expected<std::u8string, std::error_code> {
     SFGAOF attributes;
 
@@ -198,21 +204,5 @@ auto file::get_path(const wil::com_ptr<IShellItem>& item)
     }
 
     return pane::to_utf8(buffer.get());
-}
-
-auto file::download_from_url(this Self& self, ada::url url)
-    -> std::expected<void, std::error_code> {
-    auto converted_url { pane::to_utf16(url.get_href()) };
-
-    if (auto result { URLDownloadToFileW(nullptr,
-                                         reinterpret_cast<const wchar_t*>(converted_url.c_str()),
-                                         self.storage.c_str(),
-                                         0,
-                                         nullptr) };
-        FAILED(result)) {
-        return std::unexpected(hresult_error(result));
-    }
-
-    return {};
 }
 } // namespace pane
