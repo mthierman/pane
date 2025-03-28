@@ -5,10 +5,10 @@
 #include <pane/guid.hxx>
 
 auto main() -> int {
-    auto guid { pane::guid::create() };
+    auto guid { pane::new_guid() };
 
     if (guid) {
-        std::println("{}", guid.value().string().value().get());
+        std::println("{}", guid.value());
     }
 
     return EXIT_SUCCESS;

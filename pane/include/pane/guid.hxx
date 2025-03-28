@@ -2,32 +2,13 @@
 #include <Windows.h>
 #include <objbase.h>
 #include <rpc.h>
-#include <expected>
+#include <format>
 #include <optional>
-#include <string>
-#include <system_error>
+#include <wil/win32_helpers.h>
+#include <pane/text.hxx>
 
 namespace pane {
-struct guid {
-    using Self = guid;
-
-    guid() = delete;
-    ~guid() = default;
-
-    guid(const Self& guid) = default;
-    auto operator=(const Self& guid) -> Self& = default;
-
-    guid(Self&& guid) noexcept = default;
-    auto operator=(Self&& guid) noexcept -> Self& = default;
-
-    guid(GUID&& guid) noexcept;
-
-    static auto create() -> std::expected<Self, std::error_code>;
-
-    auto string(this Self& self) -> std::optional<std::u8string>;
-
-    GUID storage;
-};
+auto new_guid() -> std::optional<GUID>;
 } // namespace pane
 
 namespace std {
@@ -43,6 +24,30 @@ template <> struct less<GUID> {
         RPC_STATUS status { RPC_S_OK };
         return UuidCompare(&const_cast<GUID&>(lhs), &const_cast<GUID&>(rhs), &status) == -1 ? true
                                                                                             : false;
+    }
+};
+
+template <> struct formatter<GUID> : formatter<string_view> {
+    auto format(const GUID& guid, format_context& context) const noexcept {
+        std::wstring buffer;
+        buffer.resize(wil::guid_string_buffer_length);
+        StringFromGUID2(guid, buffer.data(), wil::guid_string_buffer_length);
+
+        auto converted_buffer { pane::to_utf8(buffer) };
+
+        return formatter<string_view>::format(
+            { reinterpret_cast<const char*>(converted_buffer.data()), converted_buffer.length() },
+            context);
+    }
+};
+
+template <> struct formatter<GUID, wchar_t> : formatter<wstring_view, wchar_t> {
+    auto format(const GUID& guid, wformat_context& context) const noexcept {
+        std::wstring buffer;
+        buffer.resize(wil::guid_string_buffer_length);
+        StringFromGUID2(guid, buffer.data(), wil::guid_string_buffer_length);
+
+        return formatter<wstring_view, wchar_t>::format(buffer, context);
     }
 };
 } // namespace std
