@@ -43,8 +43,11 @@ target_sources(
 target_link_libraries(
     ${PROJECT_NAME}
     PRIVATE ${PROJECT_NAME}::config
+            dwmapi
+            gdiplus
             icu
             Urlmon
+            WindowsApp
     PUBLIC ${PROJECT_NAME}::ada
            ${PROJECT_NAME}::glaze
            ${PROJECT_NAME}::webview2
