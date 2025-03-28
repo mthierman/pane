@@ -33,6 +33,12 @@ struct string {
     string(std::u8string_view string);
     auto operator=(std::u8string_view string) -> Self&;
 
+    string(const char* string);
+    auto operator=(const char* string) -> Self&;
+
+    string(const std::string& string);
+    auto operator=(const std::string& string) -> Self&;
+
     string(std::string_view string);
     auto operator=(std::string_view string) -> Self&;
 
