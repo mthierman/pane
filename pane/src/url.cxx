@@ -1,7 +1,7 @@
 #include <pane/url.hxx>
 
 namespace pane {
-url::url(ada::url&& url)
+url::url(ada::url&& url) noexcept
     : storage { std::move(url) } { }
 
 auto url::create(const string& string) -> std::optional<Self> {
