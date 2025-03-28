@@ -1,5 +1,6 @@
 #pragma once
 #include <Windows.h>
+#include <cstdlib>
 #include <expected>
 #include <system_error>
 #include <vector>
@@ -24,6 +25,8 @@ auto application_icon() -> HICON;
 auto resource_icon() -> std::expected<HICON, std::error_code>;
 auto ui_settings() -> winrt::UISettings;
 auto command_line_arguments() -> std::vector<string>;
+auto exit_process(unsigned int exitCode = EXIT_SUCCESS) -> void;
+auto quit(int exitCode = EXIT_SUCCESS) -> void;
 auto message_loop() -> int;
 } // namespace pane
 
