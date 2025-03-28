@@ -1,5 +1,5 @@
 #include <pane/text.hxx>
-#include "icu.hxx"
+#include "icu.h"
 
 namespace pane {
 auto to_utf16(std::u8string_view string) -> std::u16string {
