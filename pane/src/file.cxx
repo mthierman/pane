@@ -201,8 +201,9 @@ auto file::get_path(const wil::com_ptr<IShellItem>& item)
     return pane::string::from_utf16(buffer.get());
 }
 
-auto file::download_from_url(this Self& self, url url) -> std::expected<void, std::error_code> {
-    auto converted_url { pane::hstring::from_utf8(url.storage.get_href()) };
+auto file::download_from_url(this Self& self, ada::url url)
+    -> std::expected<void, std::error_code> {
+    auto converted_url { pane::hstring::from_utf8(url.get_href()) };
 
     if (!converted_url) {
         return std::unexpected(converted_url.error());
