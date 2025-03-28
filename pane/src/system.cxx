@@ -1,5 +1,5 @@
 #include <pane/system.hxx>
-#include <pane/hstring.hxx>
+#include <pane/text.hxx>
 #include <shellapi.h>
 #include <cstdlib>
 #include <wil/resource.h>
@@ -27,7 +27,7 @@ auto module_handle() -> std::expected<HMODULE, std::error_code> {
     return hmodule;
 }
 
-auto format_message(HRESULT hresult) -> std::expected<string, std::error_code> {
+auto format_message(HRESULT hresult) -> std::u8string {
     wil::unique_hlocal_string buffer;
 
     DWORD language_id;
@@ -45,13 +45,7 @@ auto format_message(HRESULT hresult) -> std::expected<string, std::error_code> {
                    0,
                    nullptr);
 
-    auto message { string::from_utf16(buffer.get()) };
-
-    if (!message.has_value()) {
-        return std::unexpected(last_error());
-    }
-
-    return message.value();
+    return pane::to_utf8(buffer.get());
 }
 
 auto null_brush() -> HBRUSH { return static_cast<HBRUSH>(GetStockObject(NULL_BRUSH)); }
@@ -85,17 +79,15 @@ auto resource_icon() -> std::expected<HICON, std::error_code> {
 
 auto ui_settings() -> winrt::UISettings { return winrt::UISettings(); }
 
-auto command_line_arguments() -> std::vector<string> {
+auto command_line_arguments() -> std::vector<std::u8string> {
     int argc { 0 };
     wil::unique_hlocal_ptr<wchar_t*[]> buffer;
     buffer.reset(CommandLineToArgvW(GetCommandLineW(), &argc));
 
-    std::vector<string> vector;
+    std::vector<std::u8string> vector;
 
     for (int i = 0; i < argc; i++) {
-        if (auto converted_buffer { string::from_utf16(buffer[i]) }) {
-            vector.emplace_back(converted_buffer.value());
-        }
+        vector.emplace_back(pane::to_utf8(buffer[i]));
     }
 
     return vector;
