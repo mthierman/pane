@@ -18,19 +18,19 @@ auto file::operator=(std::filesystem::path&& path) noexcept -> Self& {
 }
 
 file::file(const string& string) noexcept
-    : storage { string.storage } { }
+    : storage { string.get() } { }
 
 auto file::operator=(const string& string) noexcept -> Self& {
-    storage = string.storage;
+    storage = string.get();
 
     return *this;
 }
 
 file::file(const hstring& string) noexcept
-    : storage { string.storage } { }
+    : storage { string.get() } { }
 
 auto file::operator=(const hstring& string) noexcept -> Self& {
-    storage = string.storage;
+    storage = string.get();
 
     return *this;
 }

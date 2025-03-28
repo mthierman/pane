@@ -113,4 +113,6 @@ auto string::data(this Self& self) -> char8_t* { return self.storage.data(); }
 auto string::data(this const Self& self) -> const char8_t* { return self.storage.data(); }
 
 auto string::length(this const Self& self) -> const size_t { return self.storage.length(); }
+
+auto string::get(this const Self& self) -> const std::u8string& { return self.storage; }
 } // namespace pane
