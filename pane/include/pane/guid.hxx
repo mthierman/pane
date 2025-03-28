@@ -21,7 +21,7 @@ struct guid {
 
     static auto create() -> std::expected<Self, std::error_code>;
 
-    auto to_string(this Self& self) -> std::optional<string>;
+    auto string(this Self& self) -> std::optional<pane::string>;
 
     GUID storage;
 

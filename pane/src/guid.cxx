@@ -16,7 +16,7 @@ auto guid::create() -> std::expected<Self, std::error_code> {
     return self;
 }
 
-auto guid::to_string(this Self& self) -> std::optional<string> {
+auto guid::string(this Self& self) -> std::optional<pane::string> {
     std::wstring buffer;
     buffer.resize(wil::guid_string_buffer_length);
 
