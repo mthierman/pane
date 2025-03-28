@@ -22,7 +22,5 @@ struct url {
     static auto create(const string& string) -> std::optional<Self>;
 
     ada::url storage;
-
-private:
 };
 } // namespace pane
