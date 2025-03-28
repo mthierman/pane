@@ -12,5 +12,6 @@
 #include <pane/process.hxx>
 #include <pane/string.hxx>
 #include <pane/system.hxx>
+#include <pane/text.hxx>
 #include <pane/url.hxx>
 #include <pane/window.hxx>

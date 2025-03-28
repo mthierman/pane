@@ -40,6 +40,7 @@ target_sources(
             "src/process.cxx"
             "src/string.cxx"
             "src/system.cxx"
+            "src/text.cxx"
             "src/url.cxx"
             "src/window.cxx"
     )
