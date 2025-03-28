@@ -1,7 +1,8 @@
-#include <pane/pane.hxx>
 #include <cstdlib>
 #include <format>
 #include <print>
+
+#include <pane/url.hxx>
 
 auto main() -> int {
     auto url { pane::url::create(u8"https://www.google.com/") };

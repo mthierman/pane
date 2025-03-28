@@ -2,7 +2,11 @@
 #include <cstdlib>
 #include <format>
 #include <print>
-#include <pane/pane.hxx>
+
+#include <pane/co_init.hxx>
+#include <pane/window.hxx>
+#include <pane/file_picker.hxx>
+#include <pane/file.hxx>
 
 auto wWinMain(HINSTANCE, HINSTANCE, wchar_t*, int) -> int {
     auto co_init { pane::co_init::apartment_threaded() };

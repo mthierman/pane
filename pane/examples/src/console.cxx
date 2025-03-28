@@ -1,4 +1,3 @@
-#include <pane/pane.hxx>
 #include <cstdlib>
 #include <format>
 #include <print>
