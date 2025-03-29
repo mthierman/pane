@@ -77,7 +77,9 @@ auto resource_icon() -> std::expected<HICON, std::error_code> {
     return icon;
 }
 
-auto ui_settings() -> winrt::UISettings { return winrt::UISettings(); }
+auto ui_settings() -> winrt::Windows::UI::ViewManagement::UISettings {
+    return winrt::Windows::UI::ViewManagement::UISettings();
+}
 
 auto command_line_arguments() -> std::vector<std::u8string> {
     int argc { 0 };
