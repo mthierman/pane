@@ -3,10 +3,8 @@
 #include <format>
 #include <print>
 
-auto main() -> int {
-    auto color { pane::color(0, 255, 0) };
-
-    std::println("{}", color);
+auto wmain(int argc, wchar_t* argv[], wchar_t* envp[]) -> int {
+    std::println("SUBSYSTEM:CONSOLE");
 
     return EXIT_SUCCESS;
 }
