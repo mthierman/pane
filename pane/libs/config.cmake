@@ -1,22 +1,22 @@
 add_library(
-    ${PROJECT_NAME}_config
+    pane_config
     INTERFACE
     )
 
 add_library(
-    ${PROJECT_NAME}::config
+    pane::config
     ALIAS
-    ${PROJECT_NAME}_config
+    pane_config
     )
 
 target_compile_features(
-    ${PROJECT_NAME}_config
+    pane_config
     INTERFACE c_std_17
               cxx_std_23
     )
 
 target_compile_definitions(
-    ${PROJECT_NAME}_config
+    pane_config
     INTERFACE UNICODE
               WIN32_LEAN_AND_MEAN
               NOMINMAX
@@ -25,7 +25,7 @@ target_compile_definitions(
 
 # https://learn.microsoft.com/en-us/cpp/build/reference/compiler-options
 target_compile_options(
-    ${PROJECT_NAME}_config
+    pane_config
     INTERFACE $<$<CXX_COMPILER_FRONTEND_VARIANT:MSVC>:
               /W4
               /WX
@@ -43,7 +43,7 @@ target_compile_options(
 
 # https://learn.microsoft.com/en-us/cpp/build/reference/linker-options
 target_link_options(
-    ${PROJECT_NAME}_config
+    pane_config
     INTERFACE
     $<$<CXX_COMPILER_FRONTEND_VARIANT:MSVC>:
     /WX
