@@ -1,7 +1,3 @@
-#include <Windows.h>
-#include <cstdlib>
-#include <format>
-#include <print>
 #include <pane/pane.hxx>
 
 auto wWinMain(HINSTANCE, HINSTANCE, wchar_t*, int) -> int {

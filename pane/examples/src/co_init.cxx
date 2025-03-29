@@ -1,9 +1,7 @@
+#include <pane/pane.hxx>
 #include <cstdlib>
 #include <format>
 #include <print>
-
-#include <pane/co_init.hxx>
-#include <pane/system.hxx>
 
 auto main() -> int {
     auto mta { pane::co_init::multi_threaded() };

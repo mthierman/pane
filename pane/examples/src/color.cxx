@@ -1,8 +1,7 @@
+#include <pane/pane.hxx>
 #include <cstdlib>
 #include <format>
 #include <print>
-
-#include <pane/color.hxx>
 
 auto main() -> int {
     auto color { pane::color(0, 255, 0) };
