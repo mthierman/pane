@@ -3,20 +3,20 @@ list(
     CMAKE_MODULE_PATH
     "${CMAKE_CURRENT_SOURCE_DIR}/libs"
     )
-include("config")
-include("webview2")
-include("wil")
-include("cppwinrt")
-include("ada")
-include("glaze")
-add_library(${PROJECT_NAME})
+include(config)
+include(webview2)
+include(wil)
+include(cppwinrt)
+include(ada)
+include(glaze)
+add_library(pane)
 add_library(
-    ${PROJECT_NAME}::${PROJECT_NAME}
+    pane::pane
     ALIAS
-    ${PROJECT_NAME}
+    pane
     )
 target_sources(
-    ${PROJECT_NAME}
+    pane
     PUBLIC FILE_SET
            HEADERS
            BASE_DIRS
@@ -39,18 +39,18 @@ target_sources(
             "src/window.cxx"
     )
 target_link_libraries(
-    ${PROJECT_NAME}
-    PRIVATE ${PROJECT_NAME}::config
+    pane
+    PRIVATE pane::config
             dwmapi
             gdiplus
             icu
             Urlmon
             WindowsApp
-    PUBLIC ${PROJECT_NAME}::ada
-           ${PROJECT_NAME}::glaze
-           ${PROJECT_NAME}::webview2
-           ${PROJECT_NAME}::wil
-           ${PROJECT_NAME}::cppwinrt
+    PUBLIC ada
+           glaze
+           webview2
+           wil
+           cppwinrt
     )
 if(PROJECT_IS_TOP_LEVEL)
     add_subdirectory("examples")
