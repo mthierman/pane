@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 
-namespace pane {
-auto message_box(std::u8string message, std::u8string title) -> int;
-auto error_box(std::u8string message, std::u8string title) -> int;
-} // namespace pane
+namespace pane::message_box {
+auto info(std::u8string message, std::u8string title) -> int;
+auto error(std::u8string message, std::u8string title) -> int;
+} // namespace pane::message_box

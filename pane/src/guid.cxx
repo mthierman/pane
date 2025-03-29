@@ -1,6 +1,6 @@
 #include <pane/guid.hxx>
 
-namespace pane::guid {
+namespace pane {
 auto guid() -> std::optional<GUID> {
     GUID guid;
 
