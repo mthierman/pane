@@ -21,7 +21,7 @@ template <> struct formatter<std::u8string> : formatter<string_view> {
 template <> struct formatter<std::u16string, wchar_t> : formatter<wstring_view, wchar_t> {
     auto format(const std::u16string& string, wformat_context& context) const noexcept {
         return formatter<wstring_view, wchar_t>::format(
-            { reinterpret_cast<const wchar_t*>(string.data()), string.size() }, context);
+            { reinterpret_cast<const wchar_t*>(string.data()), string.length() }, context);
     }
 };
 } // namespace std
