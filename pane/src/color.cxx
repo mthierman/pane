@@ -13,13 +13,13 @@ color::color(const COLORREF& colorref, uint8_t a)
       b { GetBValue(colorref) },
       a { a } { }
 
-color::color(const winrt::Color& winrt_color)
+color::color(const winrt::Windows::UI::Color& winrt_color)
     : r { winrt_color.R },
       g { winrt_color.G },
       b { winrt_color.B },
       a { winrt_color.A } { }
 
-color::color(const winrt::Color& winrt_color, uint8_t a)
+color::color(const winrt::Windows::UI::Color& winrt_color, uint8_t a)
     : r { winrt_color.R },
       g { winrt_color.G },
       b { winrt_color.B },
@@ -47,8 +47,8 @@ auto color::to_colorref(this Self& self) -> COLORREF { return RGB(self.r, self.g
 
 auto color::to_hbrush(this Self& self) -> HBRUSH { return CreateSolidBrush(self.to_colorref()); }
 
-auto color::to_winrt_color(this Self& self) -> winrt::Color {
-    return winrt::Color { .A { self.a }, .R { self.r }, .G { self.g }, .B { self.b } };
+auto color::to_winrt_color(this Self& self) -> winrt::Windows::UI::Color {
+    return winrt::Windows::UI::Color { .A { self.a }, .R { self.r }, .G { self.g }, .B { self.b } };
 }
 
 auto color::to_webview2_color(this Self& self) -> COREWEBVIEW2_COLOR {

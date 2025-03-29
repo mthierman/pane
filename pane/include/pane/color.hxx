@@ -7,11 +7,6 @@
 #include <winrt/Windows.UI.ViewManagement.h>
 #include <WebView2.h>
 
-namespace winrt {
-using namespace winrt::Windows::UI;
-using namespace winrt::Windows::UI::ViewManagement;
-}; // namespace winrt
-
 namespace pane {
 struct color {
     using Self = color;
@@ -32,8 +27,8 @@ struct color {
 
     explicit color(const COLORREF& colorref, uint8_t a = std::numeric_limits<uint8_t>::max());
 
-    explicit color(const winrt::Color& winrt_color);
-    explicit color(const winrt::Color& winrt_color, uint8_t a);
+    explicit color(const winrt::Windows::UI::Color& winrt_color);
+    explicit color(const winrt::Windows::UI::Color& winrt_color, uint8_t a);
 
     explicit color(const COREWEBVIEW2_COLOR& webview2_color);
     explicit color(const COREWEBVIEW2_COLOR& webview2_color, uint8_t a);
@@ -41,7 +36,7 @@ struct color {
     auto to_hex(this Self& self) -> std::u8string;
     auto to_colorref(this Self& self) -> COLORREF;
     auto to_hbrush(this Self& self) -> HBRUSH;
-    auto to_winrt_color(this Self& self) -> winrt::Color;
+    auto to_winrt_color(this Self& self) -> winrt::Windows::UI::Color;
     auto to_webview2_color(this Self& self) -> COREWEBVIEW2_COLOR;
 
     auto is_dark(this Self& self) -> bool;
