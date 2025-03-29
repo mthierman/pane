@@ -8,8 +8,8 @@ struct co_init {
 
     ~co_init();
 
-    co_init(Self&& co_init) noexcept = default;
-    auto operator=(Self&& co_init) noexcept -> Self& = default;
+    co_init(Self&& co_init) noexcept = delete;
+    auto operator=(Self&& co_init) noexcept -> Self& = delete;
 
     co_init(const Self& co_init) = delete;
     auto operator=(const Self& co_init) -> Self& = delete;
@@ -22,6 +22,6 @@ struct co_init {
     HRESULT result;
 
 private:
-    co_init() = default;
+    co_init(DWORD concurrency_model);
 };
 } // namespace pane
