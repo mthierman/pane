@@ -4,13 +4,6 @@
 #include <expected>
 #include <system_error>
 #include <wil/com.h>
-// #include <pane/file.hxx>
-#include <pane/co_init.hxx>
-
-// https://learn.microsoft.com/en-us/windows/win32/shell/common-file-dialog
-// https://learn.microsoft.com/en-us/windows/win32/shell/library-be-library-aware
-// https://learn.microsoft.com/en-us/windows/win32/shell/sfgao
-// https://stackoverflow.com/questions/16543771/what-is-the-correct-way-to-detect-that-an-ishellitem-refers-to-a-library
 
 namespace pane {
 struct file_picker {
