@@ -1,6 +1,6 @@
 #pragma once
 #include <Windows.h>
-#include <combaseapi.h>
+#include <objbase.h>
 #include <format>
 #include <limits>
 #include <winrt/Windows.Foundation.h>
