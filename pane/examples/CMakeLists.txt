@@ -2,8 +2,8 @@ add_executable(console)
 target_sources(console PRIVATE "console.cxx")
 target_link_libraries(
     console
-    PRIVATE ${PROJECT_NAME}::${PROJECT_NAME}
-            ${PROJECT_NAME}::config
+    PRIVATE pane::pane
+            pane::config
     )
 
 add_executable(
@@ -13,6 +13,6 @@ add_executable(
 target_sources(windows PRIVATE "windows.cxx")
 target_link_libraries(
     windows
-    PRIVATE ${PROJECT_NAME}::${PROJECT_NAME}
-            ${PROJECT_NAME}::config
+    PRIVATE pane::pane
+            pane::config
     )
