@@ -9,8 +9,8 @@ struct console {
     console();
     ~console();
 
-    console(Self&& console) noexcept = default;
-    auto operator=(Self&& console) noexcept -> Self& = default;
+    console(Self&& console) noexcept = delete;
+    auto operator=(Self&& console) noexcept -> Self& = delete;
 
     console(const Self& console) = delete;
     auto operator=(const Self& console) -> Self& = delete;
