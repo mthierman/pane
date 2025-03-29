@@ -5,7 +5,6 @@
 #include <string>
 #include <system_error>
 #include <vector>
-#include <wil/com.h>
 #include <winrt/Windows.Foundation.h>
 #include <winrt/Windows.UI.ViewManagement.h>
 #include <pane/text.hxx>

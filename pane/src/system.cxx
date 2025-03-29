@@ -1,7 +1,6 @@
 #include <pane/system.hxx>
 #include <pane/text.hxx>
 #include <shellapi.h>
-#include <cstdlib>
 #include <wil/resource.h>
 
 namespace pane {
