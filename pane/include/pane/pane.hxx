@@ -7,10 +7,10 @@
 #include <pane/filesystem.hxx>
 #include <pane/gdi_plus.hxx>
 #include <pane/guid.hxx>
-#include <pane/hstring.hxx>
+// #include <pane/hstring.hxx>
 #include <pane/message_box.hxx>
 #include <pane/process.hxx>
-#include <pane/string.hxx>
+// #include <pane/string.hxx>
 #include <pane/system.hxx>
 #include <pane/text.hxx>
 #include <pane/url.hxx>
