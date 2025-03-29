@@ -1,7 +1,7 @@
 #include <pane/guid.hxx>
 
 namespace pane::guid {
-auto new_guid() -> std::optional<GUID> {
+auto guid() -> std::optional<GUID> {
     GUID guid;
 
     auto result { CoCreateGuid(&guid) };

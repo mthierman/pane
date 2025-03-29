@@ -7,7 +7,7 @@
 #include <pane/text.hxx>
 
 namespace pane {
-auto new_guid() -> std::optional<GUID>;
+auto guid() -> std::optional<GUID>;
 } // namespace pane
 
 namespace std {
