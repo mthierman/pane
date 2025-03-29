@@ -1,6 +1,5 @@
 #pragma once
 #include <Windows.h>
-#include <objbase.h>
 #include <rpc.h>
 #include <format>
 #include <optional>
