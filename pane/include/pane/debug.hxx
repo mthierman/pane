@@ -1,16 +1,14 @@
 #pragma once
 #include <Windows.h>
 #include <format>
-#include <pane/hstring.hxx>
-
-// https://stackoverflow.com/questions/57547273/how-to-use-source-location-in-a-variadic-template-function
+#include <pane/text.hxx>
 
 namespace pane {
 template <typename... Args>
 auto debug(std::format_string<Args...> format_string, Args&&... args) -> void {
-    if (auto converted_format_string { pane::hstring::from_utf8(
-            std::vformat(format_string.get(), std::make_format_args(args...))) }) {
-        OutputDebugStringW(converted_format_string.value().c_str());
+    if (auto converted_format_string {
+            pane::to_utf16(std::vformat(format_string.get(), std::make_format_args(args...))) }) {
+        OutputDebugStringW(reinterpet_cast<const wchar_t*>(converted_format_string.data()));
     }
 
     OutputDebugStringW(L"\n");
@@ -24,10 +22,12 @@ auto debug(std::wformat_string<Args...> format_string, Args&&... args) -> void {
 
 template <typename... Args>
 auto debug_message(std::format_string<Args...> format_string, Args&&... args) -> void {
-    if (auto converted_format_string { pane::hstring::from_utf8(
-            std::vformat(format_string.get(), std::make_format_args(args...))) }) {
-        MessageBoxW(
-            nullptr, converted_format_string.value().c_str(), L"Info", MB_OK | MB_ICONASTERISK);
+    if (auto converted_format_string {
+            pane::to_utf16(std::vformat(format_string.get(), std::make_format_args(args...))) }) {
+        MessageBoxW(nullptr,
+                    reinterpet_cast<const wchar_t*>(converted_format_string.data()),
+                    L"Info",
+                    MB_OK | MB_ICONASTERISK);
     }
 }
 
@@ -41,10 +41,12 @@ auto debug_message(std::wformat_string<Args...> format_string, Args&&... args) -
 
 template <typename... Args>
 auto debug_error(std::format_string<Args...> format_string, Args&&... args) -> void {
-    if (auto converted_format_string { pane::hstring::from_utf8(
-            std::vformat(format_string.get(), std::make_format_args(args...))) }) {
-        MessageBoxW(
-            nullptr, converted_format_string.value().c_str(), L"Error", MB_OK | MB_ICONHAND);
+    if (auto converted_format_string {
+            pane::to_utf16(std::vformat(format_string.get(), std::make_format_args(args...))) }) {
+        MessageBoxW(nullptr,
+                    reinterpet_cast<const wchar_t*>(converted_format_string.data()),
+                    L"Error",
+                    MB_OK | MB_ICONHAND);
     }
 }
 
