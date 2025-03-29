@@ -1,7 +1,6 @@
 #pragma once
 #include <Windows.h>
 #include <string>
-// #include <pane/file.hxx>
 #include <filesystem>
 #include <wil/resource.h>
 
