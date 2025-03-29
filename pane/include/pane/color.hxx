@@ -14,11 +14,10 @@ struct color {
     color() = default;
     ~color() = default;
 
-    color(Self&& color) noexcept = default;
-    auto operator=(Self&& color) noexcept -> Self& = default;
-
     color(const Self& color) = default;
     auto operator=(const Self& color) -> Self& = default;
+    color(Self&& color) noexcept = default;
+    auto operator=(Self&& color) noexcept -> Self& = default;
 
     explicit color(uint8_t r,
                    uint8_t g,

@@ -17,9 +17,9 @@ struct hstring {
 
     hstring(const Self& string) = default;
     auto operator=(const Self& string) -> Self& = default;
-
     hstring(Self&& string) noexcept = default;
     auto operator=(Self&& string) noexcept -> Self& = default;
+
     hstring(std::u16string&& string) noexcept;
     auto operator=(std::u16string&& string) noexcept -> Self&;
 
