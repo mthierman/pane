@@ -2,7 +2,6 @@
 #include <cstdlib>
 #include <format>
 #include <print>
-#include <ranges>
 #include <string_view>
 
 auto wmain(int /* argc */, wchar_t* /* argv */[], wchar_t* /* envp */[]) -> int {
