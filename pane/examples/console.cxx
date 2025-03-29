@@ -12,13 +12,5 @@ auto wmain(int /* argc */, wchar_t* /* argv */[], wchar_t* /* envp */[]) -> int 
         std::println("{}: {}", idx, std::format("{}", arg));
     }
 
-    if (args[1].compare(u8"color") == 0) {
-        std::println("color");
-    }
-
-    if (args[1].compare(u8"config") == 0) {
-        std::println("config");
-    }
-
     return EXIT_SUCCESS;
 }
