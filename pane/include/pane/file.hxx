@@ -1,6 +1,8 @@
 #pragma once
 #include <Windows.h>
 #include <ShlObj.h>
+#include <ShObjIdl.h>
+#include <KnownFolders.h>
 #include <expected>
 #include <filesystem>
 #include <format>
