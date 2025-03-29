@@ -16,8 +16,8 @@ struct co_init {
 
     operator HRESULT(this Self & self);
 
-    static auto apartment_threaded() -> Self;
-    static auto multi_threaded() -> Self;
+    static auto apartment_threaded() -> co_init;
+    static auto multi_threaded() -> co_init;
 
     HRESULT result;
 
