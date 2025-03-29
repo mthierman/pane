@@ -4,5 +4,5 @@
 #include <ada.h>
 
 namespace pane {
-auto new_url(std::u8string_view string) -> std::optional<ada::url>;
+auto url(std::u8string_view string) -> std::optional<ada::url>;
 } // namespace pane
