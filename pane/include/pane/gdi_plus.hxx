@@ -1,6 +1,6 @@
 #pragma once
 #include <Windows.h>
-#include <objbase.h>
+#include <objidl.h>
 #include <gdiplus.h>
 
 namespace pane {
