@@ -8,7 +8,7 @@
 #include <WebView2.h>
 
 namespace pane {
-struct color {
+struct color final {
     using Self = color;
 
     color() = default;

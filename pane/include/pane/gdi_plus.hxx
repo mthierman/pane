@@ -4,7 +4,7 @@
 #include <gdiplus.h>
 
 namespace pane {
-struct gdi_plus {
+struct gdi_plus final {
     using Self = gdi_plus;
 
     gdi_plus();

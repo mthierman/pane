@@ -3,7 +3,7 @@
 #include <pane/system.hxx>
 
 namespace pane {
-struct window {
+struct window final {
     using Self = window;
 
     explicit window(bool visible = true);

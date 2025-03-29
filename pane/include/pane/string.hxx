@@ -9,7 +9,7 @@
 namespace pane {
 struct hstring;
 // https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2019/p1423r3.html
-struct string {
+struct string final {
     using Self = string;
 
     string() = default;

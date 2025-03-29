@@ -3,7 +3,7 @@
 #include <objbase.h>
 
 namespace pane {
-struct co_init {
+struct co_init final {
     using Self = co_init;
 
     ~co_init();

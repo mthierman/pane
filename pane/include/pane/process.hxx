@@ -5,7 +5,7 @@
 #include <wil/resource.h>
 
 namespace pane {
-struct process {
+struct process final {
     using Self = process;
 
     process(const std::filesystem::path& path, std::u8string_view command_line);

@@ -3,7 +3,7 @@
 #include <wil/resource.h>
 
 namespace pane {
-struct console {
+struct console final {
     using Self = console;
 
     console();

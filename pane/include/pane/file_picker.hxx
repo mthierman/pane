@@ -6,7 +6,7 @@
 #include <wil/com.h>
 
 namespace pane {
-struct file_picker {
+struct file_picker final {
     using Self = file_picker;
 
     file_picker();
