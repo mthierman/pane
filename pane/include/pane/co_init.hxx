@@ -8,11 +8,10 @@ struct co_init {
 
     ~co_init();
 
-    co_init(Self&& co_init) noexcept = delete;
-    auto operator=(Self&& co_init) noexcept -> Self& = delete;
-
     co_init(const Self& co_init) = delete;
     auto operator=(const Self& co_init) -> Self& = delete;
+    co_init(Self&& co_init) noexcept = delete;
+    auto operator=(Self&& co_init) noexcept -> Self& = delete;
 
     operator HRESULT(this Self & self);
 
