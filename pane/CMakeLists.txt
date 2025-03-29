@@ -30,7 +30,7 @@ target_sources(
             "src/color.cxx"
             "src/console.cxx"
             "src/file_picker.cxx"
-            "src/file.cxx"
+            "src/filesystem.cxx"
             "src/gdi_plus.cxx"
             "src/guid.cxx"
             "src/hstring.cxx"

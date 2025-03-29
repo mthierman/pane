@@ -14,5 +14,5 @@ auto wWinMain(HINSTANCE, HINSTANCE, wchar_t*, int) -> int {
     std::u8string test { u8"TEST" };
     pane::message_box(test, test);
 
-    return pane::message_loop();
+    return pane::system::message_loop();
 }

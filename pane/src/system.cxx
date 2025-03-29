@@ -3,7 +3,7 @@
 #include <shellapi.h>
 #include <wil/resource.h>
 
-namespace pane {
+namespace pane::system {
 auto hresult_error(HRESULT hresult) -> std::error_code {
     return std::error_code(HRESULT_CODE(hresult), std::system_category());
 }

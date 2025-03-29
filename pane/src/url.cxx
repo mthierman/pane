@@ -1,7 +1,7 @@
 #include <pane/url.hxx>
 
 namespace pane {
-auto to_url(std::u8string_view string) -> std::optional<ada::url> {
+auto new_url(std::u8string_view string) -> std::optional<ada::url> {
     auto url { ada::parse<ada::url>(reinterpret_cast<const char*>(string.data())) };
 
     if (!url) {

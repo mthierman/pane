@@ -13,7 +13,7 @@
 #include <wil/resource.h>
 #include <ada.h>
 
-namespace pane {
+namespace pane::filesystem {
 auto known_folder(KNOWNFOLDERID known_folder = FOLDERID_LocalAppData)
     -> std::expected<std::filesystem::path, std::error_code>;
 auto temp_folder() -> std::expected<std::filesystem::path, std::error_code>;
@@ -45,7 +45,7 @@ auto library_directories(const wil::com_ptr<IShellLibrary>& lib)
     -> std::expected<std::vector<std::filesystem::path>, std::error_code>;
 auto get_path(const wil::com_ptr<IShellItem>& item)
     -> std::expected<std::u8string, std::error_code>;
-} // namespace pane
+} // namespace pane::filesystem
 
 namespace std {
 template <> struct formatter<std::filesystem::path> : formatter<string_view> {

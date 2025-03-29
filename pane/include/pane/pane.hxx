@@ -4,7 +4,7 @@
 #include <pane/console.hxx>
 #include <pane/debug.hxx>
 #include <pane/file_picker.hxx>
-#include <pane/file.hxx>
+#include <pane/filesystem.hxx>
 #include <pane/gdi_plus.hxx>
 #include <pane/guid.hxx>
 #include <pane/hstring.hxx>

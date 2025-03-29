@@ -8,7 +8,7 @@
 auto main() -> int {
     auto mta { pane::co_init::multi_threaded() };
 
-    std::println("{}", pane::hresult_error(mta.result));
+    std::println("{}", pane::system::hresult_error(mta.result));
 
     auto sta { pane::co_init::apartment_threaded() };
 
