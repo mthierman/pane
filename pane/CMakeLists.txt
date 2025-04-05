@@ -40,8 +40,8 @@ target_sources(
     )
 target_link_libraries(
     pane
-    PUBLIC pane::config
-           dwmapi
+    PRIVATE pane::config
+    PUBLIC dwmapi
            gdiplus
            icu
            Urlmon
