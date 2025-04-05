@@ -40,13 +40,13 @@ target_sources(
     )
 target_link_libraries(
     pane
-    PRIVATE pane::config
-            dwmapi
-            gdiplus
-            icu
-            Urlmon
-            WindowsApp
-    PUBLIC ada
+    PUBLIC pane::config
+           dwmapi
+           gdiplus
+           icu
+           Urlmon
+           WindowsApp
+           ada
            glaze
            webview2
            wil
