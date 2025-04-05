@@ -1,9 +1,13 @@
 #pragma once
 #include <Windows.h>
 #include <format>
+#include <string>
 #include <pane/text.hxx>
 
 namespace pane {
+auto debug(const std::u8string& string) -> void;
+auto debug(const std::u16string& string) -> void;
+
 template <typename... Args>
 auto debug(std::format_string<Args...> format_string, Args&&... args) -> void {
     if (auto converted_format_string {

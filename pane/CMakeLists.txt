@@ -24,6 +24,7 @@ target_sources(
     PRIVATE "src/co_init.cxx"
             "src/color.cxx"
             "src/console.cxx"
+            "src/debug.cxx"
             "src/file_picker.cxx"
             "src/filesystem.cxx"
             "src/gdi_plus.cxx"
