@@ -29,7 +29,6 @@ target_compile_options(
     INTERFACE $<$<CXX_COMPILER_FRONTEND_VARIANT:MSVC>:
               /W4
               /WX
-              /MP
               /utf-8
               /bigobj
               /diagnostics:color
