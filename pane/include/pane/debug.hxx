@@ -5,6 +5,8 @@
 #include <pane/text.hxx>
 
 namespace pane {
+auto debug(const std::string& string) -> void;
+auto debug(const std::wstring& string) -> void;
 auto debug(const std::u8string& string) -> void;
 auto debug(const std::u16string& string) -> void;
 
