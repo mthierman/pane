@@ -109,7 +109,7 @@ struct window final {
 
     auto hwnd(this const Self& self) -> HWND;
     auto activate(this const Self& self) -> bool;
-    auto create_webview(this const Self& self) -> void;
+    auto create_webview(this Self& self) -> void;
 
 private:
     pane::window::config window_config;
