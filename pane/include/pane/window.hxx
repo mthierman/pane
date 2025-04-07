@@ -14,7 +14,7 @@ struct window final {
 
     auto create() -> void;
 
-    HWND window_handle;
+    HWND window_handle { nullptr };
     WNDCLASSEXW window_class {
         .cbSize { sizeof(WNDCLASSEXW) },
         .style { 0 },
