@@ -11,12 +11,14 @@ struct window final {
     struct config final {
         std::u8string title;
         bool visible { true };
+        bool webview { false };
     };
 
     window() = default;
     ~window() = default;
 
-    explicit window(pane::window::config&& window_config = {}, std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)>&& window_procedure = {});
+    explicit window(pane::window::config&& window_config = {},
+                    std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)>&& window_procedure = {});
 
     auto hwnd(this const Self& self) -> HWND;
     auto activate(this const Self& self) -> bool;
