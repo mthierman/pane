@@ -15,7 +15,7 @@ struct window final {
     static auto window_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) -> LRESULT;
 
     auto register_class(this Self& self) -> void;
-    auto create(this Self& self, bool visible = true) -> HWND;
+    auto create(this Self& self, bool visible = true) -> void;
     auto activate(this Self& self) -> bool;
 
     wil::unique_hwnd window_handle;

@@ -23,7 +23,9 @@ auto window::window_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
     }
 
     if (auto self { reinterpret_cast<Self*>(GetWindowLongPtrW(hwnd, 0)) }) {
-        return self->message_handler(hwnd, msg, wparam, lparam);
+        if (self->message_handler) {
+            return self->message_handler(hwnd, msg, wparam, lparam);
+        }
     }
 
     return DefWindowProcW(hwnd, msg, wparam, lparam);
@@ -37,19 +39,23 @@ auto window::register_class(this Self& self) -> void {
     };
 }
 
-auto window::create(this Self& self, bool visible) -> HWND {
-    return CreateWindowExW(0,
-                           self.window_class.lpszClassName,
-                           self.window_class.lpszClassName,
-                           WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | (visible ? WS_VISIBLE : 0),
-                           CW_USEDEFAULT,
-                           CW_USEDEFAULT,
-                           CW_USEDEFAULT,
-                           CW_USEDEFAULT,
-                           nullptr,
-                           nullptr,
-                           self.window_class.hInstance,
-                           &self);
+auto window::create(this Self& self, bool visible) -> void {
+    CreateWindowExW(0,
+                    self.window_class.lpszClassName,
+                    self.window_class.lpszClassName,
+                    WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN,
+                    CW_USEDEFAULT,
+                    CW_USEDEFAULT,
+                    CW_USEDEFAULT,
+                    CW_USEDEFAULT,
+                    nullptr,
+                    nullptr,
+                    self.window_class.hInstance,
+                    &self);
+
+    if (visible) {
+        self.activate();
+    }
 }
 
 auto window::activate(this Self& self) -> bool {
