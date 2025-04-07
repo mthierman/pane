@@ -27,7 +27,7 @@ window::window(std::optional<pane::window::config>&& window_config,
                     this);
 
     if (this->window_config.visible) {
-        ShowWindow(this->window_handle, SW_SHOWNORMAL);
+        ShowWindow(this->window_handle.get(), SW_SHOWNORMAL);
     }
 }
 
@@ -119,7 +119,7 @@ auto window::create_webview(this Self& self) -> void {
 
         if (self.webview.core.environment13) {
             self.webview.core.environment13->CreateCoreWebView2Controller(
-                self.window_handle,
+                self.window_handle.get(),
                 wil::MakeAgileCallback<ICoreWebView2CreateCoreWebView2ControllerCompletedHandler>(
                     [&self]([[maybe_unused]] HRESULT error_code,
                             ICoreWebView2Controller* created_controller) -> ::HRESULT {
@@ -201,7 +201,8 @@ auto window::class_window_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM l
         if (auto create { reinterpret_cast<CREATESTRUCTW*>(lparam) }) {
             if (auto self { static_cast<Self*>(create->lpCreateParams) }) {
                 SetWindowLongPtrW(hwnd, 0, reinterpret_cast<LONG_PTR>(self));
-                self->window_handle = hwnd;
+                // self->window_handle = hwnd;
+                self->window_handle.reset(hwnd);
             }
         }
     } else {
