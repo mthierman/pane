@@ -2,7 +2,6 @@
 #include <Windows.h>
 #include <filesystem>
 #include <functional>
-#include <optional>
 #include <pane/system.hxx>
 #include <pane/webview.hxx>
 #include <wil/com.h>
