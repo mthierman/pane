@@ -1,4 +1,5 @@
 #include <pane/window.hxx>
+#include <pane/text.hxx>
 #include <pane/debug.hxx>
 
 namespace pane {
@@ -12,19 +13,19 @@ window::window(pane::window::config&& window_config,
         RegisterClassExW(&this->window_class);
     };
 
-    CreateWindowExW(0,
-                    this->window_class.lpszClassName,
-                    this->window_class.lpszClassName,
-                    WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN
-                        | (this->window_config.visible ? WS_VISIBLE : 0),
-                    CW_USEDEFAULT,
-                    CW_USEDEFAULT,
-                    CW_USEDEFAULT,
-                    CW_USEDEFAULT,
-                    nullptr,
-                    nullptr,
-                    this->window_class.hInstance,
-                    this);
+    CreateWindowExW(
+        0,
+        this->window_class.lpszClassName,
+        reinterpret_cast<const wchar_t*>(pane::to_utf16(this->window_config.title).data()),
+        WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | (this->window_config.visible ? WS_VISIBLE : 0),
+        CW_USEDEFAULT,
+        CW_USEDEFAULT,
+        CW_USEDEFAULT,
+        CW_USEDEFAULT,
+        nullptr,
+        nullptr,
+        this->window_class.hInstance,
+        this);
 
     if (this->window_config.visible) {
         ShowWindow(this->window_handle.get(), SW_SHOWNORMAL);
