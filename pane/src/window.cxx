@@ -2,24 +2,13 @@
 
 namespace pane {
 window::window() {
-    if (GetClassInfoExW(
-            this->window_class.hInstance, this->window_class.lpszClassName, &this->window_class)
-        == 0) {
-        RegisterClassExW(&this->window_class);
-    }
-
+    this->register_class();
     this->create();
 }
 
 window::window(std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)>&& message_handler) {
     this->message_handler = std::move(message_handler);
-
-    if (GetClassInfoExW(
-            this->window_class.hInstance, this->window_class.lpszClassName, &this->window_class)
-        == 0) {
-        RegisterClassExW(&this->window_class);
-    }
-
+    this->register_class();
     this->create();
 }
 
@@ -40,10 +29,18 @@ auto window::window_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
     return DefWindowProcW(hwnd, msg, wparam, lparam);
 }
 
-auto window::create() -> void {
+auto window::register_class(this Self& self) -> void {
+    if (GetClassInfoExW(
+            self.window_class.hInstance, self.window_class.lpszClassName, &self.window_class)
+        == 0) {
+        RegisterClassExW(&self.window_class);
+    };
+}
+
+auto window::create(this Self& self) -> void {
     ::CreateWindowExW(0,
-                      this->window_class.lpszClassName,
-                      this->window_class.lpszClassName,
+                      self.window_class.lpszClassName,
+                      self.window_class.lpszClassName,
                       WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_VISIBLE,
                       CW_USEDEFAULT,
                       CW_USEDEFAULT,
@@ -51,7 +48,7 @@ auto window::create() -> void {
                       CW_USEDEFAULT,
                       nullptr,
                       nullptr,
-                      this->window_class.hInstance,
-                      this);
+                      self.window_class.hInstance,
+                      &self);
 }
 } // namespace pane
