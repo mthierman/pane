@@ -14,11 +14,11 @@ window::window(std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)>&& message_hand
 
 auto window::window_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) -> LRESULT {
     if (msg == WM_NCCREATE) {
-        auto create { reinterpret_cast<CREATESTRUCTW*>(lparam) };
-
-        if (auto self { static_cast<Self*>(create->lpCreateParams) }) {
-            SetWindowLongPtrW(hwnd, 0, reinterpret_cast<LONG_PTR>(self));
-            self->window_handle = hwnd;
+        if (auto create { reinterpret_cast<CREATESTRUCTW*>(lparam) }) {
+            if (auto self { static_cast<Self*>(create->lpCreateParams) }) {
+                SetWindowLongPtrW(hwnd, 0, reinterpret_cast<LONG_PTR>(self));
+                self->window_handle.reset(hwnd);
+            }
         }
     }
 

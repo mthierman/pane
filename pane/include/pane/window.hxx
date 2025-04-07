@@ -2,6 +2,7 @@
 #include <Windows.h>
 #include <functional>
 #include <pane/system.hxx>
+#include <wil/resource.h>
 
 namespace pane {
 struct window final {
@@ -16,7 +17,7 @@ struct window final {
     auto create(this Self& self) -> HWND;
     auto activate(this Self& self) -> bool;
 
-    HWND window_handle { nullptr };
+    wil::unique_hwnd window_handle;
     WNDCLASSEXW window_class {
         .cbSize { sizeof(WNDCLASSEXW) },
         .style { 0 },
