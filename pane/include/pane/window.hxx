@@ -99,14 +99,12 @@ struct window final {
         std::filesystem::path user_data_folder;
     };
 
-    window() = delete;
-    ~window() = default;
-
-    window(pane::window::config&& window_config = {},
+    window(pane::window::config&& window_config = pane::window::config {},
            std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)>&& window_procedure
            = [](HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) {
                  return DefWindowProcW(hwnd, msg, wparam, lparam);
              });
+    ~window() = default;
 
     auto create_webview(this Self& self) -> void;
 
