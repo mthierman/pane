@@ -3,38 +3,30 @@
 
 namespace pane {
 window::window(std::optional<pane::window::config>&& window_config,
-               std::optional<std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)>>&& window_procedure)
+               std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)>&& window_procedure)
     : window_config { std::move(window_config.value_or(pane::window::config {})) },
-      window_procedure { std::move(
-          window_procedure.value_or([](HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) {
-              return DefWindowProcW(hwnd, msg, wparam, lparam);
-          })) } {
+      window_procedure { std::move(window_procedure) } { }
+
+auto window::activate(this Self& self) -> bool {
     if (GetClassInfoExW(
-            this->window_class.hInstance, this->window_class.lpszClassName, &this->window_class)
+            self.window_class.hInstance, self.window_class.lpszClassName, &self.window_class)
         == 0) {
-        RegisterClassExW(&this->window_class);
+        RegisterClassExW(&self.window_class);
     };
 
     CreateWindowExW(0,
-                    this->window_class.lpszClassName,
-                    this->window_class.lpszClassName,
-                    WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN
-                        | (this->window_config.visible ? WS_VISIBLE : 0),
+                    self.window_class.lpszClassName,
+                    self.window_class.lpszClassName,
+                    WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN,
                     CW_USEDEFAULT,
                     CW_USEDEFAULT,
                     CW_USEDEFAULT,
                     CW_USEDEFAULT,
                     nullptr,
                     nullptr,
-                    this->window_class.hInstance,
-                    this);
+                    self.window_class.hInstance,
+                    &self);
 
-    // if (this->window_config.webview) {
-    //     this->create_webview();
-    // };
-}
-
-auto window::activate(this const Self& self) -> bool {
     return ShowWindow(self.window_handle, SW_SHOWNORMAL);
 }
 

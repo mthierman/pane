@@ -104,10 +104,12 @@ struct window final {
     ~window() = default;
 
     window(std::optional<pane::window::config>&& window_config = std::nullopt,
-           std::optional<std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)>>&& window_procedure
-           = std::nullopt);
+           std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)>&& window_procedure
+           = [](HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) {
+                 return DefWindowProcW(hwnd, msg, wparam, lparam);
+             });
 
-    auto activate(this const Self& self) -> bool;
+    auto activate(this Self& self) -> bool;
     auto create_webview(this Self& self) -> void;
 
 private:
@@ -132,6 +134,11 @@ private:
     static auto class_window_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
         -> LRESULT;
 
+    // std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)> window_procedure {
+    //     [](HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) {
+    //     return DefWindowProcW(hwnd, msg, wparam, lparam);
+    // }
+    // };
     std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)> window_procedure;
 };
 } // namespace pane
