@@ -4,12 +4,12 @@
 namespace pane {
 window::window(bool visible) { this->create(visible); }
 
-window::window(std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)>&& message_handler, bool visible)
-    : message_handler { std::move(message_handler) } {
+window::window(std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)>&& window_procedure, bool visible)
+    : window_procedure { std::move(window_procedure) } {
     this->create(visible);
 }
 
-auto window::window_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) -> LRESULT {
+auto window::class_window_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) -> LRESULT {
     if (msg == WM_NCCREATE) {
         if (auto create { reinterpret_cast<CREATESTRUCTW*>(lparam) }) {
             if (auto self { static_cast<Self*>(create->lpCreateParams) }) {
@@ -20,8 +20,8 @@ auto window::window_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
     }
 
     if (auto self { reinterpret_cast<Self*>(GetWindowLongPtrW(hwnd, 0)) }) {
-        if (self->message_handler) {
-            return self->message_handler(hwnd, msg, wparam, lparam);
+        if (self->window_procedure) {
+            return self->window_procedure(hwnd, msg, wparam, lparam);
         }
     }
 
