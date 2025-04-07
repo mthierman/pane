@@ -3,13 +3,13 @@
 namespace pane {
 window::window() {
     this->register_class();
-    this->create();
+    this->create(true);
 }
 
 window::window(std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)>&& message_handler) {
     this->message_handler = std::move(message_handler);
     this->register_class();
-    this->create();
+    this->create(true);
 }
 
 auto window::window_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) -> LRESULT {
@@ -37,11 +37,11 @@ auto window::register_class(this Self& self) -> void {
     };
 }
 
-auto window::create(this Self& self) -> HWND {
+auto window::create(this Self& self, bool visible) -> HWND {
     return CreateWindowExW(0,
                            self.window_class.lpszClassName,
                            self.window_class.lpszClassName,
-                           WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN,
+                           WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | (visible ? WS_VISIBLE : 0),
                            CW_USEDEFAULT,
                            CW_USEDEFAULT,
                            CW_USEDEFAULT,
@@ -53,6 +53,6 @@ auto window::create(this Self& self) -> HWND {
 }
 
 auto window::activate(this Self& self) -> bool {
-    return ShowWindow(self.window_handle, SW_SHOWNORMAL);
+    return ShowWindow(self.window_handle.get(), SW_SHOWNORMAL);
 }
 } // namespace pane
