@@ -16,8 +16,7 @@ struct window final {
     window() = default;
     ~window() = default;
 
-    explicit window(std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)>&& window_procedure = {},
-                    pane::window::config&& window_config = {});
+    explicit window(pane::window::config&& window_config = {}, std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)>&& window_procedure = {});
 
     auto hwnd(this const Self& self) -> HWND;
     auto activate(this const Self& self) -> bool;
