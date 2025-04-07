@@ -16,12 +16,15 @@ auto window::window_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
     if (msg == WM_NCCREATE) {
         auto create { reinterpret_cast<CREATESTRUCTW*>(lparam) };
 
-        if (auto self { static_cast<Self*>(create->lpCreateParams) }; self) {
+        if (auto self { static_cast<Self*>(create->lpCreateParams) }) {
             SetWindowLongPtrW(hwnd, 0, reinterpret_cast<LONG_PTR>(self));
             self->window_handle = hwnd;
         }
+    }
+    if (msg == WM_NCDESTROY) {
+        SetWindowLongPtrW(hwnd, 0, reinterpret_cast<LONG_PTR>(nullptr));
     } else {
-        if (auto self { reinterpret_cast<window*>(::GetWindowLongPtrW(hwnd, 0)) }; self) {
+        if (auto self { reinterpret_cast<Self*>(GetWindowLongPtrW(hwnd, 0)) }) {
             return self->message_handler(hwnd, msg, wparam, lparam);
         }
     }
