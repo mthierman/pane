@@ -33,7 +33,9 @@ auto window::window_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
         }
     } else {
         if (auto self { reinterpret_cast<window*>(::GetWindowLongPtrW(hwnd, 0)) }; self) {
-            return self->message_handler(hwnd, msg, wparam, lparam);
+            if (self->message_handler) {
+                return self->message_handler(hwnd, msg, wparam, lparam);
+            }
         }
     }
 
@@ -44,7 +46,7 @@ auto window::create() -> void {
     ::CreateWindowExW(0,
                       this->window_class.lpszClassName,
                       this->window_class.lpszClassName,
-                      WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN,
+                      WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_VISIBLE,
                       CW_USEDEFAULT,
                       CW_USEDEFAULT,
                       CW_USEDEFAULT,
