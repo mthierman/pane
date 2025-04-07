@@ -1,5 +1,6 @@
 #pragma once
 #include <Windows.h>
+#include <functional>
 #include <pane/system.hxx>
 
 namespace pane {
@@ -7,8 +8,12 @@ struct window final {
     using Self = window;
 
     explicit window(bool visible = true);
+    explicit window(std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)>&& message_handler,
+                    bool visible = true);
 
     static auto window_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) -> LRESULT;
+
+    auto create(bool visible) -> void;
 
     HWND window_handle;
     WNDCLASSEXW window_class {
@@ -25,5 +30,6 @@ struct window final {
         .lpszClassName { L"PaneWindow" },
         .hIconSm { pane::system::resource_icon().value_or(pane::system::application_icon()) }
     };
+    std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)> message_handler;
 };
 } // namespace pane
