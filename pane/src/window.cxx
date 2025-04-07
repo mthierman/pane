@@ -5,19 +5,20 @@ namespace pane {
 window::window(std::optional<pane::window::config>&& window_config,
                std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)>&& window_procedure)
     : window_config { std::move(window_config.value_or(pane::window::config {})) },
-      window_procedure { std::move(window_procedure) } { }
-
-auto window::activate(this Self& self) -> bool {
+      window_procedure { std::move(window_procedure) } {
     if (GetClassInfoExW(
-            self.window_class.hInstance, self.window_class.lpszClassName, &self.window_class)
+            this->window_class.hInstance, this->window_class.lpszClassName, &this->window_class)
         == 0) {
-        RegisterClassExW(&self.window_class);
+        RegisterClassExW(&this->window_class);
     };
+}
 
+auto window::activate(this Self& self) -> void {
     CreateWindowExW(0,
                     self.window_class.lpszClassName,
                     self.window_class.lpszClassName,
-                    WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN,
+                    WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN
+                        | (self.window_config.visible ? WS_VISIBLE : 0),
                     CW_USEDEFAULT,
                     CW_USEDEFAULT,
                     CW_USEDEFAULT,
@@ -27,7 +28,9 @@ auto window::activate(this Self& self) -> bool {
                     self.window_class.hInstance,
                     &self);
 
-    return ShowWindow(self.window_handle, SW_SHOWNORMAL);
+    if (self.window_config.visible) {
+        ShowWindow(self.window_handle, SW_SHOWNORMAL);
+    }
 }
 
 auto window::create_webview(this Self& self) -> void {

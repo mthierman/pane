@@ -109,7 +109,7 @@ struct window final {
                  return DefWindowProcW(hwnd, msg, wparam, lparam);
              });
 
-    auto activate(this Self& self) -> bool;
+    auto activate(this Self& self) -> void;
     auto create_webview(this Self& self) -> void;
 
 private:
