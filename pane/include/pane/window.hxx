@@ -8,11 +8,13 @@ namespace pane {
 struct window final {
     using Self = window;
 
-    window();
+    window() = default;
+    ~window() = default;
+
     explicit window(std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)>&& window_procedure);
 
     auto hwnd(this const Self& self) -> HWND;
-    auto activate(this const Self& self) -> bool;
+    auto activate(this const Self& self, bool visible = true) -> bool;
 
 private:
     static auto class_window_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
@@ -38,6 +40,5 @@ private:
         return DefWindowProcW(hwnd, msg, wparam, lparam);
     }
     };
-    auto create(this Self& self, bool visible = true) -> void;
 };
 } // namespace pane
