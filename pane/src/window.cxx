@@ -2,10 +2,13 @@
 #include <pane/debug.hxx>
 
 namespace pane {
-window::window(pane::window::config&& window_config,
-               std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)>&& window_procedure)
-    : window_config { std::move(window_config) },
-      window_procedure { std::move(window_procedure) } {
+window::window(std::optional<pane::window::config>&& window_config,
+               std::optional<std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)>>&& window_procedure)
+    : window_config { std::move(window_config.value_or(pane::window::config {})) },
+      window_procedure { std::move(
+          window_procedure.value_or([](HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) {
+              return DefWindowProcW(hwnd, msg, wparam, lparam);
+          })) } {
     if (GetClassInfoExW(
             this->window_class.hInstance, this->window_class.lpszClassName, &this->window_class)
         == 0) {

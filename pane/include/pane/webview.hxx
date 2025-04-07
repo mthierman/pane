@@ -12,7 +12,7 @@
 namespace pane {
 struct webview final {
     using Self = webview;
-    struct WebViewEnvironmentOptions {
+    struct EnvironmentOptions {
         std::u8string AdditionalBrowserArguments;
         bool AllowSingleSignOnUsingOSPrimaryAccount { false };
         std::u8string Language;
@@ -54,7 +54,7 @@ struct webview final {
         };
     };
 
-    struct WebViewSettings {
+    struct Settings {
         bool AreBrowserAcceleratorKeysEnabled { true };
         bool AreDefaultContextMenusEnabled { true };
         bool AreDefaultScriptDialogsEnabled { true };
@@ -81,8 +81,8 @@ struct webview final {
     webview(HWND parent_hwnd);
     ~webview() = default;
 
-    WebViewEnvironmentOptions environment_options;
-    WebViewSettings settings;
+    EnvironmentOptions environment_options;
+    Settings settings;
     std::u8string home_page { u8"about:blank" };
     std::filesystem::path browser_executable_folder;
     std::filesystem::path user_data_folder;
