@@ -11,25 +11,23 @@ window::window(std::optional<pane::window::config>&& window_config,
         == 0) {
         RegisterClassExW(&this->window_class);
     };
-}
 
-auto window::activate(this Self& self) -> void {
     CreateWindowExW(0,
-                    self.window_class.lpszClassName,
-                    self.window_class.lpszClassName,
+                    this->window_class.lpszClassName,
+                    this->window_class.lpszClassName,
                     WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN
-                        | (self.window_config.visible ? WS_VISIBLE : 0),
+                        | (this->window_config.visible ? WS_VISIBLE : 0),
                     CW_USEDEFAULT,
                     CW_USEDEFAULT,
                     CW_USEDEFAULT,
                     CW_USEDEFAULT,
                     nullptr,
                     nullptr,
-                    self.window_class.hInstance,
-                    &self);
+                    this->window_class.hInstance,
+                    this);
 
-    if (self.window_config.visible) {
-        ShowWindow(self.window_handle, SW_SHOWNORMAL);
+    if (this->window_config.visible) {
+        ShowWindow(this->window_handle, SW_SHOWNORMAL);
     }
 }
 
