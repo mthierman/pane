@@ -23,8 +23,7 @@ window::window(bool visible) {
                       this);
 }
 
-auto CALLBACK window::window_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
-    -> LRESULT {
+auto window::window_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) -> LRESULT {
     if (msg == WM_NCCREATE) {
         auto create { reinterpret_cast<CREATESTRUCTW*>(lparam) };
 

@@ -8,8 +8,7 @@ struct window final {
 
     explicit window(bool visible = true);
 
-    static auto CALLBACK window_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
-        -> LRESULT;
+    static auto window_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) -> LRESULT;
 
     WNDCLASSEXW window_class {
         .cbSize { sizeof(WNDCLASSEXW) },
