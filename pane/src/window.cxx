@@ -25,7 +25,9 @@ auto window::window_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
         SetWindowLongPtrW(hwnd, 0, reinterpret_cast<LONG_PTR>(nullptr));
     } else {
         if (auto self { reinterpret_cast<Self*>(GetWindowLongPtrW(hwnd, 0)) }) {
-            return self->message_handler(hwnd, msg, wparam, lparam);
+            if (self->message_handler) {
+                return self->message_handler(hwnd, msg, wparam, lparam);
+            }
         }
     }
 
