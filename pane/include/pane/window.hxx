@@ -8,7 +8,7 @@ struct window final {
     using Self = window;
 
     explicit window();
-    explicit window(std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)> message_handler);
+    explicit window(std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)>&& message_handler);
 
     static auto window_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) -> LRESULT;
 

@@ -11,8 +11,8 @@ window::window() {
     this->create();
 }
 
-window::window(std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)> message_handler) {
-    this->message_handler = message_handler;
+window::window(std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)>&& message_handler) {
+    this->message_handler = std::move(message_handler);
 
     if (GetClassInfoExW(
             this->window_class.hInstance, this->window_class.lpszClassName, &this->window_class)
