@@ -211,11 +211,11 @@ auto window::class_window_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM l
                 self->window_handle = hwnd;
             }
         }
-    }
-
-    if (auto self { reinterpret_cast<Self*>(GetWindowLongPtrW(hwnd, 0)) }) {
-        if (self->window_procedure) {
-            return self->window_procedure(hwnd, msg, wparam, lparam);
+    } else {
+        if (auto self { reinterpret_cast<Self*>(GetWindowLongPtrW(hwnd, 0)) }) {
+            if (self->window_procedure) {
+                return self->window_procedure(hwnd, msg, wparam, lparam);
+            }
         }
     }
 
