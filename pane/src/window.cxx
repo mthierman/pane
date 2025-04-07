@@ -29,6 +29,10 @@ window::window(std::optional<pane::window::config>&& window_config,
     if (this->window_config.visible) {
         ShowWindow(this->window_handle.get(), SW_SHOWNORMAL);
     }
+
+    if (this->window_config.webview) {
+        this->create_webview();
+    }
 }
 
 auto window::create_webview(this Self& self) -> void {
@@ -206,6 +210,15 @@ auto window::class_window_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM l
         }
     } else {
         if (auto self { reinterpret_cast<Self*>(GetWindowLongPtrW(hwnd, 0)) }) {
+            if (msg == WM_WINDOWPOSCHANGED) {
+                RECT rect {};
+                GetClientRect(hwnd, &rect);
+
+                if (self->webview.core.controller4) {
+                    self->webview.core.controller4->put_Bounds(rect);
+                }
+            }
+
             if (self->window_procedure) {
                 return self->window_procedure(hwnd, msg, wparam, lparam);
             }
