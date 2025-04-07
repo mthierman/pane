@@ -201,7 +201,6 @@ auto window::class_window_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM l
         if (auto create { reinterpret_cast<CREATESTRUCTW*>(lparam) }) {
             if (auto self { static_cast<Self*>(create->lpCreateParams) }) {
                 SetWindowLongPtrW(hwnd, 0, reinterpret_cast<LONG_PTR>(self));
-                // self->window_handle = hwnd;
                 self->window_handle.reset(hwnd);
             }
         }
