@@ -3,13 +3,13 @@
 namespace pane {
 window::window(bool visible) {
     this->register_class();
-    this->create_window();
+    this->create_window(visible);
 }
 
 window::window(std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)>&& message_handler, bool visible) {
     this->message_handler = std::move(message_handler);
     this->register_class();
-    this->create_window();
+    this->create_window(visible);
 }
 
 auto window::window_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) -> LRESULT {
