@@ -1,5 +1,6 @@
 #pragma once
 #include <Windows.h>
+#include <filesystem>
 #include <functional>
 #include <pane/system.hxx>
 #include <wil/com.h>
@@ -11,7 +12,7 @@
 namespace pane {
 struct webview final {
     using Self = webview;
-    struct EnvironmentOptions {
+    struct WebViewEnvironmentOptions {
         std::u8string AdditionalBrowserArguments;
         bool AllowSingleSignOnUsingOSPrimaryAccount { false };
         std::u8string Language;
@@ -53,9 +54,40 @@ struct webview final {
         };
     };
 
-    webview();
+    struct WebViewSettings {
+        bool AreBrowserAcceleratorKeysEnabled { true };
+        bool AreDefaultContextMenusEnabled { true };
+        bool AreDefaultScriptDialogsEnabled { true };
+        bool AreDevToolsEnabled { true };
+        bool AreHostObjectsAllowed { true };
+        COREWEBVIEW2_PDF_TOOLBAR_ITEMS HiddenPdfToolbarItems {
+            COREWEBVIEW2_PDF_TOOLBAR_ITEMS::COREWEBVIEW2_PDF_TOOLBAR_ITEMS_NONE
+        };
+        bool IsBuiltInErrorPageEnabled { true };
+        bool IsGeneralAutofillEnabled { true };
+        bool IsNonClientRegionSupportEnabled { true };
+        bool IsPasswordAutosaveEnabled { true };
+        bool IsPinchZoomEnabled { true };
+        bool IsReputationCheckingRequired { true };
+        bool IsScriptEnabled { true };
+        bool IsStatusBarEnabled { true };
+        bool IsSwipeNavigationEnabled { true };
+        bool IsWebMessageEnabled { true };
+        bool IsZoomControlEnabled { true };
+
+        wil::com_ptr<ICoreWebView2Settings9> settings9;
+    };
+
+    webview(HWND parent_hwnd);
     ~webview() = default;
 
-    EnvironmentOptions environment_options;
+    WebViewEnvironmentOptions environment_options;
+    WebViewSettings settings;
+    std::u8string home_page { u8"about:blank" };
+    std::filesystem::path browser_executable_folder;
+    std::filesystem::path user_data_folder;
+    wil::com_ptr<ICoreWebView2Environment13> environment13;
+    wil::com_ptr<ICoreWebView2Controller4> controller4;
+    wil::com_ptr<ICoreWebView2_22> core22;
 };
 } // namespace pane
