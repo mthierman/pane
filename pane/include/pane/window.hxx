@@ -13,7 +13,8 @@ struct window final {
     static auto window_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) -> LRESULT;
 
     auto register_class(this Self& self) -> void;
-    auto create(this Self& self) -> void;
+    auto create(this Self& self) -> HWND;
+    auto activate(this Self& self) -> bool;
 
     HWND window_handle { nullptr };
     WNDCLASSEXW window_class {

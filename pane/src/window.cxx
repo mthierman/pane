@@ -37,18 +37,22 @@ auto window::register_class(this Self& self) -> void {
     };
 }
 
-auto window::create(this Self& self) -> void {
-    ::CreateWindowExW(0,
-                      self.window_class.lpszClassName,
-                      self.window_class.lpszClassName,
-                      WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_VISIBLE,
-                      CW_USEDEFAULT,
-                      CW_USEDEFAULT,
-                      CW_USEDEFAULT,
-                      CW_USEDEFAULT,
-                      nullptr,
-                      nullptr,
-                      self.window_class.hInstance,
-                      &self);
+auto window::create(this Self& self) -> HWND {
+    return CreateWindowExW(0,
+                           self.window_class.lpszClassName,
+                           self.window_class.lpszClassName,
+                           WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN,
+                           CW_USEDEFAULT,
+                           CW_USEDEFAULT,
+                           CW_USEDEFAULT,
+                           CW_USEDEFAULT,
+                           nullptr,
+                           nullptr,
+                           self.window_class.hInstance,
+                           &self);
+}
+
+auto window::activate(this Self& self) -> bool {
+    return ShowWindow(self.window_handle, SW_SHOWNORMAL);
 }
 } // namespace pane
