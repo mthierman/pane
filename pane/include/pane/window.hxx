@@ -8,8 +8,9 @@ namespace pane {
 struct window final {
     using Self = window;
 
-    explicit window();
-    explicit window(std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)>&& message_handler);
+    window(bool visible = true);
+    explicit window(std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)>&& message_handler,
+                    bool visible = true);
 
     static auto window_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) -> LRESULT;
 

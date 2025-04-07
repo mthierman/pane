@@ -1,15 +1,15 @@
 #include <pane/window.hxx>
 
 namespace pane {
-window::window() {
+window::window(bool visible) {
     this->register_class();
-    this->create(true);
+    this->create(visible);
 }
 
-window::window(std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)>&& message_handler) {
+window::window(std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)>&& message_handler, bool visible) {
     this->message_handler = std::move(message_handler);
     this->register_class();
-    this->create(true);
+    this->create(visible);
 }
 
 auto window::window_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) -> LRESULT {
