@@ -8,11 +8,16 @@ namespace pane {
 struct window final {
     using Self = window;
 
+    struct config final {
+        std::u8string title;
+        bool visible { true };
+    };
+
     window() = default;
     ~window() = default;
 
-    explicit window(std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)>&& window_procedure,
-                    bool visible = true);
+    explicit window(std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)>&& window_procedure = {},
+                    pane::window::config&& window_config = {});
 
     auto hwnd(this const Self& self) -> HWND;
     auto activate(this const Self& self) -> bool;
@@ -21,6 +26,7 @@ private:
     static auto class_window_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
         -> LRESULT;
 
+    config window_config;
     WNDCLASSEXW window_class {
         .cbSize { sizeof(WNDCLASSEXW) },
         .style { 0 },

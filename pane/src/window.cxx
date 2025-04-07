@@ -2,8 +2,10 @@
 #include <pane/debug.hxx>
 
 namespace pane {
-window::window(std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)>&& window_procedure, bool visible)
-    : window_procedure { std::move(window_procedure) } {
+window::window(std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)>&& window_procedure,
+               pane::window::config&& window_config)
+    : window_procedure { std::move(window_procedure) },
+      window_config { std::move(window_config) } {
     if (GetClassInfoExW(
             this->window_class.hInstance, this->window_class.lpszClassName, &this->window_class)
         == 0) {
@@ -23,7 +25,7 @@ window::window(std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)>&& window_proce
                     this->window_class.hInstance,
                     this);
 
-    if (visible) {
+    if (this->window_config.visible) {
         this->activate();
     }
 }
