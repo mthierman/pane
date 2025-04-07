@@ -2,7 +2,7 @@
 #include <pane/debug.hxx>
 
 namespace pane {
-window::window(std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)>&& window_procedure)
+window::window(std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)>&& window_procedure, bool visible)
     : window_procedure { std::move(window_procedure) } {
     if (GetClassInfoExW(
             this->window_class.hInstance, this->window_class.lpszClassName, &this->window_class)
@@ -22,6 +22,10 @@ window::window(std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)>&& window_proce
                     nullptr,
                     this->window_class.hInstance,
                     this);
+}
+
+auto window::activate(this const Self& self) -> bool {
+    return ShowWindow(self.hwnd(), SW_SHOWNORMAL);
 }
 
 auto window::class_window_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) -> LRESULT {
