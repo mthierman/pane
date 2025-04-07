@@ -17,6 +17,7 @@ struct window final {
     auto hwnd(this const Self& self) -> HWND;
     auto activate(this const Self& self) -> bool;
 
+private:
     WNDCLASSEXW window_class {
         .cbSize { sizeof(WNDCLASSEXW) },
         .style { 0 },
@@ -31,14 +32,12 @@ struct window final {
         .lpszClassName { L"PaneWindow" },
         .hIconSm { pane::system::resource_icon().value_or(pane::system::application_icon()) }
     };
+    wil::unique_hwnd window_handle;
     std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)> message_handler {
         [](HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) {
         return DefWindowProcW(hwnd, msg, wparam, lparam);
     }
     };
-
-private:
-    wil::unique_hwnd window_handle;
     auto register_class(this Self& self) -> void;
     auto create_window(this Self& self, bool visible = true) -> void;
 };
