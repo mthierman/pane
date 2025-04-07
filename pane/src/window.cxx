@@ -1,18 +1,18 @@
 #include <pane/window.hxx>
 
 namespace pane {
-window::window(bool visible) {
+window::window() {
     if (GetClassInfoExW(
             this->window_class.hInstance, this->window_class.lpszClassName, &this->window_class)
         == 0) {
         RegisterClassExW(&this->window_class);
     }
 
-    this->create(visible);
+    this->create();
 }
 
-window::window(std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)>&& message_handler, bool visible) {
-    this->message_handler = std::move(message_handler);
+window::window(std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)> message_handler) {
+    this->message_handler = message_handler;
 
     if (GetClassInfoExW(
             this->window_class.hInstance, this->window_class.lpszClassName, &this->window_class)
@@ -20,7 +20,7 @@ window::window(std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)>&& message_hand
         RegisterClassExW(&this->window_class);
     }
 
-    this->create(visible);
+    this->create();
 }
 
 auto window::window_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) -> LRESULT {
@@ -40,11 +40,11 @@ auto window::window_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
     return DefWindowProcW(hwnd, msg, wparam, lparam);
 }
 
-auto window::create(bool visible) -> void {
+auto window::create() -> void {
     ::CreateWindowExW(0,
                       this->window_class.lpszClassName,
                       this->window_class.lpszClassName,
-                      WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | (visible ? WS_VISIBLE : 0),
+                      WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN,
                       CW_USEDEFAULT,
                       CW_USEDEFAULT,
                       CW_USEDEFAULT,

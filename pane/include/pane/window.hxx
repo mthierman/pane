@@ -7,13 +7,12 @@ namespace pane {
 struct window final {
     using Self = window;
 
-    explicit window(bool visible = true);
-    explicit window(std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)>&& message_handler,
-                    bool visible = true);
+    explicit window();
+    explicit window(std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)> message_handler);
 
     static auto window_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) -> LRESULT;
 
-    auto create(bool visible) -> void;
+    auto create() -> void;
 
     HWND window_handle;
     WNDCLASSEXW window_class {
