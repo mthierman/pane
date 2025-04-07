@@ -116,7 +116,7 @@ auto window::create_webview(this Self& self) -> void {
         options8->put_ScrollBarStyle(environment_options.ScrollBarStyle);
     }
 
-    [[maybe_unused]] auto result { CreateCoreWebView2EnvironmentWithOptions(
+    CreateCoreWebView2EnvironmentWithOptions(
         self.webview.browser_executable_folder.c_str(),
         self.webview.user_data_folder.c_str(),
         options.get(),
@@ -127,101 +127,83 @@ auto window::create_webview(this Self& self) -> void {
             self.webview.core.environment13
                 = wil::com_ptr<ICoreWebView2Environment>(created_environment)
                       .try_query<ICoreWebView2Environment13>();
-        } else {
-            // glow::log::log(errorCode);
         }
 
         if (self.webview.core.environment13) {
-            [[maybe_unused]] auto controllerResult {
-                self.webview.core.environment13->CreateCoreWebView2Controller(
-                    self.hwnd(),
-                    wil::MakeAgileCallback<
-                        ICoreWebView2CreateCoreWebView2ControllerCompletedHandler>(
-                        [&self]([[maybe_unused]] HRESULT error_code,
-                                ICoreWebView2Controller* created_controller) -> ::HRESULT {
+            self.webview.core.environment13->CreateCoreWebView2Controller(
+                self.hwnd(),
+                wil::MakeAgileCallback<ICoreWebView2CreateCoreWebView2ControllerCompletedHandler>(
+                    [&self]([[maybe_unused]] HRESULT error_code,
+                            ICoreWebView2Controller* created_controller) -> ::HRESULT {
                 if (created_controller) {
                     self.webview.core.controller4
                         = wil::com_ptr<ICoreWebView2Controller>(created_controller)
                               .try_query<ICoreWebView2Controller4>();
-                } else {
-                    // glow::log::log(errorCode);
                 }
 
-                // if (controller4) {
-                //     controller4->put_DefaultBackgroundColor({ 0, 0, 0, 0 });
-                //     // put_bounds(client_position());
+                if (self.webview.core.controller4) {
+                    self.webview.core.controller4->put_DefaultBackgroundColor({ 0, 0, 0, 0 });
+                    // put_bounds(client_position());
 
-                //     wil::com_ptr<ICoreWebView2> created_core;
-                //     controller4->get_CoreWebView2(created_core.put());
+                    wil::com_ptr<ICoreWebView2> created_core;
+                    self.webview.core.controller4->get_CoreWebView2(created_core.put());
 
-                //     if (created_core) {
-                //         core22 = created_core.try_query<ICoreWebView2_22>();
-                //     }
+                    if (created_core) {
+                        self.webview.core.core22 = created_core.try_query<ICoreWebView2_22>();
+                    }
 
-                //     if (core22) {
-                //         wil::com_ptr<ICoreWebView2Settings> created_settings;
-                //         core22->get_Settings(created_settings.put());
+                    if (self.webview.core.core22) {
+                        wil::com_ptr<ICoreWebView2Settings> created_settings;
+                        self.webview.core.core22->get_Settings(created_settings.put());
 
-                //         if (created_settings) {
-                //             settings.settings9
-                //                 = created_settings.try_query<ICoreWebView2Settings9>();
+                        if (created_settings) {
+                            self.webview.core.settings9
+                                = created_settings.try_query<ICoreWebView2Settings9>();
 
-                //             if (settings.settings9) {
-                //                 settings.settings9->put_AreBrowserAcceleratorKeysEnabled(
-                //                     settings.AreBrowserAcceleratorKeysEnabled);
-                //                 settings.settings9->put_AreDefaultContextMenusEnabled(
-                //                     settings.AreDefaultContextMenusEnabled);
-                //                 settings.settings9->put_AreDefaultScriptDialogsEnabled(
-                //                     settings.AreDefaultScriptDialogsEnabled);
-                //                 settings.settings9->put_AreDevToolsEnabled(
-                //                     settings.AreDevToolsEnabled);
-                //                 settings.settings9->put_AreHostObjectsAllowed(
-                //                     settings.AreHostObjectsAllowed);
-                //                 settings.settings9->put_HiddenPdfToolbarItems(
-                //                     settings.HiddenPdfToolbarItems);
-                //                 settings.settings9->put_IsBuiltInErrorPageEnabled(
-                //                     settings.IsBuiltInErrorPageEnabled);
-                //                 settings.settings9->put_IsGeneralAutofillEnabled(
-                //                     settings.IsGeneralAutofillEnabled);
-                //                 settings.settings9->put_IsNonClientRegionSupportEnabled(
-                //                     settings.IsNonClientRegionSupportEnabled);
-                //                 settings.settings9->put_IsPasswordAutosaveEnabled(
-                //                     settings.IsPasswordAutosaveEnabled);
-                //                 settings.settings9->put_IsPinchZoomEnabled(
-                //                     settings.IsPinchZoomEnabled);
-                //                 settings.settings9->put_IsReputationCheckingRequired(
-                //                     settings.IsReputationCheckingRequired);
-                //                 settings.settings9->put_IsScriptEnabled(settings.IsScriptEnabled);
-                //                 settings.settings9->put_IsStatusBarEnabled(
-                //                     settings.IsStatusBarEnabled);
-                //                 settings.settings9->put_IsSwipeNavigationEnabled(
-                //                     settings.IsSwipeNavigationEnabled);
-                //                 settings.settings9->put_IsWebMessageEnabled(
-                //                     settings.IsWebMessageEnabled);
-                //                 settings.settings9->put_IsZoomControlEnabled(
-                //                     settings.IsZoomControlEnabled);
+                            if (self.webview.core.settings9) {
+                                auto& settings9 { self.webview.core.settings9 };
+                                auto& settings { self.webview.settings };
 
-                //                 // navigate(home_page);
-                //             }
-                //         }
-                //     }
-                // }
+                                settings9->put_AreBrowserAcceleratorKeysEnabled(
+                                    settings.AreBrowserAcceleratorKeysEnabled);
+                                settings9->put_AreDefaultContextMenusEnabled(
+                                    settings.AreDefaultContextMenusEnabled);
+                                settings9->put_AreDefaultScriptDialogsEnabled(
+                                    settings.AreDefaultScriptDialogsEnabled);
+                                settings9->put_AreDevToolsEnabled(settings.AreDevToolsEnabled);
+                                settings9->put_AreHostObjectsAllowed(
+                                    settings.AreHostObjectsAllowed);
+                                settings9->put_HiddenPdfToolbarItems(
+                                    settings.HiddenPdfToolbarItems);
+                                settings9->put_IsBuiltInErrorPageEnabled(
+                                    settings.IsBuiltInErrorPageEnabled);
+                                settings9->put_IsGeneralAutofillEnabled(
+                                    settings.IsGeneralAutofillEnabled);
+                                settings9->put_IsNonClientRegionSupportEnabled(
+                                    settings.IsNonClientRegionSupportEnabled);
+                                settings9->put_IsPasswordAutosaveEnabled(
+                                    settings.IsPasswordAutosaveEnabled);
+                                settings9->put_IsPinchZoomEnabled(settings.IsPinchZoomEnabled);
+                                settings9->put_IsReputationCheckingRequired(
+                                    settings.IsReputationCheckingRequired);
+                                settings9->put_IsScriptEnabled(settings.IsScriptEnabled);
+                                settings9->put_IsStatusBarEnabled(settings.IsStatusBarEnabled);
+                                settings9->put_IsSwipeNavigationEnabled(
+                                    settings.IsSwipeNavigationEnabled);
+                                settings9->put_IsWebMessageEnabled(settings.IsWebMessageEnabled);
+                                settings9->put_IsZoomControlEnabled(settings.IsZoomControlEnabled);
+
+                                // navigate(home_page);
+                            }
+                        }
+                    }
+                }
 
                 return S_OK;
-            }).Get())
-            };
-
-            // if (controllerResult != S_OK) {
-            //     glow::log::log(controllerResult);
-            // }
+            }).Get());
         }
-
         return S_OK;
-    }).Get()) };
-
-    // if (environmentResult != S_OK) {
-    //     glow::log::log(environmentResult);
-    // }
+    }).Get());
 }
 
 auto window::class_window_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) -> LRESULT {
