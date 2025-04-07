@@ -38,7 +38,6 @@ private:
         return DefWindowProcW(hwnd, msg, wparam, lparam);
     }
     };
-    auto register_class(this Self& self) -> void;
-    auto create_window(this Self& self, bool visible = true) -> void;
+    auto create(this Self& self, bool visible = true) -> void;
 };
 } // namespace pane

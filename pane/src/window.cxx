@@ -2,15 +2,11 @@
 #include <pane/debug.hxx>
 
 namespace pane {
-window::window(bool visible) {
-    this->register_class();
-    this->create_window(visible);
-}
+window::window(bool visible) { this->create(visible); }
 
-window::window(std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)>&& message_handler, bool visible) {
-    this->message_handler = std::move(message_handler);
-    this->register_class();
-    this->create_window(visible);
+window::window(std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)>&& message_handler, bool visible)
+    : message_handler { std::move(message_handler) } {
+    this->create(visible);
 }
 
 auto window::window_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) -> LRESULT {
@@ -38,15 +34,13 @@ auto window::activate(this const Self& self) -> bool {
     return ShowWindow(self.hwnd(), SW_SHOWNORMAL);
 }
 
-auto window::register_class(this Self& self) -> void {
+auto window::create(this Self& self, bool visible) -> void {
     if (GetClassInfoExW(
             self.window_class.hInstance, self.window_class.lpszClassName, &self.window_class)
         == 0) {
         RegisterClassExW(&self.window_class);
     };
-}
 
-auto window::create_window(this Self& self, bool visible) -> void {
     CreateWindowExW(0,
                     self.window_class.lpszClassName,
                     self.window_class.lpszClassName,
