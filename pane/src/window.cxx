@@ -1,4 +1,5 @@
 #include <pane/window.hxx>
+#include <pane/debug.hxx>
 
 namespace pane {
 window::window(bool visible) {
@@ -17,7 +18,7 @@ auto window::window_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
         if (auto create { reinterpret_cast<CREATESTRUCTW*>(lparam) }) {
             if (auto self { static_cast<Self*>(create->lpCreateParams) }) {
                 SetWindowLongPtrW(hwnd, 0, reinterpret_cast<LONG_PTR>(self));
-                self->window_handle = hwnd;
+                self->window_handle.reset(hwnd);
             }
         }
     }
@@ -32,7 +33,7 @@ auto window::window_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 }
 
 auto window::activate(this Self& self) -> bool {
-    return ShowWindow(self.window_handle, SW_SHOWNORMAL);
+    return ShowWindow(self.window_handle.get(), SW_SHOWNORMAL);
 }
 
 auto window::register_class(this Self& self) -> void {
