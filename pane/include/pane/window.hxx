@@ -107,11 +107,11 @@ struct window final {
            std::optional<std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)>>&& window_procedure
            = std::nullopt);
 
-    auto hwnd(this const Self& self) -> HWND;
     auto activate(this const Self& self) -> bool;
     auto create_webview(this Self& self) -> void;
 
 private:
+    HWND window_handle;
     pane::window::config window_config;
     WNDCLASSEXW window_class {
         .cbSize { sizeof(WNDCLASSEXW) },
@@ -133,6 +133,5 @@ private:
         -> LRESULT;
 
     std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)> window_procedure;
-    wil::unique_hwnd window_handle;
 };
 } // namespace pane

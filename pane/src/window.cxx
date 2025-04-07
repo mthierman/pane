@@ -18,7 +18,8 @@ window::window(std::optional<pane::window::config>&& window_config,
     CreateWindowExW(0,
                     this->window_class.lpszClassName,
                     this->window_class.lpszClassName,
-                    WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN,
+                    WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN
+                        | (this->window_config.visible ? WS_VISIBLE : 0),
                     CW_USEDEFAULT,
                     CW_USEDEFAULT,
                     CW_USEDEFAULT,
@@ -28,19 +29,13 @@ window::window(std::optional<pane::window::config>&& window_config,
                     this->window_class.hInstance,
                     this);
 
-    if (this->window_config.visible) {
-        this->activate();
-    }
-
-    if (this->window_config.webview) {
-        this->create_webview();
-    };
+    // if (this->window_config.webview) {
+    //     this->create_webview();
+    // };
 }
 
-auto window::hwnd(this const Self& self) -> HWND { return self.window_handle.get(); }
-
 auto window::activate(this const Self& self) -> bool {
-    return ShowWindow(self.hwnd(), SW_SHOWNORMAL);
+    return ShowWindow(self.window_handle, SW_SHOWNORMAL);
 }
 
 auto window::create_webview(this Self& self) -> void {
@@ -131,7 +126,7 @@ auto window::create_webview(this Self& self) -> void {
 
         if (self.webview.core.environment13) {
             self.webview.core.environment13->CreateCoreWebView2Controller(
-                self.hwnd(),
+                self.window_handle,
                 wil::MakeAgileCallback<ICoreWebView2CreateCoreWebView2ControllerCompletedHandler>(
                     [&self]([[maybe_unused]] HRESULT error_code,
                             ICoreWebView2Controller* created_controller) -> ::HRESULT {
@@ -213,7 +208,7 @@ auto window::class_window_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM l
         if (auto create { reinterpret_cast<CREATESTRUCTW*>(lparam) }) {
             if (auto self { static_cast<Self*>(create->lpCreateParams) }) {
                 SetWindowLongPtrW(hwnd, 0, reinterpret_cast<LONG_PTR>(self));
-                self->window_handle.reset(hwnd);
+                self->window_handle = hwnd;
             }
         }
     }
