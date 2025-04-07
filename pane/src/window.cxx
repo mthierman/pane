@@ -144,6 +144,7 @@ auto window::create_webview(this Self& self) -> void {
                 if (self.webview.core.controller4) {
                     self.webview.core.controller4->put_DefaultBackgroundColor({ 0, 0, 0, 0 });
                     // put_bounds(client_position());
+                    self.webview.core.controller4->put_Bounds({ 0, 0, 300, 300 });
 
                     wil::com_ptr<ICoreWebView2> created_core;
                     self.webview.core.controller4->get_CoreWebView2(created_core.put());
@@ -194,6 +195,7 @@ auto window::create_webview(this Self& self) -> void {
                                 settings9->put_IsZoomControlEnabled(settings.IsZoomControlEnabled);
 
                                 // navigate(home_page);
+                                self.webview.core.core22->Navigate(L"https://www.google.com/");
                             }
                         }
                     }
