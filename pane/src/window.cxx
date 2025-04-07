@@ -22,6 +22,10 @@ window::window(std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)>&& window_proce
                     nullptr,
                     this->window_class.hInstance,
                     this);
+
+    if (visible) {
+        this->activate();
+    }
 }
 
 auto window::activate(this const Self& self) -> bool {
