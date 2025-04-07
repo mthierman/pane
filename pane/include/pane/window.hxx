@@ -8,9 +8,8 @@ namespace pane {
 struct window final {
     using Self = window;
 
-    window(bool visible = true);
-    explicit window(std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)>&& window_procedure,
-                    bool visible = true);
+    window();
+    explicit window(std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)>&& window_procedure);
 
     auto hwnd(this const Self& self) -> HWND;
     auto activate(this const Self& self) -> bool;

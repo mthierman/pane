@@ -2,11 +2,11 @@
 #include <pane/debug.hxx>
 
 namespace pane {
-window::window(bool visible) { this->create(visible); }
+window::window() { this->create(true); }
 
-window::window(std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)>&& window_procedure, bool visible)
+window::window(std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)>&& window_procedure)
     : window_procedure { std::move(window_procedure) } {
-    this->create(visible);
+    this->create(true);
 }
 
 auto window::class_window_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) -> LRESULT {
