@@ -21,14 +21,13 @@ auto window::window_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
             self->window_handle = hwnd;
         }
     }
+
     if (msg == WM_NCDESTROY) {
         SetWindowLongPtrW(hwnd, 0, reinterpret_cast<LONG_PTR>(nullptr));
-    } else {
-        if (auto self { reinterpret_cast<Self*>(GetWindowLongPtrW(hwnd, 0)) }) {
-            if (self->message_handler) {
-                return self->message_handler(hwnd, msg, wparam, lparam);
-            }
-        }
+    }
+
+    if (auto self { reinterpret_cast<Self*>(GetWindowLongPtrW(hwnd, 0)) }) {
+        return self->message_handler(hwnd, msg, wparam, lparam);
     }
 
     return DefWindowProcW(hwnd, msg, wparam, lparam);
