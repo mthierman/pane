@@ -23,6 +23,7 @@ target_sources(
            "include"
     PRIVATE "src/co_init.cxx"
             "src/color.cxx"
+            "src/config.cxx"
             "src/console.cxx"
             "src/debug.cxx"
             "src/file_picker.cxx"
