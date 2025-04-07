@@ -31,10 +31,20 @@ window::window(std::optional<pane::window::config>&& window_config,
     if (this->window_config.visible) {
         this->activate();
     }
+
+    if (this->window_config.webview) {
+        this->create_webview();
+    };
 }
+
+auto window::hwnd(this const Self& self) -> HWND { return self.window_handle.get(); }
 
 auto window::activate(this const Self& self) -> bool {
     return ShowWindow(self.hwnd(), SW_SHOWNORMAL);
+}
+
+auto window::create_webview(this const Self& self) -> void {
+    //
 }
 
 auto window::class_window_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) -> LRESULT {
@@ -55,6 +65,4 @@ auto window::class_window_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM l
 
     return DefWindowProcW(hwnd, msg, wparam, lparam);
 }
-
-auto window::hwnd(this const Self& self) -> HWND { return self.window_handle.get(); }
 } // namespace pane
