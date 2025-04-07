@@ -2,10 +2,7 @@
 
 namespace pane {
 window::window(bool visible) {
-    if (GetClassInfoExW(pane::system::module_handle().value_or(nullptr),
-                        window_class.lpszClassName,
-                        &window_class)
-        == 0) {
+    if (GetClassInfoExW(window_class.hInstance, window_class.lpszClassName, &window_class) == 0) {
         RegisterClassExW(&window_class);
     }
 

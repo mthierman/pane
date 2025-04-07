@@ -10,6 +10,7 @@ struct window final {
 
     static auto window_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) -> LRESULT;
 
+    HWND window_handle;
     WNDCLASSEXW window_class {
         .cbSize { sizeof(WNDCLASSEXW) },
         .style { 0 },
@@ -24,6 +25,5 @@ struct window final {
         .lpszClassName { L"PaneWindow" },
         .hIconSm { pane::system::resource_icon().value_or(pane::system::application_icon()) }
     };
-    HWND window_handle;
 };
 } // namespace pane
