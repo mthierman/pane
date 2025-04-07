@@ -33,9 +33,7 @@ auto window::window_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
         }
     } else {
         if (auto self { reinterpret_cast<window*>(::GetWindowLongPtrW(hwnd, 0)) }; self) {
-            if (self->message_handler) {
-                return self->message_handler(hwnd, msg, wparam, lparam);
-            }
+            return self->message_handler(hwnd, msg, wparam, lparam);
         }
     }
 
