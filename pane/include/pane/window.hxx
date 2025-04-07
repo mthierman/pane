@@ -112,6 +112,9 @@ struct window final {
     auto create_webview(this Self& self) -> void;
 
 private:
+    static auto class_window_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
+        -> LRESULT;
+
     HWND window_handle;
     pane::window::config window_config;
     WNDCLASSEXW window_class {
@@ -129,15 +132,6 @@ private:
         .hIconSm { pane::system::resource_icon().value_or(pane::system::application_icon()) }
     };
     webview webview;
-
-    static auto class_window_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
-        -> LRESULT;
-
-    // std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)> window_procedure {
-    //     [](HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) {
-    //     return DefWindowProcW(hwnd, msg, wparam, lparam);
-    // }
-    // };
     std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)> window_procedure;
 };
 } // namespace pane
