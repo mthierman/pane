@@ -19,7 +19,7 @@ struct window final {
         std::u8string title;
         bool visible { true };
         bool webview { false };
-        std::u8string home_page { u8"about:blank" };
+        std::u8string home_page;
     };
 
     struct webview final {
@@ -103,7 +103,7 @@ struct window final {
     window() = delete;
     ~window() = default;
 
-    window(std::optional<pane::window::config>&& window_config = std::nullopt,
+    window(pane::window::config&& window_config = {},
            std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)>&& window_procedure
            = [](HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) {
                  return DefWindowProcW(hwnd, msg, wparam, lparam);
