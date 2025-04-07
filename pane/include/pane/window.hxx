@@ -108,7 +108,7 @@ struct window final {
     auto activate(this const Self& self) -> bool;
 
 private:
-    config window_config;
+    pane::window::config window_config;
     WNDCLASSEXW window_class {
         .cbSize { sizeof(WNDCLASSEXW) },
         .style { 0 },
