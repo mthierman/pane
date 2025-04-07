@@ -14,9 +14,9 @@ struct window final {
 
     static auto window_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) -> LRESULT;
 
-    auto activate(this Self& self) -> bool;
+    auto hwnd(this const Self& self) -> HWND;
+    auto activate(this const Self& self) -> bool;
 
-    wil::unique_hwnd window_handle;
     WNDCLASSEXW window_class {
         .cbSize { sizeof(WNDCLASSEXW) },
         .style { 0 },
@@ -38,6 +38,7 @@ struct window final {
     };
 
 private:
+    wil::unique_hwnd window_handle;
     auto register_class(this Self& self) -> void;
     auto create_window(this Self& self, bool visible = true) -> void;
 };

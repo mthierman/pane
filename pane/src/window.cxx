@@ -32,8 +32,10 @@ auto window::window_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
     return DefWindowProcW(hwnd, msg, wparam, lparam);
 }
 
-auto window::activate(this Self& self) -> bool {
-    return ShowWindow(self.window_handle.get(), SW_SHOWNORMAL);
+auto window::hwnd(this const Self& self) -> HWND { return self.window_handle.get(); }
+
+auto window::activate(this const Self& self) -> bool {
+    return ShowWindow(self.hwnd(), SW_SHOWNORMAL);
 }
 
 auto window::register_class(this Self& self) -> void {
