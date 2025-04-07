@@ -29,6 +29,10 @@ struct window final {
         .lpszClassName { L"PaneWindow" },
         .hIconSm { pane::system::resource_icon().value_or(pane::system::application_icon()) }
     };
-    std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)> message_handler;
+    std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)> message_handler {
+        [](HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) {
+        return DefWindowProcW(hwnd, msg, wparam, lparam);
+    }
+    };
 };
 } // namespace pane
