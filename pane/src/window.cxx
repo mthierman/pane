@@ -213,26 +213,29 @@ auto window::class_window_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM l
                 self->window_handle.reset(hwnd);
             }
         }
-    } else {
-        if (auto self { reinterpret_cast<Self*>(GetWindowLongPtrW(hwnd, 0)) }) {
-            switch (msg) {
-                case WM_WINDOWPOSCHANGED: {
-                    auto client_rect { self->client_rect() };
+    }
 
-                    if (self->webview.core_controller) {
-                        self->webview.core_controller->put_Bounds(client_rect);
-                    }
-                } break;
-                case WM_ERASEBKGND: {
-                    auto client_rect { self->client_rect() };
+    if (msg == WM_NCDESTROY) {
+        SetWindowLongPtrW(hwnd, 0, reinterpret_cast<LONG_PTR>(nullptr));
+    }
 
-                    FillRect(reinterpret_cast<HDC>(wparam), &client_rect, self->window_brush.get());
-                }
+    if (auto self { reinterpret_cast<Self*>(GetWindowLongPtrW(hwnd, 0)) }) {
+        if (msg == WM_WINDOWPOSCHANGED) {
+            auto client_rect { self->client_rect() };
+
+            if (self->webview.core_controller) {
+                self->webview.core_controller->put_Bounds(client_rect);
             }
+        }
 
-            if (self->window_procedure) {
-                return self->window_procedure(hwnd, msg, wparam, lparam);
-            }
+        if (msg == WM_ERASEBKGND) {
+            auto client_rect { self->client_rect() };
+
+            FillRect(reinterpret_cast<HDC>(wparam), &client_rect, self->window_brush.get());
+        }
+
+        if (self->window_procedure) {
+            return self->window_procedure(hwnd, msg, wparam, lparam);
         }
     }
 
