@@ -45,10 +45,10 @@ struct color final {
 
     auto is_dark(this const Self& self) -> bool;
 
-    uint8_t r { std::numeric_limits<uint8_t>::max() };
-    uint8_t g { std::numeric_limits<uint8_t>::max() };
-    uint8_t b { std::numeric_limits<uint8_t>::max() };
-    uint8_t a { std::numeric_limits<uint8_t>::max() };
+    uint8_t r { std::numeric_limits<uint8_t>::min() };
+    uint8_t g { std::numeric_limits<uint8_t>::min() };
+    uint8_t b { std::numeric_limits<uint8_t>::min() };
+    uint8_t a { std::numeric_limits<uint8_t>::min() };
     winrt::Windows::UI::ViewManagement::UISettings ui_settings { pane::system::ui_settings() };
 };
 } // namespace pane

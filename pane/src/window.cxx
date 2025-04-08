@@ -220,6 +220,20 @@ auto window::class_window_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM l
 
                     return 1;
                 } break;
+                case WM_CLOSE: {
+                    if (self->window_config.shutdown) {
+                        self->window_handle.reset();
+                    } else {
+                        ShowWindow(self->window_handle.get(), SW_HIDE);
+                    }
+
+                    return 0;
+                } break;
+                case WM_DESTROY: {
+                    PostQuitMessage(0);
+
+                    return 0;
+                } break;
             }
 
             if (self->window_procedure) {

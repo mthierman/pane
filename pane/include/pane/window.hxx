@@ -91,10 +91,11 @@ struct window final {
     using Self = window;
 
     struct config final {
-        std::u8string title { u8"" };
-        bool visible { true };
+        std::u8string title;
+        pane::color background_color;
+        bool visible { false };
+        bool shutdown { false };
         bool webview { false };
-        pane::color background_color { pane::color(0, 0, 0, 0) };
     };
 
     window(pane::window::config&& window_config = pane::window::config {},
