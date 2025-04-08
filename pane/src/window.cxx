@@ -39,13 +39,10 @@ window::window(pane::window::config&& window_config,
 auto window::create_webview(this Self& self) -> void {
     if (self.webview.core_options) {
         if (!self.webview.environment_options.AdditionalBrowserArguments.empty()) {
-            // if (auto converted {
-            //         glow::text::u16string(config.environmentOptions.AdditionalBrowserArguments)
-            //         };
-            //     converted) {
-            //     createdEnvironmentOptions->put_AdditionalBrowserArguments(
-            //         glow::text::c_str(converted.value()));
-            // }
+            self.webview.core_options->put_AdditionalBrowserArguments(
+                reinterpret_cast<const wchar_t*>(
+                    pane::to_utf16(self.webview.environment_options.AdditionalBrowserArguments)
+                        .data()));
         }
 
         self.webview.core_options->put_AllowSingleSignOnUsingOSPrimaryAccount(
