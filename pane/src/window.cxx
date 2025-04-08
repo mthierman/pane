@@ -6,6 +6,8 @@ namespace pane {
 window::window(const pane::window::config& window_config,
                std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)>&& window_procedure)
     : window_procedure { std::move(window_procedure) } {
+    this->window_class.hbrBackground = window_config.background_color.to_hbrush();
+
     if (GetClassInfoExW(
             this->window_class.hInstance, this->window_class.lpszClassName, &this->window_class)
         == 0) {
@@ -223,12 +225,6 @@ auto window::class_window_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM l
             if (self->webview.core_controller) {
                 self->webview.core_controller->put_Bounds(client_rect);
             }
-        }
-
-        if (msg == WM_ERASEBKGND) {
-            auto client_rect { self->client_rect() };
-
-            FillRect(reinterpret_cast<HDC>(wparam), &client_rect, self->window_brush.get());
         }
 
         if (self->window_procedure) {
