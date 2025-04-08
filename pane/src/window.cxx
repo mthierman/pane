@@ -172,7 +172,8 @@ auto window::create_webview(this Self& self) -> void {
                                 settings9->put_IsWebMessageEnabled(settings.IsWebMessageEnabled);
                                 settings9->put_IsZoomControlEnabled(settings.IsZoomControlEnabled);
 
-                                self.webview.core_core->Navigate(L"https://www.google.com/");
+                                self.webview.core_core->Navigate(reinterpret_cast<const wchar_t*>(
+                                    pane::to_utf16(self.window_config.home_page).data()));
                             }
                         }
                     }
