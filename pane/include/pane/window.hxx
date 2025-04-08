@@ -55,6 +55,7 @@ struct webview final {
     settings settings;
     std::filesystem::path browser_executable_folder;
     std::filesystem::path user_data_folder;
+    std::u8string home_page { u8"about:blank" };
 
     wil::com_ptr<ICoreWebView2Settings9> core_settings;
     wil::com_ptr<ICoreWebView2Environment13> core_environment;
@@ -93,7 +94,7 @@ struct window final {
         std::u8string title { u8"" };
         bool visible { true };
         bool webview { false };
-        std::u8string home_page { u8"about:blank" };
+        pane::color background_color { pane::color(0, 0, 0, 0) };
     };
 
     window(pane::window::config&& window_config = pane::window::config {},
@@ -112,7 +113,6 @@ private:
 
     wil::unique_hwnd window_handle;
     pane::window::config window_config;
-    pane::color background_color { pane::color(0, 255, 255, 255) };
     WNDCLASSEXW window_class {
         .cbSize { sizeof(WNDCLASSEXW) },
         .style { 0 },

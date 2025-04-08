@@ -122,7 +122,7 @@ auto window::create_webview(this Self& self) -> void {
 
                 if (self.webview.core_controller) {
                     self.webview.core_controller->put_DefaultBackgroundColor(
-                        self.background_color.to_webview2_color());
+                        self.window_config.background_color.to_webview2_color());
                     self.webview.core_controller->put_Bounds(self.client_rect);
 
                     wil::com_ptr<ICoreWebView2> created_core;
@@ -173,7 +173,7 @@ auto window::create_webview(this Self& self) -> void {
                                 settings9->put_IsWebMessageEnabled(settings.IsWebMessageEnabled);
                                 settings9->put_IsZoomControlEnabled(settings.IsZoomControlEnabled);
 
-                                self.navigate(self.window_config.home_page);
+                                self.navigate(self.webview.home_page);
                             }
                         }
                     }
@@ -216,7 +216,7 @@ auto window::class_window_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM l
 
                     FillRect(reinterpret_cast<HDC>(wparam),
                              &self->client_rect,
-                             self->background_color.to_hbrush());
+                             self->window_config.background_color.to_hbrush());
 
                     return 1;
                 } break;
