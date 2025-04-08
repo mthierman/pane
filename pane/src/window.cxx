@@ -49,19 +49,15 @@ auto window::create_webview(this Self& self) -> void {
             self.webview.environment_options.AllowSingleSignOnUsingOSPrimaryAccount);
 
         if (!self.webview.environment_options.Language.empty()) {
-            // if (auto converted { glow::text::u16string(config.environmentOptions.Language) };
-            //     converted) {
-            //     createdEnvironmentOptions->put_Language(glow::text::c_str(converted.value()));
-            // }
+            self.webview.core_options->put_Language(reinterpret_cast<const wchar_t*>(
+                pane::to_utf16(self.webview.environment_options.Language).data()));
         }
 
         if (!self.webview.environment_options.TargetCompatibleBrowserVersion.empty()) {
-            // if (auto converted { glow::text::u16string(
-            //         config.environmentOptions.TargetCompatibleBrowserVersion) };
-            //     converted) {
-            //     createdEnvironmentOptions->put_TargetCompatibleBrowserVersion(
-            //         glow::text::c_str(converted.value()));
-            // }
+            self.webview.core_options->put_TargetCompatibleBrowserVersion(
+                reinterpret_cast<const wchar_t*>(
+                    pane::to_utf16(self.webview.environment_options.TargetCompatibleBrowserVersion)
+                        .data()));
         }
     }
 
