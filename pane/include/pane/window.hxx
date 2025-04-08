@@ -3,6 +3,7 @@
 #include <filesystem>
 #include <functional>
 #include <pane/system.hxx>
+#include <pane/color.hxx>
 #include <wil/com.h>
 #include <wil/resource.h>
 #include <wil/wrl.h>
@@ -111,6 +112,7 @@ private:
 
     wil::unique_hwnd window_handle;
     pane::window::config window_config;
+    pane::color background_color { pane::color(0, 255, 255, 255) };
     WNDCLASSEXW window_class {
         .cbSize { sizeof(WNDCLASSEXW) },
         .style { 0 },
