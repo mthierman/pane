@@ -104,6 +104,8 @@ struct window final {
              });
     ~window() = default;
 
+    auto client_rect(this const Self& self) -> RECT;
+
     auto create_webview(this Self& self) -> void;
     auto navigate(this Self& self, std::u8string_view url) -> void;
 

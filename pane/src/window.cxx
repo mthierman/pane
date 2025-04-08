@@ -37,6 +37,13 @@ window::window(pane::window::config&& window_config,
     }
 }
 
+auto window::client_rect(this const Self& self) -> RECT {
+    RECT client_rect {};
+    GetClientRect(self.window_handle.get(), &client_rect);
+
+    return client_rect;
+}
+
 auto window::create_webview(this Self& self) -> void {
     if (self.webview.core_options) {
         if (!self.webview.environment_options.AdditionalBrowserArguments.empty()) {
@@ -210,16 +217,15 @@ auto window::class_window_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM l
         if (auto self { reinterpret_cast<Self*>(GetWindowLongPtrW(hwnd, 0)) }) {
             switch (msg) {
                 case WM_WINDOWPOSCHANGED: {
-                    RECT client_rect {};
-                    GetClientRect(hwnd, &client_rect);
+                    auto client_rect { self->client_rect() };
 
                     if (self->webview.core_controller) {
                         self->webview.core_controller->put_Bounds(client_rect);
                     }
                 } break;
                 case WM_ERASEBKGND: {
-                    RECT client_rect {};
-                    GetClientRect(hwnd, &client_rect);
+                    auto client_rect { self->client_rect() };
+
                     FillRect(reinterpret_cast<HDC>(wparam), &client_rect, self->window_brush.get());
                 }
             }
