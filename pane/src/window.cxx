@@ -210,6 +210,8 @@ auto window::class_window_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM l
                     if (self->webview.core_controller) {
                         self->webview.core_controller->put_Bounds(self->client_rect);
                     }
+
+                    return 0;
                 } break;
                 case WM_ERASEBKGND: {
                     GetClientRect(hwnd, &self->client_rect);
@@ -221,16 +223,14 @@ auto window::class_window_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM l
                     return 1;
                 } break;
                 case WM_CLOSE: {
-                    if (self->window_config.shutdown) {
-                        self->window_handle.reset();
-                    } else {
-                        ShowWindow(self->window_handle.get(), SW_HIDE);
-                    }
+                    self->window_handle.reset();
 
                     return 0;
                 } break;
                 case WM_DESTROY: {
-                    PostQuitMessage(0);
+                    if (self->window_config.shutdown) {
+                        PostQuitMessage(0);
+                    }
 
                     return 0;
                 } break;
