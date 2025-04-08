@@ -122,9 +122,6 @@ auto window::create_webview(this Self& self) -> void {
 
                 if (self.webview.core_controller) {
                     self.webview.core_controller->put_DefaultBackgroundColor({ 0, 0, 0, 0 });
-
-                    // RECT rect;
-                    // GetClientRect(self.window_handle.get(), &rect);
                     self.webview.core_controller->put_Bounds(self.client_rect);
 
                     wil::com_ptr<ICoreWebView2> created_core;
