@@ -97,7 +97,7 @@ struct window final {
         bool webview { false };
     };
 
-    window(pane::window::config&& window_config = pane::window::config {},
+    window(const pane::window::config& window_config = pane::window::config {},
            std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)>&& window_procedure
            = [](HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) {
                  return DefWindowProcW(hwnd, msg, wparam, lparam);
@@ -106,16 +106,14 @@ struct window final {
 
     auto client_rect(this const Self& self) -> RECT;
 
-    auto create_webview(this Self& self) -> void;
+    auto create_webview(this Self& self, const pane::window::config& window_config) -> void;
     auto navigate(this Self& self, std::u8string_view url) -> void;
 
 private:
     static auto class_window_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
         -> LRESULT;
 
-    pane::window::config window_config;
-    wil::unique_hwnd window_handle;
-    wil::unique_hbrush window_brush;
+    HWND window_handle;
     WNDCLASSEXW window_class {
         .cbSize { sizeof(WNDCLASSEXW) },
         .style { 0 },

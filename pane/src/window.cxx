@@ -3,48 +3,45 @@
 #include <pane/debug.hxx>
 
 namespace pane {
-window::window(pane::window::config&& window_config,
+window::window(const pane::window::config& window_config,
                std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)>&& window_procedure)
-    : window_config { std::move(window_config) },
-      window_brush { window_config.background_color.to_hbrush() },
-      window_procedure { std::move(window_procedure) } {
+    : window_procedure { std::move(window_procedure) } {
     if (GetClassInfoExW(
             this->window_class.hInstance, this->window_class.lpszClassName, &this->window_class)
         == 0) {
         RegisterClassExW(&this->window_class);
     };
 
-    CreateWindowExW(
-        0,
-        this->window_class.lpszClassName,
-        reinterpret_cast<const wchar_t*>(pane::to_utf16(this->window_config.title).data()),
-        WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN,
-        CW_USEDEFAULT,
-        CW_USEDEFAULT,
-        CW_USEDEFAULT,
-        CW_USEDEFAULT,
-        nullptr,
-        nullptr,
-        this->window_class.hInstance,
-        this);
+    CreateWindowExW(0,
+                    this->window_class.lpszClassName,
+                    reinterpret_cast<const wchar_t*>(pane::to_utf16(window_config.title).data()),
+                    WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN,
+                    CW_USEDEFAULT,
+                    CW_USEDEFAULT,
+                    CW_USEDEFAULT,
+                    CW_USEDEFAULT,
+                    nullptr,
+                    nullptr,
+                    this->window_class.hInstance,
+                    this);
 
-    if (this->window_config.visible) {
-        ShowWindow(this->window_handle.get(), SW_SHOWNORMAL);
+    if (window_config.visible) {
+        ShowWindow(this->window_handle, SW_SHOWNORMAL);
     }
 
-    if (this->window_config.webview) {
-        this->create_webview();
+    if (window_config.webview) {
+        this->create_webview(window_config);
     }
 }
 
 auto window::client_rect(this const Self& self) -> RECT {
     RECT client_rect {};
-    GetClientRect(self.window_handle.get(), &client_rect);
+    GetClientRect(self.window_handle, &client_rect);
 
     return client_rect;
 }
 
-auto window::create_webview(this Self& self) -> void {
+auto window::create_webview(this Self& self, const pane::window::config& window_config) -> void {
     if (self.webview.core_options) {
         if (!self.webview.environment_options.AdditionalBrowserArguments.empty()) {
             self.webview.core_options->put_AdditionalBrowserArguments(
@@ -108,8 +105,8 @@ auto window::create_webview(this Self& self) -> void {
         self.webview.user_data_folder.c_str(),
         self.webview.core_options.get(),
         wil::MakeAgileCallback<ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler>(
-            [&self]([[maybe_unused]] HRESULT error_code,
-                    ICoreWebView2Environment* created_environment) -> HRESULT {
+            [&]([[maybe_unused]] HRESULT error_code,
+                ICoreWebView2Environment* created_environment) -> HRESULT {
         if (created_environment) {
             self.webview.core_environment
                 = wil::com_ptr<ICoreWebView2Environment>(created_environment)
@@ -118,10 +115,10 @@ auto window::create_webview(this Self& self) -> void {
 
         if (self.webview.core_environment) {
             self.webview.core_environment->CreateCoreWebView2Controller(
-                self.window_handle.get(),
+                self.window_handle,
                 wil::MakeAgileCallback<ICoreWebView2CreateCoreWebView2ControllerCompletedHandler>(
-                    [&self]([[maybe_unused]] HRESULT error_code,
-                            ICoreWebView2Controller* created_controller) -> HRESULT {
+                    [&]([[maybe_unused]] HRESULT error_code,
+                        ICoreWebView2Controller* created_controller) -> HRESULT {
                 if (created_controller) {
                     self.webview.core_controller
                         = wil::com_ptr<ICoreWebView2Controller>(created_controller)
@@ -130,10 +127,10 @@ auto window::create_webview(this Self& self) -> void {
 
                 if (self.webview.core_controller) {
                     self.webview.core_controller->put_DefaultBackgroundColor(
-                        self.window_config.background_color.to_webview2_color());
+                        window_config.background_color.to_webview2_color());
 
                     RECT client_rect {};
-                    GetClientRect(self.window_handle.get(), &client_rect);
+                    GetClientRect(self.window_handle, &client_rect);
 
                     self.webview.core_controller->put_Bounds(client_rect);
 
@@ -210,7 +207,7 @@ auto window::class_window_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM l
         if (auto create { reinterpret_cast<CREATESTRUCTW*>(lparam) }) {
             if (auto self { static_cast<Self*>(create->lpCreateParams) }) {
                 SetWindowLongPtrW(hwnd, 0, reinterpret_cast<LONG_PTR>(self));
-                self->window_handle.reset(hwnd);
+                self->window_handle = hwnd;
             }
         }
     }
