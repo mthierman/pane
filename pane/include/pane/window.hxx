@@ -102,7 +102,7 @@ struct window final {
            = [](HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) {
                  return DefWindowProcW(hwnd, msg, wparam, lparam);
              });
-    ~window() = default;
+    ~window();
 
     auto client_rect(this const Self& self) -> RECT;
 
