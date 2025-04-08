@@ -94,7 +94,6 @@ struct window final {
         std::u8string title;
         pane::color background_color;
         bool visible { false };
-        bool shutdown { false };
         bool webview { false };
     };
 
