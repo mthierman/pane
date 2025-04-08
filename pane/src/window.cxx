@@ -173,7 +173,7 @@ auto window::create_webview(this Self& self) -> void {
                                 settings9->put_IsZoomControlEnabled(settings.IsZoomControlEnabled);
 
                                 self.webview.core_core->Navigate(reinterpret_cast<const wchar_t*>(
-                                    pane::to_utf16(self.window_config.home_page).data()));
+                                    pane::to_utf16(self.webview.home_page).data()));
                             }
                         }
                     }

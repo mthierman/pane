@@ -50,6 +50,7 @@ struct webview final {
         bool IsZoomControlEnabled { true };
     };
 
+    std::u8string home_page;
     environment_options environment_options;
     settings settings;
     std::filesystem::path browser_executable_folder;
@@ -92,7 +93,6 @@ struct window final {
         std::u8string title;
         bool visible { true };
         bool webview { false };
-        std::u8string home_page;
     };
 
     window(pane::window::config&& window_config = pane::window::config {},
