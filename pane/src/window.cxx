@@ -172,8 +172,7 @@ auto window::create_webview(this Self& self) -> void {
                                 settings9->put_IsWebMessageEnabled(settings.IsWebMessageEnabled);
                                 settings9->put_IsZoomControlEnabled(settings.IsZoomControlEnabled);
 
-                                self.webview.core_core->Navigate(reinterpret_cast<const wchar_t*>(
-                                    pane::to_utf16(self.window_config.home_page).data()));
+                                self.navigate(self.window_config.home_page);
                             }
                         }
                     }
@@ -184,6 +183,13 @@ auto window::create_webview(this Self& self) -> void {
         }
         return S_OK;
     }).Get());
+}
+
+auto window::navigate(this Self& self, std::u8string_view url) -> void {
+    if (self.webview.core_core) {
+        self.webview.core_core->Navigate(
+            reinterpret_cast<const wchar_t*>(pane::to_utf16(url).data()));
+    }
 }
 
 auto window::class_window_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) -> LRESULT {

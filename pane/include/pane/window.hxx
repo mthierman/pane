@@ -103,6 +103,7 @@ struct window final {
     ~window() = default;
 
     auto create_webview(this Self& self) -> void;
+    auto navigate(this Self& self, std::u8string_view url) -> void;
 
 private:
     static auto class_window_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
