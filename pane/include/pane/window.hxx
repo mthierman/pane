@@ -129,7 +129,6 @@ private:
         .hIconSm { pane::system::resource_icon().value_or(pane::system::application_icon()) }
     };
     std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)> window_procedure;
-    RECT client_rect;
     webview webview;
 };
 } // namespace pane

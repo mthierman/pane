@@ -123,7 +123,11 @@ auto window::create_webview(this Self& self) -> void {
                 if (self.webview.core_controller) {
                     self.webview.core_controller->put_DefaultBackgroundColor(
                         self.window_config.background_color.to_webview2_color());
-                    self.webview.core_controller->put_Bounds(self.client_rect);
+
+                    RECT client_rect {};
+                    GetClientRect(self.window_handle.get(), &client_rect);
+
+                    self.webview.core_controller->put_Bounds(client_rect);
 
                     wil::com_ptr<ICoreWebView2> created_core;
                     self.webview.core_controller->get_CoreWebView2(created_core.put());
@@ -205,25 +209,27 @@ auto window::class_window_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM l
         if (auto self { reinterpret_cast<Self*>(GetWindowLongPtrW(hwnd, 0)) }) {
             switch (msg) {
                 case WM_WINDOWPOSCHANGED: {
-                    GetClientRect(hwnd, &self->client_rect);
+                    RECT client_rect {};
+                    GetClientRect(hwnd, &client_rect);
 
                     if (self->webview.core_controller) {
-                        self->webview.core_controller->put_Bounds(self->client_rect);
+                        self->webview.core_controller->put_Bounds(client_rect);
                     }
 
                     return 0;
                 } break;
                 case WM_ERASEBKGND: {
-                    GetClientRect(hwnd, &self->client_rect);
+                    RECT client_rect {};
+                    GetClientRect(hwnd, &client_rect);
 
                     FillRect(reinterpret_cast<HDC>(wparam),
-                             &self->client_rect,
+                             &client_rect,
                              self->window_config.background_color.to_hbrush());
 
                     return 1;
                 } break;
                 case WM_CLOSE: {
-                    self->window_handle.reset();
+                    ShowWindow(hwnd, SW_HIDE);
 
                     return 0;
                 } break;
