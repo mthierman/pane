@@ -231,6 +231,10 @@ auto window::class_window_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM l
                 case WM_CLOSE: {
                     ShowWindow(hwnd, SW_HIDE);
 
+                    if (self->window_config.shutdown) {
+                        self->window_handle.reset();
+                    }
+
                     return 0;
                 } break;
                 case WM_DESTROY: {
