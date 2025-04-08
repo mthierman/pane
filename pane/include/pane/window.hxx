@@ -111,8 +111,9 @@ private:
     static auto class_window_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
         -> LRESULT;
 
-    wil::unique_hwnd window_handle;
     pane::window::config window_config;
+    wil::unique_hwnd window_handle;
+    wil::unique_hbrush window_brush;
     WNDCLASSEXW window_class {
         .cbSize { sizeof(WNDCLASSEXW) },
         .style { 0 },
