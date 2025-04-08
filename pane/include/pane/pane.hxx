@@ -15,5 +15,4 @@
 #include <pane/system.hxx>
 #include <pane/text.hxx>
 #include <pane/url.hxx>
-#include <pane/webview.hxx>
 #include <pane/window.hxx>

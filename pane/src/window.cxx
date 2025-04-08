@@ -3,7 +3,7 @@
 #include <pane/debug.hxx>
 
 namespace pane {
-window::window(pane::window_config&& window_config,
+window::window(pane::window::config&& window_config,
                std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)>&& window_procedure)
     : window_config { std::move(window_config) },
       window_procedure { std::move(window_procedure) } {
