@@ -113,7 +113,7 @@ auto window::create_webview(this Self& self) -> void {
                 self.window_handle.get(),
                 wil::MakeAgileCallback<ICoreWebView2CreateCoreWebView2ControllerCompletedHandler>(
                     [&self]([[maybe_unused]] HRESULT error_code,
-                            ICoreWebView2Controller* created_controller) -> ::HRESULT {
+                            ICoreWebView2Controller* created_controller) -> HRESULT {
                 if (created_controller) {
                     self.webview.core_controller
                         = wil::com_ptr<ICoreWebView2Controller>(created_controller)
