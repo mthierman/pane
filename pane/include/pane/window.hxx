@@ -124,7 +124,7 @@ private:
         .lpszClassName { L"PaneWindow" },
         .hIconSm { pane::system::resource_icon().value_or(pane::system::application_icon()) }
     };
-    webview webview;
     std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)> window_procedure;
+    webview webview;
 };
 } // namespace pane
