@@ -105,6 +105,7 @@ struct window final {
     ~window();
 
     auto client_rect(this const Self& self) -> RECT;
+    static auto get_instance(HWND hwnd) -> Self*;
 
     auto create_webview(this Self& self, const pane::window::config& window_config) -> void;
     auto navigate(this Self& self, std::u8string_view url) -> void;

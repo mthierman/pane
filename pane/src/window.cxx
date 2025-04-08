@@ -47,6 +47,10 @@ auto window::client_rect(this const Self& self) -> RECT {
     return client_rect;
 }
 
+auto window::get_instance(HWND hwnd) -> Self* {
+    return reinterpret_cast<Self*>(GetWindowLongPtrW(hwnd, 0));
+}
+
 auto window::create_webview(this Self& self, const pane::window::config& window_config) -> void {
     if (self.webview.core_options) {
         if (!self.webview.environment_options.AdditionalBrowserArguments.empty()) {
