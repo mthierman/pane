@@ -219,17 +219,17 @@ auto window::class_window_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM l
     }
 
     if (auto self { reinterpret_cast<Self*>(GetWindowLongPtrW(hwnd, 0)) }) {
+        if (msg == WM_NCDESTROY) {
+            SetWindowLongPtrW(hwnd, 0, reinterpret_cast<LONG_PTR>(nullptr));
+            self->window_handle = nullptr;
+        }
+
         if (msg == WM_WINDOWPOSCHANGED) {
             auto client_rect { self->client_rect() };
 
             if (self->webview.core_controller) {
                 self->webview.core_controller->put_Bounds(client_rect);
             }
-        }
-
-        if (msg == WM_NCDESTROY) {
-            SetWindowLongPtrW(hwnd, 0, reinterpret_cast<LONG_PTR>(nullptr));
-            self->window_handle = nullptr;
         }
 
         if (self->window_procedure) {
