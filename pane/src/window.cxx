@@ -123,9 +123,9 @@ auto window::create_webview(this Self& self) -> void {
                 if (self.webview.core_controller) {
                     self.webview.core_controller->put_DefaultBackgroundColor({ 0, 0, 0, 0 });
 
-                    RECT rect;
-                    GetClientRect(self.window_handle.get(), &rect);
-                    self.webview.core_controller->put_Bounds(rect);
+                    // RECT rect;
+                    // GetClientRect(self.window_handle.get(), &rect);
+                    self.webview.core_controller->put_Bounds(self.client_rect);
 
                     wil::com_ptr<ICoreWebView2> created_core;
                     self.webview.core_controller->get_CoreWebView2(created_core.put());
@@ -199,11 +199,10 @@ auto window::class_window_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM l
     } else {
         if (auto self { reinterpret_cast<Self*>(GetWindowLongPtrW(hwnd, 0)) }) {
             if (msg == WM_WINDOWPOSCHANGED) {
-                RECT rect {};
-                GetClientRect(hwnd, &rect);
+                GetClientRect(hwnd, &self->client_rect);
 
                 if (self->webview.core_controller) {
-                    self->webview.core_controller->put_Bounds(rect);
+                    self->webview.core_controller->put_Bounds(self->client_rect);
                 }
             }
 
