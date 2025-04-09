@@ -236,6 +236,12 @@ auto window::class_window_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM l
             }
         }
 
+        if (msg == WM_ERASEBKGND) {
+            auto client_rect { self->client_rect() };
+
+            FillRect(reinterpret_cast<HDC>(wparam), &client_rect, self->window_class.hbrBackground);
+        }
+
         if (self->window_procedure) {
             return self->window_procedure(hwnd, msg, wparam, lparam);
         }
