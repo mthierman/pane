@@ -1,9 +1,17 @@
 #pragma once
 #include <glaze/glaze.hpp>
+#include <expected>
 #include <filesystem>
+#include <system_error>
 #include <pane/filesystem.hxx>
+#include "../../src/glaze.hxx"
 
 namespace pane {
+struct glaze_test {
+    std::string first;
+    std::string second;
+};
+
 template <typename T> struct config final {
     using Self = config;
 
@@ -36,6 +44,23 @@ template <typename T> struct config final {
             reinterpret_cast<const char*>(self.config_file.u8string().data()),
             std::string {}) };
     }
+
+    auto to_json(this const Self& self) -> std::expected<std::u8string, std::error_code> {
+        auto json { glz::write_json(self.settings) };
+
+        if (!json.error()) {
+            return std::unexpected(make_error_code(json.error().ec));
+        }
+
+        return std::u8string { json.value().begin(), json.value().end() };
+    }
+
+    // auto from_json(this const Self& self, std::u8string json)
+    //     -> std::expected<std::u8string, std::error_code> {
+    //     auto json { glz::read_json(self.settings, json) };
+
+    //     return { json.begin(), json.end() };
+    // }
 
     std::filesystem::path config_file {
         pane::filesystem::known_folder()
