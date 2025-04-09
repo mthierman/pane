@@ -12,7 +12,7 @@ struct icu_error : std::error_category {
     auto message(int value) const -> std::string override;
 };
 
-auto make_error_code(UErrorCode) -> std::error_code;
+auto make_error_code(UErrorCode error_code) -> std::error_code;
 } // namespace pane
 
 namespace std {
