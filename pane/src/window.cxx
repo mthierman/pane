@@ -3,10 +3,11 @@
 #include <pane/debug.hxx>
 
 namespace pane {
-window::window(const pane::window::config& window_config,
+window::window(pane::window::config&& window_config,
                std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)>&& window_procedure)
-    : window_procedure { std::move(window_procedure) } {
-    this->window_class.hbrBackground = window_config.background_color.to_hbrush();
+    : window_config { std::move(window_config) },
+      window_procedure { std::move(window_procedure) } {
+    this->window_class.hbrBackground = this->window_config.background_color.to_hbrush();
 
     if (GetClassInfoExW(
             this->window_class.hInstance, this->window_class.lpszClassName, &this->window_class)
@@ -14,25 +15,26 @@ window::window(const pane::window::config& window_config,
         RegisterClassExW(&this->window_class);
     };
 
-    CreateWindowExW(0,
-                    this->window_class.lpszClassName,
-                    reinterpret_cast<const wchar_t*>(pane::to_utf16(window_config.title).data()),
-                    WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN,
-                    CW_USEDEFAULT,
-                    CW_USEDEFAULT,
-                    CW_USEDEFAULT,
-                    CW_USEDEFAULT,
-                    nullptr,
-                    nullptr,
-                    this->window_class.hInstance,
-                    this);
+    CreateWindowExW(
+        0,
+        this->window_class.lpszClassName,
+        reinterpret_cast<const wchar_t*>(pane::to_utf16(this->window_config.title).data()),
+        WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN,
+        CW_USEDEFAULT,
+        CW_USEDEFAULT,
+        CW_USEDEFAULT,
+        CW_USEDEFAULT,
+        nullptr,
+        nullptr,
+        this->window_class.hInstance,
+        this);
 
-    if (window_config.visible) {
+    if (this->window_config.visible) {
         ShowWindow(this->window_handle, SW_SHOWNORMAL);
     }
 
-    if (window_config.webview) {
-        this->create_webview(window_config);
+    if (this->window_config.webview) {
+        this->create_webview();
     }
 }
 
@@ -51,7 +53,7 @@ auto window::get_instance(HWND hwnd) -> Self* {
     return reinterpret_cast<Self*>(GetWindowLongPtrW(hwnd, 0));
 }
 
-auto window::create_webview(this Self& self, const pane::window::config& window_config) -> void {
+auto window::create_webview(this Self& self) -> void {
     if (self.webview.core_options) {
         if (!self.webview.environment_options.AdditionalBrowserArguments.empty()) {
             self.webview.core_options->put_AdditionalBrowserArguments(
@@ -137,7 +139,7 @@ auto window::create_webview(this Self& self, const pane::window::config& window_
 
                 if (self.webview.core_controller) {
                     self.webview.core_controller->put_DefaultBackgroundColor(
-                        window_config.background_color.to_webview2_color());
+                        self.window_config.background_color.to_webview2_color());
 
                     RECT client_rect {};
                     GetClientRect(self.window_handle, &client_rect);
@@ -239,6 +241,14 @@ auto window::class_window_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM l
         if (msg == WM_ERASEBKGND) {
             auto client_rect { self->client_rect() };
             FillRect(reinterpret_cast<HDC>(wparam), &client_rect, self->window_class.hbrBackground);
+        }
+
+        if (msg == WM_DESTROY) {
+            if (self->window_config.shutdown) {
+                PostQuitMessage(0);
+
+                return 0;
+            }
         }
 
         if (self->window_procedure) {
