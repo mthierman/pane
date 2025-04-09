@@ -46,21 +46,25 @@ template <typename T> struct config final {
     }
 
     auto to_json(this const Self& self) -> std::expected<std::u8string, std::error_code> {
-        auto json { glz::write_json(self.settings) };
+        auto buffer { glz::write_json(self.settings) };
 
-        if (!json) {
-            return std::unexpected(make_error_code(json.error().ec));
+        if (!buffer) {
+            return std::unexpected(make_error_code(buffer.error().ec));
         }
 
-        return std::u8string { json.value().begin(), json.value().end() };
+        return std::u8string { buffer.value().begin(), buffer.value().end() };
     }
 
-    // auto from_json(this const Self& self, std::u8string json)
-    //     -> std::expected<std::u8string, std::error_code> {
-    //     auto json { glz::read_json(self.settings, json) };
+    auto from_json(this const Self& self, std::u8string json)
+        -> std::expected<void, std::error_code> {
+        auto buffer { glz::read_json(self.settings, json) };
 
-    //     return { json.begin(), json.end() };
-    // }
+        if (!buffer) {
+            return std::unexpected(make_error_code(buffer.ec));
+        }
+
+        return {};
+    }
 
     std::filesystem::path config_file {
         pane::filesystem::known_folder()
