@@ -7,11 +7,6 @@
 #include "../../src/glaze.hxx"
 
 namespace pane {
-struct glaze_test {
-    std::string first;
-    std::string second;
-};
-
 template <typename T> struct config final {
     using Self = config;
 
@@ -55,13 +50,14 @@ template <typename T> struct config final {
         return std::u8string { buffer.value().begin(), buffer.value().end() };
     }
 
-    auto from_json(this const Self& self, std::u8string json)
-        -> std::expected<void, std::error_code> {
-        auto buffer { glz::read_json(self.settings, json) };
+    auto from_json(this Self& self, std::u8string json) -> std::expected<void, std::error_code> {
+        auto buffer { glz::read_json<T>(json) };
 
         if (!buffer) {
-            return std::unexpected(make_error_code(buffer.ec));
+            return std::unexpected(make_error_code(buffer.error().ec));
         }
+
+        self.settings = buffer.value();
 
         return {};
     }
