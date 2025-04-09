@@ -48,7 +48,7 @@ template <typename T> struct config final {
     auto to_json(this const Self& self) -> std::expected<std::u8string, std::error_code> {
         auto json { glz::write_json(self.settings) };
 
-        if (!json.error()) {
+        if (!json) {
             return std::unexpected(make_error_code(json.error().ec));
         }
 
