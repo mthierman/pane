@@ -70,7 +70,7 @@ struct window final {
             std::u8string home_page { u8"about:blank" };
         };
 
-        config webview_config;
+        config config;
         wil::com_ptr<ICoreWebView2Settings9> settings;
         wil::com_ptr<ICoreWebView2Environment13> environment;
         wil::com_ptr<ICoreWebView2Controller4> controller;

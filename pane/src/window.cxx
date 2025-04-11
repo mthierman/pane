@@ -35,43 +35,39 @@ window::window(pane::window::config&& window_config,
 
     if (this->window_config.webview) {
         if (this->webview.options) {
-            if (!this->webview.webview_config.environment_options.AdditionalBrowserArguments
-                     .empty()) {
+            if (!this->webview.config.environment_options.AdditionalBrowserArguments.empty()) {
                 this->webview.options->put_AdditionalBrowserArguments(
                     reinterpret_cast<const wchar_t*>(
-                        pane::to_utf16(this->webview.webview_config.environment_options
-                                           .AdditionalBrowserArguments)
+                        pane::to_utf16(
+                            this->webview.config.environment_options.AdditionalBrowserArguments)
                             .data()));
             }
 
             this->webview.options->put_AllowSingleSignOnUsingOSPrimaryAccount(
-                this->webview.webview_config.environment_options
-                    .AllowSingleSignOnUsingOSPrimaryAccount);
+                this->webview.config.environment_options.AllowSingleSignOnUsingOSPrimaryAccount);
 
-            if (!this->webview.webview_config.environment_options.Language.empty()) {
+            if (!this->webview.config.environment_options.Language.empty()) {
                 this->webview.options->put_Language(reinterpret_cast<const wchar_t*>(
-                    pane::to_utf16(this->webview.webview_config.environment_options.Language)
-                        .data()));
+                    pane::to_utf16(this->webview.config.environment_options.Language).data()));
             }
 
-            if (!this->webview.webview_config.environment_options.TargetCompatibleBrowserVersion
-                     .empty()) {
+            if (!this->webview.config.environment_options.TargetCompatibleBrowserVersion.empty()) {
                 this->webview.options->put_TargetCompatibleBrowserVersion(
                     reinterpret_cast<const wchar_t*>(
-                        pane::to_utf16(this->webview.webview_config.environment_options
-                                           .TargetCompatibleBrowserVersion)
+                        pane::to_utf16(
+                            this->webview.config.environment_options.TargetCompatibleBrowserVersion)
                             .data()));
             }
         }
 
         if (this->webview.options2) {
             this->webview.options2->put_ExclusiveUserDataFolderAccess(
-                this->webview.webview_config.environment_options.ExclusiveUserDataFolderAccess);
+                this->webview.config.environment_options.ExclusiveUserDataFolderAccess);
         }
 
         if (this->webview.options3) {
             this->webview.options3->put_IsCustomCrashReportingEnabled(
-                this->webview.webview_config.environment_options.IsCustomCrashReportingEnabled);
+                this->webview.config.environment_options.IsCustomCrashReportingEnabled);
         }
 
         // if (this->webview.options4) {
@@ -80,27 +76,27 @@ window::window(pane::window::config&& window_config,
 
         if (this->webview.options5) {
             this->webview.options5->put_EnableTrackingPrevention(
-                this->webview.webview_config.environment_options.EnableTrackingPrevention);
+                this->webview.config.environment_options.EnableTrackingPrevention);
         }
 
         if (this->webview.options6) {
             this->webview.options6->put_AreBrowserExtensionsEnabled(
-                this->webview.webview_config.environment_options.AreBrowserExtensionsEnabled);
+                this->webview.config.environment_options.AreBrowserExtensionsEnabled);
         }
 
         if (this->webview.options7) {
             this->webview.options7->put_ChannelSearchKind(
-                this->webview.webview_config.environment_options.ChannelSearchKind);
+                this->webview.config.environment_options.ChannelSearchKind);
         }
 
         if (this->webview.options8) {
             this->webview.options8->put_ScrollBarStyle(
-                this->webview.webview_config.environment_options.ScrollBarStyle);
+                this->webview.config.environment_options.ScrollBarStyle);
         }
 
         CreateCoreWebView2EnvironmentWithOptions(
-            this->webview.webview_config.browser_executable_folder.c_str(),
-            this->webview.webview_config.user_data_folder.c_str(),
+            this->webview.config.browser_executable_folder.c_str(),
+            this->webview.config.user_data_folder.c_str(),
             this->webview.options.get(),
             wil::MakeAgileCallback<ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler>(
                 [&]([[maybe_unused]] HRESULT error_code,
@@ -152,52 +148,45 @@ window::window(pane::window::config&& window_config,
                                     // auto& settings { self.webview.settings };
 
                                     this->webview.settings->put_AreBrowserAcceleratorKeysEnabled(
-                                        this->webview.webview_config.settings
+                                        this->webview.config.settings
                                             .AreBrowserAcceleratorKeysEnabled);
                                     this->webview.settings->put_AreDefaultContextMenusEnabled(
-                                        this->webview.webview_config.settings
+                                        this->webview.config.settings
                                             .AreDefaultContextMenusEnabled);
                                     this->webview.settings->put_AreDefaultScriptDialogsEnabled(
-                                        this->webview.webview_config.settings
+                                        this->webview.config.settings
                                             .AreDefaultScriptDialogsEnabled);
                                     this->webview.settings->put_AreDevToolsEnabled(
-                                        this->webview.webview_config.settings.AreDevToolsEnabled);
+                                        this->webview.config.settings.AreDevToolsEnabled);
                                     this->webview.settings->put_AreHostObjectsAllowed(
-                                        this->webview.webview_config.settings
-                                            .AreHostObjectsAllowed);
+                                        this->webview.config.settings.AreHostObjectsAllowed);
                                     this->webview.settings->put_HiddenPdfToolbarItems(
-                                        this->webview.webview_config.settings
-                                            .HiddenPdfToolbarItems);
+                                        this->webview.config.settings.HiddenPdfToolbarItems);
                                     this->webview.settings->put_IsBuiltInErrorPageEnabled(
-                                        this->webview.webview_config.settings
-                                            .IsBuiltInErrorPageEnabled);
+                                        this->webview.config.settings.IsBuiltInErrorPageEnabled);
                                     this->webview.settings->put_IsGeneralAutofillEnabled(
-                                        this->webview.webview_config.settings
-                                            .IsGeneralAutofillEnabled);
+                                        this->webview.config.settings.IsGeneralAutofillEnabled);
                                     this->webview.settings->put_IsNonClientRegionSupportEnabled(
-                                        this->webview.webview_config.settings
+                                        this->webview.config.settings
                                             .IsNonClientRegionSupportEnabled);
                                     this->webview.settings->put_IsPasswordAutosaveEnabled(
-                                        this->webview.webview_config.settings
-                                            .IsPasswordAutosaveEnabled);
+                                        this->webview.config.settings.IsPasswordAutosaveEnabled);
                                     this->webview.settings->put_IsPinchZoomEnabled(
-                                        this->webview.webview_config.settings.IsPinchZoomEnabled);
+                                        this->webview.config.settings.IsPinchZoomEnabled);
                                     this->webview.settings->put_IsReputationCheckingRequired(
-                                        this->webview.webview_config.settings
-                                            .IsReputationCheckingRequired);
+                                        this->webview.config.settings.IsReputationCheckingRequired);
                                     this->webview.settings->put_IsScriptEnabled(
-                                        this->webview.webview_config.settings.IsScriptEnabled);
+                                        this->webview.config.settings.IsScriptEnabled);
                                     this->webview.settings->put_IsStatusBarEnabled(
-                                        this->webview.webview_config.settings.IsStatusBarEnabled);
+                                        this->webview.config.settings.IsStatusBarEnabled);
                                     this->webview.settings->put_IsSwipeNavigationEnabled(
-                                        this->webview.webview_config.settings
-                                            .IsSwipeNavigationEnabled);
+                                        this->webview.config.settings.IsSwipeNavigationEnabled);
                                     this->webview.settings->put_IsWebMessageEnabled(
-                                        this->webview.webview_config.settings.IsWebMessageEnabled);
+                                        this->webview.config.settings.IsWebMessageEnabled);
                                     this->webview.settings->put_IsZoomControlEnabled(
-                                        this->webview.webview_config.settings.IsZoomControlEnabled);
+                                        this->webview.config.settings.IsZoomControlEnabled);
 
-                                    this->navigate(this->webview.webview_config.home_page);
+                                    this->navigate(this->webview.config.home_page);
                                 }
                             }
                         }
