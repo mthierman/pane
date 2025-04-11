@@ -34,7 +34,180 @@ window::window(pane::window::config&& window_config,
     }
 
     if (this->window_config.webview) {
-        this->create_webview();
+        if (this->webview.options) {
+            if (!this->webview.webview_config.environment_options.AdditionalBrowserArguments
+                     .empty()) {
+                this->webview.options->put_AdditionalBrowserArguments(
+                    reinterpret_cast<const wchar_t*>(
+                        pane::to_utf16(this->webview.webview_config.environment_options
+                                           .AdditionalBrowserArguments)
+                            .data()));
+            }
+
+            this->webview.options->put_AllowSingleSignOnUsingOSPrimaryAccount(
+                this->webview.webview_config.environment_options
+                    .AllowSingleSignOnUsingOSPrimaryAccount);
+
+            if (!this->webview.webview_config.environment_options.Language.empty()) {
+                this->webview.options->put_Language(reinterpret_cast<const wchar_t*>(
+                    pane::to_utf16(this->webview.webview_config.environment_options.Language)
+                        .data()));
+            }
+
+            if (!this->webview.webview_config.environment_options.TargetCompatibleBrowserVersion
+                     .empty()) {
+                this->webview.options->put_TargetCompatibleBrowserVersion(
+                    reinterpret_cast<const wchar_t*>(
+                        pane::to_utf16(this->webview.webview_config.environment_options
+                                           .TargetCompatibleBrowserVersion)
+                            .data()));
+            }
+        }
+
+        if (this->webview.options2) {
+            this->webview.options2->put_ExclusiveUserDataFolderAccess(
+                this->webview.webview_config.environment_options.ExclusiveUserDataFolderAccess);
+        }
+
+        if (this->webview.options3) {
+            this->webview.options3->put_IsCustomCrashReportingEnabled(
+                this->webview.webview_config.environment_options.IsCustomCrashReportingEnabled);
+        }
+
+        // if (this->webview.options4) {
+        //     this->webview.options4->SetCustomSchemeRegistrations();
+        // }
+
+        if (this->webview.options5) {
+            this->webview.options5->put_EnableTrackingPrevention(
+                this->webview.webview_config.environment_options.EnableTrackingPrevention);
+        }
+
+        if (this->webview.options6) {
+            this->webview.options6->put_AreBrowserExtensionsEnabled(
+                this->webview.webview_config.environment_options.AreBrowserExtensionsEnabled);
+        }
+
+        if (this->webview.options7) {
+            this->webview.options7->put_ChannelSearchKind(
+                this->webview.webview_config.environment_options.ChannelSearchKind);
+        }
+
+        if (this->webview.options8) {
+            this->webview.options8->put_ScrollBarStyle(
+                this->webview.webview_config.environment_options.ScrollBarStyle);
+        }
+
+        CreateCoreWebView2EnvironmentWithOptions(
+            this->webview.webview_config.browser_executable_folder.c_str(),
+            this->webview.webview_config.user_data_folder.c_str(),
+            this->webview.options.get(),
+            wil::MakeAgileCallback<ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler>(
+                [&]([[maybe_unused]] HRESULT error_code,
+                    ICoreWebView2Environment* created_environment) -> HRESULT {
+            if (created_environment) {
+                this->webview.environment
+                    = wil::com_ptr<ICoreWebView2Environment>(created_environment)
+                          .try_query<ICoreWebView2Environment13>();
+            }
+
+            if (this->webview.environment) {
+                this->webview.environment->CreateCoreWebView2Controller(
+                    this->window_handle,
+                    wil::MakeAgileCallback<
+                        ICoreWebView2CreateCoreWebView2ControllerCompletedHandler>(
+                        [&]([[maybe_unused]] HRESULT error_code,
+                            ICoreWebView2Controller* created_controller) -> HRESULT {
+                    if (created_controller) {
+                        this->webview.controller
+                            = wil::com_ptr<ICoreWebView2Controller>(created_controller)
+                                  .try_query<ICoreWebView2Controller4>();
+                    }
+
+                    if (this->webview.controller) {
+                        this->webview.controller->put_DefaultBackgroundColor(
+                            this->window_config.background_color.to_webview2_color());
+
+                        RECT client_rect {};
+                        GetClientRect(this->window_handle, &client_rect);
+
+                        this->webview.controller->put_Bounds(client_rect);
+
+                        wil::com_ptr<ICoreWebView2> created_core;
+                        this->webview.controller->get_CoreWebView2(created_core.put());
+
+                        if (created_core) {
+                            this->webview.core = created_core.try_query<ICoreWebView2_22>();
+                        }
+
+                        if (this->webview.core) {
+                            wil::com_ptr<ICoreWebView2Settings> created_settings;
+                            this->webview.core->get_Settings(created_settings.put());
+
+                            if (created_settings) {
+                                this->webview.settings
+                                    = created_settings.try_query<ICoreWebView2Settings9>();
+
+                                if (this->webview.settings) {
+                                    // auto& settings { self.webview.settings };
+
+                                    this->webview.settings->put_AreBrowserAcceleratorKeysEnabled(
+                                        this->webview.webview_config.settings
+                                            .AreBrowserAcceleratorKeysEnabled);
+                                    this->webview.settings->put_AreDefaultContextMenusEnabled(
+                                        this->webview.webview_config.settings
+                                            .AreDefaultContextMenusEnabled);
+                                    this->webview.settings->put_AreDefaultScriptDialogsEnabled(
+                                        this->webview.webview_config.settings
+                                            .AreDefaultScriptDialogsEnabled);
+                                    this->webview.settings->put_AreDevToolsEnabled(
+                                        this->webview.webview_config.settings.AreDevToolsEnabled);
+                                    this->webview.settings->put_AreHostObjectsAllowed(
+                                        this->webview.webview_config.settings
+                                            .AreHostObjectsAllowed);
+                                    this->webview.settings->put_HiddenPdfToolbarItems(
+                                        this->webview.webview_config.settings
+                                            .HiddenPdfToolbarItems);
+                                    this->webview.settings->put_IsBuiltInErrorPageEnabled(
+                                        this->webview.webview_config.settings
+                                            .IsBuiltInErrorPageEnabled);
+                                    this->webview.settings->put_IsGeneralAutofillEnabled(
+                                        this->webview.webview_config.settings
+                                            .IsGeneralAutofillEnabled);
+                                    this->webview.settings->put_IsNonClientRegionSupportEnabled(
+                                        this->webview.webview_config.settings
+                                            .IsNonClientRegionSupportEnabled);
+                                    this->webview.settings->put_IsPasswordAutosaveEnabled(
+                                        this->webview.webview_config.settings
+                                            .IsPasswordAutosaveEnabled);
+                                    this->webview.settings->put_IsPinchZoomEnabled(
+                                        this->webview.webview_config.settings.IsPinchZoomEnabled);
+                                    this->webview.settings->put_IsReputationCheckingRequired(
+                                        this->webview.webview_config.settings
+                                            .IsReputationCheckingRequired);
+                                    this->webview.settings->put_IsScriptEnabled(
+                                        this->webview.webview_config.settings.IsScriptEnabled);
+                                    this->webview.settings->put_IsStatusBarEnabled(
+                                        this->webview.webview_config.settings.IsStatusBarEnabled);
+                                    this->webview.settings->put_IsSwipeNavigationEnabled(
+                                        this->webview.webview_config.settings
+                                            .IsSwipeNavigationEnabled);
+                                    this->webview.settings->put_IsWebMessageEnabled(
+                                        this->webview.webview_config.settings.IsWebMessageEnabled);
+                                    this->webview.settings->put_IsZoomControlEnabled(
+                                        this->webview.webview_config.settings.IsZoomControlEnabled);
+
+                                    this->navigate(this->webview.webview_config.home_page);
+                                }
+                            }
+                        }
+                    }
+
+                    return S_OK;
+                }).Get());
+            }
+            return S_OK;
+        }).Get());
     }
 }
 
@@ -61,164 +234,9 @@ auto window::get_instance(HWND hwnd) -> Self* {
     return reinterpret_cast<Self*>(GetWindowLongPtrW(hwnd, 0));
 }
 
-auto window::create_webview(this Self& self) -> void {
-    if (self.webview.core_options) {
-        if (!self.webview.environment_options.AdditionalBrowserArguments.empty()) {
-            self.webview.core_options->put_AdditionalBrowserArguments(
-                reinterpret_cast<const wchar_t*>(
-                    pane::to_utf16(self.webview.environment_options.AdditionalBrowserArguments)
-                        .data()));
-        }
-
-        self.webview.core_options->put_AllowSingleSignOnUsingOSPrimaryAccount(
-            self.webview.environment_options.AllowSingleSignOnUsingOSPrimaryAccount);
-
-        if (!self.webview.environment_options.Language.empty()) {
-            self.webview.core_options->put_Language(reinterpret_cast<const wchar_t*>(
-                pane::to_utf16(self.webview.environment_options.Language).data()));
-        }
-
-        if (!self.webview.environment_options.TargetCompatibleBrowserVersion.empty()) {
-            self.webview.core_options->put_TargetCompatibleBrowserVersion(
-                reinterpret_cast<const wchar_t*>(
-                    pane::to_utf16(self.webview.environment_options.TargetCompatibleBrowserVersion)
-                        .data()));
-        }
-    }
-
-    if (self.webview.core_options2) {
-        self.webview.core_options2->put_ExclusiveUserDataFolderAccess(
-            self.webview.environment_options.ExclusiveUserDataFolderAccess);
-    }
-
-    if (self.webview.core_options3) {
-        self.webview.core_options3->put_IsCustomCrashReportingEnabled(
-            self.webview.environment_options.IsCustomCrashReportingEnabled);
-    }
-
-    // if (self.webview.webview_options4) {
-    //     self.webview.webview_options4->SetCustomSchemeRegistrations();
-    // }
-
-    if (self.webview.core_options5) {
-        self.webview.core_options5->put_EnableTrackingPrevention(
-            self.webview.environment_options.EnableTrackingPrevention);
-    }
-
-    if (self.webview.core_options6) {
-        self.webview.core_options6->put_AreBrowserExtensionsEnabled(
-            self.webview.environment_options.AreBrowserExtensionsEnabled);
-    }
-
-    if (self.webview.core_options7) {
-        self.webview.core_options7->put_ChannelSearchKind(
-            self.webview.environment_options.ChannelSearchKind);
-    }
-
-    if (self.webview.core_options8) {
-        self.webview.core_options8->put_ScrollBarStyle(
-            self.webview.environment_options.ScrollBarStyle);
-    }
-
-    CreateCoreWebView2EnvironmentWithOptions(
-        self.webview.browser_executable_folder.c_str(),
-        self.webview.user_data_folder.c_str(),
-        self.webview.core_options.get(),
-        wil::MakeAgileCallback<ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler>(
-            [&]([[maybe_unused]] HRESULT error_code,
-                ICoreWebView2Environment* created_environment) -> HRESULT {
-        if (created_environment) {
-            self.webview.core_environment
-                = wil::com_ptr<ICoreWebView2Environment>(created_environment)
-                      .try_query<ICoreWebView2Environment13>();
-        }
-
-        if (self.webview.core_environment) {
-            self.webview.core_environment->CreateCoreWebView2Controller(
-                self.window_handle,
-                wil::MakeAgileCallback<ICoreWebView2CreateCoreWebView2ControllerCompletedHandler>(
-                    [&]([[maybe_unused]] HRESULT error_code,
-                        ICoreWebView2Controller* created_controller) -> HRESULT {
-                if (created_controller) {
-                    self.webview.core_controller
-                        = wil::com_ptr<ICoreWebView2Controller>(created_controller)
-                              .try_query<ICoreWebView2Controller4>();
-                }
-
-                if (self.webview.core_controller) {
-                    self.webview.core_controller->put_DefaultBackgroundColor(
-                        self.window_config.background_color.to_webview2_color());
-
-                    RECT client_rect {};
-                    GetClientRect(self.window_handle, &client_rect);
-
-                    self.webview.core_controller->put_Bounds(client_rect);
-
-                    wil::com_ptr<ICoreWebView2> created_core;
-                    self.webview.core_controller->get_CoreWebView2(created_core.put());
-
-                    if (created_core) {
-                        self.webview.core_core = created_core.try_query<ICoreWebView2_22>();
-                    }
-
-                    if (self.webview.core_core) {
-                        wil::com_ptr<ICoreWebView2Settings> created_settings;
-                        self.webview.core_core->get_Settings(created_settings.put());
-
-                        if (created_settings) {
-                            self.webview.core_settings
-                                = created_settings.try_query<ICoreWebView2Settings9>();
-
-                            if (self.webview.core_settings) {
-                                auto& settings9 { self.webview.core_settings };
-                                auto& settings { self.webview.settings };
-
-                                settings9->put_AreBrowserAcceleratorKeysEnabled(
-                                    settings.AreBrowserAcceleratorKeysEnabled);
-                                settings9->put_AreDefaultContextMenusEnabled(
-                                    settings.AreDefaultContextMenusEnabled);
-                                settings9->put_AreDefaultScriptDialogsEnabled(
-                                    settings.AreDefaultScriptDialogsEnabled);
-                                settings9->put_AreDevToolsEnabled(settings.AreDevToolsEnabled);
-                                settings9->put_AreHostObjectsAllowed(
-                                    settings.AreHostObjectsAllowed);
-                                settings9->put_HiddenPdfToolbarItems(
-                                    settings.HiddenPdfToolbarItems);
-                                settings9->put_IsBuiltInErrorPageEnabled(
-                                    settings.IsBuiltInErrorPageEnabled);
-                                settings9->put_IsGeneralAutofillEnabled(
-                                    settings.IsGeneralAutofillEnabled);
-                                settings9->put_IsNonClientRegionSupportEnabled(
-                                    settings.IsNonClientRegionSupportEnabled);
-                                settings9->put_IsPasswordAutosaveEnabled(
-                                    settings.IsPasswordAutosaveEnabled);
-                                settings9->put_IsPinchZoomEnabled(settings.IsPinchZoomEnabled);
-                                settings9->put_IsReputationCheckingRequired(
-                                    settings.IsReputationCheckingRequired);
-                                settings9->put_IsScriptEnabled(settings.IsScriptEnabled);
-                                settings9->put_IsStatusBarEnabled(settings.IsStatusBarEnabled);
-                                settings9->put_IsSwipeNavigationEnabled(
-                                    settings.IsSwipeNavigationEnabled);
-                                settings9->put_IsWebMessageEnabled(settings.IsWebMessageEnabled);
-                                settings9->put_IsZoomControlEnabled(settings.IsZoomControlEnabled);
-
-                                self.navigate(self.webview.home_page);
-                            }
-                        }
-                    }
-                }
-
-                return S_OK;
-            }).Get());
-        }
-        return S_OK;
-    }).Get());
-}
-
 auto window::navigate(this Self& self, std::u8string_view url) -> void {
-    if (self.webview.core_core) {
-        self.webview.core_core->Navigate(
-            reinterpret_cast<const wchar_t*>(pane::to_utf16(url).data()));
+    if (self.webview.core) {
+        self.webview.core->Navigate(reinterpret_cast<const wchar_t*>(pane::to_utf16(url).data()));
     }
 }
 
@@ -241,8 +259,8 @@ auto window::class_window_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM l
         if (msg == WM_WINDOWPOSCHANGED) {
             auto client_rect { self->client_rect() };
 
-            if (self->webview.core_controller) {
-                self->webview.core_controller->put_Bounds(client_rect);
+            if (self->webview.controller) {
+                self->webview.controller->put_Bounds(client_rect);
             }
         }
 
