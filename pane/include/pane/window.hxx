@@ -105,6 +105,10 @@ struct window final {
              });
     ~window();
 
+    auto activate(this const Self& self) -> bool;
+    auto show(this const Self& self) -> bool;
+    auto hide(this const Self& self) -> bool;
+
     auto client_rect(this const Self& self) -> RECT;
     static auto get_instance(HWND hwnd) -> Self*;
 
@@ -115,7 +119,7 @@ private:
     static auto class_window_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
         -> LRESULT;
 
-        config window_config;
+    config window_config;
     HWND window_handle;
     WNDCLASSEXW window_class {
         .cbSize { sizeof(WNDCLASSEXW) },

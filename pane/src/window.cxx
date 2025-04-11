@@ -30,7 +30,7 @@ window::window(pane::window::config&& window_config,
         this);
 
     if (this->window_config.visible) {
-        ShowWindow(this->window_handle, SW_SHOWNORMAL);
+        this->activate();
     }
 
     if (this->window_config.webview) {
@@ -41,6 +41,14 @@ window::window(pane::window::config&& window_config,
 window::~window() {
     UnregisterClassW(this->window_class.lpszClassName, this->window_class.hInstance);
 }
+
+auto window::activate(this const Self& self) -> bool {
+    return ShowWindow(self.window_handle, SW_SHOWNORMAL);
+}
+
+auto window::show(this const Self& self) -> bool { return ShowWindow(self.window_handle, SW_SHOW); }
+
+auto window::hide(this const Self& self) -> bool { return ShowWindow(self.window_handle, SW_HIDE); }
 
 auto window::client_rect(this const Self& self) -> RECT {
     RECT client_rect {};
