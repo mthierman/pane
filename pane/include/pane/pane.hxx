@@ -4,6 +4,7 @@
 #include <pane/config.hxx>
 #include <pane/console.hxx>
 #include <pane/debug.hxx>
+#include <pane/error.hxx>
 #include <pane/file_picker.hxx>
 #include <pane/filesystem.hxx>
 #include <pane/gdi_plus.hxx>

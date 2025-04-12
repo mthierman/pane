@@ -26,6 +26,7 @@ target_sources(
             "src/config.cxx"
             "src/console.cxx"
             "src/debug.cxx"
+            "src/error.cxx"
             "src/file_picker.cxx"
             "src/filesystem.cxx"
             "src/gdi_plus.cxx"
