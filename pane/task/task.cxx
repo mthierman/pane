@@ -19,5 +19,15 @@ auto wmain(int /* argc */, wchar_t* /* argv */[], wchar_t* /* envp */[]) -> int 
         std::println("config");
     }
 
+    if (task(u8"error")) {
+        std::println("error");
+
+        HRESULT hr { 1 };
+
+        auto error { pane::error(hr) };
+
+        std::println("error_code: {} message: {}", error.error_code, error.message);
+    }
+
     return EXIT_SUCCESS;
 }

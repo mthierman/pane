@@ -4,7 +4,7 @@
 #include <pane/system.hxx>
 
 namespace pane {
-template <typename T> struct error final {
+struct error final {
     using Self = error;
 
     error() = default;
@@ -16,11 +16,9 @@ template <typename T> struct error final {
     error(Self&& error) noexcept = default;
     auto operator=(Self&& error) noexcept -> Self& = default;
 
-    explicit error(HRESULT hresult)
-        : error_code { hresult },
-          message { pane::system::format_message(hresult) } { }
+    explicit error(HRESULT hresult);
 
-    T error_code;
+    int64_t error_code;
     std::u8string message;
 };
 } // namespace pane
