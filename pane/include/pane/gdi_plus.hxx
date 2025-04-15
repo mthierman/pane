@@ -10,10 +10,11 @@ struct gdi_plus final {
     gdi_plus();
     ~gdi_plus();
 
-    gdi_plus(const Self& gdi_plus) = delete;
-    auto operator=(const Self& gdi_plus) -> Self& = delete;
-    gdi_plus(Self&& gdi_plus) noexcept = delete;
-    auto operator=(Self&& gdi_plus) noexcept -> Self& = delete;
+    gdi_plus(const Self&) = delete;
+    auto operator=(const Self&) -> Self& = delete;
+
+    gdi_plus(Self&&) noexcept = delete;
+    auto operator=(Self&&) noexcept -> Self& = delete;
 
     Gdiplus::Status status;
 

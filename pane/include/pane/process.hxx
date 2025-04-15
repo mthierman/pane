@@ -11,10 +11,11 @@ struct process final {
     process(const std::filesystem::path& path, std::u8string_view command_line);
     ~process() = default;
 
-    process(const Self& process) = delete;
-    auto operator=(const Self& process) -> Self& = delete;
-    process(Self&& process) noexcept = delete;
-    auto operator=(Self&& process) noexcept -> Self& = delete;
+    process(const Self&) = delete;
+    auto operator=(const Self&) -> Self& = delete;
+
+    process(Self&&) noexcept = delete;
+    auto operator=(Self&&) noexcept -> Self& = delete;
 
 private:
     wil::unique_handle process_handle;

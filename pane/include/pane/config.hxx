@@ -13,10 +13,11 @@ template <typename T> struct config final {
     config() = default;
     ~config() = default;
 
-    config(const Self& color) = delete;
-    auto operator=(const Self& color) -> Self& = delete;
-    config(Self&& color) noexcept = delete;
-    auto operator=(Self&& color) noexcept -> Self& = delete;
+    config(const Self&) = delete;
+    auto operator=(const Self&) -> Self& = delete;
+
+    config(Self&&) noexcept = delete;
+    auto operator=(Self&&) noexcept -> Self& = delete;
 
     auto load(this Self& self) -> void {
         if (self.config_file.empty()) {
