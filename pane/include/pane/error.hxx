@@ -12,15 +12,15 @@ struct error final {
     error() = default;
     ~error() = default;
 
-    error(const Self& error) = default;
-    auto operator=(const Self& error) -> Self& = default;
+    error(const Self&) = default;
+    auto operator=(const Self&) -> Self& = default;
 
-    error(Self&& error) noexcept = default;
-    auto operator=(Self&& error) noexcept -> Self& = default;
+    error(Self&&) noexcept = default;
+    auto operator=(Self&&) noexcept -> Self& = default;
 
-    explicit error(HRESULT error);
-    explicit error(glz::error_code error);
-    explicit error(UErrorCode error);
+    explicit error(HRESULT error_code);
+    explicit error(glz::error_code error_code);
+    explicit error(UErrorCode error_code);
 
     int64_t error_code;
     std::u8string message;

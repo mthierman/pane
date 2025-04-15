@@ -1,17 +1,17 @@
 #include <pane/error.hxx>
 
 namespace pane {
-error::error(HRESULT error)
-    : error_code { error },
-      message { pane::system::format_message(error) } { }
+error::error(HRESULT error_code)
+    : error_code { error_code },
+      message { pane::system::format_message(error_code) } { }
 
-error::error(glz::error_code error)
-    : error_code { static_cast<int64_t>(error) } {
-    auto formatted_error { glz::format_error(error) };
-    this->message = std::u8string { formatted_error.begin(), formatted_error.end() };
+error::error(glz::error_code error_code)
+    : error_code { static_cast<int64_t>(error_code) } {
+    auto formatted_error_code { glz::format_error(error_code) };
+    this->message = std::u8string { formatted_error_code.begin(), formatted_error_code.end() };
 }
 
-error::error(UErrorCode error)
-    : error_code { static_cast<int64_t>(error) },
-      message { reinterpret_cast<const char8_t*>(u_errorName(error)) } { }
+error::error(UErrorCode error_code)
+    : error_code { static_cast<int64_t>(error_code) },
+      message { reinterpret_cast<const char8_t*>(u_errorName(error_code)) } { }
 } // namespace pane
