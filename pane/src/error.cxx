@@ -8,7 +8,7 @@ error::error(HRESULT error_code)
 error::error(glz::error_code error_code)
     : error_code { static_cast<int64_t>(error_code) } {
     auto formatted_error_code { glz::format_error(error_code) };
-    this->message = std::u8string { formatted_error_code.begin(), formatted_error_code.end() };
+    this->message = { formatted_error_code.begin(), formatted_error_code.end() };
 }
 
 error::error(UErrorCode error_code)
