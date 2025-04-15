@@ -18,7 +18,7 @@ struct error final {
     auto operator=(Self&& error) noexcept -> Self& = default;
 
     explicit error(HRESULT error);
-    explicit error(glz::error_ctx error);
+    explicit error(glz::error_code error);
 
     int64_t error_code;
     std::u8string message;
