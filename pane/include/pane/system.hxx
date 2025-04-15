@@ -23,7 +23,7 @@ auto command_line_arguments() -> std::vector<std::u8string>;
 auto exit_process(unsigned int exit_code = EXIT_SUCCESS) -> void;
 auto quit(int exit_code = EXIT_SUCCESS) -> void;
 auto message_loop() -> int;
-} // namespace pane
+} // namespace pane::system
 
 namespace std {
 template <> struct formatter<std::error_code> : formatter<string_view> {
@@ -37,7 +37,9 @@ template <> struct formatter<std::error_code, wchar_t> : formatter<wstring_view,
         auto converted_message { pane::to_utf16(error_code.message()) };
 
         return formatter<wstring_view, wchar_t>::format(
-            reinterpret_cast<const wchar_t*>(converted_message.data()), context);
+            { reinterpret_cast<const wchar_t*>(converted_message.data()),
+              converted_message.length() },
+            context);
     }
 };
 } // namespace std
