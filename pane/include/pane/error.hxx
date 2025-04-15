@@ -2,6 +2,7 @@
 #include <format>
 #include <string>
 #include <pane/system.hxx>
+#include <glaze/glaze.hpp>
 
 namespace pane {
 struct error final {
@@ -16,7 +17,8 @@ struct error final {
     error(Self&& error) noexcept = default;
     auto operator=(Self&& error) noexcept -> Self& = default;
 
-    explicit error(HRESULT hresult);
+    explicit error(HRESULT error);
+    explicit error(glz::error_ctx error);
 
     int64_t error_code;
     std::u8string message;
