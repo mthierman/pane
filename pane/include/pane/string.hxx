@@ -15,10 +15,11 @@ struct string final {
     string() = default;
     ~string() = default;
 
-    string(const Self& string) = default;
-    auto operator=(const Self& string) -> Self& = default;
-    string(Self&& string) noexcept = default;
-    auto operator=(Self&& string) noexcept -> Self& = default;
+    string(const Self&) = default;
+    auto operator=(const Self&) -> Self& = default;
+
+    string(Self&&) noexcept = default;
+    auto operator=(Self&&) noexcept -> Self& = default;
 
     string(std::u8string&& string) noexcept;
     auto operator=(std::u8string&& string) noexcept -> Self&;
