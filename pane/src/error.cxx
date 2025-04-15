@@ -10,4 +10,8 @@ error::error(glz::error_code error)
     auto formatted_error { glz::format_error(error) };
     this->message = std::u8string { formatted_error.begin(), formatted_error.end() };
 }
+
+error::error(UErrorCode error)
+    : error_code { static_cast<int64_t>(error) },
+      message { reinterpret_cast<const char8_t*>(u_errorName(error)) } { }
 } // namespace pane

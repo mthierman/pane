@@ -3,6 +3,7 @@
 #include <string>
 #include <pane/system.hxx>
 #include <glaze/glaze.hpp>
+#include <icu.h>
 
 namespace pane {
 struct error final {
@@ -19,6 +20,7 @@ struct error final {
 
     explicit error(HRESULT error);
     explicit error(glz::error_code error);
+    explicit error(UErrorCode error);
 
     int64_t error_code;
     std::u8string message;
