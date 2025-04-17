@@ -18,15 +18,13 @@ struct file_picker final {
     file_picker(Self&&) noexcept = default;
     auto operator=(Self&&) noexcept -> Self& = default;
 
-    auto open_directory(this Self& self)
-        -> std::expected<wil::com_ptr<IShellItem>, std::error_code>;
-    auto open_file(this Self& self) -> std::expected<wil::com_ptr<IShellItem>, std::error_code>;
-
-    auto save_file(this Self& self) -> std::expected<wil::com_ptr<IShellItem>, std::error_code>;
+    auto open_directory(this Self& self) -> std::expected<wil::com_ptr<IShellItem>, HRESULT>;
+    auto open_file(this Self& self) -> std::expected<wil::com_ptr<IShellItem>, HRESULT>;
+    auto save_file(this Self& self) -> std::expected<wil::com_ptr<IShellItem>, HRESULT>;
 
 private:
-    auto open(this Self& self) -> std::expected<wil::com_ptr<IShellItem>, std::error_code>;
-    auto save(this Self& self) -> std::expected<wil::com_ptr<IShellItem>, std::error_code>;
+    auto open(this Self& self) -> std::expected<wil::com_ptr<IShellItem>, HRESULT>;
+    auto save(this Self& self) -> std::expected<wil::com_ptr<IShellItem>, HRESULT>;
 
     struct options {
         struct open {
