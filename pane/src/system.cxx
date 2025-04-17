@@ -12,15 +12,16 @@ auto last_error() -> std::error_code {
     return std::error_code(GetLastError(), std::system_category());
 }
 
-auto module_handle() -> std::expected<HMODULE, std::error_code> {
+auto module_handle() -> std::expected<HMODULE, HRESULT> {
     HMODULE hmodule;
 
-    if (GetModuleHandleExW(GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT
-                               | GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS,
-                           reinterpret_cast<LPCWSTR>(&module_handle),
-                           &hmodule)
-        == 0) {
-        return std::unexpected(last_error());
+    if (auto result { GetModuleHandleExW(GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT
+                                             | GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS,
+                                         reinterpret_cast<LPCWSTR>(&module_handle),
+                                         &hmodule) };
+        result == 0) {
+        auto last_error { GetLastError() };
+        return std::unexpected(HRESULT_FROM_WIN32(last_error));
     };
 
     return hmodule;
@@ -59,18 +60,19 @@ auto application_icon() -> HICON {
         LoadImageW(nullptr, IDI_APPLICATION, IMAGE_ICON, 0, 0, LR_SHARED | LR_DEFAULTSIZE));
 }
 
-auto resource_icon() -> std::expected<HICON, std::error_code> {
+auto resource_icon() -> std::expected<HICON, HRESULT> {
     auto module { module_handle() };
 
     if (!module) {
-        return std::unexpected(last_error());
+        return std::unexpected(module.error());
     }
 
     auto icon { static_cast<HICON>(
         LoadImageW(module.value(), MAKEINTRESOURCEW(1), IMAGE_ICON, 0, 0, LR_DEFAULTSIZE)) };
 
     if (!icon) {
-        return std::unexpected(last_error());
+        auto last_error { GetLastError() };
+        return std::unexpected(HRESULT_FROM_WIN32(last_error));
     }
 
     return icon;
@@ -115,4 +117,4 @@ auto message_loop() -> int {
 
     return static_cast<int>(msg.wParam);
 }
-} // namespace pane
+} // namespace pane::system

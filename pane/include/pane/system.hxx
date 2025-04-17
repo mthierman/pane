@@ -12,12 +12,12 @@
 namespace pane::system {
 auto hresult_error(HRESULT hresult) -> std::error_code;
 auto last_error() -> std::error_code;
-auto module_handle() -> std::expected<HMODULE, std::error_code>;
+auto module_handle() -> std::expected<HMODULE, HRESULT>;
 auto format_message(HRESULT hresult) -> std::u8string;
 auto null_brush() -> HBRUSH;
 auto arrow_cursor() -> HCURSOR;
 auto application_icon() -> HICON;
-auto resource_icon() -> std::expected<HICON, std::error_code>;
+auto resource_icon() -> std::expected<HICON, HRESULT>;
 auto ui_settings() -> winrt::Windows::UI::ViewManagement::UISettings;
 auto command_line_arguments() -> std::vector<std::u8string>;
 auto exit_process(unsigned int exit_code = EXIT_SUCCESS) -> void;
