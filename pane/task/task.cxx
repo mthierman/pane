@@ -4,6 +4,11 @@
 #include <print>
 #include <string_view>
 
+struct Settings {
+    std::string one;
+    std::string two;
+};
+
 auto wmain(int /* argc */, wchar_t* /* argv */[], wchar_t* /* envp */[]) -> int {
     auto args { pane::system::command_line_arguments() };
 
@@ -17,6 +22,15 @@ auto wmain(int /* argc */, wchar_t* /* argv */[], wchar_t* /* envp */[]) -> int 
 
     if (task(u8"config")) {
         std::println("config");
+
+        pane::config<Settings> settings;
+
+        auto json { settings.to_json() };
+
+        if (json) {
+            auto val { *json };
+            std::println("{}", val);
+        }
     }
 
     if (task(u8"error")) {
