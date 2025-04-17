@@ -45,4 +45,12 @@ auto to_utf8(std::u16string_view string) -> std::u8string {
 auto to_utf8(std::wstring_view string) -> std::u8string {
     return to_utf8(reinterpret_cast<const char16_t*>(string.data()));
 }
+
+auto to_u8string(std::string_view string) -> std::u8string {
+    return { string.begin(), string.end() };
+}
+
+auto to_u16string(std::wstring_view string) -> std::u16string {
+    return { string.begin(), string.end() };
+}
 } // namespace pane
