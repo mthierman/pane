@@ -25,7 +25,7 @@ auto temp_folder() -> std::expected<std::filesystem::path, HRESULT> {
         buffer.resize(length);
     }
 
-    if (auto length { GetTempPath2W(static_cast<DWORD>(buffer.size()), buffer.data()) };
+    if (auto length { GetTempPath2W(static_cast<DWORD>(buffer.length()), buffer.data()) };
         length == 0) {
         auto last_error { GetLastError() };
         return std::unexpected(HRESULT_FROM_WIN32(last_error));
