@@ -24,7 +24,7 @@ template <typename T> struct config final {
             return;
         }
 
-        auto ec { glz::read_file_json(
+        [[maybe_unused]] auto ec { glz::read_file_json(
             self.settings,
             reinterpret_cast<const char*>(self.config_file.u8string().data()),
             std::string {}) };
@@ -35,7 +35,7 @@ template <typename T> struct config final {
             return;
         }
 
-        auto ec { glz::write_file_json(
+        [[maybe_unused]] auto ec { glz::write_file_json(
             self.settings,
             reinterpret_cast<const char*>(self.config_file.u8string().data()),
             std::string {}) };

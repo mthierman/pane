@@ -12,6 +12,13 @@
 #include <WebView2EnvironmentOptions.h>
 
 namespace pane {
+struct window_config final {
+    std::u8string title;
+    pane::color background_color;
+    bool visible { false };
+    bool shutdown { false };
+};
+
 struct webview_config {
     struct environment_options final {
         std::u8string AdditionalBrowserArguments;
@@ -59,15 +66,64 @@ struct webview_config {
     settings settings;
 };
 
-struct window_config final {
-    std::u8string title;
-    pane::color background_color;
-    bool visible { false };
-    bool shutdown { false };
-    std::optional<pane::webview_config> webview_config { std::nullopt };
+struct window final {
+    using Self = window;
+
+    window() = default;
+    window(pane::window_config&& window_config = {},
+           std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)>&& procedure
+           = [](HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) {
+                 return DefWindowProcW(hwnd, msg, wparam, lparam);
+             });
+    ~window();
+
+    auto activate(this const Self& self) -> bool;
+    auto show(this const Self& self) -> bool;
+    auto hide(this const Self& self) -> bool;
+
+    auto client_rect(this const Self& self) -> RECT;
+    static auto get_instance(HWND hwnd) -> Self*;
+
+    HWND window_handle;
+    pane::window_config window_config;
+
+private:
+    static auto class_window_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
+        -> LRESULT;
+
+    WNDCLASSEXW window_class {
+        .cbSize { sizeof(WNDCLASSEXW) },
+        .style { 0 },
+        .lpfnWndProc { class_window_procedure },
+        .cbClsExtra { 0 },
+        .cbWndExtra { sizeof(Self) },
+        .hInstance { pane::system::module_handle().value_or(nullptr) },
+        .hIcon { pane::system::resource_icon().value_or(pane::system::application_icon()) },
+        .hCursor { pane::system::arrow_cursor() },
+        .hbrBackground { nullptr },
+        .lpszMenuName { nullptr },
+        .lpszClassName { L"PaneWindow" },
+        .hIconSm { pane::system::resource_icon().value_or(pane::system::application_icon()) }
+    };
+    std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)> window_procedure;
 };
 
 struct webview final {
+    using Self = webview;
+
+    webview(pane::window_config&& window_config = {},
+            pane::webview_config&& webview_config = {},
+            std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)>&& procedure
+            = [](HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) {
+                  return DefWindowProcW(hwnd, msg, wparam, lparam);
+              });
+    ~webview() = default;
+
+    auto navigate(this Self& self, std::u8string_view url) -> void;
+
+private:
+    pane::window window;
+    pane::webview_config webview_config;
     wil::com_ptr<ICoreWebView2Settings9> settings;
     wil::com_ptr<ICoreWebView2Environment13> environment;
     wil::com_ptr<ICoreWebView2Controller4> controller;
@@ -96,48 +152,5 @@ struct webview final {
     wil::com_ptr<ICoreWebView2EnvironmentOptions8> options8 {
         options.try_query<ICoreWebView2EnvironmentOptions8>()
     };
-};
-
-struct window final {
-    using Self = window;
-
-    window(pane::window_config&& window_config = {},
-           std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)>&& procedure
-           = [](HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) {
-                 return DefWindowProcW(hwnd, msg, wparam, lparam);
-             });
-    ~window();
-
-    auto activate(this const Self& self) -> bool;
-    auto show(this const Self& self) -> bool;
-    auto hide(this const Self& self) -> bool;
-
-    auto client_rect(this const Self& self) -> RECT;
-    static auto get_instance(HWND hwnd) -> Self*;
-
-    auto navigate(this Self& self, std::u8string_view url) -> void;
-
-private:
-    static auto class_window_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
-        -> LRESULT;
-
-    pane::window_config window_config;
-    WNDCLASSEXW window_class {
-        .cbSize { sizeof(WNDCLASSEXW) },
-        .style { 0 },
-        .lpfnWndProc { class_window_procedure },
-        .cbClsExtra { 0 },
-        .cbWndExtra { sizeof(Self) },
-        .hInstance { pane::system::module_handle().value_or(nullptr) },
-        .hIcon { pane::system::resource_icon().value_or(pane::system::application_icon()) },
-        .hCursor { pane::system::arrow_cursor() },
-        .hbrBackground { nullptr },
-        .lpszMenuName { nullptr },
-        .lpszClassName { L"PaneWindow" },
-        .hIconSm { pane::system::resource_icon().value_or(pane::system::application_icon()) }
-    };
-    HWND window_handle;
-    pane::webview webview;
-    std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)> window_procedure;
 };
 } // namespace pane
