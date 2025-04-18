@@ -76,6 +76,12 @@ struct window final {
              });
     ~window();
 
+    window(const Self&) = delete;
+    auto operator=(const Self&) -> Self& = delete;
+
+    window(Self&&) noexcept = delete;
+    auto operator=(Self&&) noexcept -> Self& = delete;
+
     auto activate(this const Self& self) -> bool;
     auto show(this const Self& self) -> bool;
     auto hide(this const Self& self) -> bool;
@@ -117,6 +123,12 @@ struct webview final {
                   return DefWindowProcW(hwnd, msg, wparam, lparam);
               });
     ~webview() = default;
+
+    webview(const Self&) = delete;
+    auto operator=(const Self&) -> Self& = delete;
+
+    webview(Self&&) noexcept = delete;
+    auto operator=(Self&&) noexcept -> Self& = delete;
 
     auto navigate(this Self& self, std::u8string_view url) -> void;
 
