@@ -105,8 +105,20 @@ auto window::class_window_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM l
 webview::webview(pane::window_config&& window_config,
                  pane::webview_config&& webview_config,
                  std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)>&& window_procedure)
-    : window { pane::window(std::move(window_config), std::move(window_procedure)) },
-      webview_config { std::move(webview_config) } {
+    : webview_config { std::move(webview_config) },
+      window_procedure { std::move(window_procedure) },
+      webview_procedure { [this](HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) -> LRESULT {
+          if (msg == WM_WINDOWPOSCHANGED) {
+              auto client_rect { this->window.client_rect() };
+
+              if (this->controller) {
+                  this->controller->put_Bounds(client_rect);
+              }
+          }
+
+          return this->window_procedure(hwnd, msg, wparam, lparam);
+      } },
+      window { pane::window(std::move(window_config), std::move(webview_procedure)) } {
     if (this->options) {
         if (!this->webview_config.environment_options.AdditionalBrowserArguments.empty()) {
             this->options->put_AdditionalBrowserArguments(reinterpret_cast<const wchar_t*>(

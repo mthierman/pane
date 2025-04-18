@@ -15,8 +15,8 @@ namespace pane {
 struct window_config final {
     std::u8string title;
     pane::color background_color;
-    bool visible { false };
-    bool shutdown { false };
+    bool visible { true };
+    bool shutdown { true };
 };
 
 struct webview_config {
@@ -132,7 +132,6 @@ struct webview final {
 
     auto navigate(this Self& self, std::u8string_view url) -> void;
 
-    pane::window window;
     pane::webview_config webview_config;
     wil::com_ptr<ICoreWebView2Settings9> settings;
     wil::com_ptr<ICoreWebView2Environment13> environment;
@@ -162,5 +161,9 @@ struct webview final {
     wil::com_ptr<ICoreWebView2EnvironmentOptions8> options8 {
         options.try_query<ICoreWebView2EnvironmentOptions8>()
     };
+
+    std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)> window_procedure;
+    std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)> webview_procedure;
+    pane::window window;
 };
 } // namespace pane
