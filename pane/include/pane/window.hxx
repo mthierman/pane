@@ -1,6 +1,7 @@
 #pragma once
 #include <Windows.h>
 #include <filesystem>
+#include <optional>
 #include <functional>
 #include <pane/system.hxx>
 #include <pane/color.hxx>
@@ -15,7 +16,6 @@ struct window_config final {
     std::u8string title;
     pane::color background_color;
     bool visible { false };
-    bool webview { false };
     bool shutdown { false };
 };
 
@@ -67,7 +67,6 @@ struct webview_config {
 };
 
 struct webview final {
-    webview_config config;
     wil::com_ptr<ICoreWebView2Settings9> settings;
     wil::com_ptr<ICoreWebView2Environment13> environment;
     wil::com_ptr<ICoreWebView2Controller4> controller;
@@ -102,10 +101,11 @@ struct window final {
     using Self = window;
 
     window(pane::window_config&& window_config = {},
-           std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)>&& procedure
-           = [](HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) {
-                 return DefWindowProcW(hwnd, msg, wparam, lparam);
-             });
+           std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)>&& procedure =
+               [](HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) {
+                   return DefWindowProcW(hwnd, msg, wparam, lparam);
+               },
+           std::optional<pane::webview_config>&& webview_config = std::nullopt);
     ~window();
 
     auto activate(this const Self& self) -> bool;
@@ -122,7 +122,8 @@ private:
         -> LRESULT;
 
     pane::window_config window_config;
-    HWND window_handle;
+    std::optional<pane::webview_config> webview_config;
+
     WNDCLASSEXW window_class {
         .cbSize { sizeof(WNDCLASSEXW) },
         .style { 0 },
@@ -137,7 +138,9 @@ private:
         .lpszClassName { L"PaneWindow" },
         .hIconSm { pane::system::resource_icon().value_or(pane::system::application_icon()) }
     };
-    std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)> window_procedure;
+
+    HWND window_handle;
     pane::webview webview;
+    std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)> window_procedure;
 };
 } // namespace pane
