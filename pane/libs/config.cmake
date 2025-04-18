@@ -26,7 +26,7 @@ target_compile_definitions(
 # https://learn.microsoft.com/en-us/cpp/build/reference/compiler-options
 target_compile_options(
     pane_config
-    INTERFACE $<$<CXX_COMPILER_FRONTEND_VARIANT:MSVC>:
+    INTERFACE $<$<CXX_COMPILER_ID:MSVC>:
               /W4
               /WX
               /utf-8
@@ -35,8 +35,13 @@ target_compile_options(
               /permissive-
               /Zc:__cplusplus,__STDC__,enumTypes,templateScope,throwingNew,preprocessor
               >
-              $<$<CXX_COMPILER_FRONTEND_VARIANT:GNU>:
-              # -Wall -Werror
+              $<$<AND:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_FRONTEND_VARIANT:MSVC>>:
+              /W4
+              /WX
+              >
+              $<$<AND:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_FRONTEND_VARIANT:GNU>>:
+              -Wall
+              -Werror
               >
     )
 
@@ -44,10 +49,13 @@ target_compile_options(
 target_link_options(
     pane_config
     INTERFACE
-    $<$<CXX_COMPILER_FRONTEND_VARIANT:MSVC>:
+    $<$<CXX_COMPILER_ID:MSVC>:
     /WX
     >
-    $<$<CXX_COMPILER_FRONTEND_VARIANT:GNU>:
-    # -Wl,/WX
+    $<$<AND:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_FRONTEND_VARIANT:MSVC>>:
+    /WX
+    >
+    $<$<AND:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_FRONTEND_VARIANT:GNU>>:
+    -Wl,/WX
     >
     )
