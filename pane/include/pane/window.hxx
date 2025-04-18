@@ -69,7 +69,6 @@ struct webview_config {
 struct window final {
     using Self = window;
 
-    window() = default;
     window(pane::window_config&& window_config = {},
            std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)>&& procedure
            = [](HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) {
@@ -121,7 +120,6 @@ struct webview final {
 
     auto navigate(this Self& self, std::u8string_view url) -> void;
 
-private:
     pane::window window;
     pane::webview_config webview_config;
     wil::com_ptr<ICoreWebView2Settings9> settings;

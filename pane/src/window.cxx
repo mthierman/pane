@@ -244,11 +244,11 @@ webview::webview(pane::window_config&& window_config,
                                     this->webview_config.settings.IsWebMessageEnabled);
                                 this->settings->put_IsZoomControlEnabled(
                                     this->webview_config.settings.IsZoomControlEnabled);
-
-                                this->navigate(this->webview_config.home_page);
                             }
                         }
                     }
+
+                    this->navigate(this->webview_config.home_page);
                 }
 
                 return S_OK;
