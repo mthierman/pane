@@ -107,7 +107,7 @@ webview::webview(pane::window_config&& window_config,
                  std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)>&& window_procedure)
     : webview_config { std::move(webview_config) },
       window_procedure { std::move(window_procedure) },
-      webview_procedure { [this](HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) -> LRESULT {
+      webview_procedure { [&](HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) -> LRESULT {
           if (msg == WM_WINDOWPOSCHANGED) {
               auto client_rect { this->window.client_rect() };
 
