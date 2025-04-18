@@ -8,7 +8,7 @@ file_picker::file_picker()
     open_dialog->GetOptions(&options.open.defaults);
     save_dialog->GetOptions(&options.save.defaults);
 
-    options.open.directory = options.open.defaults | FOS_PICKFOLDERS & ~FOS_FORCEFILESYSTEM;
+    options.open.directory = options.open.defaults | (FOS_PICKFOLDERS & ~FOS_FORCEFILESYSTEM);
     options.open.file = options.open.defaults;
     options.save.file = options.save.defaults;
 }

@@ -42,6 +42,7 @@ target_compile_options(
               $<$<AND:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_FRONTEND_VARIANT:GNU>>:
               -Wall
               -Werror
+              -Wno-braced-scalar-init
               >
     )
 
