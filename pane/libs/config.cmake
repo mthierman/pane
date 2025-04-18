@@ -38,6 +38,7 @@ target_compile_options(
               $<$<AND:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_FRONTEND_VARIANT:MSVC>>:
               /W4
               /WX
+              -Wno-braced-scalar-init
               >
               $<$<AND:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_FRONTEND_VARIANT:GNU>>:
               -Wall
