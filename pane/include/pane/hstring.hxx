@@ -52,7 +52,7 @@ struct hstring final {
 
     auto data(this const Self& self) -> const char16_t*;
 
-    auto length(this const Self& self) -> const size_t;
+    auto length(this const Self& self) -> size_t;
 
     auto get(this const Self& self) -> const std::u16string&;
 

@@ -52,7 +52,7 @@ struct string final {
 
     auto data(this const Self& self) -> const char8_t*;
 
-    auto length(this const Self& self) -> const size_t;
+    auto length(this const Self& self) -> size_t;
 
     auto get(this const Self& self) -> const std::u8string&;
 
