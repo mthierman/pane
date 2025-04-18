@@ -1,7 +1,6 @@
 #pragma once
 #include <Windows.h>
 #include <filesystem>
-#include <optional>
 #include <functional>
 #include <pane/system.hxx>
 #include <pane/color.hxx>
