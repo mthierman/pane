@@ -130,7 +130,7 @@ struct webview final {
     webview(Self&&) noexcept = delete;
     auto operator=(Self&&) noexcept -> Self& = delete;
 
-    auto navigate(this Self& self, std::u8string_view url) -> void;
+    auto navigate(this const Self& self, std::u8string_view url) -> void;
 
     pane::webview_config webview_config;
     wil::com_ptr<ICoreWebView2Settings9> settings;

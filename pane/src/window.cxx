@@ -270,7 +270,7 @@ webview::webview(pane::window_config&& window_config,
     }).Get());
 }
 
-auto webview::navigate(this Self& self, std::u8string_view url) -> void {
+auto webview::navigate(this const Self& self, std::u8string_view url) -> void {
     if (self.core) {
         self.core->Navigate(reinterpret_cast<const wchar_t*>(pane::to_utf16(url).data()));
     }
