@@ -4,11 +4,9 @@
 
 namespace pane {
 window::window(pane::window_config&& window_config,
-               std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)>&& window_procedure,
-               std::optional<pane::webview_config>&& webview_config)
+               std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)>&& window_procedure)
     : window_config { std::move(window_config) },
-      window_procedure { std::move(window_procedure) },
-      webview_config { std::move(webview_config) } {
+      window_procedure { std::move(window_procedure) } {
     this->window_class.hbrBackground = this->window_config.background_color.to_hbrush();
 
     if (GetClassInfoExW(
@@ -35,32 +33,33 @@ window::window(pane::window_config&& window_config,
         this->activate();
     }
 
-    if (this->webview_config) {
+    if (this->window_config.webview_config) {
         if (this->webview.options) {
-            if (!this->webview_config.value()
+            if (!this->window_config.webview_config.value()
                      .environment_options.AdditionalBrowserArguments.empty()) {
                 this->webview.options->put_AdditionalBrowserArguments(
                     reinterpret_cast<const wchar_t*>(
-                        pane::to_utf16(this->webview_config.value()
+                        pane::to_utf16(this->window_config.webview_config.value()
                                            .environment_options.AdditionalBrowserArguments)
                             .data()));
             }
 
             this->webview.options->put_AllowSingleSignOnUsingOSPrimaryAccount(
-                this->webview_config.value()
+                this->window_config.webview_config.value()
                     .environment_options.AllowSingleSignOnUsingOSPrimaryAccount);
 
-            if (!this->webview_config.value().environment_options.Language.empty()) {
+            if (!this->window_config.webview_config.value().environment_options.Language.empty()) {
                 this->webview.options->put_Language(reinterpret_cast<const wchar_t*>(
-                    pane::to_utf16(this->webview_config.value().environment_options.Language)
+                    pane::to_utf16(
+                        this->window_config.webview_config.value().environment_options.Language)
                         .data()));
             }
 
-            if (!this->webview_config.value()
+            if (!this->window_config.webview_config.value()
                      .environment_options.TargetCompatibleBrowserVersion.empty()) {
                 this->webview.options->put_TargetCompatibleBrowserVersion(
                     reinterpret_cast<const wchar_t*>(
-                        pane::to_utf16(this->webview_config.value()
+                        pane::to_utf16(this->window_config.webview_config.value()
                                            .environment_options.TargetCompatibleBrowserVersion)
                             .data()));
             }
@@ -68,12 +67,14 @@ window::window(pane::window_config&& window_config,
 
         if (this->webview.options2) {
             this->webview.options2->put_ExclusiveUserDataFolderAccess(
-                this->webview_config.value().environment_options.ExclusiveUserDataFolderAccess);
+                this->window_config.webview_config.value()
+                    .environment_options.ExclusiveUserDataFolderAccess);
         }
 
         if (this->webview.options3) {
             this->webview.options3->put_IsCustomCrashReportingEnabled(
-                this->webview_config.value().environment_options.IsCustomCrashReportingEnabled);
+                this->window_config.webview_config.value()
+                    .environment_options.IsCustomCrashReportingEnabled);
         }
 
         // if (this->webview.options4) {
@@ -82,27 +83,29 @@ window::window(pane::window_config&& window_config,
 
         if (this->webview.options5) {
             this->webview.options5->put_EnableTrackingPrevention(
-                this->webview_config.value().environment_options.EnableTrackingPrevention);
+                this->window_config.webview_config.value()
+                    .environment_options.EnableTrackingPrevention);
         }
 
         if (this->webview.options6) {
             this->webview.options6->put_AreBrowserExtensionsEnabled(
-                this->webview_config.value().environment_options.AreBrowserExtensionsEnabled);
+                this->window_config.webview_config.value()
+                    .environment_options.AreBrowserExtensionsEnabled);
         }
 
         if (this->webview.options7) {
             this->webview.options7->put_ChannelSearchKind(
-                this->webview_config.value().environment_options.ChannelSearchKind);
+                this->window_config.webview_config.value().environment_options.ChannelSearchKind);
         }
 
         if (this->webview.options8) {
             this->webview.options8->put_ScrollBarStyle(
-                this->webview_config.value().environment_options.ScrollBarStyle);
+                this->window_config.webview_config.value().environment_options.ScrollBarStyle);
         }
 
         CreateCoreWebView2EnvironmentWithOptions(
-            this->webview_config.value().browser_executable_folder.c_str(),
-            this->webview_config.value().user_data_folder.c_str(),
+            this->window_config.webview_config.value().browser_executable_folder.c_str(),
+            this->window_config.webview_config.value().user_data_folder.c_str(),
             this->webview.options.get(),
             wil::MakeAgileCallback<ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler>(
                 [&]([[maybe_unused]] HRESULT error_code,
@@ -154,52 +157,59 @@ window::window(pane::window_config&& window_config,
                                     // auto& settings { self.webview.settings };
 
                                     this->webview.settings->put_AreBrowserAcceleratorKeysEnabled(
-                                        this->webview_config.value()
+                                        this->window_config.webview_config.value()
                                             .settings.AreBrowserAcceleratorKeysEnabled);
                                     this->webview.settings->put_AreDefaultContextMenusEnabled(
-                                        this->webview_config.value()
+                                        this->window_config.webview_config.value()
                                             .settings.AreDefaultContextMenusEnabled);
                                     this->webview.settings->put_AreDefaultScriptDialogsEnabled(
-                                        this->webview_config.value()
+                                        this->window_config.webview_config.value()
                                             .settings.AreDefaultScriptDialogsEnabled);
                                     this->webview.settings->put_AreDevToolsEnabled(
-                                        this->webview_config.value().settings.AreDevToolsEnabled);
+                                        this->window_config.webview_config.value()
+                                            .settings.AreDevToolsEnabled);
                                     this->webview.settings->put_AreHostObjectsAllowed(
-                                        this->webview_config.value()
+                                        this->window_config.webview_config.value()
                                             .settings.AreHostObjectsAllowed);
                                     this->webview.settings->put_HiddenPdfToolbarItems(
-                                        this->webview_config.value()
+                                        this->window_config.webview_config.value()
                                             .settings.HiddenPdfToolbarItems);
                                     this->webview.settings->put_IsBuiltInErrorPageEnabled(
-                                        this->webview_config.value()
+                                        this->window_config.webview_config.value()
                                             .settings.IsBuiltInErrorPageEnabled);
                                     this->webview.settings->put_IsGeneralAutofillEnabled(
-                                        this->webview_config.value()
+                                        this->window_config.webview_config.value()
                                             .settings.IsGeneralAutofillEnabled);
                                     this->webview.settings->put_IsNonClientRegionSupportEnabled(
-                                        this->webview_config.value()
+                                        this->window_config.webview_config.value()
                                             .settings.IsNonClientRegionSupportEnabled);
                                     this->webview.settings->put_IsPasswordAutosaveEnabled(
-                                        this->webview_config.value()
+                                        this->window_config.webview_config.value()
                                             .settings.IsPasswordAutosaveEnabled);
                                     this->webview.settings->put_IsPinchZoomEnabled(
-                                        this->webview_config.value().settings.IsPinchZoomEnabled);
+                                        this->window_config.webview_config.value()
+                                            .settings.IsPinchZoomEnabled);
                                     this->webview.settings->put_IsReputationCheckingRequired(
-                                        this->webview_config.value()
+                                        this->window_config.webview_config.value()
                                             .settings.IsReputationCheckingRequired);
                                     this->webview.settings->put_IsScriptEnabled(
-                                        this->webview_config.value().settings.IsScriptEnabled);
+                                        this->window_config.webview_config.value()
+                                            .settings.IsScriptEnabled);
                                     this->webview.settings->put_IsStatusBarEnabled(
-                                        this->webview_config.value().settings.IsStatusBarEnabled);
+                                        this->window_config.webview_config.value()
+                                            .settings.IsStatusBarEnabled);
                                     this->webview.settings->put_IsSwipeNavigationEnabled(
-                                        this->webview_config.value()
+                                        this->window_config.webview_config.value()
                                             .settings.IsSwipeNavigationEnabled);
                                     this->webview.settings->put_IsWebMessageEnabled(
-                                        this->webview_config.value().settings.IsWebMessageEnabled);
+                                        this->window_config.webview_config.value()
+                                            .settings.IsWebMessageEnabled);
                                     this->webview.settings->put_IsZoomControlEnabled(
-                                        this->webview_config.value().settings.IsZoomControlEnabled);
+                                        this->window_config.webview_config.value()
+                                            .settings.IsZoomControlEnabled);
 
-                                    this->navigate(this->webview_config.value().home_page);
+                                    this->navigate(
+                                        this->window_config.webview_config.value().home_page);
                                 }
                             }
                         }

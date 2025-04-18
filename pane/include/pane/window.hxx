@@ -12,13 +12,6 @@
 #include <WebView2EnvironmentOptions.h>
 
 namespace pane {
-struct window_config final {
-    std::u8string title;
-    pane::color background_color;
-    bool visible { false };
-    bool shutdown { false };
-};
-
 struct webview_config {
     struct environment_options final {
         std::u8string AdditionalBrowserArguments;
@@ -59,11 +52,19 @@ struct webview_config {
         bool IsZoomControlEnabled { true };
     };
 
-    environment_options environment_options;
-    settings settings;
+    std::u8string home_page { u8"about:blank" };
     std::filesystem::path browser_executable_folder;
     std::filesystem::path user_data_folder;
-    std::u8string home_page { u8"about:blank" };
+    environment_options environment_options;
+    settings settings;
+};
+
+struct window_config final {
+    std::u8string title;
+    pane::color background_color;
+    bool visible { false };
+    bool shutdown { false };
+    std::optional<pane::webview_config> webview_config { std::nullopt };
 };
 
 struct webview final {
@@ -101,11 +102,10 @@ struct window final {
     using Self = window;
 
     window(pane::window_config&& window_config = {},
-           std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)>&& procedure =
-               [](HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) {
-                   return DefWindowProcW(hwnd, msg, wparam, lparam);
-               },
-           std::optional<pane::webview_config>&& webview_config = std::nullopt);
+           std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)>&& procedure
+           = [](HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) {
+                 return DefWindowProcW(hwnd, msg, wparam, lparam);
+             });
     ~window();
 
     auto activate(this const Self& self) -> bool;
@@ -122,8 +122,6 @@ private:
         -> LRESULT;
 
     pane::window_config window_config;
-    std::optional<pane::webview_config> webview_config;
-
     WNDCLASSEXW window_class {
         .cbSize { sizeof(WNDCLASSEXW) },
         .style { 0 },
@@ -138,7 +136,6 @@ private:
         .lpszClassName { L"PaneWindow" },
         .hIconSm { pane::system::resource_icon().value_or(pane::system::application_icon()) }
     };
-
     HWND window_handle;
     pane::webview webview;
     std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)> window_procedure;
