@@ -36,7 +36,18 @@ window::window(pane::window_config&& window_config,
 
 window::~window() {
     DestroyWindow(this->window_handle);
-    UnregisterClassW(this->window_class.lpszClassName, this->window_class.hInstance);
+
+    // auto unreg { UnregisterClassW(this->window_class.lpszClassName, this->window_class.hInstance)
+    // };
+
+    // if (unreg == 0) {
+    //     auto last_error { GetLastError() };
+    //     auto hr { HRESULT_FROM_WIN32(last_error) };
+    //     auto msg { pane::system::format_message(hr) };
+    //     pane::debug(msg);
+    // } else {
+    //     pane::debug(u8"Window class unregistered!");
+    // }
 }
 
 auto window::activate(this const Self& self) -> bool {
