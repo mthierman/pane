@@ -35,6 +35,7 @@ window::window(pane::window_config&& window_config,
 }
 
 window::~window() {
+    DestroyWindow(this->window_handle);
     UnregisterClassW(this->window_class.lpszClassName, this->window_class.hInstance);
 }
 
@@ -69,16 +70,8 @@ auto window::class_window_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM l
 
     if (auto self { reinterpret_cast<Self*>(GetWindowLongPtrW(hwnd, 0)) }) {
         if (msg == WM_NCDESTROY) {
-            SetWindowLongPtrW(hwnd, 0, reinterpret_cast<LONG_PTR>(nullptr));
             self->window_handle = nullptr;
-        }
-
-        if (msg == WM_WINDOWPOSCHANGED) {
-            // auto client_rect { self->client_rect() };
-
-            // if (self->webview.controller) {
-            //     self->webview.controller->put_Bounds(client_rect);
-            // }
+            SetWindowLongPtrW(hwnd, 0, reinterpret_cast<LONG_PTR>(nullptr));
         }
 
         if (msg == WM_ERASEBKGND) {
