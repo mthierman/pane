@@ -100,7 +100,7 @@ auto exit_process(unsigned int exit_code) -> void { ExitProcess(exit_code); }
 
 auto quit(int exit_code) -> void { PostQuitMessage(exit_code); }
 
-auto message_loop() -> int {
+auto message_loop(std::function<void()> cleanup) -> int {
     MSG msg {};
     int r {};
 
@@ -114,6 +114,8 @@ auto message_loop() -> int {
             DispatchMessageW(&msg);
         }
     }
+
+    cleanup();
 
     return static_cast<int>(msg.wParam);
 }

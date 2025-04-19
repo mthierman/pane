@@ -34,24 +34,23 @@ window::window(pane::window_config&& window_config,
     }
 }
 
-window::~window() {
-    DestroyWindow(this->window_handle);
-
-    // auto unreg { UnregisterClassW(this->window_class.lpszClassName, this->window_class.hInstance)
-    // };
-
-    // if (unreg == 0) {
-    //     auto last_error { GetLastError() };
-    //     auto hr { HRESULT_FROM_WIN32(last_error) };
-    //     auto msg { pane::system::format_message(hr) };
-    //     pane::debug(msg);
-    // } else {
-    //     pane::debug(u8"Window class unregistered!");
-    // }
-}
+window::~window() { DestroyWindow(this->window_handle); }
 
 auto window::activate(this const Self& self) -> bool {
     return ShowWindow(self.window_handle, SW_SHOWNORMAL);
+}
+
+auto window::deactivate(this const Self& self) -> void {
+    auto unreg { UnregisterClassW(self.window_class.lpszClassName, self.window_class.hInstance) };
+
+    if (unreg == 0) {
+        auto last_error { GetLastError() };
+        auto hr { HRESULT_FROM_WIN32(last_error) };
+        auto msg { pane::system::format_message(hr) };
+        pane::debug(msg);
+    } else {
+        pane::debug(u8"Window class unregistered!");
+    }
 }
 
 auto window::show(this const Self& self) -> bool { return ShowWindow(self.window_handle, SW_SHOW); }

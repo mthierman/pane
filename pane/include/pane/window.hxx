@@ -82,6 +82,8 @@ struct window final {
     auto operator=(Self&&) noexcept -> Self& = delete;
 
     auto activate(this const Self& self) -> bool;
+    auto deactivate(this const Self& self) -> void;
+
     auto show(this const Self& self) -> bool;
     auto hide(this const Self& self) -> bool;
 
