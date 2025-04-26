@@ -109,15 +109,14 @@ struct window final {
     pane::window_config window_config;
 
 private:
-    static auto class_window_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
-        -> LRESULT;
+    static auto class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) -> LRESULT;
     uint64_t window_id { pane::random_number<uint64_t>() };
     std::wstring class_window_name { L"PaneWindow" + std::to_wstring(window_id) };
 
     WNDCLASSEXW window_class {
         .cbSize { sizeof(WNDCLASSEXW) },
         .style { 0 },
-        .lpfnWndProc { class_window_procedure },
+        .lpfnWndProc { class_procedure },
         .cbClsExtra { 0 },
         .cbWndExtra { sizeof(Self) },
         .hInstance { pane::system::module_handle().value_or(nullptr) },

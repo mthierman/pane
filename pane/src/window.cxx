@@ -55,7 +55,7 @@ auto window::default_procedure(pane::window_message message) -> LRESULT {
     return DefWindowProcW(message.hwnd, message.msg, message.wparam, message.lparam);
 }
 
-auto window::class_window_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) -> LRESULT {
+auto window::class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) -> LRESULT {
     if (msg == WM_NCCREATE) {
         if (auto create { reinterpret_cast<CREATESTRUCTW*>(lparam) }) {
             if (auto self { static_cast<Self*>(create->lpCreateParams) }) {
