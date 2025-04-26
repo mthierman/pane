@@ -34,7 +34,7 @@ window::window(pane::window_config&& window_config,
     }
 }
 
-window::~window() { DestroyWindow(this->window_handle); }
+window::~window() { this->destroy(); }
 
 auto window::activate(this const Self& self) -> bool {
     return ShowWindow(self.window_handle, SW_SHOWNORMAL);
