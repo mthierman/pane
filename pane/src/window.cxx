@@ -51,6 +51,10 @@ auto window::show(this const Self& self) -> bool { return ShowWindow(self.window
 
 auto window::hide(this const Self& self) -> bool { return ShowWindow(self.window_handle, SW_HIDE); }
 
+auto window::default_procedure(pane::window_message message) -> LRESULT {
+    return DefWindowProcW(message.hwnd, message.msg, message.wparam, message.lparam);
+}
+
 auto window::class_window_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) -> LRESULT {
     if (msg == WM_NCCREATE) {
         if (auto create { reinterpret_cast<CREATESTRUCTW*>(lparam) }) {

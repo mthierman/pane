@@ -11,7 +11,7 @@ auto make_window(pane::window_manager& window_manager) -> pane::window {
             window_manager.erase(message.hwnd);
         }
 
-        return DefWindowProcW(message.hwnd, message.msg, message.wparam, message.lparam);
+        return pane::window::default_procedure(message);
     });
 }
 
@@ -27,7 +27,7 @@ auto make_webview(pane::window_manager& window_manager) -> pane::webview {
             window_manager.erase(message.hwnd);
         }
 
-        return DefWindowProcW(message.hwnd, message.msg, message.wparam, message.lparam);
+        return pane::window::default_procedure(message);
     });
 }
 

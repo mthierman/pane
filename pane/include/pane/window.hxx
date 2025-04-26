@@ -101,6 +101,7 @@ struct window final {
 
     auto show(this const Self& self) -> bool;
     auto hide(this const Self& self) -> bool;
+    static auto default_procedure(pane::window_message message) -> LRESULT;
 
     HWND window_handle;
     HBRUSH window_background;
