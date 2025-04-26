@@ -139,7 +139,6 @@ private:
         .hCursor { pane::system::arrow_cursor() },
         .hbrBackground { nullptr },
         .lpszMenuName { nullptr },
-        // .lpszClassName { L"" },
         .lpszClassName { window_class_name.data() },
         .hIconSm { pane::system::resource_icon().value_or(pane::system::application_icon()) }
     };
