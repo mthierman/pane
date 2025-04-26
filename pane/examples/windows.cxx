@@ -1,6 +1,7 @@
 #include <pane/pane.hxx>
 #include <set>
 
+namespace pane {
 struct window_manager {
     std::set<HWND> windows;
 
@@ -14,8 +15,9 @@ struct window_manager {
         }
     }
 };
+}; // namespace pane
 
-auto make_window() -> pane::window {
+auto make_window(pane::window_manager& window_manager) -> pane::window {
     return pane::window({ u8"pane", pane::color { 0, 0, 0, 0 }, true, true },
                         [&](pane::window::message message) -> LRESULT {
         if (message.msg == WM_CREATE) {
@@ -26,7 +28,7 @@ auto make_window() -> pane::window {
     });
 }
 
-auto make_webview() -> pane::webview {
+auto make_webview(pane::window_manager& window_manager) -> pane::webview {
     return pane::webview({},
                          { .home_page = u8"https://www.google.com/" },
                          [&](pane::window::message message) -> LRESULT {
@@ -43,9 +45,10 @@ auto WINAPI wWinMain(HINSTANCE /* hinstance */,
                      HINSTANCE /* hprevinstance */,
                      PWSTR /* pcmdline */,
                      int /* ncmdshow */) -> int {
-    auto window { make_window() };
-    auto window2 { make_window() };
-    auto webview { make_webview() };
+    auto window_manager { pane::window_manager() };
+    auto window { make_window(window_manager) };
+    auto window2 { make_window(window_manager) };
+    auto webview { make_webview(window_manager) };
 
     return pane::system::message_loop();
 }
