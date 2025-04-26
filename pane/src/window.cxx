@@ -13,6 +13,14 @@ auto window_manager::erase(this Self& self, HWND hwnd) -> void {
     }
 }
 
+auto window_manager::clear(this Self& self) -> void {
+    self.set.clear();
+
+    if (self.set.empty()) {
+        PostQuitMessage(0);
+    }
+}
+
 window::window(pane::window_config&& window_config,
                std::function<LRESULT(pane::window_message)>&& window_procedure)
     : window_config { std::move(window_config) },
