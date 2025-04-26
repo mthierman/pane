@@ -5,7 +5,11 @@ auto WINAPI wWinMain(HINSTANCE /* hinstance */,
                      HINSTANCE /* hprevinstance */,
                      PWSTR /* pcmdline */,
                      int /* ncmdshow */) -> int {
-    auto window { pane::window() };
+    // auto window { pane::window() };
+
+    // window.~window();
+
+    auto win { std::make_unique<pane::window>() };
 
     return pane::system::message_loop();
 }

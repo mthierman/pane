@@ -82,16 +82,13 @@ struct window final {
     auto operator=(Self&&) noexcept -> Self& = delete;
 
     auto create(this Self& self) -> std::expected<HWND, HRESULT>;
-    auto destroy(this const Self& self) -> bool;
-    auto unregister_class(this const Self& self) -> std::expected<void, HRESULT>;
-
     auto show(this const Self& self) -> bool;
     auto hide(this const Self& self) -> bool;
 
-    auto client_rect(this const Self& self) -> RECT;
     static auto get_instance(HWND hwnd) -> Self*;
 
     HWND window_handle;
+    RECT client_rect;
     pane::window_config window_config;
 
 private:

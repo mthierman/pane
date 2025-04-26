@@ -22,7 +22,10 @@ window::window(pane::window_config&& window_config,
     }
 }
 
-window::~window() { this->destroy(); }
+window::~window() {
+    DestroyWindow(this->window_handle);
+    UnregisterClassW(this->window_class.lpszClassName, this->window_class.hInstance);
+}
 
 auto window::create(this Self& self) -> std::expected<HWND, HRESULT> {
     auto hwnd { CreateWindowExW(
@@ -47,29 +50,9 @@ auto window::create(this Self& self) -> std::expected<HWND, HRESULT> {
     return hwnd;
 }
 
-auto window::destroy(this const Self& self) -> bool { return DestroyWindow(self.window_handle); }
-
-auto window::unregister_class(this const Self& self) -> std::expected<void, HRESULT> {
-    if (auto unreg {
-            UnregisterClassW(self.window_class.lpszClassName, self.window_class.hInstance) };
-        unreg == 0) {
-        auto last_error { GetLastError() };
-        return std::unexpected(HRESULT_FROM_WIN32(last_error));
-    }
-
-    return {};
-}
-
 auto window::show(this const Self& self) -> bool { return ShowWindow(self.window_handle, SW_SHOW); }
 
 auto window::hide(this const Self& self) -> bool { return ShowWindow(self.window_handle, SW_HIDE); }
-
-auto window::client_rect(this const Self& self) -> RECT {
-    RECT client_rect {};
-    GetClientRect(self.window_handle, &client_rect);
-
-    return client_rect;
-}
 
 auto window::get_instance(HWND hwnd) -> Self* {
     return reinterpret_cast<Self*>(GetWindowLongPtrW(hwnd, 0));
@@ -86,14 +69,20 @@ auto window::class_window_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM l
     }
 
     if (auto self { reinterpret_cast<Self*>(GetWindowLongPtrW(hwnd, 0)) }) {
+        if (msg == WM_ERASEBKGND) {
+            GetClientRect(hwnd, &self->client_rect);
+            FillRect(reinterpret_cast<HDC>(wparam),
+                     &self->client_rect,
+                     self->window_class.hbrBackground);
+        }
+
+        if (msg == WM_WINDOWPOSCHANGED) {
+            GetClientRect(hwnd, &self->client_rect);
+        }
+
         if (msg == WM_NCDESTROY) {
             self->window_handle = nullptr;
             SetWindowLongPtrW(hwnd, 0, reinterpret_cast<LONG_PTR>(nullptr));
-        }
-
-        if (msg == WM_ERASEBKGND) {
-            auto client_rect { self->client_rect() };
-            FillRect(reinterpret_cast<HDC>(wparam), &client_rect, self->window_class.hbrBackground);
         }
 
         if (msg == WM_DESTROY) {
@@ -119,10 +108,8 @@ webview::webview(pane::window_config&& window_config,
       window_procedure { std::move(window_procedure) },
       webview_procedure { [&](HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) -> LRESULT {
           if (msg == WM_WINDOWPOSCHANGED) {
-              auto client_rect { this->window.client_rect() };
-
               if (this->controller) {
-                  this->controller->put_Bounds(client_rect);
+                  this->controller->put_Bounds(this->window.client_rect);
               }
           }
 
