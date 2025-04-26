@@ -1,4 +1,19 @@
 #include <pane/pane.hxx>
+#include <set>
+
+struct window_manager {
+    std::set<HWND> windows;
+
+    auto add(HWND hwnd) -> void { windows.insert(hwnd); }
+
+    auto remove(HWND hwnd) -> void {
+        windows.erase(hwnd);
+
+        if (windows.empty()) {
+            PostQuitMessage(0);
+        }
+    }
+};
 
 auto make_window() -> pane::window {
     return pane::window({ u8"pane", pane::color { 0, 0, 0, 0 }, true, true },
