@@ -81,7 +81,7 @@ struct window final {
     window(Self&&) noexcept = delete;
     auto operator=(Self&&) noexcept -> Self& = delete;
 
-    auto create(this Self& self) -> HWND;
+    auto create(this Self& self) -> std::expected<HWND, HRESULT>;
     auto activate(this const Self& self) -> bool;
     auto deactivate(this const Self& self) -> void;
     auto destroy(this const Self& self) -> bool;

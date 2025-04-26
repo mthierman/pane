@@ -14,12 +14,17 @@ window::window(pane::window_config&& window_config,
         == 0) {
         RegisterClassExW(&this->window_class);
     };
+
+    if (this->window_config.visible) {
+        this->create();
+        this->activate();
+    }
 }
 
 window::~window() { this->destroy(); }
 
-auto window::create(this Self& self) -> HWND {
-    auto create { CreateWindowExW(
+auto window::create(this Self& self) -> std::expected<HWND, HRESULT> {
+    auto hwnd { CreateWindowExW(
         0,
         self.window_class.lpszClassName,
         reinterpret_cast<const wchar_t*>(pane::to_utf16(self.window_config.title).data()),
@@ -33,11 +38,12 @@ auto window::create(this Self& self) -> HWND {
         self.window_class.hInstance,
         &self) };
 
-    if (self.window_config.visible) {
-        self.activate();
+    if (hwnd == NULL) {
+        auto last_error { GetLastError() };
+        return std::unexpected(HRESULT_FROM_WIN32(last_error));
     }
 
-    return create;
+    return hwnd;
 }
 
 auto window::activate(this const Self& self) -> bool {
