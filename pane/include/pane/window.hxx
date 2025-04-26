@@ -95,6 +95,11 @@ struct window_message {
 struct window final {
     using Self = window;
 
+    struct message {
+        Self* window;
+        window_message window_message;
+    };
+
     window(pane::window_config&& window_config = {},
            std::function<LRESULT(pane::window_message)>&& procedure
            = [](pane::window_message message) {
@@ -143,6 +148,11 @@ private:
 
 struct webview final {
     using Self = webview;
+
+    struct message {
+        Self* webview;
+        window_message window_message;
+    };
 
     webview(pane::window_config&& window_config = {},
             pane::webview_config&& webview_config = {},
