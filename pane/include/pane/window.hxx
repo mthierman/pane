@@ -126,7 +126,8 @@ struct window final {
 private:
     static auto class_window_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
         -> LRESULT;
-    std::wstring class_window_name { L"PaneWindow" + std::to_wstring(make_random<uint64_t>()) };
+    uint64_t window_id { make_random<uint64_t>() };
+    std::wstring class_window_name { L"PaneWindow" + std::to_wstring(window_id) };
 
     WNDCLASSEXW window_class {
         .cbSize { sizeof(WNDCLASSEXW) },
