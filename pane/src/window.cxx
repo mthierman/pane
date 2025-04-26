@@ -14,11 +14,15 @@ window::window(pane::window_config&& window_config,
         == 0) {
         RegisterClassExW(&this->window_class);
     };
+}
 
-    CreateWindowExW(
+window::~window() { this->destroy(); }
+
+auto window::create(this Self& self) -> HWND {
+    auto create { CreateWindowExW(
         0,
-        this->window_class.lpszClassName,
-        reinterpret_cast<const wchar_t*>(pane::to_utf16(this->window_config.title).data()),
+        self.window_class.lpszClassName,
+        reinterpret_cast<const wchar_t*>(pane::to_utf16(self.window_config.title).data()),
         WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN,
         CW_USEDEFAULT,
         CW_USEDEFAULT,
@@ -26,15 +30,15 @@ window::window(pane::window_config&& window_config,
         CW_USEDEFAULT,
         nullptr,
         nullptr,
-        this->window_class.hInstance,
-        this);
+        self.window_class.hInstance,
+        &self) };
 
-    if (this->window_config.visible) {
-        this->activate();
+    if (self.window_config.visible) {
+        self.activate();
     }
-}
 
-window::~window() { this->destroy(); }
+    return create;
+}
 
 auto window::activate(this const Self& self) -> bool {
     return ShowWindow(self.window_handle, SW_SHOWNORMAL);
