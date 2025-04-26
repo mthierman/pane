@@ -27,6 +27,8 @@ auto window_manager::contains(this const Self& self, HWND hwnd) -> bool {
 
 auto window_manager::empty(this const Self& self) -> bool { return self.set.empty(); }
 
+auto window_manager::size(this const Self& self) -> uint64_t { return self.set.size(); }
+
 window::window(pane::window_config&& window_config,
                std::function<LRESULT(pane::window_message)>&& window_procedure)
     : window_config { std::move(window_config) },

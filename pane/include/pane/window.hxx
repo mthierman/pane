@@ -75,6 +75,7 @@ struct window_manager {
     auto clear(this Self& self) -> void;
     auto contains(this const Self& self, HWND hwnd) -> bool;
     auto empty(this const Self& self) -> bool;
+    auto size(this const Self& self) -> uint64_t;
 
     std::set<HWND> set;
 };
