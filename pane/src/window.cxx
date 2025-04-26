@@ -14,7 +14,7 @@ auto window_manager::erase(this Self& self, HWND hwnd) -> void {
 }
 
 window::window(pane::window_config&& window_config,
-               std::function<LRESULT(message)>&& window_procedure)
+               std::function<LRESULT(pane::window_message)>&& window_procedure)
     : window_config { std::move(window_config) },
       window_procedure { std::move(window_procedure) } {
     if (GetClassInfoExW(
@@ -96,10 +96,10 @@ auto window::class_window_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM l
 
 webview::webview(pane::window_config&& window_config,
                  pane::webview_config&& webview_config,
-                 std::function<LRESULT(window::message)>&& window_procedure)
+                 std::function<LRESULT(pane::window_message)>&& window_procedure)
     : webview_config { std::move(webview_config) },
       window_procedure { std::move(window_procedure) },
-      webview_procedure { [&](pane::window::message message) -> LRESULT {
+      webview_procedure { [&](pane::window_message message) -> LRESULT {
           if (message.msg == WM_WINDOWPOSCHANGED) {
               if (this->controller) {
                   this->controller->put_Bounds(this->window.client_rect);
