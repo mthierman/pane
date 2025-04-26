@@ -102,6 +102,7 @@ struct window final {
     auto hide(this const Self& self) -> bool;
 
     HWND window_handle;
+    HBRUSH window_background;
     RECT client_rect;
     pane::window_config window_config;
 

@@ -17,7 +17,10 @@ window::window(pane::window_config&& window_config,
                std::function<LRESULT(message)>&& window_procedure)
     : window_config { std::move(window_config) },
       window_procedure { std::move(window_procedure) } {
-    this->window_class.hbrBackground = this->window_config.background_color.to_hbrush();
+    // window_background = this->window_config.background_color.to_hbrush();
+    window_background = CreateSolidBrush(RGB(this->window_config.background_color.r,
+                                             this->window_config.background_color.g,
+                                             this->window_config.background_color.b));
 
     if (GetClassInfoExW(
             this->window_class.hInstance, this->window_class.lpszClassName, &this->window_class)
@@ -64,14 +67,13 @@ auto window::class_window_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM l
     }
 
     if (auto self { reinterpret_cast<Self*>(GetWindowLongPtrW(hwnd, 0)) }) {
-        if (msg == WM_ERASEBKGND) {
-            FillRect(reinterpret_cast<HDC>(wparam),
-                     &self->client_rect,
-                     self->window_class.hbrBackground);
-        }
-
         if (msg == WM_WINDOWPOSCHANGED) {
             GetClientRect(hwnd, &self->client_rect);
+        }
+
+        if (msg == WM_ERASEBKGND) {
+            GetClientRect(hwnd, &self->client_rect);
+            FillRect(reinterpret_cast<HDC>(wparam), &self->client_rect, self->window_background);
         }
 
         if (msg == WM_NCDESTROY) {
