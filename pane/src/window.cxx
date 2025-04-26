@@ -4,7 +4,7 @@
 
 namespace pane {
 window::window(pane::window_config&& window_config,
-               std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)>&& window_procedure)
+               std::function<LRESULT(message)>&& window_procedure)
     : window_config { std::move(window_config) },
       window_procedure { std::move(window_procedure) } {
     this->window_class.hbrBackground = this->window_config.background_color.to_hbrush();
@@ -54,10 +54,6 @@ auto window::show(this const Self& self) -> bool { return ShowWindow(self.window
 
 auto window::hide(this const Self& self) -> bool { return ShowWindow(self.window_handle, SW_HIDE); }
 
-// auto window::get_instance(HWND hwnd) -> Self* {
-//     return reinterpret_cast<Self*>(GetWindowLongPtrW(hwnd, 0));
-// }
-
 auto window::class_window_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) -> LRESULT {
     if (msg == WM_NCCREATE) {
         if (auto create { reinterpret_cast<CREATESTRUCTW*>(lparam) }) {
@@ -94,7 +90,7 @@ auto window::class_window_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM l
         }
 
         if (self->window_procedure) {
-            return self->window_procedure(hwnd, msg, wparam, lparam);
+            return self->window_procedure({ self, hwnd, msg, wparam, lparam });
         }
     }
 
@@ -103,17 +99,18 @@ auto window::class_window_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM l
 
 webview::webview(pane::window_config&& window_config,
                  pane::webview_config&& webview_config,
-                 std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)>&& window_procedure)
+                 std::function<LRESULT(window::message)>&& window_procedure)
     : webview_config { std::move(webview_config) },
       window_procedure { std::move(window_procedure) },
-      webview_procedure { [&](HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) -> LRESULT {
-          if (msg == WM_WINDOWPOSCHANGED) {
+      webview_procedure { [&](pane::window::message message) -> LRESULT {
+          if (message.msg == WM_WINDOWPOSCHANGED) {
               if (this->controller) {
                   this->controller->put_Bounds(this->window.client_rect);
               }
           }
 
-          return this->window_procedure(hwnd, msg, wparam, lparam);
+          return this->window_procedure(
+              { message.self, message.hwnd, message.msg, message.wparam, message.lparam });
       } },
       window { pane::window(std::move(window_config), std::move(webview_procedure)) } {
     if (this->options) {

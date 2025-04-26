@@ -68,11 +68,18 @@ struct webview_config {
 struct window final {
     using Self = window;
 
+    struct message {
+        Self* self;
+        HWND hwnd;
+        UINT msg;
+        WPARAM wparam;
+        LPARAM lparam;
+    };
+
     window(pane::window_config&& window_config = {},
-           std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)>&& procedure
-           = [](HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) {
-                 return DefWindowProcW(hwnd, msg, wparam, lparam);
-             });
+           std::function<LRESULT(message)>&& procedure = [](pane::window::message message) {
+               return DefWindowProcW(message.hwnd, message.msg, message.wparam, message.lparam);
+           });
     ~window();
 
     window(const Self&) = delete;
@@ -84,8 +91,6 @@ struct window final {
     auto create(this Self& self) -> std::expected<HWND, HRESULT>;
     auto show(this const Self& self) -> bool;
     auto hide(this const Self& self) -> bool;
-
-    // static auto get_instance(HWND hwnd) -> Self*;
 
     HWND window_handle;
     RECT client_rect;
@@ -109,7 +114,7 @@ private:
         .lpszClassName { L"PaneWindow" },
         .hIconSm { pane::system::resource_icon().value_or(pane::system::application_icon()) }
     };
-    std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)> window_procedure;
+    std::function<LRESULT(message)> window_procedure;
 };
 
 struct webview final {
@@ -117,10 +122,9 @@ struct webview final {
 
     webview(pane::window_config&& window_config = {},
             pane::webview_config&& webview_config = {},
-            std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)>&& procedure
-            = [](HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) {
-                  return DefWindowProcW(hwnd, msg, wparam, lparam);
-              });
+            std::function<LRESULT(window::message)>&& procedure = [](window::message message) {
+                return DefWindowProcW(message.hwnd, message.msg, message.wparam, message.lparam);
+            });
     ~webview() = default;
 
     webview(const Self&) = delete;
@@ -161,8 +165,8 @@ struct webview final {
         options.try_query<ICoreWebView2EnvironmentOptions8>()
     };
 
-    std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)> window_procedure;
-    std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)> webview_procedure;
+    std::function<LRESULT(window::message)> window_procedure;
+    std::function<LRESULT(window::message)> webview_procedure;
     pane::window window;
 };
 } // namespace pane

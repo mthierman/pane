@@ -12,16 +12,13 @@ auto WINAPI wWinMain(HINSTANCE /* hinstance */,
 
     // auto win { std::make_unique<pane::window>() };
 
-    auto window { pane::window({ .title { u8"pane" },
-                                 .background_color { pane::color { 0, 0, 0, 0 } },
-                                 .visible { false },
-                                 .shutdown { false } },
-                               [&](HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) -> LRESULT {
-        if (msg == WM_SETTINGCHANGE) {
+    auto window { pane::window({ u8"pane", pane::color { 0, 0, 0, 0 }, true, true },
+                               [&](pane::window::message message) -> LRESULT {
+        if (message.msg == WM_SETTINGCHANGE) {
             //
         }
 
-        return DefWindowProcW(hwnd, msg, wparam, lparam);
+        return DefWindowProcW(message.hwnd, message.msg, message.wparam, message.lparam);
     }) };
 
     return pane::system::message_loop();
