@@ -53,6 +53,8 @@ auto window::deactivate(this const Self& self) -> void {
     }
 }
 
+auto window::destroy(this const Self& self) -> bool { return DestroyWindow(self.window_handle); }
+
 auto window::show(this const Self& self) -> bool { return ShowWindow(self.window_handle, SW_SHOW); }
 
 auto window::hide(this const Self& self) -> bool { return ShowWindow(self.window_handle, SW_HIDE); }

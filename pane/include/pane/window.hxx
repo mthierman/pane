@@ -83,6 +83,7 @@ struct window final {
 
     auto activate(this const Self& self) -> bool;
     auto deactivate(this const Self& self) -> void;
+    auto destroy(this const Self& self) -> bool;
 
     auto show(this const Self& self) -> bool;
     auto hide(this const Self& self) -> bool;
