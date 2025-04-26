@@ -312,14 +312,12 @@ auto webview::class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
     }
 
     if (auto self { reinterpret_cast<Self*>(GetWindowLongPtrW(hwnd, 0)) }) {
-        //       if (message.msg == WM_WINDOWPOSCHANGED) {
-        //           if (this->controller) {
-        //               this->controller->put_Bounds(this->window.client_rect);
-        //           }
-        //       }
-
         if (msg == WM_WINDOWPOSCHANGED) {
             GetClientRect(hwnd, &self->client_rect);
+
+            if (self->controller) {
+                self->controller->put_Bounds(self->client_rect);
+            }
         }
 
         if (msg == WM_ERASEBKGND) {
