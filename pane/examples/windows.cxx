@@ -41,7 +41,7 @@ auto WINAPI wWinMain(HINSTANCE /* hinstance */,
     auto window_manager { pane::window_manager() };
 
     auto window { make_window(window_manager) };
-    // auto webview { make_webview(window_manager) };
+    auto webview { make_webview(window_manager) };
 
     return pane::system::message_loop();
 }
