@@ -113,8 +113,6 @@ struct window final {
     window(Self&&) noexcept = delete;
     auto operator=(Self&&) noexcept -> Self& = delete;
 
-    auto create(this Self& self, const WNDCLASSEXW& window_class, std::u8string_view window_name)
-        -> void;
     auto show(this const Self& self) -> bool;
     auto hide(this const Self& self) -> bool;
     static auto default_procedure(pane::window_message message) -> LRESULT;
