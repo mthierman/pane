@@ -85,7 +85,7 @@ struct window final {
     auto show(this const Self& self) -> bool;
     auto hide(this const Self& self) -> bool;
 
-    static auto get_instance(HWND hwnd) -> Self*;
+    // static auto get_instance(HWND hwnd) -> Self*;
 
     HWND window_handle;
     RECT client_rect;

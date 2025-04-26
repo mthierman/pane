@@ -54,9 +54,9 @@ auto window::show(this const Self& self) -> bool { return ShowWindow(self.window
 
 auto window::hide(this const Self& self) -> bool { return ShowWindow(self.window_handle, SW_HIDE); }
 
-auto window::get_instance(HWND hwnd) -> Self* {
-    return reinterpret_cast<Self*>(GetWindowLongPtrW(hwnd, 0));
-}
+// auto window::get_instance(HWND hwnd) -> Self* {
+//     return reinterpret_cast<Self*>(GetWindowLongPtrW(hwnd, 0));
+// }
 
 auto window::class_window_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) -> LRESULT {
     if (msg == WM_NCCREATE) {
