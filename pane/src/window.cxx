@@ -44,7 +44,6 @@ window::window(pane::window_config&& window_config,
 
 window::~window() {
     DestroyWindow(this->window_handle);
-    pane::debug(this->window_class.lpszClassName);
     UnregisterClassW(this->window_class.lpszClassName, this->window_class.hInstance);
 }
 

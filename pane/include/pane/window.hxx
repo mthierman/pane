@@ -126,8 +126,8 @@ struct window final {
 private:
     static auto class_window_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
         -> LRESULT;
+    std::wstring class_window_name { L"PaneWindow" + std::to_wstring(make_random<uint64_t>()) };
 
-    std::wstring window_class_name { L"PaneWindow" + std::to_wstring(make_random<uint64_t>()) };
     WNDCLASSEXW window_class {
         .cbSize { sizeof(WNDCLASSEXW) },
         .style { 0 },
@@ -139,7 +139,7 @@ private:
         .hCursor { pane::system::arrow_cursor() },
         .hbrBackground { nullptr },
         .lpszMenuName { nullptr },
-        .lpszClassName { window_class_name.data() },
+        .lpszClassName { class_window_name.data() },
         .hIconSm { pane::system::resource_icon().value_or(pane::system::application_icon()) }
     };
     std::function<LRESULT(message)> window_procedure;
