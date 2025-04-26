@@ -2,6 +2,8 @@
 #include <Windows.h>
 #include <filesystem>
 #include <functional>
+#include <limits>
+#include <random>
 #include <set>
 #include <pane/system.hxx>
 #include <pane/color.hxx>
@@ -12,6 +14,21 @@
 #include <WebView2EnvironmentOptions.h>
 
 namespace pane {
+template <typename T = int64_t, typename R = std::mt19937_64> auto make_random() -> T {
+    constexpr T max { std::numeric_limits<T>::max() };
+    thread_local R generator { std::random_device {}() };
+
+    if constexpr (std::is_integral_v<T>) {
+        thread_local std::uniform_int_distribution<T> dist(0, max);
+        return dist(generator);
+    }
+
+    else if constexpr (std::is_floating_point_v<T>) {
+        thread_local std::uniform_real_distribution<T> dist(0, max);
+        return dist(generator);
+    }
+}
+
 struct window_config final {
     std::u8string title;
     pane::color background_color;
@@ -110,6 +127,7 @@ private:
     static auto class_window_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
         -> LRESULT;
 
+    std::wstring window_class_name { L"PaneWindow" + std::to_wstring(make_random<uint64_t>()) };
     WNDCLASSEXW window_class {
         .cbSize { sizeof(WNDCLASSEXW) },
         .style { 0 },
@@ -121,7 +139,8 @@ private:
         .hCursor { pane::system::arrow_cursor() },
         .hbrBackground { nullptr },
         .lpszMenuName { nullptr },
-        .lpszClassName { L"PaneWindow" },
+        // .lpszClassName { L"" },
+        .lpszClassName { window_class_name.data() },
         .hIconSm { pane::system::resource_icon().value_or(pane::system::application_icon()) }
     };
     std::function<LRESULT(message)> window_procedure;
