@@ -15,10 +15,10 @@ window::window(pane::window_config&& window_config,
         RegisterClassExW(&this->window_class);
     };
 
-    this->create();
-
-    if (this->window_config.visible) {
-        this->activate();
+    if (this->create()) {
+        if (this->window_config.visible) {
+            ShowWindow(this->window_handle, SW_SHOWNORMAL);
+        }
     }
 }
 
@@ -47,24 +47,18 @@ auto window::create(this Self& self) -> std::expected<HWND, HRESULT> {
     return hwnd;
 }
 
-auto window::activate(this const Self& self) -> bool {
-    return ShowWindow(self.window_handle, SW_SHOWNORMAL);
-}
-
-auto window::deactivate(this const Self& self) -> void {
-    auto unreg { UnregisterClassW(self.window_class.lpszClassName, self.window_class.hInstance) };
-
-    if (unreg == 0) {
-        auto last_error { GetLastError() };
-        auto hr { HRESULT_FROM_WIN32(last_error) };
-        auto msg { pane::system::format_message(hr) };
-        pane::debug(msg);
-    } else {
-        pane::debug(u8"Window class unregistered!");
-    }
-}
-
 auto window::destroy(this const Self& self) -> bool { return DestroyWindow(self.window_handle); }
+
+auto window::unregister_class(this const Self& self) -> std::expected<void, HRESULT> {
+    if (auto unreg {
+            UnregisterClassW(self.window_class.lpszClassName, self.window_class.hInstance) };
+        unreg == 0) {
+        auto last_error { GetLastError() };
+        return std::unexpected(HRESULT_FROM_WIN32(last_error));
+    }
+
+    return {};
+}
 
 auto window::show(this const Self& self) -> bool { return ShowWindow(self.window_handle, SW_SHOW); }
 
