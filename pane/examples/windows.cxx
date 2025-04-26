@@ -37,8 +37,8 @@ auto WINAPI wWinMain(HINSTANCE /* hinstance */,
                      PWSTR /* pcmdline */,
                      int /* ncmdshow */) -> int {
     auto window_manager { pane::window_manager() };
+
     auto window { make_window(window_manager) };
-    auto window2 { make_window(window_manager) };
     auto webview { make_webview(window_manager) };
 
     return pane::system::message_loop();
