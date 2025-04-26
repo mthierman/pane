@@ -15,8 +15,9 @@ window::window(pane::window_config&& window_config,
         RegisterClassExW(&this->window_class);
     };
 
+    this->create();
+
     if (this->window_config.visible) {
-        this->create();
         this->activate();
     }
 }
