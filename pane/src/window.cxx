@@ -65,7 +65,6 @@ auto window::class_window_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM l
 
     if (auto self { reinterpret_cast<Self*>(GetWindowLongPtrW(hwnd, 0)) }) {
         if (msg == WM_ERASEBKGND) {
-            GetClientRect(hwnd, &self->client_rect);
             FillRect(reinterpret_cast<HDC>(wparam),
                      &self->client_rect,
                      self->window_class.hbrBackground);

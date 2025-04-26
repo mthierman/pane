@@ -1,7 +1,7 @@
 #include <pane/pane.hxx>
 
 auto make_window(pane::window_manager& window_manager) -> pane::window {
-    return pane::window({ u8"pane", pane::color { 0, 0, 0, 0 }, true, false },
+    return pane::window({ u8"pane", pane::color { 0, 34, 255, 255 }, true, false },
                         [&](pane::window::message message) -> LRESULT {
         if (message.msg == WM_CREATE) {
             window_manager.insert(message.hwnd);
