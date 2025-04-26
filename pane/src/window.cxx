@@ -44,7 +44,6 @@ window::window(pane::window_config&& window_config,
 
 window::~window() {
     DestroyWindow(this->window_handle);
-    DeleteObject(this->window_background);
     UnregisterClassW(this->window_class.lpszClassName, this->window_class.hInstance);
 }
 
@@ -75,6 +74,7 @@ auto window::class_window_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM l
 
         if (msg == WM_NCDESTROY) {
             self->window_handle = nullptr;
+            DeleteObject(self->window_background);
             SetWindowLongPtrW(hwnd, 0, reinterpret_cast<LONG_PTR>(nullptr));
         }
 
