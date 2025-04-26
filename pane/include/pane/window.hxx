@@ -2,11 +2,10 @@
 #include <Windows.h>
 #include <filesystem>
 #include <functional>
-#include <limits>
-#include <random>
 #include <set>
-#include <pane/system.hxx>
 #include <pane/color.hxx>
+#include <pane/math.hxx>
+#include <pane/system.hxx>
 #include <wil/com.h>
 #include <wil/resource.h>
 #include <wil/wrl.h>
@@ -14,21 +13,6 @@
 #include <WebView2EnvironmentOptions.h>
 
 namespace pane {
-template <typename T = int64_t, typename R = std::mt19937_64> auto make_random() -> T {
-    constexpr T max { std::numeric_limits<T>::max() };
-    thread_local R generator { std::random_device {}() };
-
-    if constexpr (std::is_integral_v<T>) {
-        thread_local std::uniform_int_distribution<T> dist(0, max);
-        return dist(generator);
-    }
-
-    else if constexpr (std::is_floating_point_v<T>) {
-        thread_local std::uniform_real_distribution<T> dist(0, max);
-        return dist(generator);
-    }
-}
-
 struct window_config final {
     std::u8string title;
     pane::color background_color;
@@ -126,7 +110,7 @@ struct window final {
 private:
     static auto class_window_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
         -> LRESULT;
-    uint64_t window_id { make_random<uint64_t>() };
+    uint64_t window_id { pane::random_number<uint64_t>() };
     std::wstring class_window_name { L"PaneWindow" + std::to_wstring(window_id) };
 
     WNDCLASSEXW window_class {

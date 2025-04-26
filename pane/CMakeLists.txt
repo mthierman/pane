@@ -34,6 +34,7 @@ target_sources(
             "src/guid.cxx"
             "src/hstring.cxx"
             "src/icu.cxx"
+            "src/math.cxx"
             "src/message_box.cxx"
             "src/process.cxx"
             "src/string.cxx"
