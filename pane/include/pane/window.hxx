@@ -2,6 +2,7 @@
 #include <Windows.h>
 #include <filesystem>
 #include <functional>
+#include <set>
 #include <pane/system.hxx>
 #include <pane/color.hxx>
 #include <wil/com.h>
@@ -63,6 +64,15 @@ struct webview_config {
     std::filesystem::path user_data_folder;
     environment_options environment_options;
     settings settings;
+};
+
+struct window_manager {
+    using Self = window_manager;
+
+    auto insert(this Self& self, HWND hwnd) -> void;
+    auto erase(this Self& self, HWND hwnd) -> void;
+
+    std::set<HWND> set;
 };
 
 struct window final {

@@ -3,6 +3,16 @@
 #include <pane/debug.hxx>
 
 namespace pane {
+auto window_manager::insert(this Self& self, HWND hwnd) -> void { self.set.insert(hwnd); }
+
+auto window_manager::erase(this Self& self, HWND hwnd) -> void {
+    self.set.erase(hwnd);
+
+    if (self.set.empty()) {
+        PostQuitMessage(0);
+    }
+}
+
 window::window(pane::window_config&& window_config,
                std::function<LRESULT(message)>&& window_procedure)
     : window_config { std::move(window_config) },
