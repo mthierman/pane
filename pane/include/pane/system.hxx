@@ -23,7 +23,7 @@ auto ui_settings() -> winrt::Windows::UI::ViewManagement::UISettings;
 auto command_line_arguments() -> std::vector<std::u8string>;
 auto exit_process(unsigned int exit_code = EXIT_SUCCESS) -> void;
 auto quit(int exit_code = EXIT_SUCCESS) -> void;
-auto message_loop(std::function<void()> cleanup = {}) -> int;
+auto message_loop() -> int;
 } // namespace pane::system
 
 namespace std {
