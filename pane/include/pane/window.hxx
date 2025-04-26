@@ -80,7 +80,6 @@ struct window final {
     using Self = window;
 
     struct message {
-        Self* window;
         HWND hwnd;
         UINT msg;
         WPARAM wparam;

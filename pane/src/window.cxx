@@ -87,7 +87,7 @@ auto window::class_window_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM l
         }
 
         if (self->window_procedure) {
-            return self->window_procedure({ self, hwnd, msg, wparam, lparam });
+            return self->window_procedure({ hwnd, msg, wparam, lparam });
         }
     }
 
@@ -106,8 +106,7 @@ webview::webview(pane::window_config&& window_config,
               }
           }
 
-          return this->window_procedure(
-              { message.window, message.hwnd, message.msg, message.wparam, message.lparam });
+          return this->window_procedure(message);
       } },
       window { pane::window(std::move(window_config), std::move(webview_procedure)) } {
     if (this->options) {
