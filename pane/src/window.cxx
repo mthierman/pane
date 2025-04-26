@@ -124,18 +124,7 @@ webview::webview(pane::window_config&& window_config,
                  std::function<LRESULT(pane::webview::message)>&& webview_procedure)
     : window_config { std::move(window_config) },
       webview_config { std::move(webview_config) },
-      webview_procedure { std::move(webview_procedure) }
-//   webview_procedure { [&](pane::window_message message) -> LRESULT {
-//       if (message.msg == WM_WINDOWPOSCHANGED) {
-//           if (this->controller) {
-//               this->controller->put_Bounds(this->window.client_rect);
-//           }
-//       }
-
-//       return this->window_procedure(message);
-//   } },
-//   window { pane::window(std::move(window_config), std::move(webview_procedure)) },
-{
+      webview_procedure { std::move(webview_procedure) } {
     if (GetClassInfoExW(
             this->window_class.hInstance, this->window_class.lpszClassName, &this->window_class)
         == 0) {
@@ -323,6 +312,12 @@ auto webview::class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
     }
 
     if (auto self { reinterpret_cast<Self*>(GetWindowLongPtrW(hwnd, 0)) }) {
+        //       if (message.msg == WM_WINDOWPOSCHANGED) {
+        //           if (this->controller) {
+        //               this->controller->put_Bounds(this->window.client_rect);
+        //           }
+        //       }
+
         if (msg == WM_WINDOWPOSCHANGED) {
             GetClientRect(hwnd, &self->client_rect);
         }
