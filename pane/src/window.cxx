@@ -67,6 +67,23 @@ window::~window() {
     UnregisterClassW(this->window_class.lpszClassName, this->window_class.hInstance);
 }
 
+auto window::create(this Self& self,
+                    const WNDCLASSEXW& window_class,
+                    std::u8string_view window_name) -> void {
+    CreateWindowExW(0,
+                    window_class.lpszClassName,
+                    reinterpret_cast<const wchar_t*>(pane::to_utf16(window_name).data()),
+                    WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN,
+                    CW_USEDEFAULT,
+                    CW_USEDEFAULT,
+                    CW_USEDEFAULT,
+                    CW_USEDEFAULT,
+                    nullptr,
+                    nullptr,
+                    window_class.hInstance,
+                    &self);
+}
+
 auto window::show(this const Self& self) -> bool { return ShowWindow(self.window_handle, SW_SHOW); }
 
 auto window::hide(this const Self& self) -> bool { return ShowWindow(self.window_handle, SW_HIDE); }
