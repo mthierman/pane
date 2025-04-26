@@ -15,23 +15,10 @@ window::window(pane::window_config&& window_config,
         RegisterClassExW(&this->window_class);
     };
 
-    if (this->create()) {
-        if (this->window_config.visible) {
-            ShowWindow(this->window_handle, SW_SHOWNORMAL);
-        }
-    }
-}
-
-window::~window() {
-    DestroyWindow(this->window_handle);
-    UnregisterClassW(this->window_class.lpszClassName, this->window_class.hInstance);
-}
-
-auto window::create(this Self& self) -> std::expected<HWND, HRESULT> {
-    auto hwnd { CreateWindowExW(
+    CreateWindowExW(
         0,
-        self.window_class.lpszClassName,
-        reinterpret_cast<const wchar_t*>(pane::to_utf16(self.window_config.title).data()),
+        this->window_class.lpszClassName,
+        reinterpret_cast<const wchar_t*>(pane::to_utf16(this->window_config.title).data()),
         WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN,
         CW_USEDEFAULT,
         CW_USEDEFAULT,
@@ -39,15 +26,17 @@ auto window::create(this Self& self) -> std::expected<HWND, HRESULT> {
         CW_USEDEFAULT,
         nullptr,
         nullptr,
-        self.window_class.hInstance,
-        &self) };
+        this->window_class.hInstance,
+        this);
 
-    if (hwnd == NULL) {
-        auto last_error { GetLastError() };
-        return std::unexpected(HRESULT_FROM_WIN32(last_error));
+    if (this->window_config.visible) {
+        ShowWindow(this->window_handle, SW_SHOWNORMAL);
     }
+}
 
-    return hwnd;
+window::~window() {
+    DestroyWindow(this->window_handle);
+    UnregisterClassW(this->window_class.lpszClassName, this->window_class.hInstance);
 }
 
 auto window::show(this const Self& self) -> bool { return ShowWindow(self.window_handle, SW_SHOW); }
@@ -110,7 +99,7 @@ webview::webview(pane::window_config&& window_config,
           }
 
           return this->window_procedure(
-              { message.self, message.hwnd, message.msg, message.wparam, message.lparam });
+              { message.window, message.hwnd, message.msg, message.wparam, message.lparam });
       } },
       window { pane::window(std::move(window_config), std::move(webview_procedure)) } {
     if (this->options) {

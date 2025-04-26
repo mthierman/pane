@@ -69,7 +69,7 @@ struct window final {
     using Self = window;
 
     struct message {
-        Self* self;
+        Self* window;
         HWND hwnd;
         UINT msg;
         WPARAM wparam;
@@ -88,7 +88,6 @@ struct window final {
     window(Self&&) noexcept = delete;
     auto operator=(Self&&) noexcept -> Self& = delete;
 
-    auto create(this Self& self) -> std::expected<HWND, HRESULT>;
     auto show(this const Self& self) -> bool;
     auto hide(this const Self& self) -> bool;
 

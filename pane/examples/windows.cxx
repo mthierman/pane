@@ -16,6 +16,7 @@ auto WINAPI wWinMain(HINSTANCE /* hinstance */,
                                [&](pane::window::message message) -> LRESULT {
         if (message.msg == WM_SETTINGCHANGE) {
             //
+            // auto rect { message.window->client_rect };
         }
 
         return DefWindowProcW(message.hwnd, message.msg, message.wparam, message.lparam);
