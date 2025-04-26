@@ -179,8 +179,8 @@ struct webview final {
         options.try_query<ICoreWebView2EnvironmentOptions8>()
     };
 
-    std::function<LRESULT(window::message)> window_procedure;
-    std::function<LRESULT(window::message)> webview_procedure;
+    std::function<LRESULT(pane::window_message)> window_procedure;
+    std::function<LRESULT(pane::window_message)> webview_procedure;
     pane::window window;
 };
 } // namespace pane

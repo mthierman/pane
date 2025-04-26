@@ -2,7 +2,7 @@
 
 auto make_window(pane::window_manager& window_manager) -> pane::window {
     return pane::window({ u8"pane", pane::color { 255, 0, 0, 255 }, true, false },
-                        [&](pane::window::message message) -> LRESULT {
+                        [&](pane::window_message message) -> LRESULT {
         if (message.msg == WM_CREATE) {
             window_manager.insert(message.hwnd);
         }
@@ -18,7 +18,7 @@ auto make_window(pane::window_manager& window_manager) -> pane::window {
 auto make_webview(pane::window_manager& window_manager) -> pane::webview {
     return pane::webview({ .background_color = pane::color { 0, 0, 255, 255 } },
                          { .home_page = u8"https://www.google.com/" },
-                         [&](pane::window::message message) -> LRESULT {
+                         [&](pane::window_message message) -> LRESULT {
         if (message.msg == WM_CREATE) {
             window_manager.insert(message.hwnd);
         }
