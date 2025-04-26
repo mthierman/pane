@@ -34,7 +34,7 @@ auto window_manager::first(this const Self& self) -> HWND { return *self.set.beg
 auto window_manager::last(this const Self& self) -> HWND { return *self.set.end(); }
 
 window::window(pane::window_config&& window_config,
-               std::function<LRESULT(pane::window_message)>&& window_procedure)
+               std::function<LRESULT(pane::window::message)>&& window_procedure)
     : window_config { std::move(window_config) },
       window_procedure { std::move(window_procedure) } {
     if (GetClassInfoExW(
@@ -71,8 +71,9 @@ auto window::show(this const Self& self) -> bool { return ShowWindow(self.window
 
 auto window::hide(this const Self& self) -> bool { return ShowWindow(self.window_handle, SW_HIDE); }
 
-auto window::default_procedure(pane::window_message message) -> LRESULT {
-    return DefWindowProcW(message.hwnd, message.msg, message.wparam, message.lparam);
+auto window::default_procedure(pane::window::message message) -> LRESULT {
+    return DefWindowProcW(
+        message.window->window_handle, message.msg, message.wparam, message.lparam);
 }
 
 auto window::class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) -> LRESULT {
@@ -111,7 +112,7 @@ auto window::class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) 
         }
 
         if (self->window_procedure) {
-            return self->window_procedure({ hwnd, msg, wparam, lparam });
+            return self->window_procedure({ self, msg, wparam, lparam });
         }
     }
 
@@ -120,19 +121,45 @@ auto window::class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) 
 
 webview::webview(pane::window_config&& window_config,
                  pane::webview_config&& webview_config,
-                 std::function<LRESULT(pane::window_message)>&& window_procedure)
-    : webview_config { std::move(webview_config) },
-      window_procedure { std::move(window_procedure) },
-      webview_procedure { [&](pane::window_message message) -> LRESULT {
-          if (message.msg == WM_WINDOWPOSCHANGED) {
-              if (this->controller) {
-                  this->controller->put_Bounds(this->window.client_rect);
-              }
-          }
+                 std::function<LRESULT(pane::webview::message)>&& webview_procedure)
+    : window_config { std::move(window_config) },
+      webview_config { std::move(webview_config) },
+      webview_procedure { std::move(webview_procedure) }
+//   webview_procedure { [&](pane::window_message message) -> LRESULT {
+//       if (message.msg == WM_WINDOWPOSCHANGED) {
+//           if (this->controller) {
+//               this->controller->put_Bounds(this->window.client_rect);
+//           }
+//       }
 
-          return this->window_procedure(message);
-      } },
-      window { pane::window(std::move(window_config), std::move(webview_procedure)) } {
+//       return this->window_procedure(message);
+//   } },
+//   window { pane::window(std::move(window_config), std::move(webview_procedure)) },
+{
+    if (GetClassInfoExW(
+            this->window_class.hInstance, this->window_class.lpszClassName, &this->window_class)
+        == 0) {
+        RegisterClassExW(&this->window_class);
+    };
+
+    CreateWindowExW(
+        0,
+        this->window_class.lpszClassName,
+        reinterpret_cast<const wchar_t*>(pane::to_utf16(this->window_config.title).data()),
+        WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN,
+        CW_USEDEFAULT,
+        CW_USEDEFAULT,
+        CW_USEDEFAULT,
+        CW_USEDEFAULT,
+        nullptr,
+        nullptr,
+        this->window_class.hInstance,
+        this);
+
+    if (this->window_config.visible) {
+        ShowWindow(this->window_handle, SW_SHOWNORMAL);
+    }
+
     if (this->options) {
         if (!this->webview_config.environment_options.AdditionalBrowserArguments.empty()) {
             this->options->put_AdditionalBrowserArguments(reinterpret_cast<const wchar_t*>(
@@ -203,7 +230,7 @@ webview::webview(pane::window_config&& window_config,
 
         if (this->environment) {
             this->environment->CreateCoreWebView2Controller(
-                this->window.window_handle,
+                this->window_handle,
                 wil::MakeAgileCallback<ICoreWebView2CreateCoreWebView2ControllerCompletedHandler>(
                     [&]([[maybe_unused]] HRESULT error_code,
                         ICoreWebView2Controller* created_controller) -> HRESULT {
@@ -214,10 +241,10 @@ webview::webview(pane::window_config&& window_config,
 
                 if (this->controller) {
                     this->controller->put_DefaultBackgroundColor(
-                        this->window.window_config.background_color.to_webview2_color());
+                        this->window_config.background_color.to_webview2_color());
 
                     RECT client_rect {};
-                    GetClientRect(this->window.window_handle, &client_rect);
+                    GetClientRect(this->window_handle, &client_rect);
 
                     this->controller->put_Bounds(client_rect);
 
@@ -282,6 +309,49 @@ webview::webview(pane::window_config&& window_config,
         }
         return S_OK;
     }).Get());
+}
+
+auto webview::class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) -> LRESULT {
+    if (msg == WM_NCCREATE) {
+        if (auto create { reinterpret_cast<CREATESTRUCTW*>(lparam) }) {
+            if (auto self { static_cast<Self*>(create->lpCreateParams) }) {
+                SetWindowLongPtrW(hwnd, 0, reinterpret_cast<LONG_PTR>(self));
+                self->window_handle = hwnd;
+                self->window_background = self->window_config.background_color.to_hbrush();
+            }
+        }
+    }
+
+    if (auto self { reinterpret_cast<Self*>(GetWindowLongPtrW(hwnd, 0)) }) {
+        if (msg == WM_WINDOWPOSCHANGED) {
+            GetClientRect(hwnd, &self->client_rect);
+        }
+
+        if (msg == WM_ERASEBKGND) {
+            GetClientRect(hwnd, &self->client_rect);
+            FillRect(reinterpret_cast<HDC>(wparam), &self->client_rect, self->window_background);
+        }
+
+        if (msg == WM_NCDESTROY) {
+            self->window_handle = nullptr;
+            DeleteObject(self->window_background);
+            SetWindowLongPtrW(hwnd, 0, reinterpret_cast<LONG_PTR>(nullptr));
+        }
+
+        if (msg == WM_DESTROY) {
+            if (self->window_config.shutdown) {
+                PostQuitMessage(0);
+
+                return 0;
+            }
+        }
+
+        if (self->webview_procedure) {
+            return self->webview_procedure({ self, msg, wparam, lparam });
+        }
+    }
+
+    return DefWindowProcW(hwnd, msg, wparam, lparam);
 }
 
 auto webview::navigate(this const Self& self, std::u8string_view url) -> void {

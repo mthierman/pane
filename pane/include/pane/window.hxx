@@ -85,25 +85,21 @@ struct window_manager {
     std::set<HWND> set;
 };
 
-struct window_message {
-    HWND hwnd;
-    UINT msg;
-    WPARAM wparam;
-    LPARAM lparam;
-};
-
 struct window final {
     using Self = window;
 
     struct message {
         Self* window;
-        window_message window_message;
+        UINT msg;
+        WPARAM wparam;
+        LPARAM lparam;
     };
 
     window(pane::window_config&& window_config = {},
-           std::function<LRESULT(pane::window_message)>&& procedure
-           = [](pane::window_message message) {
-                 return DefWindowProcW(message.hwnd, message.msg, message.wparam, message.lparam);
+           std::function<LRESULT(pane::window::message)>&& window_procedure
+           = [](pane::window::message message) {
+                 return DefWindowProcW(
+                     message.window->window_handle, message.msg, message.wparam, message.lparam);
              });
     ~window();
 
@@ -115,7 +111,7 @@ struct window final {
 
     auto show(this const Self& self) -> bool;
     auto hide(this const Self& self) -> bool;
-    static auto default_procedure(pane::window_message message) -> LRESULT;
+    static auto default_procedure(pane::window::message message) -> LRESULT;
 
     HWND window_handle;
     HBRUSH window_background;
@@ -141,7 +137,7 @@ private:
         .lpszClassName { class_window_name.data() },
         .hIconSm { pane::system::resource_icon().value_or(pane::system::application_icon()) }
     };
-    std::function<LRESULT(pane::window_message)> window_procedure;
+    std::function<LRESULT(pane::window::message)> window_procedure;
 };
 
 struct webview final {
@@ -149,14 +145,17 @@ struct webview final {
 
     struct message {
         Self* webview;
-        window_message window_message;
+        UINT msg;
+        WPARAM wparam;
+        LPARAM lparam;
     };
 
     webview(pane::window_config&& window_config = {},
             pane::webview_config&& webview_config = {},
-            std::function<LRESULT(pane::window_message)>&& procedure
-            = [](pane::window_message message) {
-                  return DefWindowProcW(message.hwnd, message.msg, message.wparam, message.lparam);
+            std::function<LRESULT(pane::webview::message)>&& webview_procedure
+            = [](pane::webview::message message) {
+                  return DefWindowProcW(
+                      message.webview->window_handle, message.msg, message.wparam, message.lparam);
               });
     ~webview() = default;
 
@@ -168,7 +167,6 @@ struct webview final {
 
     auto navigate(this const Self& self, std::u8string_view url) -> void;
 
-    pane::webview_config webview_config;
     wil::com_ptr<ICoreWebView2Settings9> settings;
     wil::com_ptr<ICoreWebView2Environment13> environment;
     wil::com_ptr<ICoreWebView2Controller4> controller;
@@ -198,8 +196,31 @@ struct webview final {
         options.try_query<ICoreWebView2EnvironmentOptions8>()
     };
 
-    std::function<LRESULT(pane::window_message)> window_procedure;
-    std::function<LRESULT(pane::window_message)> webview_procedure;
-    pane::window window;
+    HWND window_handle;
+    HBRUSH window_background;
+    RECT client_rect;
+    pane::window_config window_config;
+    pane::webview_config webview_config;
+
+private:
+    static auto class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) -> LRESULT;
+    uint64_t window_id { pane::random_number<uint64_t>() };
+    std::wstring class_window_name { L"PaneWebView" + std::to_wstring(window_id) };
+
+    WNDCLASSEXW window_class {
+        .cbSize { sizeof(WNDCLASSEXW) },
+        .style { 0 },
+        .lpfnWndProc { class_procedure },
+        .cbClsExtra { 0 },
+        .cbWndExtra { sizeof(Self) },
+        .hInstance { pane::system::module_handle().value_or(nullptr) },
+        .hIcon { pane::system::resource_icon().value_or(pane::system::application_icon()) },
+        .hCursor { pane::system::arrow_cursor() },
+        .hbrBackground { nullptr },
+        .lpszMenuName { nullptr },
+        .lpszClassName { class_window_name.data() },
+        .hIconSm { pane::system::resource_icon().value_or(pane::system::application_icon()) }
+    };
+    std::function<LRESULT(pane::webview::message)> webview_procedure;
 };
 } // namespace pane
