@@ -73,6 +73,7 @@ struct window_manager {
     auto insert(this Self& self, HWND hwnd) -> void;
     auto erase(this Self& self, HWND hwnd) -> void;
     auto clear(this Self& self) -> void;
+    auto contains(this const Self& self, HWND hwnd) -> bool;
 
     std::set<HWND> set;
 };

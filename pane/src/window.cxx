@@ -21,6 +21,10 @@ auto window_manager::clear(this Self& self) -> void {
     }
 }
 
+auto window_manager::contains(this const Self& self, HWND hwnd) -> bool {
+    return self.set.contains(hwnd);
+}
+
 window::window(pane::window_config&& window_config,
                std::function<LRESULT(pane::window_message)>&& window_procedure)
     : window_config { std::move(window_config) },
