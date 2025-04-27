@@ -81,6 +81,11 @@ struct window_message final {
 };
 
 struct window_handle final {
+    using Self = window_handle;
+
+    auto show(this const Self& self) -> bool;
+    auto hide(this const Self& self) -> bool;
+
     HWND hwnd { nullptr };
 };
 
