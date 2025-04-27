@@ -98,6 +98,10 @@ struct window_message {
     auto default_procedure(this const Self& self) -> LRESULT;
 };
 
+struct window_handle final {
+    HWND hwnd { nullptr };
+};
+
 struct window final {
     using Self = window;
 
