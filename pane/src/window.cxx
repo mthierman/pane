@@ -339,7 +339,7 @@ auto webview::class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
         }
 
         if (self->webview_procedure) {
-            return self->webview_procedure({ self, msg, wparam, lparam });
+            return self->webview_procedure({ self, hwnd, msg, wparam, lparam });
         }
     }
 

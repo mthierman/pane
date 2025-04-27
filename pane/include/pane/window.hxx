@@ -145,6 +145,7 @@ struct webview final {
 
     struct message {
         Self* webview;
+        HWND hwnd;
         UINT msg;
         WPARAM wparam;
         LPARAM lparam;
@@ -154,8 +155,7 @@ struct webview final {
             pane::webview_config&& webview_config = {},
             std::function<LRESULT(pane::webview::message)>&& webview_procedure
             = [](pane::webview::message message) {
-                  return DefWindowProcW(
-                      message.webview->window_handle, message.msg, message.wparam, message.lparam);
+                  return DefWindowProcW(message.hwnd, message.msg, message.wparam, message.lparam);
               });
     ~webview() = default;
 
