@@ -86,10 +86,14 @@ struct window_manager {
 };
 
 struct window_message {
+    using Self = window_message;
+
     HWND hwnd;
     UINT msg;
     WPARAM wparam;
     LPARAM lparam;
+
+    auto default_procedure(this const Self& self) -> LRESULT;
 };
 
 struct window final {
@@ -97,17 +101,12 @@ struct window final {
 
     struct procedure {
         Self* window;
-        window_message window_message;
+        window_message msg;
     };
 
     window(pane::window_config&& window_config = {},
-           std::function<LRESULT(pane::window::procedure)>&& procedure
-           = [](pane::window::procedure procedure) {
-                 return DefWindowProcW(procedure.window->window_handle,
-                                       procedure.window_message.msg,
-                                       procedure.window_message.wparam,
-                                       procedure.window_message.lparam);
-             });
+           std::function<LRESULT(pane::window::procedure)>&& window_procedure
+           = [](pane::window::procedure procedure) { return procedure.msg.default_procedure(); });
     ~window();
 
     window(const Self&) = delete;
@@ -150,20 +149,15 @@ private:
 struct webview final {
     using Self = webview;
 
-    struct message {
+    struct procedure {
         Self* webview;
-        HWND hwnd;
-        UINT msg;
-        WPARAM wparam;
-        LPARAM lparam;
+        window_message msg;
     };
 
     webview(pane::window_config&& window_config = {},
             pane::webview_config&& webview_config = {},
-            std::function<LRESULT(pane::webview::message)>&& webview_procedure
-            = [](pane::webview::message message) {
-                  return DefWindowProcW(message.hwnd, message.msg, message.wparam, message.lparam);
-              });
+            std::function<LRESULT(pane::webview::procedure)>&& webview_procedure
+            = [](pane::webview::procedure procedure) { return procedure.msg.default_procedure(); });
     ~webview() = default;
 
     webview(const Self&) = delete;
@@ -228,6 +222,6 @@ private:
         .lpszClassName { class_window_name.data() },
         .hIconSm { pane::system::resource_icon().value_or(pane::system::application_icon()) }
     };
-    std::function<LRESULT(pane::webview::message)> webview_procedure;
+    std::function<LRESULT(pane::webview::procedure)> webview_procedure;
 };
 } // namespace pane

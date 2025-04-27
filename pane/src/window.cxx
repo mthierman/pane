@@ -33,6 +33,10 @@ auto window_manager::first(this const Self& self) -> HWND { return *self.set.beg
 
 auto window_manager::last(this const Self& self) -> HWND { return *self.set.end(); }
 
+auto window_message::default_procedure(this const Self& self) -> LRESULT {
+    return DefWindowProcW(self.hwnd, self.msg, self.wparam, self.lparam);
+}
+
 window::window(pane::window_config&& window_config,
                std::function<LRESULT(pane::window::procedure)>&& window_procedure)
     : window_config { std::move(window_config) },
@@ -116,12 +120,12 @@ auto window::class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) 
         }
     }
 
-    return DefWindowProcW(hwnd, msg, wparam, lparam);
+    return pane::window::default_procedure({ hwnd, msg, wparam, lparam });
 }
 
 webview::webview(pane::window_config&& window_config,
                  pane::webview_config&& webview_config,
-                 std::function<LRESULT(pane::webview::message)>&& webview_procedure)
+                 std::function<LRESULT(pane::webview::procedure)>&& webview_procedure)
     : window_config { std::move(window_config) },
       webview_config { std::move(webview_config) },
       webview_procedure { std::move(webview_procedure) } {
@@ -340,11 +344,11 @@ auto webview::class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
         }
 
         if (self->webview_procedure) {
-            return self->webview_procedure({ self, hwnd, msg, wparam, lparam });
+            return self->webview_procedure({ self, { hwnd, msg, wparam, lparam } });
         }
     }
 
-    return DefWindowProcW(hwnd, msg, wparam, lparam);
+    return pane::window::default_procedure({ hwnd, msg, wparam, lparam });
 }
 
 auto webview::navigate(this const Self& self, std::u8string_view url) -> void {
