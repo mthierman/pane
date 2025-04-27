@@ -310,10 +310,18 @@ webview::~webview() {
 }
 
 auto webview::show(this const Self& self) -> bool {
+    if (self.controller) {
+        self.controller->put_IsVisible(true);
+    }
+
     return ShowWindow(self.window_handle, SW_SHOW);
 }
 
 auto webview::hide(this const Self& self) -> bool {
+    if (self.controller) {
+        self.controller->put_IsVisible(false);
+    }
+
     return ShowWindow(self.window_handle, SW_HIDE);
 }
 
