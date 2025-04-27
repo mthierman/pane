@@ -20,7 +20,7 @@ target_sources(
     PUBLIC FILE_SET
            HEADERS
            BASE_DIRS
-           "include"
+           "src/include"
     PRIVATE "src/co_init.cxx"
             "src/color.cxx"
             "src/config.cxx"
