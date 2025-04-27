@@ -309,6 +309,20 @@ webview::~webview() {
     UnregisterClassW(this->window_class.lpszClassName, this->window_class.hInstance);
 }
 
+auto webview::show(this const Self& self) -> bool {
+    return ShowWindow(self.window_handle, SW_SHOW);
+}
+
+auto webview::hide(this const Self& self) -> bool {
+    return ShowWindow(self.window_handle, SW_HIDE);
+}
+
+auto webview::navigate(this const Self& self, std::u8string_view url) -> void {
+    if (self.core) {
+        self.core->Navigate(reinterpret_cast<const wchar_t*>(pane::to_utf16(url).data()));
+    }
+}
+
 auto webview::class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) -> LRESULT {
     if (msg == WM_NCCREATE) {
         if (auto create { reinterpret_cast<CREATESTRUCTW*>(lparam) }) {
@@ -354,11 +368,5 @@ auto webview::class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
     }
 
     return pane::window::default_procedure({ hwnd, msg, wparam, lparam });
-}
-
-auto webview::navigate(this const Self& self, std::u8string_view url) -> void {
-    if (self.core) {
-        self.core->Navigate(reinterpret_cast<const wchar_t*>(pane::to_utf16(url).data()));
-    }
 }
 } // namespace pane
