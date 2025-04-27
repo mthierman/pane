@@ -51,14 +51,16 @@ window::window(pane::window_config&& window_config,
         0,
         this->window_class.lpszClassName,
         reinterpret_cast<const wchar_t*>(pane::to_utf16(this->window_config.title).data()),
-        this->window_config.popup ? WS_POPUPWINDOW | WS_CLIPCHILDREN
-                                  : WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN,
+        this->window_config.parent_hwnd
+            ? WS_CHILDWINDOW | WS_CLIPSIBLINGS
+            : (this->window_config.popup ? WS_POPUPWINDOW | WS_CLIPCHILDREN
+                                         : WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN),
         CW_USEDEFAULT,
         CW_USEDEFAULT,
         CW_USEDEFAULT,
         CW_USEDEFAULT,
-        nullptr,
-        nullptr,
+        this->window_config.parent_hwnd,
+        this->window_config.parent_hwnd ? reinterpret_cast<HMENU>(this->window_id) : nullptr,
         this->window_class.hInstance,
         this);
 
@@ -140,14 +142,16 @@ webview::webview(pane::window_config&& window_config,
         0,
         this->window_class.lpszClassName,
         reinterpret_cast<const wchar_t*>(pane::to_utf16(this->window_config.title).data()),
-        this->window_config.popup ? WS_POPUPWINDOW | WS_CLIPCHILDREN
-                                  : WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN,
+        this->window_config.parent_hwnd
+            ? WS_CHILDWINDOW | WS_CLIPSIBLINGS
+            : (this->window_config.popup ? WS_POPUPWINDOW | WS_CLIPCHILDREN
+                                         : WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN),
         CW_USEDEFAULT,
         CW_USEDEFAULT,
         CW_USEDEFAULT,
         CW_USEDEFAULT,
-        nullptr,
-        nullptr,
+        this->window_config.parent_hwnd,
+        this->window_config.parent_hwnd ? reinterpret_cast<HMENU>(this->window_id) : nullptr,
         this->window_class.hInstance,
         this);
 

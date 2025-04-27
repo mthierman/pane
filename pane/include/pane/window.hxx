@@ -19,6 +19,7 @@ struct window_config final {
     bool visible { true };
     bool popup { false };
     bool shutdown { false };
+    HWND parent_hwnd { nullptr };
 };
 
 struct webview_config {
