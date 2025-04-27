@@ -17,6 +17,7 @@ struct window_config final {
     std::u8string title;
     pane::color background_color;
     bool visible { true };
+    bool popup { false };
     bool shutdown { false };
 };
 
