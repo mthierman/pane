@@ -17,7 +17,7 @@ auto make_window(pane::window_manager& window_manager) -> pane::window {
 }
 
 auto make_webview(pane::window_manager& window_manager) -> pane::webview {
-    return pane::webview({ .background_color = pane::color { 0, 0, 255, 255 } },
+    return pane::webview({ .background_color = pane::color { 16, 18, 24, 255 } },
                          { .home_page = u8"https://www.google.com/" },
                          [&](pane::webview::procedure procedure) -> LRESULT {
         switch (procedure.msg.msg) {
@@ -40,7 +40,7 @@ auto WINAPI wWinMain(HINSTANCE /* hinstance */,
                      int /* ncmdshow */) -> int {
     auto window_manager { pane::window_manager() };
 
-    auto window { make_window(window_manager) };
+    // auto window { make_window(window_manager) };
     auto webview { make_webview(window_manager) };
 
     return pane::system::message_loop();
