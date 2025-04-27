@@ -90,10 +90,10 @@ struct window_manager {
 struct window_message {
     using Self = window_message;
 
-    HWND hwnd;
-    UINT msg;
-    WPARAM wparam;
-    LPARAM lparam;
+    HWND hwnd { nullptr };
+    UINT msg { 0 };
+    WPARAM wparam { 0 };
+    LPARAM lparam { 0 };
 
     auto default_procedure(this const Self& self) -> LRESULT;
 };
