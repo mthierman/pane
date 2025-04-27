@@ -3,40 +3,6 @@
 #include <pane/debug.hxx>
 
 namespace pane {
-auto window_manager::insert(this Self& self, HWND hwnd) -> void { self.set.insert(hwnd); }
-
-auto window_manager::erase(this Self& self, HWND hwnd) -> void {
-    self.set.erase(hwnd);
-
-    if (self.set.empty()) {
-        PostQuitMessage(0);
-    }
-}
-
-auto window_manager::clear(this Self& self) -> void {
-    self.set.clear();
-
-    if (self.set.empty()) {
-        PostQuitMessage(0);
-    }
-}
-
-auto window_manager::size(this const Self& self) -> uint64_t { return self.set.size(); }
-
-auto window_manager::contains(this const Self& self, HWND hwnd) -> bool {
-    return self.set.contains(hwnd);
-}
-
-auto window_manager::empty(this const Self& self) -> bool { return self.set.empty(); }
-
-auto window_manager::first(this const Self& self) -> HWND { return *self.set.begin(); }
-
-auto window_manager::last(this const Self& self) -> HWND { return *self.set.end(); }
-
-auto window_message::default_procedure(this const Self& self) -> LRESULT {
-    return DefWindowProcW(self.hwnd, self.msg, self.wparam, self.lparam);
-}
-
 window::window(pane::window_config&& window_config,
                std::function<LRESULT(Self*, pane::window_message)>&& window_procedure)
     : window_config { std::move(window_config) },
@@ -377,5 +343,39 @@ auto webview::class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
     }
 
     return DefWindowProcW(hwnd, msg, wparam, lparam);
+}
+
+auto window_manager::insert(this Self& self, HWND hwnd) -> void { self.set.insert(hwnd); }
+
+auto window_manager::erase(this Self& self, HWND hwnd) -> void {
+    self.set.erase(hwnd);
+
+    if (self.set.empty()) {
+        PostQuitMessage(0);
+    }
+}
+
+auto window_manager::clear(this Self& self) -> void {
+    self.set.clear();
+
+    if (self.set.empty()) {
+        PostQuitMessage(0);
+    }
+}
+
+auto window_manager::size(this const Self& self) -> uint64_t { return self.set.size(); }
+
+auto window_manager::contains(this const Self& self, HWND hwnd) -> bool {
+    return self.set.contains(hwnd);
+}
+
+auto window_manager::empty(this const Self& self) -> bool { return self.set.empty(); }
+
+auto window_manager::first(this const Self& self) -> HWND { return *self.set.begin(); }
+
+auto window_manager::last(this const Self& self) -> HWND { return *self.set.end(); }
+
+auto window_message::default_procedure(this const Self& self) -> LRESULT {
+    return DefWindowProcW(self.hwnd, self.msg, self.wparam, self.lparam);
 }
 } // namespace pane

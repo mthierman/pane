@@ -69,24 +69,6 @@ struct webview_config {
     settings settings;
 };
 
-struct window_manager {
-    using Self = window_manager;
-
-    auto insert(this Self& self, HWND hwnd) -> void;
-    auto erase(this Self& self, HWND hwnd) -> void;
-    auto clear(this Self& self) -> void;
-
-    auto size(this const Self& self) -> uint64_t;
-
-    auto contains(this const Self& self, HWND hwnd) -> bool;
-    auto empty(this const Self& self) -> bool;
-
-    auto first(this const Self& self) -> HWND;
-    auto last(this const Self& self) -> HWND;
-
-    std::set<HWND> set;
-};
-
 struct window_message {
     using Self = window_message;
 
@@ -228,5 +210,23 @@ struct webview final {
 private:
     static auto class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) -> LRESULT;
     std::function<LRESULT(Self*, pane::window_message)> webview_procedure;
+};
+
+struct window_manager {
+    using Self = window_manager;
+
+    auto insert(this Self& self, HWND hwnd) -> void;
+    auto erase(this Self& self, HWND hwnd) -> void;
+    auto clear(this Self& self) -> void;
+
+    auto size(this const Self& self) -> uint64_t;
+
+    auto contains(this const Self& self, HWND hwnd) -> bool;
+    auto empty(this const Self& self) -> bool;
+
+    auto first(this const Self& self) -> HWND;
+    auto last(this const Self& self) -> HWND;
+
+    std::set<HWND> set;
 };
 } // namespace pane
