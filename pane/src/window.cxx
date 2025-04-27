@@ -3,6 +3,10 @@
 #include <pane/debug.hxx>
 
 namespace pane {
+auto window_handle::activate(this const Self& self) -> bool {
+    return ShowWindow(self.hwnd, SW_SHOWNORMAL);
+}
+
 auto window_handle::show(this const Self& self) -> bool { return ShowWindow(self.hwnd, SW_SHOW); }
 
 auto window_handle::hide(this const Self& self) -> bool { return ShowWindow(self.hwnd, SW_HIDE); }
@@ -35,7 +39,7 @@ window::window(pane::window_config&& window_config,
         this);
 
     if (this->window_config.visible) {
-        ShowWindow(this->window_handle.hwnd, SW_SHOWNORMAL);
+        this->window_handle.activate();
     }
 }
 
@@ -44,13 +48,9 @@ window::~window() {
     UnregisterClassW(this->window_class.lpszClassName, this->window_class.hInstance);
 }
 
-auto window::show(this const Self& self) -> bool {
-    return ShowWindow(self.window_handle.hwnd, SW_SHOW);
-}
+auto window::show(this const Self& self) -> bool { return self.window_handle.show(); }
 
-auto window::hide(this const Self& self) -> bool {
-    return ShowWindow(self.window_handle.hwnd, SW_HIDE);
-}
+auto window::hide(this const Self& self) -> bool { return self.window_handle.hide(); }
 
 auto window::class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) -> LRESULT {
     if (msg == WM_NCCREATE) {
@@ -125,7 +125,7 @@ webview::webview(pane::window_config&& window_config,
         this);
 
     if (this->window_config.visible) {
-        ShowWindow(this->window_handle.hwnd, SW_SHOWNORMAL);
+        this->window_handle.activate();
     }
 
     if (this->options) {
@@ -289,7 +289,7 @@ auto webview::show(this const Self& self) -> bool {
         self.controller->put_IsVisible(true);
     }
 
-    return ShowWindow(self.window_handle.hwnd, SW_SHOW);
+    return self.window_handle.show();
 }
 
 auto webview::hide(this const Self& self) -> bool {
@@ -297,7 +297,7 @@ auto webview::hide(this const Self& self) -> bool {
         self.controller->put_IsVisible(false);
     }
 
-    return ShowWindow(self.window_handle.hwnd, SW_HIDE);
+    return self.window_handle.hide();
 }
 
 auto webview::navigate(this const Self& self, std::u8string_view url) -> void {

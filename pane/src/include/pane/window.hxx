@@ -83,6 +83,7 @@ struct window_message final {
 struct window_handle final {
     using Self = window_handle;
 
+    auto activate(this const Self& self) -> bool;
     auto show(this const Self& self) -> bool;
     auto hide(this const Self& self) -> bool;
 
