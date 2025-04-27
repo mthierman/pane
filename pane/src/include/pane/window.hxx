@@ -22,7 +22,7 @@ struct window_config final {
     HWND parent_hwnd { nullptr };
 };
 
-struct webview_config {
+struct webview_config final {
     struct environment_options final {
         std::u8string AdditionalBrowserArguments;
         bool AllowSingleSignOnUsingOSPrimaryAccount { false };
@@ -69,7 +69,7 @@ struct webview_config {
     settings settings;
 };
 
-struct window_message {
+struct window_message final {
     using Self = window_message;
 
     HWND hwnd { nullptr };
@@ -87,7 +87,7 @@ struct window_handle final {
 struct window final {
     using Self = window;
 
-    struct procedure {
+    struct procedure final {
         Self* window;
         window_message msg;
     };
@@ -135,7 +135,7 @@ private:
 struct webview final {
     using Self = webview;
 
-    struct procedure {
+    struct procedure final {
         Self* webview;
         window_message msg;
     };
@@ -212,7 +212,7 @@ private:
     std::function<LRESULT(Self*, pane::window_message)> webview_procedure;
 };
 
-struct window_manager {
+struct window_manager final {
     using Self = window_manager;
 
     auto insert(this Self& self, HWND hwnd) -> void;
