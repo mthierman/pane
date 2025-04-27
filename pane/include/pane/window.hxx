@@ -85,6 +85,13 @@ struct window_manager {
     std::set<HWND> set;
 };
 
+struct window_message {
+    HWND hwnd;
+    UINT msg;
+    WPARAM wparam;
+    LPARAM lparam;
+};
+
 struct window final {
     using Self = window;
 
@@ -111,7 +118,7 @@ struct window final {
 
     auto show(this const Self& self) -> bool;
     auto hide(this const Self& self) -> bool;
-    static auto default_procedure(pane::window::message message) -> LRESULT;
+    static auto default_procedure(const pane::window_message& window_message) -> LRESULT;
 
     HWND window_handle;
     HBRUSH window_background;

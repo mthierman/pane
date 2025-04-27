@@ -71,8 +71,9 @@ auto window::show(this const Self& self) -> bool { return ShowWindow(self.window
 
 auto window::hide(this const Self& self) -> bool { return ShowWindow(self.window_handle, SW_HIDE); }
 
-auto window::default_procedure(pane::window::message message) -> LRESULT {
-    return DefWindowProcW(message.hwnd, message.msg, message.wparam, message.lparam);
+auto window::default_procedure(const pane::window_message& window_message) -> LRESULT {
+    return DefWindowProcW(
+        window_message.hwnd, window_message.msg, window_message.wparam, window_message.lparam);
 }
 
 auto window::class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) -> LRESULT {
