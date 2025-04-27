@@ -125,7 +125,7 @@ struct window final {
     HBRUSH window_background { nullptr };
     RECT client_rect { 0, 0, 0, 0 };
     pane::window_config window_config;
-    std::wstring class_window_name { L"PaneWindow" + std::to_wstring(window_id) };
+    std::wstring class_name { L"PaneWindow" + std::to_wstring(window_id) };
     WNDCLASSEXW window_class {
         .cbSize { sizeof(WNDCLASSEXW) },
         .style { 0 },
@@ -137,7 +137,7 @@ struct window final {
         .hCursor { pane::system::arrow_cursor() },
         .hbrBackground { nullptr },
         .lpszMenuName { nullptr },
-        .lpszClassName { class_window_name.data() },
+        .lpszClassName { class_name.data() },
         .hIconSm { pane::system::resource_icon().value_or(pane::system::application_icon()) }
     };
 
@@ -176,7 +176,7 @@ struct webview final {
     RECT client_rect { 0, 0, 0, 0 };
     pane::window_config window_config;
     pane::webview_config webview_config;
-    std::wstring class_window_name { L"PaneWebView" + std::to_wstring(window_id) };
+    std::wstring class_name { L"PaneWebView" + std::to_wstring(window_id) };
     WNDCLASSEXW window_class {
         .cbSize { sizeof(WNDCLASSEXW) },
         .style { 0 },
@@ -188,7 +188,7 @@ struct webview final {
         .hCursor { pane::system::arrow_cursor() },
         .hbrBackground { nullptr },
         .lpszMenuName { nullptr },
-        .lpszClassName { class_window_name.data() },
+        .lpszClassName { class_name.data() },
         .hIconSm { pane::system::resource_icon().value_or(pane::system::application_icon()) }
     };
 
