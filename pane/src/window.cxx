@@ -34,7 +34,7 @@ auto window_manager::first(this const Self& self) -> HWND { return *self.set.beg
 auto window_manager::last(this const Self& self) -> HWND { return *self.set.end(); }
 
 window::window(pane::window_config&& window_config,
-               std::function<LRESULT(pane::window::message)>&& window_procedure)
+               std::function<LRESULT(pane::window::procedure)>&& window_procedure)
     : window_config { std::move(window_config) },
       window_procedure { std::move(window_procedure) } {
     if (GetClassInfoExW(
@@ -112,7 +112,7 @@ auto window::class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) 
         }
 
         if (self->window_procedure) {
-            return self->window_procedure({ self, hwnd, msg, wparam, lparam });
+            return self->window_procedure({ self, { hwnd, msg, wparam, lparam } });
         }
     }
 

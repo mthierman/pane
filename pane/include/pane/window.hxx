@@ -95,18 +95,18 @@ struct window_message {
 struct window final {
     using Self = window;
 
-    struct message {
+    struct procedure {
         Self* window;
-        HWND hwnd;
-        UINT msg;
-        WPARAM wparam;
-        LPARAM lparam;
+        window_message window_message;
     };
 
     window(pane::window_config&& window_config = {},
-           std::function<LRESULT(pane::window::message)>&& window_procedure
-           = [](pane::window::message message) {
-                 return DefWindowProcW(message.hwnd, message.msg, message.wparam, message.lparam);
+           std::function<LRESULT(pane::window::procedure)>&& procedure
+           = [](pane::window::procedure procedure) {
+                 return DefWindowProcW(procedure.window->window_handle,
+                                       procedure.window_message.msg,
+                                       procedure.window_message.wparam,
+                                       procedure.window_message.lparam);
              });
     ~window();
 
@@ -144,7 +144,7 @@ private:
         .lpszClassName { class_window_name.data() },
         .hIconSm { pane::system::resource_icon().value_or(pane::system::application_icon()) }
     };
-    std::function<LRESULT(pane::window::message)> window_procedure;
+    std::function<LRESULT(pane::window::procedure)> window_procedure;
 };
 
 struct webview final {
