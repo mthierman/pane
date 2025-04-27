@@ -107,8 +107,8 @@ struct window final {
     };
 
     window(pane::window_config&& window_config = {},
-           std::function<LRESULT(pane::window::procedure)>&& window_procedure
-           = [](pane::window::procedure procedure) { return procedure.msg.default_procedure(); });
+           std::function<LRESULT(Self*, pane::window_message)>&& window_procedure
+           = [](Self* self, pane::window_message msg) { return msg.default_procedure(); });
     ~window();
 
     window(const Self&) = delete;
@@ -144,7 +144,7 @@ struct window final {
 
 private:
     static auto class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) -> LRESULT;
-    std::function<LRESULT(pane::window::procedure)> window_procedure;
+    std::function<LRESULT(Self*, pane::window_message)> window_procedure;
 };
 
 struct webview final {

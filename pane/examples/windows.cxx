@@ -8,17 +8,17 @@ auto WINAPI wWinMain(HINSTANCE /* hinstance */,
     auto window_manager { pane::window_manager() };
 
     auto window { pane::window({ .background_color = pane::color { 16, 18, 24, 255 } },
-                               [&](pane::window::procedure procedure) -> LRESULT {
-        switch (procedure.msg.msg) {
+                               [&](pane::window* window, pane::window_message msg) -> LRESULT {
+        switch (msg.msg) {
             case WM_CREATE: {
-                window_manager.insert(procedure.msg.hwnd);
+                window_manager.insert(window->window_handle);
             } break;
             case WM_DESTROY: {
-                window_manager.erase(procedure.msg.hwnd);
+                window_manager.erase(window->window_handle);
             } break;
         }
 
-        return procedure.msg.default_procedure();
+        return msg.default_procedure();
     }) };
 
     // auto webview { pane::webview({ .background_color = pane::color { 16, 18, 24, 255 } },

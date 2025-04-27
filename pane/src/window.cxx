@@ -38,7 +38,7 @@ auto window_message::default_procedure(this const Self& self) -> LRESULT {
 }
 
 window::window(pane::window_config&& window_config,
-               std::function<LRESULT(pane::window::procedure)>&& window_procedure)
+               std::function<LRESULT(Self*, pane::window_message)>&& window_procedure)
     : window_config { std::move(window_config) },
       window_procedure { std::move(window_procedure) } {
     if (GetClassInfoExW(
@@ -119,7 +119,7 @@ auto window::class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) 
         }
 
         if (self->window_procedure) {
-            return self->window_procedure({ self, { hwnd, msg, wparam, lparam } });
+            return self->window_procedure(self, { hwnd, msg, wparam, lparam });
         }
     }
 
