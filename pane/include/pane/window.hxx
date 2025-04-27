@@ -90,6 +90,7 @@ struct window final {
 
     struct message {
         Self* window;
+        HWND hwnd;
         UINT msg;
         WPARAM wparam;
         LPARAM lparam;
@@ -98,8 +99,7 @@ struct window final {
     window(pane::window_config&& window_config = {},
            std::function<LRESULT(pane::window::message)>&& window_procedure
            = [](pane::window::message message) {
-                 return DefWindowProcW(
-                     message.window->window_handle, message.msg, message.wparam, message.lparam);
+                 return DefWindowProcW(message.hwnd, message.msg, message.wparam, message.lparam);
              });
     ~window();
 

@@ -72,8 +72,7 @@ auto window::show(this const Self& self) -> bool { return ShowWindow(self.window
 auto window::hide(this const Self& self) -> bool { return ShowWindow(self.window_handle, SW_HIDE); }
 
 auto window::default_procedure(pane::window::message message) -> LRESULT {
-    return DefWindowProcW(
-        message.window->window_handle, message.msg, message.wparam, message.lparam);
+    return DefWindowProcW(message.hwnd, message.msg, message.wparam, message.lparam);
 }
 
 auto window::class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) -> LRESULT {
@@ -112,7 +111,7 @@ auto window::class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) 
         }
 
         if (self->window_procedure) {
-            return self->window_procedure({ self, msg, wparam, lparam });
+            return self->window_procedure({ self, hwnd, msg, wparam, lparam });
         }
     }
 
