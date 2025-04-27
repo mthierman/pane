@@ -128,7 +128,7 @@ auto window::class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) 
 
 webview::webview(pane::window_config&& window_config,
                  pane::webview_config&& webview_config,
-                 std::function<LRESULT(pane::webview::procedure)>&& webview_procedure)
+                 std::function<LRESULT(Self*, pane::window_message)>&& webview_procedure)
     : window_config { std::move(window_config) },
       webview_config { std::move(webview_config) },
       webview_procedure { std::move(webview_procedure) } {
@@ -377,7 +377,7 @@ auto webview::class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
         }
 
         if (self->webview_procedure) {
-            return self->webview_procedure({ self, { hwnd, msg, wparam, lparam } });
+            return self->webview_procedure(self, { hwnd, msg, wparam, lparam });
         }
     }
 

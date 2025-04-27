@@ -157,8 +157,8 @@ struct webview final {
 
     webview(pane::window_config&& window_config = {},
             pane::webview_config&& webview_config = {},
-            std::function<LRESULT(pane::webview::procedure)>&& webview_procedure
-            = [](pane::webview::procedure procedure) { return procedure.msg.default_procedure(); });
+            std::function<LRESULT(Self*, pane::window_message)>&& webview_procedure
+            = [](Self* self, pane::window_message msg) { return msg.default_procedure(); });
     ~webview();
 
     webview(const Self&) = delete;
@@ -224,6 +224,6 @@ struct webview final {
 
 private:
     static auto class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) -> LRESULT;
-    std::function<LRESULT(pane::webview::procedure)> webview_procedure;
+    std::function<LRESULT(Self*, pane::window_message)> webview_procedure;
 };
 } // namespace pane
