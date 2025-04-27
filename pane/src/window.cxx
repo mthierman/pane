@@ -31,25 +31,29 @@ window::window(pane::window_config&& window_config,
         this);
 
     if (this->window_config.visible) {
-        ShowWindow(this->window_handle, SW_SHOWNORMAL);
+        ShowWindow(this->window_handle.hwnd, SW_SHOWNORMAL);
     }
 }
 
 window::~window() {
-    DestroyWindow(this->window_handle);
+    DestroyWindow(this->window_handle.hwnd);
     UnregisterClassW(this->window_class.lpszClassName, this->window_class.hInstance);
 }
 
-auto window::show(this const Self& self) -> bool { return ShowWindow(self.window_handle, SW_SHOW); }
+auto window::show(this const Self& self) -> bool {
+    return ShowWindow(self.window_handle.hwnd, SW_SHOW);
+}
 
-auto window::hide(this const Self& self) -> bool { return ShowWindow(self.window_handle, SW_HIDE); }
+auto window::hide(this const Self& self) -> bool {
+    return ShowWindow(self.window_handle.hwnd, SW_HIDE);
+}
 
 auto window::class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) -> LRESULT {
     if (msg == WM_NCCREATE) {
         if (auto create { reinterpret_cast<CREATESTRUCTW*>(lparam) }) {
             if (auto self { static_cast<Self*>(create->lpCreateParams) }) {
                 SetWindowLongPtrW(hwnd, 0, reinterpret_cast<LONG_PTR>(self));
-                self->window_handle = hwnd;
+                self->window_handle.hwnd = hwnd;
                 self->window_background = self->window_config.background_color.to_hbrush();
             }
         }
@@ -66,7 +70,7 @@ auto window::class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) 
         }
 
         if (msg == WM_NCDESTROY) {
-            self->window_handle = nullptr;
+            self->window_handle.hwnd = nullptr;
             DeleteObject(self->window_background);
             SetWindowLongPtrW(hwnd, 0, reinterpret_cast<LONG_PTR>(nullptr));
         }
@@ -117,7 +121,7 @@ webview::webview(pane::window_config&& window_config,
         this);
 
     if (this->window_config.visible) {
-        ShowWindow(this->window_handle, SW_SHOWNORMAL);
+        ShowWindow(this->window_handle.hwnd, SW_SHOWNORMAL);
     }
 
     if (this->options) {
@@ -190,7 +194,7 @@ webview::webview(pane::window_config&& window_config,
 
         if (this->environment) {
             this->environment->CreateCoreWebView2Controller(
-                this->window_handle,
+                this->window_handle.hwnd,
                 wil::MakeAgileCallback<ICoreWebView2CreateCoreWebView2ControllerCompletedHandler>(
                     [&]([[maybe_unused]] HRESULT error_code,
                         ICoreWebView2Controller* created_controller) -> HRESULT {
@@ -204,7 +208,7 @@ webview::webview(pane::window_config&& window_config,
                         this->window_config.background_color.to_webview2_color());
 
                     RECT client_rect {};
-                    GetClientRect(this->window_handle, &client_rect);
+                    GetClientRect(this->window_handle.hwnd, &client_rect);
 
                     this->controller->put_Bounds(client_rect);
 
@@ -272,7 +276,7 @@ webview::webview(pane::window_config&& window_config,
 }
 
 webview::~webview() {
-    DestroyWindow(this->window_handle);
+    DestroyWindow(this->window_handle.hwnd);
     UnregisterClassW(this->window_class.lpszClassName, this->window_class.hInstance);
 }
 
@@ -281,7 +285,7 @@ auto webview::show(this const Self& self) -> bool {
         self.controller->put_IsVisible(true);
     }
 
-    return ShowWindow(self.window_handle, SW_SHOW);
+    return ShowWindow(self.window_handle.hwnd, SW_SHOW);
 }
 
 auto webview::hide(this const Self& self) -> bool {
@@ -289,7 +293,7 @@ auto webview::hide(this const Self& self) -> bool {
         self.controller->put_IsVisible(false);
     }
 
-    return ShowWindow(self.window_handle, SW_HIDE);
+    return ShowWindow(self.window_handle.hwnd, SW_HIDE);
 }
 
 auto webview::navigate(this const Self& self, std::u8string_view url) -> void {
@@ -303,7 +307,7 @@ auto webview::class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
         if (auto create { reinterpret_cast<CREATESTRUCTW*>(lparam) }) {
             if (auto self { static_cast<Self*>(create->lpCreateParams) }) {
                 SetWindowLongPtrW(hwnd, 0, reinterpret_cast<LONG_PTR>(self));
-                self->window_handle = hwnd;
+                self->window_handle.hwnd = hwnd;
                 self->window_background = self->window_config.background_color.to_hbrush();
             }
         }
@@ -324,7 +328,7 @@ auto webview::class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
         }
 
         if (msg == WM_NCDESTROY) {
-            self->window_handle = nullptr;
+            self->window_handle.hwnd = nullptr;
             DeleteObject(self->window_background);
             SetWindowLongPtrW(hwnd, 0, reinterpret_cast<LONG_PTR>(nullptr));
         }

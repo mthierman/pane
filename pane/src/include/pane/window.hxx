@@ -106,7 +106,7 @@ struct window final {
     auto show(this const Self& self) -> bool;
     auto hide(this const Self& self) -> bool;
 
-    HWND window_handle { nullptr };
+    window_handle window_handle;
     uint64_t window_id { pane::random_number<uint64_t>() };
     HBRUSH window_background { nullptr };
     RECT client_rect { 0, 0, 0, 0 };
@@ -156,7 +156,7 @@ struct webview final {
     auto hide(this const Self& self) -> bool;
     auto navigate(this const Self& self, std::u8string_view url) -> void;
 
-    HWND window_handle { nullptr };
+    window_handle window_handle;
     uint64_t window_id { pane::random_number<uint64_t>() };
     HBRUSH window_background { nullptr };
     RECT client_rect { 0, 0, 0, 0 };
