@@ -158,7 +158,7 @@ struct webview final {
             pane::webview_config&& webview_config = {},
             std::function<LRESULT(pane::webview::procedure)>&& webview_procedure
             = [](pane::webview::procedure procedure) { return procedure.msg.default_procedure(); });
-    ~webview() = default;
+    ~webview();
 
     webview(const Self&) = delete;
     auto operator=(const Self&) -> Self& = delete;

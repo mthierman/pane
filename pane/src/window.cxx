@@ -304,6 +304,11 @@ webview::webview(pane::window_config&& window_config,
     }).Get());
 }
 
+webview::~webview() {
+    DestroyWindow(this->window_handle);
+    UnregisterClassW(this->window_class.lpszClassName, this->window_class.hInstance);
+}
+
 auto webview::class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) -> LRESULT {
     if (msg == WM_NCCREATE) {
         if (auto create { reinterpret_cast<CREATESTRUCTW*>(lparam) }) {
