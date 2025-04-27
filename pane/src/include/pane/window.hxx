@@ -119,7 +119,6 @@ struct window final {
 
     auto show(this const Self& self) -> bool;
     auto hide(this const Self& self) -> bool;
-    static auto default_procedure(const pane::window_message& window_message) -> LRESULT;
 
     HWND window_handle;
     uint64_t window_id { pane::random_number<uint64_t>() };

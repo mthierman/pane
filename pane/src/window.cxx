@@ -78,11 +78,6 @@ auto window::show(this const Self& self) -> bool { return ShowWindow(self.window
 
 auto window::hide(this const Self& self) -> bool { return ShowWindow(self.window_handle, SW_HIDE); }
 
-auto window::default_procedure(const pane::window_message& window_message) -> LRESULT {
-    return DefWindowProcW(
-        window_message.hwnd, window_message.msg, window_message.wparam, window_message.lparam);
-}
-
 auto window::class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) -> LRESULT {
     if (msg == WM_NCCREATE) {
         if (auto create { reinterpret_cast<CREATESTRUCTW*>(lparam) }) {
@@ -123,7 +118,7 @@ auto window::class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) 
         }
     }
 
-    return pane::window::default_procedure({ hwnd, msg, wparam, lparam });
+    return DefWindowProcW(hwnd, msg, wparam, lparam);
 }
 
 webview::webview(pane::window_config&& window_config,
@@ -381,6 +376,6 @@ auto webview::class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
         }
     }
 
-    return pane::window::default_procedure({ hwnd, msg, wparam, lparam });
+    return DefWindowProcW(hwnd, msg, wparam, lparam);
 }
 } // namespace pane
