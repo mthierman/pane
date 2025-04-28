@@ -75,14 +75,6 @@ auto window::window_class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM l
             SetWindowLongPtrW(hwnd, 0, reinterpret_cast<LONG_PTR>(nullptr));
         }
 
-        if (msg == WM_DESTROY) {
-            if (self->window_config.shutdown) {
-                PostQuitMessage(0);
-
-                return 0;
-            }
-        }
-
         if (self->window_procedure) {
             return self->window_procedure(self, { hwnd, msg, wparam, lparam });
         }
@@ -314,14 +306,6 @@ auto webview::window_class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM 
         if (msg == WM_NCDESTROY) {
             self->window_handle.hwnd = nullptr;
             SetWindowLongPtrW(hwnd, 0, reinterpret_cast<LONG_PTR>(nullptr));
-        }
-
-        if (msg == WM_DESTROY) {
-            if (self->window_config.shutdown) {
-                PostQuitMessage(0);
-
-                return 0;
-            }
         }
 
         if (self->window_procedure) {
