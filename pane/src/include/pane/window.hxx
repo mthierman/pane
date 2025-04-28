@@ -148,6 +148,8 @@ struct webview final {
     webview(Self&&) noexcept = delete;
     auto operator=(Self&&) noexcept -> Self& = delete;
 
+    auto destroy(this const Self& self) -> void;
+
     auto navigate(this const Self& self, std::u8string_view url) -> void;
 
     pane::window_config window_config;

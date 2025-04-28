@@ -277,9 +277,11 @@ webview::webview(pane::window_config&& window_config,
     }).Get());
 }
 
-webview::~webview() {
-    DestroyWindow(this->window_handle.hwnd);
-    UnregisterClassW(this->window_class.lpszClassName, this->window_class.hInstance);
+webview::~webview() { this->destroy(); }
+
+auto webview::destroy(this const Self& self) -> void {
+    DestroyWindow(self.window_handle.hwnd);
+    UnregisterClassW(self.window_class.lpszClassName, self.window_class.hInstance);
 }
 
 auto webview::navigate(this const Self& self, std::u8string_view url) -> void {
