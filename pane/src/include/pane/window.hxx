@@ -93,11 +93,6 @@ struct window_handle final {
 struct window final {
     using Self = window;
 
-    struct procedure final {
-        Self* window;
-        window_message msg;
-    };
-
     window(pane::window_config&& window_config = {},
            std::function<LRESULT(Self*, pane::window_message)>&& window_procedure
            = [](Self* self, pane::window_message msg) { return msg.default_procedure(); });
@@ -141,14 +136,9 @@ private:
 struct webview final {
     using Self = webview;
 
-    struct procedure final {
-        Self* webview;
-        window_message msg;
-    };
-
     webview(pane::window_config&& window_config = {},
             pane::webview_config&& webview_config = {},
-            std::function<LRESULT(Self*, pane::window_message)>&& webview_procedure
+            std::function<LRESULT(Self*, pane::window_message)>&& window_procedure
             = [](Self* self, pane::window_message msg) { return msg.default_procedure(); });
     ~webview();
 
@@ -215,7 +205,7 @@ struct webview final {
 
 private:
     static auto class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) -> LRESULT;
-    std::function<LRESULT(Self*, pane::window_message)> webview_procedure;
+    std::function<LRESULT(Self*, pane::window_message)> window_procedure;
 };
 
 struct window_manager final {

@@ -11,10 +11,10 @@ auto WINAPI wWinMain(HINSTANCE /* hinstance */,
                                [&](pane::window* window, pane::window_message msg) -> LRESULT {
         switch (msg.msg) {
             case WM_CREATE: {
-                window_manager.insert(window->window_handle);
+                window_manager.insert(window->window_handle.hwnd);
             } break;
             case WM_DESTROY: {
-                window_manager.erase(window->window_handle);
+                window_manager.erase(window->window_handle.hwnd);
             } break;
         }
 
@@ -26,10 +26,10 @@ auto WINAPI wWinMain(HINSTANCE /* hinstance */,
                                  [&](pane::webview* window, pane::window_message msg) -> LRESULT {
         switch (msg.msg) {
             case WM_CREATE: {
-                window_manager.insert(window->window_handle);
+                window_manager.insert(window->window_handle.hwnd);
             } break;
             case WM_DESTROY: {
-                window_manager.erase(window->window_handle);
+                window_manager.erase(window->window_handle.hwnd);
             } break;
         }
 
