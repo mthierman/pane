@@ -17,9 +17,15 @@ auto window_handle::show(this const Self& self) -> bool { return ShowWindow(self
 
 auto window_handle::hide(this const Self& self) -> bool { return ShowWindow(self.hwnd, SW_HIDE); }
 
+window_background::window_background(const pane::color& color)
+    : hbrush { color.to_hbrush() } { }
+
+window_background::~window_background() { DeleteObject(this->hbrush); }
+
 window::window(pane::window_config&& window_config,
                std::function<LRESULT(Self*, pane::window_message)>&& window_procedure)
     : window_config { std::move(window_config) },
+      window_background(this->window_config.background_color),
       window_procedure { std::move(window_procedure) } {
     CreateWindowExW(
         0,
@@ -54,7 +60,6 @@ auto window::window_class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM l
             if (auto self { static_cast<Self*>(create->lpCreateParams) }) {
                 SetWindowLongPtrW(hwnd, 0, reinterpret_cast<LONG_PTR>(self));
                 self->window_handle.hwnd = hwnd;
-                self->window_handle.background = self->window_config.background_color.to_hbrush();
             }
         }
     }
@@ -68,7 +73,7 @@ auto window::window_class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM l
             GetClientRect(hwnd, &self->window_handle.client_rect);
             FillRect(reinterpret_cast<HDC>(wparam),
                      &self->window_handle.client_rect,
-                     self->window_handle.background);
+                     self->window_background.hbrush);
         }
 
         if (msg == WM_CLOSE) {
@@ -78,7 +83,7 @@ auto window::window_class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM l
         }
 
         if (msg == WM_NCDESTROY) {
-            DeleteObject(self->window_handle.background);
+            DeleteObject(self->window_background.hbrush);
             self->window_handle.hwnd = nullptr;
             SetWindowLongPtrW(hwnd, 0, reinterpret_cast<LONG_PTR>(nullptr));
         }
@@ -104,6 +109,7 @@ webview::webview(pane::window_config&& window_config,
                  std::function<LRESULT(Self*, pane::window_message)>&& window_procedure)
     : window_config { std::move(window_config) },
       webview_config { std::move(webview_config) },
+      window_background(this->window_config.background_color),
       window_procedure { std::move(window_procedure) } {
     CreateWindowExW(
         0,
@@ -294,7 +300,6 @@ auto webview::window_class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM 
             if (auto self { static_cast<Self*>(create->lpCreateParams) }) {
                 SetWindowLongPtrW(hwnd, 0, reinterpret_cast<LONG_PTR>(self));
                 self->window_handle.hwnd = hwnd;
-                self->window_handle.background = self->window_config.background_color.to_hbrush();
             }
         }
     }
@@ -322,7 +327,7 @@ auto webview::window_class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM 
             GetClientRect(hwnd, &self->window_handle.client_rect);
             FillRect(reinterpret_cast<HDC>(wparam),
                      &self->window_handle.client_rect,
-                     self->window_handle.background);
+                     self->window_background.hbrush);
         }
 
         if (msg == WM_CLOSE) {
@@ -332,7 +337,7 @@ auto webview::window_class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM 
         }
 
         if (msg == WM_NCDESTROY) {
-            DeleteObject(self->window_handle.background);
+            DeleteObject(self->window_background.hbrush);
             self->window_handle.hwnd = nullptr;
             SetWindowLongPtrW(hwnd, 0, reinterpret_cast<LONG_PTR>(nullptr));
         }

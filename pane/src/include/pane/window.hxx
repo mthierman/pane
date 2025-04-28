@@ -121,9 +121,18 @@ struct window_handle final {
     auto hide(this const Self& self) -> bool;
 
     HWND hwnd { nullptr };
-    HBRUSH background { nullptr };
+    // HBRUSH background { nullptr };
     uintptr_t id { pane::random_number<uintptr_t>() };
     RECT client_rect { 0, 0, 0, 0 };
+};
+
+struct window_background final {
+    using Self = window_background;
+
+    window_background(const pane::color& color);
+    ~window_background();
+
+    HBRUSH hbrush { nullptr };
 };
 
 struct window final {
@@ -144,6 +153,7 @@ struct window final {
 
     pane::window_config window_config;
     pane::window_class<Self> window_class { u8"PaneWindow", window_class_procedure };
+    pane::window_background window_background;
     pane::window_handle window_handle;
 
 private:
@@ -175,6 +185,7 @@ struct webview final {
     pane::window_config window_config;
     pane::webview_config webview_config;
     pane::window_class<Self> window_class { u8"PaneWebView", window_class_procedure };
+    pane::window_background window_background;
     pane::window_handle window_handle;
 
     wil::com_ptr<ICoreWebView2Settings9> settings;
