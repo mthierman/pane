@@ -105,15 +105,9 @@ webview::webview(pane::window_config&& window_config,
     : window_config { std::move(window_config) },
       webview_config { std::move(webview_config) },
       window_procedure { std::move(window_procedure) } {
-    if (GetClassInfoExW(
-            this->window_class.hInstance, this->window_class.lpszClassName, &this->window_class)
-        == 0) {
-        RegisterClassExW(&this->window_class);
-    };
-
     CreateWindowExW(
         0,
-        this->window_class.lpszClassName,
+        this->window_class.wndclass.lpszClassName,
         reinterpret_cast<const wchar_t*>(pane::to_utf16(this->window_config.title).data()),
         this->window_config.parent_hwnd ? WS_CHILDWINDOW : WS_OVERLAPPEDWINDOW,
         CW_USEDEFAULT,
@@ -122,7 +116,7 @@ webview::webview(pane::window_config&& window_config,
         CW_USEDEFAULT,
         this->window_config.parent_hwnd,
         this->window_config.parent_hwnd ? reinterpret_cast<HMENU>(this->window_handle.id) : nullptr,
-        this->window_class.hInstance,
+        this->window_class.wndclass.hInstance,
         this);
 
     if (this->window_config.visible) {
@@ -284,7 +278,8 @@ webview::~webview() { this->destroy(); }
 
 auto webview::destroy(this const Self& self) -> void {
     self.window_handle.destroy();
-    UnregisterClassW(self.window_class.lpszClassName, self.window_class.hInstance);
+    UnregisterClassW(self.window_class.wndclass.lpszClassName,
+                     self.window_class.wndclass.hInstance);
 }
 
 auto webview::navigate(this const Self& self, std::u8string_view url) -> void {

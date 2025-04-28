@@ -145,20 +145,6 @@ struct window final {
     pane::window_config window_config;
     pane::window_handle window_handle;
     pane::window_class<Self> window_class { u8"PaneWindow", window_class_procedure };
-    // WNDCLASSEXW window_class {
-    //     { sizeof(WNDCLASSEXW) },
-    //     { 0 },
-    //     { window_class_procedure },
-    //     { 0 },
-    //     { sizeof(Self) },
-    //     { pane::system::module_handle().value_or(nullptr) },
-    //     { pane::system::resource_icon().value_or(pane::system::application_icon()) },
-    //     { pane::system::arrow_cursor() },
-    //     { nullptr },
-    //     { nullptr },
-    //     { L"PaneWindow" },
-    //     { pane::system::resource_icon().value_or(pane::system::application_icon()) }
-    // };
 
 private:
     static auto window_class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
@@ -189,20 +175,7 @@ struct webview final {
     pane::window_config window_config;
     pane::webview_config webview_config;
     pane::window_handle window_handle;
-    WNDCLASSEXW window_class {
-        { sizeof(WNDCLASSEXW) },
-        { 0 },
-        { window_class_procedure },
-        { 0 },
-        { sizeof(Self) },
-        { pane::system::module_handle().value_or(nullptr) },
-        { pane::system::resource_icon().value_or(pane::system::application_icon()) },
-        { pane::system::arrow_cursor() },
-        { nullptr },
-        { nullptr },
-        { L"PaneWebView" },
-        { pane::system::resource_icon().value_or(pane::system::application_icon()) }
-    };
+    pane::window_class<Self> window_class { u8"PaneWebView", window_class_procedure };
 
     wil::com_ptr<ICoreWebView2Settings9> settings;
     wil::com_ptr<ICoreWebView2Environment13> environment;
