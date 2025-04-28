@@ -82,7 +82,9 @@ struct window_message final {
 template <typename T> struct window_class final {
     using Self = window_class;
 
-    auto unregister(this const Self& self) -> bool;
+    auto unregister(this const Self& self) -> bool {
+        return UnregisterClassW(self.wndclass.lpszClassName, self.wndclass.hInstance);
+    }
 
     WNDCLASSEXW wndclass {
         { sizeof(WNDCLASSEXW) },
