@@ -106,9 +106,6 @@ struct window final {
     window(Self&&) noexcept = delete;
     auto operator=(Self&&) noexcept -> Self& = delete;
 
-    auto show(this const Self& self) -> bool;
-    auto hide(this const Self& self) -> bool;
-
     pane::window_config window_config;
     pane::window_handle window_handle;
     std::wstring window_class_name { L"PaneWindow" + std::to_wstring(window_handle.id) };
@@ -149,8 +146,6 @@ struct webview final {
     webview(Self&&) noexcept = delete;
     auto operator=(Self&&) noexcept -> Self& = delete;
 
-    auto show(this const Self& self) -> bool;
-    auto hide(this const Self& self) -> bool;
     auto navigate(this const Self& self, std::u8string_view url) -> void;
 
     pane::window_config window_config;

@@ -49,10 +49,6 @@ window::~window() {
     UnregisterClassW(this->window_class.lpszClassName, this->window_class.hInstance);
 }
 
-auto window::show(this const Self& self) -> bool { return self.window_handle.show(); }
-
-auto window::hide(this const Self& self) -> bool { return self.window_handle.hide(); }
-
 auto window::window_class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) -> LRESULT {
     if (msg == WM_NCCREATE) {
         if (auto create { reinterpret_cast<CREATESTRUCTW*>(lparam) }) {
@@ -284,22 +280,6 @@ webview::~webview() {
     UnregisterClassW(this->window_class.lpszClassName, this->window_class.hInstance);
 }
 
-auto webview::show(this const Self& self) -> bool {
-    if (self.controller) {
-        self.controller->put_IsVisible(true);
-    }
-
-    return self.window_handle.show();
-}
-
-auto webview::hide(this const Self& self) -> bool {
-    if (self.controller) {
-        self.controller->put_IsVisible(false);
-    }
-
-    return self.window_handle.hide();
-}
-
 auto webview::navigate(this const Self& self, std::u8string_view url) -> void {
     if (self.core) {
         self.core->Navigate(reinterpret_cast<const wchar_t*>(pane::to_utf16(url).data()));
@@ -323,6 +303,16 @@ auto webview::window_class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM 
 
             if (self->controller) {
                 self->controller->put_Bounds(self->window_handle.client_rect);
+            }
+        }
+
+        if (msg == WM_SHOWWINDOW) {
+            if (self->controller) {
+                if (wparam) {
+                    self->controller->put_IsVisible(true);
+                } else {
+                    self->controller->put_IsVisible(false);
+                }
             }
         }
 
