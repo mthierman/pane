@@ -65,12 +65,6 @@ auto window::window_class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM l
     }
 
     if (auto self { reinterpret_cast<Self*>(GetWindowLongPtrW(hwnd, 0)) }) {
-        if (msg == WM_CLOSE) {
-            self->destroy();
-
-            return 0;
-        }
-
         if (msg == WM_WINDOWPOSCHANGED) {
             GetClientRect(hwnd, &self->window_handle.client_rect);
         }
@@ -82,9 +76,15 @@ auto window::window_class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM l
                      self->window_handle.background);
         }
 
+        if (msg == WM_CLOSE) {
+            self->destroy();
+
+            return 0;
+        }
+
         if (msg == WM_NCDESTROY) {
-            self->window_handle.hwnd = nullptr;
             DeleteObject(self->window_handle.background);
+            self->window_handle.hwnd = nullptr;
             SetWindowLongPtrW(hwnd, 0, reinterpret_cast<LONG_PTR>(nullptr));
         }
 
@@ -310,12 +310,6 @@ auto webview::window_class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM 
     }
 
     if (auto self { reinterpret_cast<Self*>(GetWindowLongPtrW(hwnd, 0)) }) {
-        if (msg == WM_CLOSE) {
-            self->destroy();
-
-            return 0;
-        }
-
         if (msg == WM_WINDOWPOSCHANGED) {
             GetClientRect(hwnd, &self->window_handle.client_rect);
 
@@ -341,9 +335,15 @@ auto webview::window_class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM 
                      self->window_handle.background);
         }
 
+        if (msg == WM_CLOSE) {
+            self->destroy();
+
+            return 0;
+        }
+
         if (msg == WM_NCDESTROY) {
-            self->window_handle.hwnd = nullptr;
             DeleteObject(self->window_handle.background);
+            self->window_handle.hwnd = nullptr;
             SetWindowLongPtrW(hwnd, 0, reinterpret_cast<LONG_PTR>(nullptr));
         }
 
