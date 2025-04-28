@@ -114,9 +114,9 @@ public:
 struct window_handle final {
     using Self = window_handle;
 
-    auto activate(this const Self& self) -> bool;
     auto destroy(this const Self& self) -> bool;
 
+    auto activate(this const Self& self) -> bool;
     auto show(this const Self& self) -> bool;
     auto hide(this const Self& self) -> bool;
 

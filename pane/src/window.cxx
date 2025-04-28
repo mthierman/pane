@@ -7,11 +7,11 @@ auto window_message::default_procedure(this const Self& self) -> LRESULT {
     return DefWindowProcW(self.hwnd, self.msg, self.wparam, self.lparam);
 }
 
+auto window_handle::destroy(this const Self& self) -> bool { return DestroyWindow(self.hwnd); }
+
 auto window_handle::activate(this const Self& self) -> bool {
     return ShowWindow(self.hwnd, SW_SHOWNORMAL);
 }
-
-auto window_handle::destroy(this const Self& self) -> bool { return DestroyWindow(self.hwnd); }
 
 auto window_handle::show(this const Self& self) -> bool { return ShowWindow(self.hwnd, SW_SHOW); }
 
