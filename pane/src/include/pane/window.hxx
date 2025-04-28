@@ -94,6 +94,25 @@ struct window_handle final {
     RECT client_rect { 0, 0, 0, 0 };
 };
 
+struct window_class final {
+    using Self = window_class;
+
+    WNDCLASSEXW window_class {
+        { sizeof(WNDCLASSEXW) },
+        { 0 },
+        { DefWindowProcW },
+        { 0 },
+        { sizeof(Self) },
+        { pane::system::module_handle().value_or(nullptr) },
+        { pane::system::resource_icon().value_or(pane::system::application_icon()) },
+        { pane::system::arrow_cursor() },
+        { nullptr },
+        { nullptr },
+        { L"PaneWindow" },
+        { pane::system::resource_icon().value_or(pane::system::application_icon()) }
+    };
+};
+
 struct window final {
     using Self = window;
 
@@ -113,18 +132,18 @@ struct window final {
     pane::window_config window_config;
     pane::window_handle window_handle;
     WNDCLASSEXW window_class {
-        .cbSize { sizeof(WNDCLASSEXW) },
-        .style { 0 },
-        .lpfnWndProc { window_class_procedure },
-        .cbClsExtra { 0 },
-        .cbWndExtra { sizeof(Self) },
-        .hInstance { pane::system::module_handle().value_or(nullptr) },
-        .hIcon { pane::system::resource_icon().value_or(pane::system::application_icon()) },
-        .hCursor { pane::system::arrow_cursor() },
-        .hbrBackground { nullptr },
-        .lpszMenuName { nullptr },
-        .lpszClassName { L"PaneWindow" },
-        .hIconSm { pane::system::resource_icon().value_or(pane::system::application_icon()) }
+        { sizeof(WNDCLASSEXW) },
+        { 0 },
+        { window_class_procedure },
+        { 0 },
+        { sizeof(Self) },
+        { pane::system::module_handle().value_or(nullptr) },
+        { pane::system::resource_icon().value_or(pane::system::application_icon()) },
+        { pane::system::arrow_cursor() },
+        { nullptr },
+        { nullptr },
+        { L"PaneWindow" },
+        { pane::system::resource_icon().value_or(pane::system::application_icon()) }
     };
 
 private:
@@ -157,18 +176,18 @@ struct webview final {
     pane::webview_config webview_config;
     pane::window_handle window_handle;
     WNDCLASSEXW window_class {
-        .cbSize { sizeof(WNDCLASSEXW) },
-        .style { 0 },
-        .lpfnWndProc { window_class_procedure },
-        .cbClsExtra { 0 },
-        .cbWndExtra { sizeof(Self) },
-        .hInstance { pane::system::module_handle().value_or(nullptr) },
-        .hIcon { pane::system::resource_icon().value_or(pane::system::application_icon()) },
-        .hCursor { pane::system::arrow_cursor() },
-        .hbrBackground { nullptr },
-        .lpszMenuName { nullptr },
-        .lpszClassName { L"PaneWebView" },
-        .hIconSm { pane::system::resource_icon().value_or(pane::system::application_icon()) }
+        { sizeof(WNDCLASSEXW) },
+        { 0 },
+        { window_class_procedure },
+        { 0 },
+        { sizeof(Self) },
+        { pane::system::module_handle().value_or(nullptr) },
+        { pane::system::resource_icon().value_or(pane::system::application_icon()) },
+        { pane::system::arrow_cursor() },
+        { nullptr },
+        { nullptr },
+        { L"PaneWebView" },
+        { pane::system::resource_icon().value_or(pane::system::application_icon()) }
     };
 
     wil::com_ptr<ICoreWebView2Settings9> settings;
