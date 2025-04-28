@@ -44,9 +44,11 @@ window::window(pane::window_config&& window_config,
     }
 }
 
-window::~window() {
-    DestroyWindow(this->window_handle.hwnd);
-    UnregisterClassW(this->window_class.lpszClassName, this->window_class.hInstance);
+window::~window() { this->destroy(); }
+
+auto window::destroy(this const Self& self) -> void {
+    DestroyWindow(self.window_handle.hwnd);
+    UnregisterClassW(self.window_class.lpszClassName, self.window_class.hInstance);
 }
 
 auto window::window_class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) -> LRESULT {

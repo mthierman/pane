@@ -106,6 +106,8 @@ struct window final {
     window(Self&&) noexcept = delete;
     auto operator=(Self&&) noexcept -> Self& = delete;
 
+    auto destroy(this const Self& self) -> void;
+
     pane::window_config window_config;
     pane::window_handle window_handle;
     std::wstring window_class_name { L"PaneWindow" + std::to_wstring(window_handle.id) };
