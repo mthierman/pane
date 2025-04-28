@@ -212,8 +212,8 @@ private:
 struct window_manager final {
     using Self = window_manager;
 
-    auto insert(this Self& self, HWND hwnd) -> void;
-    auto erase(this Self& self, HWND hwnd) -> void;
+    auto insert(this Self& self, const window_handle& window_handle) -> void;
+    auto erase(this Self& self, const window_handle& window_handle) -> void;
     auto clear(this Self& self) -> void;
 
     auto size(this const Self& self) -> uint64_t;
