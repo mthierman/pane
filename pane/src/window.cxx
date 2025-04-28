@@ -65,6 +65,12 @@ auto window::window_class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM l
     }
 
     if (auto self { reinterpret_cast<Self*>(GetWindowLongPtrW(hwnd, 0)) }) {
+        if (msg == WM_CLOSE) {
+            self->destroy();
+
+            return 0;
+        }
+
         if (msg == WM_WINDOWPOSCHANGED) {
             GetClientRect(hwnd, &self->window_handle.client_rect);
         }
@@ -304,6 +310,12 @@ auto webview::window_class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM 
     }
 
     if (auto self { reinterpret_cast<Self*>(GetWindowLongPtrW(hwnd, 0)) }) {
+        if (msg == WM_CLOSE) {
+            self->destroy();
+
+            return 0;
+        }
+
         if (msg == WM_WINDOWPOSCHANGED) {
             GetClientRect(hwnd, &self->window_handle.client_rect);
 
