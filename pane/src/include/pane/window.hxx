@@ -224,10 +224,10 @@ private:
 template <typename T> struct window_manager final {
     using Self = window_manager;
 
-    auto insert(this Self& self, T& window) -> void { self.set.insert(window.window_handle.hwnd); }
+    auto insert(this Self& self, T* window) -> void { self.set.insert(window.window_handle.hwnd); }
 
-    auto erase(this Self& self, const T& window) -> void {
-        self.set.erase(window.window_handle.hwnd);
+    auto erase(this Self& self, T* window) -> void {
+        self.set.erase(window->window_handle.hwnd);
 
         if (self.set.empty()) {
             PostQuitMessage(0);
