@@ -29,7 +29,7 @@ window::window(pane::window_config&& window_config,
       window_procedure { std::move(window_procedure) } {
     CreateWindowExW(
         0,
-        this->window_class.wndclass.lpszClassName,
+        this->window_class().lpszClassName,
         reinterpret_cast<const wchar_t*>(pane::to_utf16(this->window_config.title).data()),
         this->window_config.parent_hwnd ? WS_CHILDWINDOW : WS_OVERLAPPEDWINDOW,
         CW_USEDEFAULT,
@@ -38,7 +38,7 @@ window::window(pane::window_config&& window_config,
         CW_USEDEFAULT,
         this->window_config.parent_hwnd,
         this->window_config.parent_hwnd ? reinterpret_cast<HMENU>(this->window_handle.id) : nullptr,
-        this->window_class.wndclass.hInstance,
+        this->window_class().hInstance,
         this);
 
     if (this->window_config.visible) {
@@ -92,7 +92,7 @@ webview::webview(pane::window_config&& window_config,
       window_procedure { std::move(window_procedure) } {
     CreateWindowExW(
         0,
-        this->window_class.wndclass.lpszClassName,
+        this->window_class().lpszClassName,
         reinterpret_cast<const wchar_t*>(pane::to_utf16(this->window_config.title).data()),
         this->window_config.parent_hwnd ? WS_CHILDWINDOW : WS_OVERLAPPEDWINDOW,
         CW_USEDEFAULT,
@@ -101,7 +101,7 @@ webview::webview(pane::window_config&& window_config,
         CW_USEDEFAULT,
         this->window_config.parent_hwnd,
         this->window_config.parent_hwnd ? reinterpret_cast<HMENU>(this->window_handle.id) : nullptr,
-        this->window_class.wndclass.hInstance,
+        this->window_class().hInstance,
         this);
 
     if (this->window_config.visible) {

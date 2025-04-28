@@ -103,10 +103,10 @@ template <typename T> struct window_class final {
     }
     ~window_class() { UnregisterClassW(this->wndclass.lpszClassName, this->wndclass.hInstance); }
 
+    auto operator()(this const Self& self) -> const WNDCLASSEXW& { return self.wndclass; }
+
 private:
     std::u16string class_name;
-
-public:
     WNDCLASSEXW wndclass;
 };
 
