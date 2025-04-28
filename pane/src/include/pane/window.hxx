@@ -116,7 +116,7 @@ struct window final {
     WNDCLASSEXW window_class {
         .cbSize { sizeof(WNDCLASSEXW) },
         .style { 0 },
-        .lpfnWndProc { class_procedure },
+        .lpfnWndProc { window_class_procedure },
         .cbClsExtra { 0 },
         .cbWndExtra { sizeof(Self) },
         .hInstance { pane::system::module_handle().value_or(nullptr) },
@@ -129,7 +129,8 @@ struct window final {
     };
 
 private:
-    static auto class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) -> LRESULT;
+    static auto window_class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
+        -> LRESULT;
 
     std::function<LRESULT(Self*, pane::window_message)> window_procedure;
 };
@@ -160,7 +161,7 @@ struct webview final {
     WNDCLASSEXW window_class {
         .cbSize { sizeof(WNDCLASSEXW) },
         .style { 0 },
-        .lpfnWndProc { class_procedure },
+        .lpfnWndProc { window_class_procedure },
         .cbClsExtra { 0 },
         .cbWndExtra { sizeof(Self) },
         .hInstance { pane::system::module_handle().value_or(nullptr) },
@@ -202,7 +203,8 @@ struct webview final {
     };
 
 private:
-    static auto class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) -> LRESULT;
+    static auto window_class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
+        -> LRESULT;
 
     std::function<LRESULT(Self*, pane::window_message)> window_procedure;
 };

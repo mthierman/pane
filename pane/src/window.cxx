@@ -52,7 +52,7 @@ auto window::show(this const Self& self) -> bool { return self.window_handle.sho
 
 auto window::hide(this const Self& self) -> bool { return self.window_handle.hide(); }
 
-auto window::class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) -> LRESULT {
+auto window::window_class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) -> LRESULT {
     if (msg == WM_NCCREATE) {
         if (auto create { reinterpret_cast<CREATESTRUCTW*>(lparam) }) {
             if (auto self { static_cast<Self*>(create->lpCreateParams) }) {
@@ -308,7 +308,7 @@ auto webview::navigate(this const Self& self, std::u8string_view url) -> void {
     }
 }
 
-auto webview::class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) -> LRESULT {
+auto webview::window_class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) -> LRESULT {
     if (msg == WM_NCCREATE) {
         if (auto create { reinterpret_cast<CREATESTRUCTW*>(lparam) }) {
             if (auto self { static_cast<Self*>(create->lpCreateParams) }) {
