@@ -124,7 +124,6 @@ struct window_handle final {
     auto hide(this const Self& self) -> bool;
 
     HWND hwnd { nullptr };
-    // HBRUSH background { nullptr };
     uintptr_t id { pane::random_number<uintptr_t>() };
     RECT client_rect { 0, 0, 0, 0 };
 };
