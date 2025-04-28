@@ -11,6 +11,8 @@ auto window_handle::activate(this const Self& self) -> bool {
     return ShowWindow(self.hwnd, SW_SHOWNORMAL);
 }
 
+auto window_handle::destroy(this const Self& self) -> bool { return DestroyWindow(self.hwnd); }
+
 auto window_handle::show(this const Self& self) -> bool { return ShowWindow(self.hwnd, SW_SHOW); }
 
 auto window_handle::hide(this const Self& self) -> bool { return ShowWindow(self.hwnd, SW_HIDE); }
@@ -47,7 +49,7 @@ window::window(pane::window_config&& window_config,
 window::~window() { this->destroy(); }
 
 auto window::destroy(this const Self& self) -> void {
-    DestroyWindow(self.window_handle.hwnd);
+    self.window_handle.destroy();
     UnregisterClassW(self.window_class.lpszClassName, self.window_class.hInstance);
 }
 
@@ -280,7 +282,7 @@ webview::webview(pane::window_config&& window_config,
 webview::~webview() { this->destroy(); }
 
 auto webview::destroy(this const Self& self) -> void {
-    DestroyWindow(self.window_handle.hwnd);
+    self.window_handle.destroy();
     UnregisterClassW(self.window_class.lpszClassName, self.window_class.hInstance);
 }
 
