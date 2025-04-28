@@ -9,8 +9,8 @@ auto wWinMain(HINSTANCE /* hinstance */,
 
     auto window { pane::window(
         { .background_color = pane::color { 16, 18, 24, 255 } },
-        [&window_manager](pane::window* window, pane::window_message msg) -> LRESULT {
-        switch (msg.msg) {
+        [&window_manager](pane::window* window, pane::window_message window_message) -> LRESULT {
+        switch (window_message.msg) {
             case WM_CREATE: {
                 window_manager.insert(window->window_handle);
             } break;
@@ -19,14 +19,14 @@ auto wWinMain(HINSTANCE /* hinstance */,
             } break;
         }
 
-        return msg.default_procedure();
+        return window_message.default_procedure();
     }) };
 
     auto webview { pane::webview(
         { .background_color = pane::color { 16, 18, 24, 255 } },
         { .home_page = u8"https://www.google.com/" },
-        [&window_manager](pane::webview* webview, pane::window_message msg) -> LRESULT {
-        switch (msg.msg) {
+        [&window_manager](pane::webview* webview, pane::window_message window_message) -> LRESULT {
+        switch (window_message.msg) {
             case WM_CREATE: {
                 window_manager.insert(webview->window_handle);
             } break;
@@ -35,7 +35,7 @@ auto wWinMain(HINSTANCE /* hinstance */,
             } break;
         }
 
-        return msg.default_procedure();
+        return window_message.default_procedure();
     }) };
 
     return pane::system::message_loop();
