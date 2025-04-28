@@ -72,12 +72,12 @@ struct webview_config final {
 struct window_message final {
     using Self = window_message;
 
+    auto default_procedure(this const Self& self) -> LRESULT;
+
     HWND hwnd { nullptr };
     UINT msg { 0 };
     WPARAM wparam { 0 };
     LPARAM lparam { 0 };
-
-    auto default_procedure(this const Self& self) -> LRESULT;
 };
 
 struct window_handle final {
