@@ -97,14 +97,12 @@ template <typename T> struct window_class final {
                      { reinterpret_cast<const wchar_t*>(class_name.data()) },
                      { pane::system::resource_icon().value_or(
                          pane::system::application_icon()) } } { }
-    ~window_class();
-
-    auto unregister(this const Self& self) -> bool {
-        return UnregisterClassW(self.wndclass.lpszClassName, self.wndclass.hInstance);
-    }
+    ~window_class() { UnregisterClassW(this->wndclass.lpszClassName, this->wndclass.hInstance); }
 
 private:
     std::u16string class_name;
+
+public:
     WNDCLASSEXW wndclass {};
 };
 
