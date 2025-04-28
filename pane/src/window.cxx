@@ -71,7 +71,6 @@ auto window::window_class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM l
         }
 
         if (msg == WM_NCDESTROY) {
-            DeleteObject(self->window_background.hbrush);
             self->window_handle.hwnd = nullptr;
             SetWindowLongPtrW(hwnd, 0, reinterpret_cast<LONG_PTR>(nullptr));
         }
@@ -313,7 +312,6 @@ auto webview::window_class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM 
         }
 
         if (msg == WM_NCDESTROY) {
-            DeleteObject(self->window_background.hbrush);
             self->window_handle.hwnd = nullptr;
             SetWindowLongPtrW(hwnd, 0, reinterpret_cast<LONG_PTR>(nullptr));
         }
