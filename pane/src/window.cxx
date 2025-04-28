@@ -34,7 +34,7 @@ window::window(pane::window_config&& window_config,
         CW_USEDEFAULT,
         CW_USEDEFAULT,
         this->window_config.parent_hwnd,
-        this->window_config.parent_hwnd ? reinterpret_cast<HMENU>(this->window_id) : nullptr,
+        this->window_config.parent_hwnd ? reinterpret_cast<HMENU>(this->window_handle.id) : nullptr,
         this->window_class.hInstance,
         this);
 
@@ -58,24 +58,26 @@ auto window::class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) 
             if (auto self { static_cast<Self*>(create->lpCreateParams) }) {
                 SetWindowLongPtrW(hwnd, 0, reinterpret_cast<LONG_PTR>(self));
                 self->window_handle.hwnd = hwnd;
-                self->window_background = self->window_config.background_color.to_hbrush();
+                self->window_handle.background = self->window_config.background_color.to_hbrush();
             }
         }
     }
 
     if (auto self { reinterpret_cast<Self*>(GetWindowLongPtrW(hwnd, 0)) }) {
         if (msg == WM_WINDOWPOSCHANGED) {
-            GetClientRect(hwnd, &self->client_rect);
+            GetClientRect(hwnd, &self->window_handle.client_rect);
         }
 
         if (msg == WM_ERASEBKGND) {
-            GetClientRect(hwnd, &self->client_rect);
-            FillRect(reinterpret_cast<HDC>(wparam), &self->client_rect, self->window_background);
+            GetClientRect(hwnd, &self->window_handle.client_rect);
+            FillRect(reinterpret_cast<HDC>(wparam),
+                     &self->window_handle.client_rect,
+                     self->window_handle.background);
         }
 
         if (msg == WM_NCDESTROY) {
             self->window_handle.hwnd = nullptr;
-            DeleteObject(self->window_background);
+            DeleteObject(self->window_handle.background);
             SetWindowLongPtrW(hwnd, 0, reinterpret_cast<LONG_PTR>(nullptr));
         }
 

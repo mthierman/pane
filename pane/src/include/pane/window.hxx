@@ -88,6 +88,9 @@ struct window_handle final {
     auto hide(this const Self& self) -> bool;
 
     HWND hwnd { nullptr };
+    HBRUSH background { nullptr };
+    uint64_t id { pane::random_number<uint64_t>() };
+    RECT client_rect { 0, 0, 0, 0 };
 };
 
 struct window final {
@@ -107,12 +110,9 @@ struct window final {
     auto show(this const Self& self) -> bool;
     auto hide(this const Self& self) -> bool;
 
-    window_handle window_handle;
-    uint64_t window_id { pane::random_number<uint64_t>() };
-    HBRUSH window_background { nullptr };
-    RECT client_rect { 0, 0, 0, 0 };
     pane::window_config window_config;
-    std::wstring class_name { L"PaneWindow" + std::to_wstring(window_id) };
+    pane::window_handle window_handle;
+    std::wstring class_name { L"PaneWindow" + std::to_wstring(window_handle.id) };
     WNDCLASSEXW window_class {
         .cbSize { sizeof(WNDCLASSEXW) },
         .style { 0 },
@@ -130,6 +130,7 @@ struct window final {
 
 private:
     static auto class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) -> LRESULT;
+
     std::function<LRESULT(Self*, pane::window_message)> window_procedure;
 };
 
