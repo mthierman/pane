@@ -88,7 +88,7 @@ struct window_handle final {
 
     HWND hwnd { nullptr };
     HBRUSH background { nullptr };
-    uint64_t id { pane::random_number<uint64_t>() };
+    uintptr_t id { pane::random_number<uintptr_t>() };
     RECT client_rect { 0, 0, 0, 0 };
 };
 
