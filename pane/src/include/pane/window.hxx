@@ -96,14 +96,19 @@ template <typename T> struct window_class final {
                      { nullptr },
                      { reinterpret_cast<const wchar_t*>(class_name.data()) },
                      { pane::system::resource_icon().value_or(
-                         pane::system::application_icon()) } } { }
+                         pane::system::application_icon()) } } {
+        if (GetClassInfoExW(this->wndclass.hInstance, this->wndclass.lpszClassName, &this->wndclass)
+            == 0) {
+            RegisterClassExW(&this->wndclass);
+        };
+    }
     ~window_class() { UnregisterClassW(this->wndclass.lpszClassName, this->wndclass.hInstance); }
 
 private:
     std::u16string class_name;
 
 public:
-    WNDCLASSEXW wndclass {};
+    WNDCLASSEXW wndclass;
 };
 
 struct window_handle final {
@@ -139,20 +144,21 @@ struct window final {
 
     pane::window_config window_config;
     pane::window_handle window_handle;
-    WNDCLASSEXW window_class {
-        { sizeof(WNDCLASSEXW) },
-        { 0 },
-        { window_class_procedure },
-        { 0 },
-        { sizeof(Self) },
-        { pane::system::module_handle().value_or(nullptr) },
-        { pane::system::resource_icon().value_or(pane::system::application_icon()) },
-        { pane::system::arrow_cursor() },
-        { nullptr },
-        { nullptr },
-        { L"PaneWindow" },
-        { pane::system::resource_icon().value_or(pane::system::application_icon()) }
-    };
+    pane::window_class<Self> window_class { u8"PaneWindow", window_class_procedure };
+    // WNDCLASSEXW window_class {
+    //     { sizeof(WNDCLASSEXW) },
+    //     { 0 },
+    //     { window_class_procedure },
+    //     { 0 },
+    //     { sizeof(Self) },
+    //     { pane::system::module_handle().value_or(nullptr) },
+    //     { pane::system::resource_icon().value_or(pane::system::application_icon()) },
+    //     { pane::system::arrow_cursor() },
+    //     { nullptr },
+    //     { nullptr },
+    //     { L"PaneWindow" },
+    //     { pane::system::resource_icon().value_or(pane::system::application_icon()) }
+    // };
 
 private:
     static auto window_class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)

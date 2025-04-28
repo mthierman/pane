@@ -21,15 +21,9 @@ window::window(pane::window_config&& window_config,
                std::function<LRESULT(Self*, pane::window_message)>&& window_procedure)
     : window_config { std::move(window_config) },
       window_procedure { std::move(window_procedure) } {
-    if (GetClassInfoExW(
-            this->window_class.hInstance, this->window_class.lpszClassName, &this->window_class)
-        == 0) {
-        RegisterClassExW(&this->window_class);
-    };
-
     CreateWindowExW(
         0,
-        this->window_class.lpszClassName,
+        this->window_class.wndclass.lpszClassName,
         reinterpret_cast<const wchar_t*>(pane::to_utf16(this->window_config.title).data()),
         this->window_config.parent_hwnd ? WS_CHILDWINDOW : WS_OVERLAPPEDWINDOW,
         CW_USEDEFAULT,
@@ -38,7 +32,7 @@ window::window(pane::window_config&& window_config,
         CW_USEDEFAULT,
         this->window_config.parent_hwnd,
         this->window_config.parent_hwnd ? reinterpret_cast<HMENU>(this->window_handle.id) : nullptr,
-        this->window_class.hInstance,
+        this->window_class.wndclass.hInstance,
         this);
 
     if (this->window_config.visible) {
@@ -50,7 +44,8 @@ window::~window() { this->destroy(); }
 
 auto window::destroy(this const Self& self) -> void {
     self.window_handle.destroy();
-    UnregisterClassW(self.window_class.lpszClassName, self.window_class.hInstance);
+    UnregisterClassW(self.window_class.wndclass.lpszClassName,
+                     self.window_class.wndclass.hInstance);
 }
 
 auto window::window_class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) -> LRESULT {
