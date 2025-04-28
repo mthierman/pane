@@ -249,6 +249,7 @@ template <typename T> struct window_manager final {
     auto empty(this const Self& self) -> bool { return self.set.empty(); }
 
     auto first(this const Self& self) -> HWND { return *self.set.begin(); }
+
     auto last(this const Self& self) -> HWND { return *self.set.end(); }
 
 private:
