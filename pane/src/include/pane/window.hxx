@@ -13,6 +13,17 @@
 #include <WebView2EnvironmentOptions.h>
 
 namespace pane {
+struct window_message final {
+    using Self = window_message;
+
+    auto default_procedure(this const Self& self) -> LRESULT;
+
+    HWND hwnd { nullptr };
+    UINT msg { 0 };
+    WPARAM wparam { 0 };
+    LPARAM lparam { 0 };
+};
+
 struct window_config final {
     std::u8string title;
     pane::color background_color;
@@ -66,17 +77,6 @@ struct webview_config final {
     std::filesystem::path user_data_folder;
     environment_options environment_options;
     settings settings;
-};
-
-struct window_message final {
-    using Self = window_message;
-
-    auto default_procedure(this const Self& self) -> LRESULT;
-
-    HWND hwnd { nullptr };
-    UINT msg { 0 };
-    WPARAM wparam { 0 };
-    LPARAM lparam { 0 };
 };
 
 template <typename T> struct window_class final {
