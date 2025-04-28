@@ -143,8 +143,8 @@ struct window final {
     auto destroy(this const Self& self) -> void;
 
     pane::window_config window_config;
-    pane::window_handle window_handle;
     pane::window_class<Self> window_class { u8"PaneWindow", window_class_procedure };
+    pane::window_handle window_handle;
 
 private:
     static auto window_class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
@@ -174,8 +174,8 @@ struct webview final {
 
     pane::window_config window_config;
     pane::webview_config webview_config;
-    pane::window_handle window_handle;
     pane::window_class<Self> window_class { u8"PaneWebView", window_class_procedure };
+    pane::window_handle window_handle;
 
     wil::com_ptr<ICoreWebView2Settings9> settings;
     wil::com_ptr<ICoreWebView2Environment13> environment;
