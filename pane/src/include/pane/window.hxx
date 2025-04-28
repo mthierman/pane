@@ -151,8 +151,6 @@ struct window final {
     window(Self&&) noexcept = delete;
     auto operator=(Self&&) noexcept -> Self& = delete;
 
-    auto destroy(this const Self& self) -> void;
-
     pane::window_config window_config;
     pane::window_class<Self> window_class { u8"PaneWindow", window_class_procedure };
     pane::window_background window_background;
@@ -179,8 +177,6 @@ struct webview final {
 
     webview(Self&&) noexcept = delete;
     auto operator=(Self&&) noexcept -> Self& = delete;
-
-    auto destroy(this const Self& self) -> void;
 
     auto navigate(this const Self& self, std::u8string_view url) -> void;
 

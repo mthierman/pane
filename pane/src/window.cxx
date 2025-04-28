@@ -46,13 +46,7 @@ window::window(pane::window_config&& window_config,
     }
 }
 
-window::~window() { this->destroy(); }
-
-auto window::destroy(this const Self& self) -> void {
-    self.window_handle.destroy();
-    UnregisterClassW(self.window_class.wndclass.lpszClassName,
-                     self.window_class.wndclass.hInstance);
-}
+window::~window() { this->window_handle.destroy(); }
 
 auto window::window_class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) -> LRESULT {
     if (msg == WM_NCCREATE) {
@@ -74,12 +68,6 @@ auto window::window_class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM l
             FillRect(reinterpret_cast<HDC>(wparam),
                      &self->window_handle.client_rect,
                      self->window_background.hbrush);
-        }
-
-        if (msg == WM_CLOSE) {
-            self->destroy();
-
-            return 0;
         }
 
         if (msg == WM_NCDESTROY) {
@@ -280,13 +268,7 @@ webview::webview(pane::window_config&& window_config,
     }).Get());
 }
 
-webview::~webview() { this->destroy(); }
-
-auto webview::destroy(this const Self& self) -> void {
-    self.window_handle.destroy();
-    UnregisterClassW(self.window_class.wndclass.lpszClassName,
-                     self.window_class.wndclass.hInstance);
-}
+webview::~webview() { this->window_handle.destroy(); }
 
 auto webview::navigate(this const Self& self, std::u8string_view url) -> void {
     if (self.core) {
@@ -328,12 +310,6 @@ auto webview::window_class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM 
             FillRect(reinterpret_cast<HDC>(wparam),
                      &self->window_handle.client_rect,
                      self->window_background.hbrush);
-        }
-
-        if (msg == WM_CLOSE) {
-            self->destroy();
-
-            return 0;
         }
 
         if (msg == WM_NCDESTROY) {
