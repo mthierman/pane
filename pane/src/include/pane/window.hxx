@@ -224,6 +224,7 @@ struct window_manager final {
     auto first(this const Self& self) -> HWND;
     auto last(this const Self& self) -> HWND;
 
+private:
     std::set<HWND> set;
 };
 } // namespace pane
