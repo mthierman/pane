@@ -79,7 +79,7 @@ struct window_message final {
     LPARAM lparam { 0 };
 };
 
-struct window_class final {
+template <typename T> struct window_class final {
     using Self = window_class;
 
     auto unregister(this const Self& self) -> bool;
@@ -89,7 +89,7 @@ struct window_class final {
         { 0 },
         { DefWindowProcW },
         { 0 },
-        { sizeof(Self) },
+        { sizeof(T) },
         { pane::system::module_handle().value_or(nullptr) },
         { pane::system::resource_icon().value_or(pane::system::application_icon()) },
         { pane::system::arrow_cursor() },
