@@ -153,13 +153,10 @@ struct webview final {
     auto hide(this const Self& self) -> bool;
     auto navigate(this const Self& self, std::u8string_view url) -> void;
 
-    window_handle window_handle;
-    uint64_t window_id { pane::random_number<uint64_t>() };
-    HBRUSH window_background { nullptr };
-    RECT client_rect { 0, 0, 0, 0 };
     pane::window_config window_config;
     pane::webview_config webview_config;
-    std::wstring class_name { L"PaneWebView" + std::to_wstring(window_id) };
+    pane::window_handle window_handle;
+    std::wstring class_name { L"PaneWebView" + std::to_wstring(window_handle.id) };
     WNDCLASSEXW window_class {
         .cbSize { sizeof(WNDCLASSEXW) },
         .style { 0 },
@@ -206,6 +203,7 @@ struct webview final {
 
 private:
     static auto class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) -> LRESULT;
+
     std::function<LRESULT(Self*, pane::window_message)> window_procedure;
 };
 
