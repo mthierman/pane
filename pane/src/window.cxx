@@ -7,7 +7,7 @@ auto window_message::default_procedure(this const Self& self) -> LRESULT {
     return DefWindowProcW(self.hwnd, self.msg, self.wparam, self.lparam);
 }
 
-auto window_class::destroy(this const Self& self) -> bool {
+auto window_class::unregister(this const Self& self) -> bool {
     return UnregisterClassW(self.wndclass.lpszClassName, self.wndclass.hInstance);
 }
 

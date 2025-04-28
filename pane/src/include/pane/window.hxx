@@ -82,7 +82,7 @@ struct window_message final {
 struct window_class final {
     using Self = window_class;
 
-    auto destroy(this const Self& self) -> bool;
+    auto unregister(this const Self& self) -> bool;
 
     WNDCLASSEXW wndclass {
         { sizeof(WNDCLASSEXW) },
