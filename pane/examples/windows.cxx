@@ -8,7 +8,7 @@ auto wWinMain(HINSTANCE /* hinstance */,
     auto window_manager { pane::window_manager() };
 
     auto window { pane::window(
-        { u8"test", pane::color { 16, 18, 24, 255 }, true, false, nullptr },
+        { u8"test", pane::color { 0, 255, 0, 255 }, true, false, nullptr },
         [&window_manager](pane::window* window, pane::window_message window_message) -> LRESULT {
         switch (window_message.msg) {
             case WM_CREATE: {
