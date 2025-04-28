@@ -221,20 +221,35 @@ private:
     std::function<LRESULT(Self*, pane::window_message)> window_procedure;
 };
 
-struct window_manager final {
+template <typename T> struct window_manager final {
     using Self = window_manager;
 
-    auto insert(this Self& self, const window_handle& window_handle) -> void;
-    auto erase(this Self& self, const window_handle& window_handle) -> void;
-    auto clear(this Self& self) -> void;
+    auto insert(this Self& self, T& window) -> void { self.set.insert(window.window_handle.hwnd); }
 
-    auto size(this const Self& self) -> uint64_t;
+    auto erase(this Self& self, const T& window) -> void {
+        self.set.erase(window.window_handle.hwnd);
 
-    auto contains(this const Self& self, HWND hwnd) -> bool;
-    auto empty(this const Self& self) -> bool;
+        if (self.set.empty()) {
+            PostQuitMessage(0);
+        }
+    }
 
-    auto first(this const Self& self) -> HWND;
-    auto last(this const Self& self) -> HWND;
+    auto clear(this Self& self) -> void {
+        self.set.clear();
+
+        if (self.set.empty()) {
+            PostQuitMessage(0);
+        }
+    }
+
+    auto size(this const Self& self) -> uint64_t { return self.set.size(); }
+
+    auto contains(this const Self& self, HWND hwnd) -> bool { return self.set.contains(hwnd); }
+
+    auto empty(this const Self& self) -> bool { return self.set.empty(); }
+
+    auto first(this const Self& self) -> HWND { return *self.set.begin(); }
+    auto last(this const Self& self) -> HWND { return *self.set.end(); }
 
 private:
     std::set<HWND> set;
