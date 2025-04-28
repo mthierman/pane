@@ -79,25 +79,12 @@ struct window_message final {
     LPARAM lparam { 0 };
 };
 
-struct window_handle final {
-    using Self = window_handle;
-
-    auto activate(this const Self& self) -> bool;
-    auto destroy(this const Self& self) -> bool;
-
-    auto show(this const Self& self) -> bool;
-    auto hide(this const Self& self) -> bool;
-
-    HWND hwnd { nullptr };
-    HBRUSH background { nullptr };
-    uintptr_t id { pane::random_number<uintptr_t>() };
-    RECT client_rect { 0, 0, 0, 0 };
-};
-
 struct window_class final {
     using Self = window_class;
 
-    WNDCLASSEXW window_class {
+    auto destroy(this const Self& self) -> bool;
+
+    WNDCLASSEXW wndclass {
         { sizeof(WNDCLASSEXW) },
         { 0 },
         { DefWindowProcW },
@@ -111,6 +98,21 @@ struct window_class final {
         { L"PaneWindow" },
         { pane::system::resource_icon().value_or(pane::system::application_icon()) }
     };
+};
+
+struct window_handle final {
+    using Self = window_handle;
+
+    auto activate(this const Self& self) -> bool;
+    auto destroy(this const Self& self) -> bool;
+
+    auto show(this const Self& self) -> bool;
+    auto hide(this const Self& self) -> bool;
+
+    HWND hwnd { nullptr };
+    HBRUSH background { nullptr };
+    uintptr_t id { pane::random_number<uintptr_t>() };
+    RECT client_rect { 0, 0, 0, 0 };
 };
 
 struct window final {
