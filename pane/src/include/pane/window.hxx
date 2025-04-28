@@ -112,7 +112,6 @@ struct window final {
 
     pane::window_config window_config;
     pane::window_handle window_handle;
-    std::wstring window_class_name { L"PaneWindow" + std::to_wstring(window_handle.id) };
     WNDCLASSEXW window_class {
         .cbSize { sizeof(WNDCLASSEXW) },
         .style { 0 },
@@ -124,7 +123,7 @@ struct window final {
         .hCursor { pane::system::arrow_cursor() },
         .hbrBackground { nullptr },
         .lpszMenuName { nullptr },
-        .lpszClassName { window_class_name.data() },
+        .lpszClassName { L"PaneWindow" },
         .hIconSm { pane::system::resource_icon().value_or(pane::system::application_icon()) }
     };
 
@@ -157,7 +156,6 @@ struct webview final {
     pane::window_config window_config;
     pane::webview_config webview_config;
     pane::window_handle window_handle;
-    std::wstring window_class_name { L"PaneWebView" + std::to_wstring(window_handle.id) };
     WNDCLASSEXW window_class {
         .cbSize { sizeof(WNDCLASSEXW) },
         .style { 0 },
@@ -169,7 +167,7 @@ struct webview final {
         .hCursor { pane::system::arrow_cursor() },
         .hbrBackground { nullptr },
         .lpszMenuName { nullptr },
-        .lpszClassName { window_class_name.data() },
+        .lpszClassName { L"PaneWebView" },
         .hIconSm { pane::system::resource_icon().value_or(pane::system::application_icon()) }
     };
 
