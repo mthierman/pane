@@ -82,24 +82,30 @@ struct window_message final {
 template <typename T> struct window_class final {
     using Self = window_class;
 
+    window_class(std::u8string_view class_name, WNDPROC window_procedure)
+        : class_name { pane::to_utf16(class_name) },
+          wndclass { { sizeof(WNDCLASSEXW) },
+                     { 0 },
+                     { window_procedure },
+                     { 0 },
+                     { sizeof(T) },
+                     { pane::system::module_handle().value_or(nullptr) },
+                     { pane::system::resource_icon().value_or(pane::system::application_icon()) },
+                     { pane::system::arrow_cursor() },
+                     { nullptr },
+                     { nullptr },
+                     { reinterpret_cast<const wchar_t*>(class_name.data()) },
+                     { pane::system::resource_icon().value_or(
+                         pane::system::application_icon()) } } { }
+    ~window_class();
+
     auto unregister(this const Self& self) -> bool {
         return UnregisterClassW(self.wndclass.lpszClassName, self.wndclass.hInstance);
     }
 
-    WNDCLASSEXW wndclass {
-        { sizeof(WNDCLASSEXW) },
-        { 0 },
-        { DefWindowProcW },
-        { 0 },
-        { sizeof(T) },
-        { pane::system::module_handle().value_or(nullptr) },
-        { pane::system::resource_icon().value_or(pane::system::application_icon()) },
-        { pane::system::arrow_cursor() },
-        { nullptr },
-        { nullptr },
-        { L"PaneWindow" },
-        { pane::system::resource_icon().value_or(pane::system::application_icon()) }
-    };
+private:
+    std::u16string class_name;
+    WNDCLASSEXW wndclass {};
 };
 
 struct window_handle final {
