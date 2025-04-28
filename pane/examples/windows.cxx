@@ -9,7 +9,7 @@ auto wWinMain(HINSTANCE /* hinstance */,
     auto webview_manager { pane::window_manager<pane::webview>() };
 
     auto window { pane::window(
-        { u8"test", pane::color { 0, 255, 0, 255 }, true, nullptr },
+        { u8"window", pane::color { 0, 0, 0, 255 }, true, nullptr },
         [&](pane::window* window, pane::window_message window_message) -> LRESULT {
         switch (window_message.msg) {
             case WM_CREATE: {
@@ -24,7 +24,7 @@ auto wWinMain(HINSTANCE /* hinstance */,
     }) };
 
     auto webview { pane::webview(
-        { .background_color = pane::color { 16, 18, 24, 255 } },
+        { u8"webview", pane::color { 0, 0, 0, 255 }, true, nullptr },
         { .home_page = u8"https://www.google.com/" },
         [&](pane::webview* webview, pane::window_message window_message) -> LRESULT {
         switch (window_message.msg) {
