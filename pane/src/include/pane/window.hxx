@@ -138,7 +138,9 @@ struct window final {
 
     window(pane::window_config&& window_config = {},
            std::function<LRESULT(Self*, pane::window_message)>&& window_procedure
-           = [](Self* self, pane::window_message msg) { return msg.default_procedure(); });
+           = [](Self*, pane::window_message window_message) {
+                 return window_message.default_procedure();
+             });
     ~window();
 
     window(const Self&) = delete;
@@ -165,7 +167,9 @@ struct webview final {
     webview(pane::window_config&& window_config = {},
             pane::webview_config&& webview_config = {},
             std::function<LRESULT(Self*, pane::window_message)>&& window_procedure
-            = [](Self* self, pane::window_message msg) { return msg.default_procedure(); });
+            = [](Self*, pane::window_message window_message) {
+                  return window_message.default_procedure();
+              });
     ~webview();
 
     webview(const Self&) = delete;
