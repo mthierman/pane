@@ -129,7 +129,7 @@ private:
 struct window_background final {
     using Self = window_background;
 
-    window_background(const pane::color& color);
+    explicit window_background(const pane::color& color);
     ~window_background();
 
     auto operator()(this const Self& self) -> HBRUSH;
