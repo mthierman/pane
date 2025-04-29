@@ -236,36 +236,18 @@ public:
     };
 };
 
-template <typename T> struct window_manager final {
+struct window_manager final {
     using Self = window_manager;
 
-    auto insert(this Self& self, T* window) -> void { self.set.insert(window->window_handle()); }
+    auto insert(this Self& self, const pane::window_handle& window_handle) -> void;
+    auto erase(this Self& self, const pane::window_handle& window_handle) -> void;
+    auto clear(this Self& self) -> void;
 
-    auto erase(this Self& self, T* window) -> void {
-        self.set.erase(window->window_handle());
-
-        if (self.set.empty()) {
-            PostQuitMessage(0);
-        }
-    }
-
-    auto clear(this Self& self) -> void {
-        self.set.clear();
-
-        if (self.set.empty()) {
-            PostQuitMessage(0);
-        }
-    }
-
-    auto size(this const Self& self) -> uint64_t { return self.set.size(); }
-
-    auto contains(this const Self& self, HWND hwnd) -> bool { return self.set.contains(hwnd); }
-
-    auto empty(this const Self& self) -> bool { return self.set.empty(); }
-
-    auto first(this const Self& self) -> HWND { return *self.set.begin(); }
-
-    auto last(this const Self& self) -> HWND { return *self.set.end(); }
+    auto size(this const Self& self) -> uint64_t;
+    auto contains(this const Self& self, HWND hwnd) -> bool;
+    auto empty(this const Self& self) -> bool;
+    auto first(this const Self& self) -> HWND;
+    auto last(this const Self& self) -> HWND;
 
 private:
     std::set<HWND> set;
