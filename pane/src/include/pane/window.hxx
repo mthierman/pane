@@ -242,7 +242,6 @@ struct window_manager final {
     auto insert(this Self& self, const pane::window_handle& window_handle) -> void;
     auto erase(this Self& self, const pane::window_handle& window_handle) -> void;
     auto clear(this Self& self) -> void;
-
     auto size(this const Self& self) -> uint64_t;
     auto contains(this const Self& self, HWND hwnd) -> bool;
     auto empty(this const Self& self) -> bool;
