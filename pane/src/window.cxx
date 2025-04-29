@@ -7,11 +7,7 @@ auto window_message::default_procedure(this const Self& self) -> LRESULT {
     return DefWindowProcW(self.hwnd, self.msg, self.wparam, self.lparam);
 }
 
-auto window_handle::destroy(this const Self& self) -> bool { return DestroyWindow(self.hwnd); }
-
-auto window_handle::activate(this const Self& self) -> bool {
-    return ShowWindow(self.hwnd, SW_SHOWNORMAL);
-}
+window_handle::~window_handle() { DestroyWindow(this->hwnd); }
 
 auto window_handle::show(this const Self& self) -> bool { return ShowWindow(self.hwnd, SW_SHOW); }
 
@@ -37,8 +33,6 @@ window::window(pane::window_config&& window_config,
       window_background(this->window_config.background_color) {
     this->create();
 }
-
-window::~window() { this->window_handle.destroy(); }
 
 auto window::window_class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) -> LRESULT {
     if (msg == WM_NCCREATE) {
@@ -100,7 +94,7 @@ webview::webview(pane::window_config&& window_config,
     this->create();
 }
 
-webview::~webview() { this->window_handle.destroy(); }
+webview::~webview() { }
 
 auto webview::window_class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) -> LRESULT {
     if (msg == WM_NCCREATE) {

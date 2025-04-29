@@ -113,9 +113,9 @@ private:
 struct window_handle final {
     using Self = window_handle;
 
-    auto destroy(this const Self& self) -> bool;
+    window_handle() = default;
+    ~window_handle();
 
-    auto activate(this const Self& self) -> bool;
     auto show(this const Self& self) -> bool;
     auto hide(this const Self& self) -> bool;
 
@@ -147,7 +147,7 @@ struct window final {
            = [](Self*, pane::window_message window_message) {
                  return window_message.default_procedure();
              });
-    ~window();
+    ~window() = default;
 
     window(const Self&) = delete;
     auto operator=(const Self&) -> Self& = delete;
