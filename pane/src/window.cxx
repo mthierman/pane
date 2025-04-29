@@ -15,7 +15,11 @@ auto window_handle::hide(this const Self& self) -> bool { return ShowWindow(self
 
 auto window_handle::operator()(this const Self& self) -> HWND { return self.hwnd; }
 
-auto window_handle::operator()(this Self& self, HWND hwnd) -> void { self.hwnd = hwnd; }
+auto window_handle::operator()(this Self& self, HWND hwnd) -> void {
+    if (!self.hwnd) {
+        self.hwnd = hwnd;
+    }
+}
 
 window_background::window_background(const pane::color& color)
     : hbrush { color.to_hbrush() } { }
