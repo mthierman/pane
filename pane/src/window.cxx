@@ -36,8 +36,8 @@ window::window(pane::window_config&& window_config,
 
 auto window::window_class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) -> LRESULT {
     if (msg == WM_NCCREATE) {
-        if (auto create { reinterpret_cast<CREATESTRUCTW*>(lparam) }) {
-            if (auto self { static_cast<Self*>(create->lpCreateParams) }) {
+        if (auto create_struct { reinterpret_cast<CREATESTRUCTW*>(lparam) }) {
+            if (auto self { static_cast<Self*>(create_struct->lpCreateParams) }) {
                 SetWindowLongPtrW(hwnd, 0, reinterpret_cast<LONG_PTR>(self));
                 self->window_handle(hwnd);
             }
@@ -98,8 +98,8 @@ webview::~webview() { }
 
 auto webview::window_class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) -> LRESULT {
     if (msg == WM_NCCREATE) {
-        if (auto create { reinterpret_cast<CREATESTRUCTW*>(lparam) }) {
-            if (auto self { static_cast<Self*>(create->lpCreateParams) }) {
+        if (auto create_struct { reinterpret_cast<CREATESTRUCTW*>(lparam) }) {
+            if (auto self { static_cast<Self*>(create_struct->lpCreateParams) }) {
                 SetWindowLongPtrW(hwnd, 0, reinterpret_cast<LONG_PTR>(self));
                 self->window_handle(hwnd);
             }
