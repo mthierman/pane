@@ -194,6 +194,9 @@ private:
     std::function<LRESULT(Self*, pane::window_message)> window_procedure;
 
 public:
+    auto create(this Self& self) -> HWND;
+    auto create_webview(this Self& self) -> void;
+
     auto navigate(this const Self& self, std::u8string_view url) -> void;
 
     pane::window_config window_config;

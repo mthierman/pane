@@ -268,12 +268,6 @@ webview::webview(pane::window_config&& window_config,
 
 webview::~webview() { this->window_handle.destroy(); }
 
-auto webview::navigate(this const Self& self, std::u8string_view url) -> void {
-    if (self.core) {
-        self.core->Navigate(reinterpret_cast<const wchar_t*>(pane::to_utf16(url).data()));
-    }
-}
-
 auto webview::window_class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) -> LRESULT {
     if (msg == WM_NCCREATE) {
         if (auto create { reinterpret_cast<CREATESTRUCTW*>(lparam) }) {
@@ -319,5 +313,32 @@ auto webview::window_class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM 
     }
 
     return DefWindowProcW(hwnd, msg, wparam, lparam);
+}
+
+auto webview::create(this Self& self) -> HWND {
+    return CreateWindowExW(
+        0,
+        self.window_class().lpszClassName,
+        reinterpret_cast<const wchar_t*>(pane::to_utf16(self.window_config.title).data()),
+        (self.window_config.parent_hwnd ? WS_CHILDWINDOW : WS_OVERLAPPEDWINDOW)
+            | (self.window_config.visible ? WS_VISIBLE : 0),
+        CW_USEDEFAULT,
+        CW_USEDEFAULT,
+        CW_USEDEFAULT,
+        CW_USEDEFAULT,
+        self.window_config.parent_hwnd,
+        self.window_config.parent_hwnd ? reinterpret_cast<HMENU>(self.id) : nullptr,
+        self.window_class().hInstance,
+        &self);
+}
+
+auto webview::create_webview(this Self& self) -> void {
+    //
+}
+
+auto webview::navigate(this const Self& self, std::u8string_view url) -> void {
+    if (self.core) {
+        self.core->Navigate(reinterpret_cast<const wchar_t*>(pane::to_utf16(url).data()));
+    }
 }
 } // namespace pane
