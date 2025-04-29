@@ -161,6 +161,8 @@ private:
     std::function<LRESULT(Self*, pane::window_message)> window_procedure;
 
 public:
+    auto create(this Self& self) -> HWND;
+
     pane::window_config window_config;
     uintptr_t id { pane::random_number<uintptr_t>() };
     pane::window_class<Self> window_class { u8"PaneWindow", window_class_procedure };

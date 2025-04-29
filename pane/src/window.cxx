@@ -89,6 +89,22 @@ auto window::window_class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM l
     return DefWindowProcW(hwnd, msg, wparam, lparam);
 }
 
+auto window::create(this Self& self) -> HWND {
+    return CreateWindowExW(
+        0,
+        self.window_class().lpszClassName,
+        reinterpret_cast<const wchar_t*>(pane::to_utf16(self.window_config.title).data()),
+        self.window_config.parent_hwnd ? WS_CHILDWINDOW : WS_OVERLAPPEDWINDOW,
+        CW_USEDEFAULT,
+        CW_USEDEFAULT,
+        CW_USEDEFAULT,
+        CW_USEDEFAULT,
+        self.window_config.parent_hwnd,
+        self.window_config.parent_hwnd ? reinterpret_cast<HMENU>(self.id) : nullptr,
+        self.window_class().hInstance,
+        &self);
+}
+
 webview::webview(pane::window_config&& window_config,
                  pane::webview_config&& webview_config,
                  std::function<LRESULT(Self*, pane::window_message)>&& window_procedure)
