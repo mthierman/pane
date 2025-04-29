@@ -10,7 +10,7 @@ auto wWinMain(HINSTANCE /* hinstance */,
     auto window { std::make_unique<pane::window>(
         pane::window_config { u8"window", pane::color { 0, 0, 0, 255 }, true, nullptr },
         [&](pane::window* window, pane::window_message window_message) -> LRESULT {
-        switch (window_message.msg) {
+        switch (window_message.event) {
             case WM_CREATE: {
                 window_manager.insert(window->window_handle);
             } break;
@@ -28,7 +28,7 @@ auto wWinMain(HINSTANCE /* hinstance */,
     //     { u8"webview", pane::color { 0, 0, 0, 255 }, true, nullptr },
     //     { .home_page = u8"https://www.google.com/" },
     //     [&](pane::webview* webview, pane::window_message window_message) -> LRESULT {
-    //     switch (window_message.msg) {
+    //     switch (window_message.event) {
     //         case WM_CREATE: {
     //             window_manager.insert(webview->window_handle);
     //         } break;

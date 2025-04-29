@@ -17,7 +17,7 @@ struct window_message final {
     auto default_procedure(this const Self& self) -> LRESULT;
 
     HWND hwnd { nullptr };
-    UINT msg { 0 };
+    UINT event { 0 };
     WPARAM wparam { 0 };
     LPARAM lparam { 0 };
 };

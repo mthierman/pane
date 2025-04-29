@@ -11,7 +11,7 @@ auto wWinMain(HINSTANCE /* hinstance */,
     auto window { pane::window(
         { u8"window", bg, true, nullptr },
         [&](pane::window* window, pane::window_message window_message) -> LRESULT {
-        switch (window_message.msg) {
+        switch (window_message.event) {
             case WM_CREATE: {
                 window_manager.insert(window->window_handle);
             } break;
@@ -27,7 +27,7 @@ auto wWinMain(HINSTANCE /* hinstance */,
         { u8"webview", bg, true, nullptr },
         { .home_page = u8"https://www.google.com/" },
         [&](pane::webview* webview, pane::window_message window_message) -> LRESULT {
-        switch (window_message.msg) {
+        switch (window_message.event) {
             case WM_CREATE: {
                 window_manager.insert(webview->window_handle);
             } break;
