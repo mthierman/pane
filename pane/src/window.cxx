@@ -35,23 +35,7 @@ window::window(pane::window_config&& window_config,
     : window_procedure { std::move(window_procedure) },
       window_config { std::move(window_config) },
       window_background(this->window_config.background_color) {
-    CreateWindowExW(
-        0,
-        this->window_class().lpszClassName,
-        reinterpret_cast<const wchar_t*>(pane::to_utf16(this->window_config.title).data()),
-        this->window_config.parent_hwnd ? WS_CHILDWINDOW : WS_OVERLAPPEDWINDOW,
-        CW_USEDEFAULT,
-        CW_USEDEFAULT,
-        CW_USEDEFAULT,
-        CW_USEDEFAULT,
-        this->window_config.parent_hwnd,
-        this->window_config.parent_hwnd ? reinterpret_cast<HMENU>(this->id) : nullptr,
-        this->window_class().hInstance,
-        this);
-
-    if (this->window_config.visible) {
-        this->window_handle.activate();
-    }
+    this->create();
 }
 
 window::~window() { this->window_handle.destroy(); }
@@ -94,7 +78,8 @@ auto window::create(this Self& self) -> HWND {
         0,
         self.window_class().lpszClassName,
         reinterpret_cast<const wchar_t*>(pane::to_utf16(self.window_config.title).data()),
-        self.window_config.parent_hwnd ? WS_CHILDWINDOW : WS_OVERLAPPEDWINDOW,
+        (self.window_config.parent_hwnd ? WS_CHILDWINDOW : WS_OVERLAPPEDWINDOW)
+            | (self.window_config.visible ? WS_VISIBLE : 0),
         CW_USEDEFAULT,
         CW_USEDEFAULT,
         CW_USEDEFAULT,
