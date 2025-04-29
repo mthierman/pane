@@ -32,9 +32,9 @@ auto window_background::operator()(this Self& self, HBRUSH hbrush) -> void { sel
 
 window::window(pane::window_config&& window_config,
                std::function<LRESULT(Self*, pane::window_message)>&& window_procedure)
-    : window_config { std::move(window_config) },
-      window_background(this->window_config.background_color),
-      window_procedure { std::move(window_procedure) } {
+    : window_procedure { std::move(window_procedure) },
+      window_config { std::move(window_config) },
+      window_background(this->window_config.background_color) {
     CreateWindowExW(
         0,
         this->window_class().lpszClassName,
@@ -92,10 +92,10 @@ auto window::window_class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM l
 webview::webview(pane::window_config&& window_config,
                  pane::webview_config&& webview_config,
                  std::function<LRESULT(Self*, pane::window_message)>&& window_procedure)
-    : window_config { std::move(window_config) },
+    : window_procedure { std::move(window_procedure) },
+      window_config { std::move(window_config) },
       webview_config { std::move(webview_config) },
-      window_background(this->window_config.background_color),
-      window_procedure { std::move(window_procedure) } {
+      window_background(this->window_config.background_color) {
     CreateWindowExW(
         0,
         this->window_class().lpszClassName,

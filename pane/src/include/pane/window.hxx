@@ -155,18 +155,18 @@ struct window final {
     window(Self&&) noexcept = delete;
     auto operator=(Self&&) noexcept -> Self& = delete;
 
+private:
+    static auto window_class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
+        -> LRESULT;
+    std::function<LRESULT(Self*, pane::window_message)> window_procedure;
+
+public:
     pane::window_config window_config;
     uintptr_t id { pane::random_number<uintptr_t>() };
     pane::window_class<Self> window_class { u8"PaneWindow", window_class_procedure };
     pane::window_background window_background;
     pane::window_handle window_handle;
     RECT client_rect { 0, 0, 0, 0 };
-
-private:
-    static auto window_class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
-        -> LRESULT;
-
-    std::function<LRESULT(Self*, pane::window_message)> window_procedure;
 };
 
 struct webview final {
@@ -186,6 +186,12 @@ struct webview final {
     webview(Self&&) noexcept = delete;
     auto operator=(Self&&) noexcept -> Self& = delete;
 
+private:
+    static auto window_class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
+        -> LRESULT;
+    std::function<LRESULT(Self*, pane::window_message)> window_procedure;
+
+public:
     auto navigate(this const Self& self, std::u8string_view url) -> void;
 
     pane::window_config window_config;
@@ -224,12 +230,6 @@ struct webview final {
     wil::com_ptr<ICoreWebView2EnvironmentOptions8> options8 {
         options.try_query<ICoreWebView2EnvironmentOptions8>()
     };
-
-private:
-    static auto window_class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
-        -> LRESULT;
-
-    std::function<LRESULT(Self*, pane::window_message)> window_procedure;
 };
 
 template <typename T> struct window_manager final {
