@@ -131,7 +131,6 @@ struct window_background final {
     ~window_background();
 
     auto operator()(this const Self& self) -> HBRUSH;
-    auto operator()(this Self& self, HBRUSH hbrush) -> void;
 
 private:
     HBRUSH hbrush { nullptr };

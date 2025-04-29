@@ -24,8 +24,6 @@ window_background::~window_background() { DeleteObject(this->hbrush); }
 
 auto window_background::operator()(this const Self& self) -> HBRUSH { return self.hbrush; }
 
-auto window_background::operator()(this Self& self, HBRUSH hbrush) -> void { self.hbrush = hbrush; }
-
 window::window(pane::window_config&& window_config,
                std::function<LRESULT(Self*, pane::window_message)>&& window_procedure)
     : window_procedure { std::move(window_procedure) },
