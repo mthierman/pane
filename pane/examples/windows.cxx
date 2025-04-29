@@ -14,6 +14,14 @@ auto wWinMain(HINSTANCE /* hinstance */,
         switch (window_message.msg) {
             case WM_CREATE: {
                 window_manager.insert(window->window_handle);
+
+                window->window_message_manager.events.try_emplace(
+                    WM_DESTROY,
+                    [](pane::window* window, pane::window_message window_message) -> LRESULT {
+                    pane::debug("WM_DESTROY");
+
+                    return 1;
+                });
             } break;
             case WM_DESTROY: {
                 window_manager.erase(window->window_handle);

@@ -2,6 +2,7 @@
 #include <Windows.h>
 #include <filesystem>
 #include <functional>
+#include <unordered_map>
 #include <set>
 #include <pane/color.hxx>
 #include <pane/math.hxx>
@@ -20,6 +21,10 @@ struct window_message final {
     UINT msg { 0 };
     WPARAM wparam { 0 };
     LPARAM lparam { 0 };
+};
+
+template <typename T> struct window_message_manager final {
+    std::unordered_map<UINT, std::function<LRESULT(T*, pane::window_message)>> events;
 };
 
 struct window_config final {
@@ -184,6 +189,7 @@ public:
     pane::window_background window_background;
     pane::window_handle window_handle;
     RECT client_rect { 0, 0, 0, 0 };
+    window_message_manager<Self> window_message_manager;
 };
 
 struct webview final {

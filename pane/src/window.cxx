@@ -61,6 +61,11 @@ auto window::window_class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM l
             SetWindowLongPtrW(hwnd, 0, reinterpret_cast<LONG_PTR>(nullptr));
         }
 
+        if (self->window_message_manager.events.contains(msg)) {
+            auto handler { self->window_message_manager.events.at(msg) };
+            return handler(self, { hwnd, msg, wparam, lparam });
+        }
+
         if (self->window_procedure) {
             return self->window_procedure(self, { hwnd, msg, wparam, lparam });
         }
