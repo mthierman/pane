@@ -119,9 +119,14 @@ struct window_handle final {
     auto show(this const Self& self) -> bool;
     auto hide(this const Self& self) -> bool;
 
-    HWND hwnd { nullptr };
+    auto operator()(this const Self& self) -> HWND;
+    auto operator()(this Self& self, HWND hwnd) -> void;
+
     uintptr_t id { pane::random_number<uintptr_t>() };
     RECT client_rect { 0, 0, 0, 0 };
+
+private:
+    HWND hwnd { nullptr };
 };
 
 struct window_background final {
@@ -225,10 +230,10 @@ private:
 template <typename T> struct window_manager final {
     using Self = window_manager;
 
-    auto insert(this Self& self, T* window) -> void { self.set.insert(window->window_handle.hwnd); }
+    auto insert(this Self& self, T* window) -> void { self.set.insert(window->window_handle()); }
 
     auto erase(this Self& self, T* window) -> void {
-        self.set.erase(window->window_handle.hwnd);
+        self.set.erase(window->window_handle());
 
         if (self.set.empty()) {
             PostQuitMessage(0);

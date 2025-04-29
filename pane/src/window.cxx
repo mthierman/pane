@@ -17,6 +17,10 @@ auto window_handle::show(this const Self& self) -> bool { return ShowWindow(self
 
 auto window_handle::hide(this const Self& self) -> bool { return ShowWindow(self.hwnd, SW_HIDE); }
 
+auto window_handle::operator()(this const Self& self) -> HWND { return self.hwnd; }
+
+auto window_handle::operator()(this Self& self, HWND hwnd) -> void { self.hwnd = hwnd; }
+
 window_background::window_background(const pane::color& color)
     : hbrush { color.to_hbrush() } { }
 
@@ -53,7 +57,7 @@ auto window::window_class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM l
         if (auto create { reinterpret_cast<CREATESTRUCTW*>(lparam) }) {
             if (auto self { static_cast<Self*>(create->lpCreateParams) }) {
                 SetWindowLongPtrW(hwnd, 0, reinterpret_cast<LONG_PTR>(self));
-                self->window_handle.hwnd = hwnd;
+                self->window_handle(hwnd);
             }
         }
     }
@@ -71,7 +75,7 @@ auto window::window_class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM l
         }
 
         if (msg == WM_NCDESTROY) {
-            self->window_handle.hwnd = nullptr;
+            self->window_handle(nullptr);
             SetWindowLongPtrW(hwnd, 0, reinterpret_cast<LONG_PTR>(nullptr));
         }
 
@@ -178,7 +182,7 @@ webview::webview(pane::window_config&& window_config,
 
         if (this->environment) {
             this->environment->CreateCoreWebView2Controller(
-                this->window_handle.hwnd,
+                this->window_handle(),
                 wil::MakeAgileCallback<ICoreWebView2CreateCoreWebView2ControllerCompletedHandler>(
                     [&]([[maybe_unused]] HRESULT error_code,
                         ICoreWebView2Controller* created_controller) -> HRESULT {
@@ -192,7 +196,7 @@ webview::webview(pane::window_config&& window_config,
                         this->window_config.background_color.to_webview2_color());
 
                     RECT client_rect {};
-                    GetClientRect(this->window_handle.hwnd, &client_rect);
+                    GetClientRect(this->window_handle(), &client_rect);
 
                     this->controller->put_Bounds(client_rect);
 
@@ -272,7 +276,7 @@ auto webview::window_class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM 
         if (auto create { reinterpret_cast<CREATESTRUCTW*>(lparam) }) {
             if (auto self { static_cast<Self*>(create->lpCreateParams) }) {
                 SetWindowLongPtrW(hwnd, 0, reinterpret_cast<LONG_PTR>(self));
-                self->window_handle.hwnd = hwnd;
+                self->window_handle(hwnd);
             }
         }
     }
@@ -304,7 +308,7 @@ auto webview::window_class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM 
         }
 
         if (msg == WM_NCDESTROY) {
-            self->window_handle.hwnd = nullptr;
+            self->window_handle(nullptr);
             SetWindowLongPtrW(hwnd, 0, reinterpret_cast<LONG_PTR>(nullptr));
         }
 
