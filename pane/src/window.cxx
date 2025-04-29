@@ -26,6 +26,10 @@ window_background::window_background(const pane::color& color)
 
 window_background::~window_background() { DeleteObject(this->hbrush); }
 
+auto window_background::operator()(this const Self& self) -> HBRUSH { return self.hbrush; }
+
+auto window_background::operator()(this Self& self, HBRUSH hbrush) -> void { self.hbrush = hbrush; }
+
 window::window(pane::window_config&& window_config,
                std::function<LRESULT(Self*, pane::window_message)>&& window_procedure)
     : window_config { std::move(window_config) },
@@ -71,7 +75,7 @@ auto window::window_class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM l
             GetClientRect(hwnd, &self->window_handle.client_rect);
             FillRect(reinterpret_cast<HDC>(wparam),
                      &self->window_handle.client_rect,
-                     self->window_background.hbrush);
+                     self->window_background());
         }
 
         if (msg == WM_NCDESTROY) {
@@ -304,7 +308,7 @@ auto webview::window_class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM 
             GetClientRect(hwnd, &self->window_handle.client_rect);
             FillRect(reinterpret_cast<HDC>(wparam),
                      &self->window_handle.client_rect,
-                     self->window_background.hbrush);
+                     self->window_background());
         }
 
         if (msg == WM_NCDESTROY) {
