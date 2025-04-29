@@ -67,7 +67,7 @@ auto window::window_class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM l
 }
 
 auto window::create(this Self& self) -> HWND {
-    return CreateWindowExW(
+    CreateWindowExW(
         0,
         self.window_class().lpszClassName,
         reinterpret_cast<const wchar_t*>(pane::to_utf16(self.window_config.title).data()),
@@ -81,6 +81,8 @@ auto window::create(this Self& self) -> HWND {
         self.window_config.parent_hwnd ? reinterpret_cast<HMENU>(self.id) : nullptr,
         self.window_class().hInstance,
         &self);
+
+    return self.window_handle();
 }
 
 webview::webview(pane::window_config&& window_config,
@@ -143,7 +145,7 @@ auto webview::window_class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM 
 }
 
 auto webview::create(this Self& self) -> HWND {
-    auto hwnd { CreateWindowExW(
+    CreateWindowExW(
         0,
         self.window_class().lpszClassName,
         reinterpret_cast<const wchar_t*>(pane::to_utf16(self.window_config.title).data()),
@@ -156,7 +158,7 @@ auto webview::create(this Self& self) -> HWND {
         self.window_config.parent_hwnd,
         self.window_config.parent_hwnd ? reinterpret_cast<HMENU>(self.id) : nullptr,
         self.window_class().hInstance,
-        &self) };
+        &self);
 
     if (self.options) {
         if (!self.webview_config.environment_options.AdditionalBrowserArguments.empty()) {
@@ -307,7 +309,7 @@ auto webview::create(this Self& self) -> HWND {
         return S_OK;
     }).Get());
 
-    return hwnd;
+    return self.window_handle();
 }
 
 auto webview::navigate(this const Self& self, std::u8string_view url) -> void {
