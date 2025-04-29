@@ -6,9 +6,10 @@ auto wWinMain(HINSTANCE /* hinstance */,
               PWSTR /* pcmdline */,
               int /* ncmdshow */) -> int {
     auto window_manager { pane::window_manager() };
+    auto bg { pane::color { 0, 0, 0, 255 } };
 
     auto window { pane::window(
-        { u8"window", pane::color { 0, 0, 0, 255 }, true, nullptr },
+        { u8"window", bg, true, nullptr },
         [&](pane::window* window, pane::window_message window_message) -> LRESULT {
         switch (window_message.msg) {
             case WM_CREATE: {
@@ -23,7 +24,7 @@ auto wWinMain(HINSTANCE /* hinstance */,
     }) };
 
     auto webview { pane::webview(
-        { u8"webview", pane::color { 0, 0, 0, 255 }, true, nullptr },
+        { u8"webview", bg, true, nullptr },
         { .home_page = u8"https://www.google.com/" },
         [&](pane::webview* webview, pane::window_message window_message) -> LRESULT {
         switch (window_message.msg) {
