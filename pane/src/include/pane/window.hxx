@@ -7,8 +7,6 @@
 #include <pane/math.hxx>
 #include <pane/system.hxx>
 #include <wil/com.h>
-#include <wil/resource.h>
-#include <wil/wrl.h>
 #include <WebView2.h>
 #include <WebView2EnvironmentOptions.h>
 

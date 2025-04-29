@@ -1,5 +1,6 @@
 #include <pane/window.hxx>
 #include <pane/text.hxx>
+#include <wil/wrl.h>
 
 namespace pane {
 auto window_message::default_procedure(this const Self& self) -> LRESULT {
