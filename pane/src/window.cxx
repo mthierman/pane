@@ -61,9 +61,7 @@ auto window::window_class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM l
             SetWindowLongPtrW(hwnd, 0, reinterpret_cast<LONG_PTR>(nullptr));
         }
 
-        if (self->window_procedure) {
-            return self->window_procedure(self, { hwnd, msg, wparam, lparam });
-        }
+        return self->window_procedure(self, { hwnd, msg, wparam, lparam });
     }
 
     return DefWindowProcW(hwnd, msg, wparam, lparam);
@@ -139,9 +137,7 @@ auto webview::window_class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM 
             SetWindowLongPtrW(hwnd, 0, reinterpret_cast<LONG_PTR>(nullptr));
         }
 
-        if (self->window_procedure) {
-            return self->window_procedure(self, { hwnd, msg, wparam, lparam });
-        }
+        return self->window_procedure(self, { hwnd, msg, wparam, lparam });
     }
 
     return DefWindowProcW(hwnd, msg, wparam, lparam);
