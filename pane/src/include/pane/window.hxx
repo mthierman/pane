@@ -101,6 +101,12 @@ template <typename T> struct window_class final {
     }
     ~window_class() { UnregisterClassW(this->wndclass.lpszClassName, this->wndclass.hInstance); }
 
+    window_class(const Self&) = delete;
+    auto operator=(const Self&) -> Self& = delete;
+
+    window_class(Self&&) noexcept = delete;
+    auto operator=(Self&&) noexcept -> Self& = delete;
+
     auto operator()(this const Self& self) -> const WNDCLASSEXW& { return self.wndclass; }
 
 private:
@@ -113,6 +119,12 @@ struct window_handle final {
 
     window_handle() = default;
     ~window_handle();
+
+    window_handle(const Self&) = delete;
+    auto operator=(const Self&) -> Self& = delete;
+
+    window_handle(Self&&) noexcept = delete;
+    auto operator=(Self&&) noexcept -> Self& = delete;
 
     auto show(this const Self& self) -> bool;
     auto hide(this const Self& self) -> bool;
@@ -129,6 +141,12 @@ struct window_background final {
 
     explicit window_background(const pane::color& color);
     ~window_background();
+
+    window_background(const Self&) = delete;
+    auto operator=(const Self&) -> Self& = delete;
+
+    window_background(Self&&) noexcept = delete;
+    auto operator=(Self&&) noexcept -> Self& = delete;
 
     auto operator()(this const Self& self) -> HBRUSH;
 
