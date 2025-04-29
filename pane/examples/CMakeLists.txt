@@ -16,3 +16,14 @@ target_link_libraries(
     PRIVATE pane::pane
             pane::config
     )
+
+add_executable(
+    windows_ptr
+    WIN32
+    )
+target_sources(windows_ptr PRIVATE "windows_ptr.cxx")
+target_link_libraries(
+    windows_ptr
+    PRIVATE pane::pane
+            pane::config
+    )
