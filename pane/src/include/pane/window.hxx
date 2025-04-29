@@ -123,7 +123,6 @@ struct window_handle final {
     auto operator()(this Self& self, HWND hwnd) -> void;
 
     uintptr_t id { pane::random_number<uintptr_t>() };
-    RECT client_rect { 0, 0, 0, 0 };
 
 private:
     HWND hwnd { nullptr };
@@ -162,6 +161,7 @@ struct window final {
     pane::window_class<Self> window_class { u8"PaneWindow", window_class_procedure };
     pane::window_background window_background;
     pane::window_handle window_handle;
+    RECT client_rect { 0, 0, 0, 0 };
 
 private:
     static auto window_class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
@@ -194,6 +194,7 @@ struct webview final {
     pane::window_class<Self> window_class { u8"PaneWebView", window_class_procedure };
     pane::window_background window_background;
     pane::window_handle window_handle;
+    RECT client_rect { 0, 0, 0, 0 };
 
     wil::com_ptr<ICoreWebView2Settings9> settings;
     wil::com_ptr<ICoreWebView2Environment13> environment;

@@ -68,14 +68,12 @@ auto window::window_class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM l
 
     if (auto self { reinterpret_cast<Self*>(GetWindowLongPtrW(hwnd, 0)) }) {
         if (msg == WM_WINDOWPOSCHANGED) {
-            GetClientRect(hwnd, &self->window_handle.client_rect);
+            GetClientRect(hwnd, &self->client_rect);
         }
 
         if (msg == WM_ERASEBKGND) {
-            GetClientRect(hwnd, &self->window_handle.client_rect);
-            FillRect(reinterpret_cast<HDC>(wparam),
-                     &self->window_handle.client_rect,
-                     self->window_background());
+            GetClientRect(hwnd, &self->client_rect);
+            FillRect(reinterpret_cast<HDC>(wparam), &self->client_rect, self->window_background());
         }
 
         if (msg == WM_NCDESTROY) {
@@ -287,10 +285,10 @@ auto webview::window_class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM 
 
     if (auto self { reinterpret_cast<Self*>(GetWindowLongPtrW(hwnd, 0)) }) {
         if (msg == WM_WINDOWPOSCHANGED) {
-            GetClientRect(hwnd, &self->window_handle.client_rect);
+            GetClientRect(hwnd, &self->client_rect);
 
             if (self->controller) {
-                self->controller->put_Bounds(self->window_handle.client_rect);
+                self->controller->put_Bounds(self->client_rect);
             }
         }
 
@@ -305,10 +303,8 @@ auto webview::window_class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM 
         }
 
         if (msg == WM_ERASEBKGND) {
-            GetClientRect(hwnd, &self->window_handle.client_rect);
-            FillRect(reinterpret_cast<HDC>(wparam),
-                     &self->window_handle.client_rect,
-                     self->window_background());
+            GetClientRect(hwnd, &self->client_rect);
+            FillRect(reinterpret_cast<HDC>(wparam), &self->client_rect, self->window_background());
         }
 
         if (msg == WM_NCDESTROY) {
