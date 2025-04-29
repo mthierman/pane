@@ -122,8 +122,6 @@ struct window_handle final {
     auto operator()(this const Self& self) -> HWND;
     auto operator()(this Self& self, HWND hwnd) -> void;
 
-    uintptr_t id { pane::random_number<uintptr_t>() };
-
 private:
     HWND hwnd { nullptr };
 };
@@ -158,6 +156,7 @@ struct window final {
     auto operator=(Self&&) noexcept -> Self& = delete;
 
     pane::window_config window_config;
+    uintptr_t id { pane::random_number<uintptr_t>() };
     pane::window_class<Self> window_class { u8"PaneWindow", window_class_procedure };
     pane::window_background window_background;
     pane::window_handle window_handle;
@@ -191,6 +190,7 @@ struct webview final {
 
     pane::window_config window_config;
     pane::webview_config webview_config;
+    uintptr_t id { pane::random_number<uintptr_t>() };
     pane::window_class<Self> window_class { u8"PaneWebView", window_class_procedure };
     pane::window_background window_background;
     pane::window_handle window_handle;
