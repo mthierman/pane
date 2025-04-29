@@ -195,7 +195,6 @@ private:
 
 public:
     auto create(this Self& self) -> HWND;
-    auto create_webview(this Self& self) -> void;
 
     auto navigate(this const Self& self, std::u8string_view url) -> void;
 

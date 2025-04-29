@@ -98,7 +98,6 @@ webview::webview(pane::window_config&& window_config,
       webview_config { std::move(webview_config) },
       window_background(this->window_config.background_color) {
     this->create();
-    this->create_webview();
 }
 
 webview::~webview() { this->window_handle.destroy(); }
@@ -317,8 +316,6 @@ auto webview::create(this Self& self) -> HWND {
 
     return hwnd;
 }
-
-auto webview::create_webview(this Self& self) -> void { }
 
 auto webview::navigate(this const Self& self, std::u8string_view url) -> void {
     if (self.core) {
