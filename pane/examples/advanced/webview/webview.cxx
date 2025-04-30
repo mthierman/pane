@@ -12,6 +12,11 @@ auto wWinMain(HINSTANCE /* hinstance */,
             case WM_CREATE: {
                 pane::debug("WM_CREATE");
             } break;
+            case WM_DESTROY: {
+                PostQuitMessage(0);
+
+                return 1;
+            }
         }
 
         return window_message.default_procedure();
