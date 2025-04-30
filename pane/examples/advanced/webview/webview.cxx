@@ -5,10 +5,9 @@ auto wWinMain(HINSTANCE /* hinstance */,
               PWSTR /* pcmdline */,
               int /* ncmdshow */) -> int {
     auto window_manager { pane::window_manager() };
-    auto bg { pane::color { 0, 0, 0, 255 } };
 
     auto webview { pane::webview(
-        { u8"webview", bg, true, nullptr },
+        { u8"webview", pane::color { 0, 0, 0, 255 }, true, nullptr },
         { .home_page = u8"https://www.google.com/" },
         [&](pane::webview* webview, pane::window_message window_message) -> LRESULT {
         switch (window_message.event) {
