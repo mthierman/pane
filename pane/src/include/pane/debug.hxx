@@ -46,19 +46,17 @@ auto debug_message(std::wformat_string<Args...> format_string, Args&&... args) -
 
 template <typename... Args>
 auto debug_error(std::format_string<Args...> format_string, Args&&... args) -> void {
-    if (auto converted_format_string {
-            pane::to_utf16(std::vformat(format_string.get(), std::make_format_args(args...))) }) {
-        MessageBoxW(nullptr,
-                    reinterpet_cast<const wchar_t*>(converted_format_string.data()),
-                    L"Error",
-                    MB_OK | MB_ICONHAND);
-    }
+    const auto u16string { pane::to_utf16(
+        std::vformat(format_string.get(), std::make_format_args(args...))) };
+
+    MessageBoxW(
+        nullptr, reinterpet_cast<const wchar_t*>(u16string.data()), L"Error", MB_OK | MB_ICONHAND);
 }
 
 template <typename... Args>
 auto debug_error(std::wformat_string<Args...> format_string, Args&&... args) -> void {
     MessageBoxW(nullptr,
-                std::vformat(format_string.get(), std::make_wformat_args(args...)).c_str(),
+                std::vformat(format_string.get(), std::make_wformat_args(args...)).data(),
                 L"Error",
                 MB_OK | MB_ICONHAND);
 }
