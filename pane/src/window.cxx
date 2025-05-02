@@ -2,6 +2,8 @@
 #include <pane/text.hxx>
 #include <wil/wrl.h>
 
+#include <pane/debug.hxx>
+
 namespace pane {
 auto window_message::default_procedure(this const Self& self) -> LRESULT {
     return DefWindowProcW(self.hwnd, self.event, self.wparam, self.lparam);
@@ -49,6 +51,26 @@ auto window::window_class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM l
     if (auto self { reinterpret_cast<Self*>(GetWindowLongPtrW(hwnd, 0)) }) {
         if (msg == WM_WINDOWPOSCHANGED) {
             GetClientRect(hwnd, &self->client_rect);
+        }
+
+        if (msg == WM_DPICHANGED) {
+            auto new_dpi { HIWORD(wparam) };
+            auto default_dpi { USER_DEFAULT_SCREEN_DPI };
+            auto scale_factor { static_cast<float>(new_dpi) / static_cast<float>(default_dpi) };
+
+            pane::debug("new_dpi: {}, default_dpi: {}, scale_factor: {}",
+                        new_dpi,
+                        default_dpi,
+                        scale_factor);
+
+            auto const suggested_rect { reinterpret_cast<RECT*>(lparam) };
+            SetWindowPos(hwnd,
+                         nullptr,
+                         suggested_rect->left,
+                         suggested_rect->top,
+                         suggested_rect->right - suggested_rect->left,
+                         suggested_rect->bottom - suggested_rect->top,
+                         SWP_NOZORDER | SWP_NOACTIVATE);
         }
 
         if (msg == WM_ERASEBKGND) {

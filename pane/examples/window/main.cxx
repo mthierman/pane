@@ -18,9 +18,9 @@ auto wWinMain(HINSTANCE /* hinstance */,
             case WM_DESTROY: {
                 window_manager.erase(window->window_handle);
             } break;
-            case WM_DPICHANGED: {
-                pane::debug("WM_DPICHANGED");
-            }
+                // case WM_DPICHANGED: {
+                //     pane::debug("WM_DPICHANGED");
+                // } break;
         }
 
         return window_message.default_procedure();
