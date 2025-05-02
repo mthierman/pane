@@ -339,7 +339,7 @@ auto webview::create(this Self& self) -> HWND {
                 if (self.controller) {
                     self.controller->put_DefaultBackgroundColor(COREWEBVIEW2_COLOR { 0, 0, 0, 0 });
 
-                    RECT client_rect {};
+                    RECT client_rect { 0, 0, 0, 0 };
                     GetClientRect(self.window_handle(), &client_rect);
                     self.controller->put_Bounds(client_rect);
 
