@@ -43,7 +43,8 @@ window::window(pane::window_config&& window_config,
                std::function<LRESULT(Self*, pane::window_message)>&& window_procedure)
     : window_procedure { std::move(window_procedure) },
       window_config { std::move(window_config) },
-      window_background(this->window_config.background_color) {
+      window_dark_background(this->window_config.dark_background),
+      window_light_background(this->window_config.light_background) {
     this->create();
 }
 
@@ -63,11 +64,11 @@ auto window::window_class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM l
         }
 
         if (msg == WM_SETTINGCHANGE) {
-            if (pane::color { winrt::Windows::UI::ViewManagement::UIColorType::Foreground }
+            if (pane::color { winrt::Windows::UI::ViewManagement::UIColorType::Background }
                     .is_dark()) {
-                self->window_background(pane::color { 0, 255, 0, 255 });
+                self->dark_mode = true;
             } else {
-                self->window_background(pane::color { 255, 0, 0, 255 });
+                self->dark_mode = false;
             }
 
             InvalidateRect(hwnd, nullptr, true);
@@ -90,7 +91,16 @@ auto window::window_class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM l
 
         if (msg == WM_ERASEBKGND) {
             GetClientRect(hwnd, &self->client_rect);
-            FillRect(reinterpret_cast<HDC>(wparam), &self->client_rect, self->window_background());
+
+            if (self->dark_mode) {
+                FillRect(reinterpret_cast<HDC>(wparam),
+                         &self->client_rect,
+                         self->window_dark_background());
+            } else {
+                FillRect(reinterpret_cast<HDC>(wparam),
+                         &self->client_rect,
+                         self->window_light_background());
+            }
         }
 
         if (msg == WM_NCDESTROY) {
@@ -129,7 +139,8 @@ webview::webview(pane::window_config&& window_config,
     : window_procedure { std::move(window_procedure) },
       window_config { std::move(window_config) },
       webview_config { std::move(webview_config) },
-      window_background(this->window_config.background_color) {
+      window_dark_background(this->window_config.dark_background),
+      window_light_background(this->window_config.light_background) {
     this->create();
 }
 
@@ -155,11 +166,11 @@ auto webview::window_class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM 
         }
 
         if (msg == WM_SETTINGCHANGE) {
-            if (pane::color { winrt::Windows::UI::ViewManagement::UIColorType::Foreground }
+            if (pane::color { winrt::Windows::UI::ViewManagement::UIColorType::Background }
                     .is_dark()) {
-                self->window_background(pane::color { 0, 255, 0, 255 });
+                self->dark_mode = true;
             } else {
-                self->window_background(pane::color { 255, 0, 0, 255 });
+                self->dark_mode = false;
             }
 
             InvalidateRect(hwnd, nullptr, true);
@@ -192,7 +203,16 @@ auto webview::window_class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM 
 
         if (msg == WM_ERASEBKGND) {
             GetClientRect(hwnd, &self->client_rect);
-            FillRect(reinterpret_cast<HDC>(wparam), &self->client_rect, self->window_background());
+
+            if (self->dark_mode) {
+                FillRect(reinterpret_cast<HDC>(wparam),
+                         &self->client_rect,
+                         self->window_dark_background());
+            } else {
+                FillRect(reinterpret_cast<HDC>(wparam),
+                         &self->client_rect,
+                         self->window_light_background());
+            }
         }
 
         if (msg == WM_NCDESTROY) {

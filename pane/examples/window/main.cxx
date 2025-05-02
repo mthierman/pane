@@ -7,9 +7,11 @@ auto wWinMain(HINSTANCE /* hinstance */,
               int /* ncmdshow */) -> int {
     auto window_manager { pane::window_manager() };
 
-    auto window_background { pane::color { 0, 0, 0, 255 } };
+    auto dark_bg { pane::color { 0, 0, 255, 255 } };
+    auto light_bg { pane::color { 0, 0, 255, 255 } };
+
     auto window { pane::window(
-        { u8"window", window_background, true, nullptr },
+        { u8"window", dark_bg, light_bg, true, nullptr },
         [&](pane::window* window, pane::window_message window_message) -> LRESULT {
         switch (window_message.event) {
             case WM_CREATE: {

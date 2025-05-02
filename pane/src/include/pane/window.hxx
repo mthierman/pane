@@ -24,7 +24,8 @@ struct window_message final {
 
 struct window_config final {
     std::u8string title;
-    pane::color background_color;
+    pane::color dark_background;
+    pane::color light_background;
     bool visible { true };
     HWND parent_hwnd { nullptr };
 };
@@ -182,11 +183,15 @@ public:
     pane::window_config window_config;
     uintptr_t id { pane::random_number<uintptr_t>() };
     pane::window_class<Self> window_class { u8"PaneWindow", window_class_procedure };
-    pane::window_background window_background;
+    pane::window_background window_dark_background;
+    pane::window_background window_light_background;
     pane::window_handle window_handle;
     RECT client_rect { 0, 0, 0, 0 };
     UINT dpi { GetDpiForWindow(window_handle()) };
     float scale_factor { static_cast<float>(dpi) / static_cast<float>(USER_DEFAULT_SCREEN_DPI) };
+    bool dark_mode {
+        pane::color { winrt::Windows::UI::ViewManagement::UIColorType::Background }.is_dark()
+    };
 };
 
 struct webview final {
@@ -220,11 +225,15 @@ public:
     pane::webview_config webview_config;
     uintptr_t id { pane::random_number<uintptr_t>() };
     pane::window_class<Self> window_class { u8"PaneWebView", window_class_procedure };
-    pane::window_background window_background;
+    pane::window_background window_dark_background;
+    pane::window_background window_light_background;
     pane::window_handle window_handle;
     RECT client_rect { 0, 0, 0, 0 };
     UINT dpi { GetDpiForWindow(window_handle()) };
     float scale_factor { static_cast<float>(dpi) / static_cast<float>(USER_DEFAULT_SCREEN_DPI) };
+    bool dark_mode {
+        pane::color { winrt::Windows::UI::ViewManagement::UIColorType::Background }.is_dark()
+    };
 
     wil::com_ptr<ICoreWebView2Settings9> settings;
     wil::com_ptr<ICoreWebView2Environment13> environment;

@@ -7,9 +7,11 @@ auto wWinMain(HINSTANCE /* hinstance */,
               int /* ncmdshow */) -> int {
     auto window_manager { pane::window_manager() };
 
-    auto webview_background { pane::color { 0, 0, 255, 255 } };
+    auto dark_bg { pane::color { 0, 0, 255, 255 } };
+    auto light_bg { pane::color { 0, 0, 255, 255 } };
+
     auto webview { pane::webview(
-        { u8"webview", webview_background, true, nullptr },
+        { u8"webview", dark_bg, light_bg, true, nullptr },
         { .home_page = u8"about:blank" },
         [&](pane::webview* webview, pane::window_message window_message) -> LRESULT {
         switch (window_message.event) {
