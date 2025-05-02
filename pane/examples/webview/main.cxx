@@ -7,16 +7,17 @@ auto wWinMain(HINSTANCE /* hinstance */,
               int /* ncmdshow */) -> int {
     auto window_manager { pane::window_manager() };
 
-    auto window_background { pane::color { 0, 0, 0, 255 } };
-    auto window { pane::window(
-        { u8"window", window_background, true, nullptr },
-        [&](pane::window* window, pane::window_message window_message) -> LRESULT {
+    auto webview_background { pane::color { 0, 0, 0, 255 } };
+    auto webview { pane::webview(
+        { u8"webview", webview_background, true, nullptr },
+        { .home_page = u8"https://www.google.com/" },
+        [&](pane::webview* webview, pane::window_message window_message) -> LRESULT {
         switch (window_message.event) {
             case WM_CREATE: {
-                window_manager.insert(window->window_handle);
+                window_manager.insert(webview->window_handle);
             } break;
             case WM_DESTROY: {
-                window_manager.erase(window->window_handle);
+                window_manager.erase(webview->window_handle);
             } break;
         }
 
