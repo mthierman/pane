@@ -6,13 +6,13 @@ auto debug(const std::string& string) -> void {
     OutputDebugStringW(L"\n");
 }
 
-auto debug(const std::wstring& string) -> void {
-    OutputDebugStringW(string.data());
+auto debug(const std::u8string& string) -> void {
+    OutputDebugStringW(reinterpret_cast<const wchar_t*>(pane::to_utf16(string).data()));
     OutputDebugStringW(L"\n");
 }
 
-auto debug(const std::u8string& string) -> void {
-    OutputDebugStringW(reinterpret_cast<const wchar_t*>(pane::to_utf16(string).data()));
+auto debug(const std::wstring& string) -> void {
+    OutputDebugStringW(string.data());
     OutputDebugStringW(L"\n");
 }
 
