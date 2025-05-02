@@ -54,14 +54,9 @@ auto window::window_class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM l
         }
 
         if (msg == WM_DPICHANGED) {
-            auto new_dpi { HIWORD(wparam) };
-            auto default_dpi { USER_DEFAULT_SCREEN_DPI };
-            auto scale_factor { static_cast<float>(new_dpi) / static_cast<float>(default_dpi) };
-
-            pane::debug("new_dpi: {}, default_dpi: {}, scale_factor: {}",
-                        new_dpi,
-                        default_dpi,
-                        scale_factor);
+            self->dpi = HIWORD(wparam);
+            self->scale_factor
+                = static_cast<float>(self->dpi) / static_cast<float>(USER_DEFAULT_SCREEN_DPI);
 
             auto const suggested_rect { reinterpret_cast<RECT*>(lparam) };
             SetWindowPos(hwnd,
