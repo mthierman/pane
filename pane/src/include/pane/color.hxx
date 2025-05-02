@@ -21,10 +21,7 @@ struct color final {
     color(Self&&) noexcept = default;
     auto operator=(Self&&) noexcept -> Self& = default;
 
-    explicit color(uint8_t r,
-                   uint8_t g,
-                   uint8_t b,
-                   uint8_t alpha = std::numeric_limits<uint8_t>::max());
+    color(uint8_t r, uint8_t g, uint8_t b, uint8_t alpha = std::numeric_limits<uint8_t>::max());
 
     explicit color(const COLORREF& colorref, uint8_t alpha = std::numeric_limits<uint8_t>::max());
 
