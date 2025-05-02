@@ -12,11 +12,9 @@ auto debug(const std::u16string& string) -> void;
 
 template <typename... Args>
 auto debug(std::format_string<Args...> format_string, Args&&... args) -> void {
-    if (auto converted_format_string {
-            pane::to_utf16(std::vformat(format_string.get(), std::make_format_args(args...))) }) {
-        OutputDebugStringW(reinterpet_cast<const wchar_t*>(converted_format_string.data()));
-    }
+    auto fmt { pane::to_utf16(std::vformat(format_string.get(), std::make_format_args(args...))) };
 
+    OutputDebugStringW(reinterpret_cast<const wchar_t*>(fmt.data()));
     OutputDebugStringW(L"\n");
 }
 

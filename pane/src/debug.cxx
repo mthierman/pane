@@ -2,12 +2,16 @@
 
 namespace pane {
 auto debug(const std::string& string) -> void {
-    OutputDebugStringW(reinterpret_cast<const wchar_t*>(pane::to_utf16(string).data()));
+    const auto u16string { pane::to_utf16(string) };
+
+    OutputDebugStringW(reinterpret_cast<const wchar_t*>(u16string.data()));
     OutputDebugStringW(L"\n");
 }
 
 auto debug(const std::u8string& string) -> void {
-    OutputDebugStringW(reinterpret_cast<const wchar_t*>(pane::to_utf16(string).data()));
+    const auto u16string { pane::to_utf16(string) };
+
+    OutputDebugStringW(reinterpret_cast<const wchar_t*>(u16string.data()));
     OutputDebugStringW(L"\n");
 }
 
