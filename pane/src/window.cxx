@@ -66,8 +66,6 @@ auto window::window_class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM l
                          suggested_rect->right - suggested_rect->left,
                          suggested_rect->bottom - suggested_rect->top,
                          SWP_NOZORDER | SWP_NOACTIVATE);
-
-            pane::debug("{}, {}", self->dpi, self->scale_factor);
         }
 
         if (msg == WM_ERASEBKGND) {
@@ -134,6 +132,21 @@ auto webview::window_class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM 
             if (self->controller) {
                 self->controller->put_Bounds(self->client_rect);
             }
+        }
+
+        if (msg == WM_DPICHANGED) {
+            self->dpi = HIWORD(wparam);
+            self->scale_factor
+                = static_cast<float>(self->dpi) / static_cast<float>(USER_DEFAULT_SCREEN_DPI);
+
+            auto const suggested_rect { reinterpret_cast<RECT*>(lparam) };
+            SetWindowPos(hwnd,
+                         nullptr,
+                         suggested_rect->left,
+                         suggested_rect->top,
+                         suggested_rect->right - suggested_rect->left,
+                         suggested_rect->bottom - suggested_rect->top,
+                         SWP_NOZORDER | SWP_NOACTIVATE);
         }
 
         if (msg == WM_SHOWWINDOW) {

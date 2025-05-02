@@ -222,6 +222,8 @@ public:
     pane::window_background window_background;
     pane::window_handle window_handle;
     RECT client_rect { 0, 0, 0, 0 };
+    UINT dpi { GetDpiForWindow(window_handle()) };
+    float scale_factor { static_cast<float>(dpi) / static_cast<float>(USER_DEFAULT_SCREEN_DPI) };
 
     wil::com_ptr<ICoreWebView2Settings9> settings;
     wil::com_ptr<ICoreWebView2Environment13> environment;
