@@ -30,6 +30,15 @@ window_background::~window_background() { DeleteObject(this->hbrush); }
 
 auto window_background::operator()(this const Self& self) -> HBRUSH { return self.hbrush; }
 
+auto window_background::operator()(this Self& self, const pane::color& color) -> void {
+    if (!self.hbrush) {
+        self.hbrush = color.to_hbrush();
+    } else {
+        DeleteObject(self.hbrush);
+        self.hbrush = color.to_hbrush();
+    }
+}
+
 window::window(pane::window_config&& window_config,
                std::function<LRESULT(Self*, pane::window_message)>&& window_procedure)
     : window_procedure { std::move(window_procedure) },
@@ -51,6 +60,17 @@ auto window::window_class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM l
     if (auto self { reinterpret_cast<Self*>(GetWindowLongPtrW(hwnd, 0)) }) {
         if (msg == WM_WINDOWPOSCHANGED) {
             GetClientRect(hwnd, &self->client_rect);
+        }
+
+        if (msg == WM_SETTINGCHANGE) {
+            if (pane::color { winrt::Windows::UI::ViewManagement::UIColorType::Foreground }
+                    .is_dark()) {
+                self->window_background(pane::color { 0, 255, 0, 255 });
+            } else {
+                self->window_background(pane::color { 255, 0, 0, 255 });
+            }
+
+            InvalidateRect(hwnd, nullptr, true);
         }
 
         if (msg == WM_DPICHANGED) {
@@ -132,6 +152,17 @@ auto webview::window_class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM 
             if (self->controller) {
                 self->controller->put_Bounds(self->client_rect);
             }
+        }
+
+        if (msg == WM_SETTINGCHANGE) {
+            if (pane::color { winrt::Windows::UI::ViewManagement::UIColorType::Foreground }
+                    .is_dark()) {
+                self->window_background(pane::color { 0, 255, 0, 255 });
+            } else {
+                self->window_background(pane::color { 255, 0, 0, 255 });
+            }
+
+            InvalidateRect(hwnd, nullptr, true);
         }
 
         if (msg == WM_DPICHANGED) {

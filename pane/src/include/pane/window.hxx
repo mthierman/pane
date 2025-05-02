@@ -149,6 +149,7 @@ struct window_background final {
     auto operator=(Self&&) noexcept -> Self& = delete;
 
     auto operator()(this const Self& self) -> HBRUSH;
+    auto operator()(this Self& self, const pane::color& color) -> void;
 
 private:
     HBRUSH hbrush { nullptr };
