@@ -12,11 +12,5 @@ auto wmain(int /* argc */, wchar_t* /* argv */[], wchar_t* /* envp */[]) -> int 
         std::println("{}: {}", idx, std::format("{}", arg));
     }
 
-    pane::debug("TEST");
-
-    DWORD test { 0 };
-
-    pane::debug("{}", test);
-
     return EXIT_SUCCESS;
 }
