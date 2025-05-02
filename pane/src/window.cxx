@@ -66,6 +66,8 @@ auto window::window_class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM l
                          suggested_rect->right - suggested_rect->left,
                          suggested_rect->bottom - suggested_rect->top,
                          SWP_NOZORDER | SWP_NOACTIVATE);
+
+            pane::debug("{}, {}", self->dpi, self->scale_factor);
         }
 
         if (msg == WM_ERASEBKGND) {
