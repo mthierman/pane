@@ -7,8 +7,8 @@ auto wWinMain(HINSTANCE /* hinstance */,
               int /* ncmdshow */) -> int {
     auto window_manager { pane::window_manager() };
 
-    auto dark_bg { pane::color { 0, 0, 255, 255 } };
-    auto light_bg { pane::color { 0, 0, 255, 255 } };
+    auto dark_bg { pane::color { 0, 0, 0, 255 } };
+    auto light_bg { pane::color { 255, 255, 255, 255 } };
 
     auto webview { pane::webview(
         { u8"webview", dark_bg, light_bg, true, nullptr },
