@@ -271,8 +271,7 @@ auto webview::create(this Self& self) -> HWND {
                 }
 
                 if (self.controller) {
-                    self.controller->put_DefaultBackgroundColor(
-                        self.window_config.background_color.to_webview2_color());
+                    self.controller->put_DefaultBackgroundColor(COREWEBVIEW2_COLOR { 0, 0, 0, 0 });
 
                     RECT client_rect {};
                     GetClientRect(self.window_handle(), &client_rect);
