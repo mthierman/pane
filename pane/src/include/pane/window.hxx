@@ -172,6 +172,8 @@ struct window final {
     window(Self&&) noexcept = delete;
     auto operator=(Self&&) noexcept -> Self& = delete;
 
+    auto default_procedure(this Self& self, const pane::window_message& window_message) -> LRESULT;
+
 private:
     static auto window_class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
         -> LRESULT;

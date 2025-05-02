@@ -19,7 +19,7 @@ auto wWinMain(HINSTANCE /* hinstance */,
             } break;
         }
 
-        return window_message.default_procedure();
+        return window->default_procedure(window_message);
     }) };
 
     return pane::system::message_loop();

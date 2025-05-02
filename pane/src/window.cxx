@@ -48,6 +48,70 @@ window::window(pane::window_config&& window_config,
     this->create();
 }
 
+auto window::default_procedure(this Self& self, const pane::window_message& window_message)
+    -> LRESULT {
+    if (window_message.event == WM_WINDOWPOSCHANGED) {
+        GetClientRect(self.window_handle(), &self.client_rect);
+
+        return 0;
+    }
+
+    if (window_message.event == WM_SETTINGCHANGE) {
+        if (pane::color { winrt::Windows::UI::ViewManagement::UIColorType::Background }.is_dark()) {
+            self.dark_mode = true;
+        } else {
+            self.dark_mode = false;
+        }
+
+        InvalidateRect(self.window_handle(), nullptr, true);
+
+        return 0;
+    }
+
+    if (window_message.event == WM_DPICHANGED) {
+        self.dpi = HIWORD(window_message.wparam);
+        self.scale_factor
+            = static_cast<float>(self.dpi) / static_cast<float>(USER_DEFAULT_SCREEN_DPI);
+
+        auto const suggested_rect { reinterpret_cast<RECT*>(window_message.lparam) };
+        SetWindowPos(self.window_handle(),
+                     nullptr,
+                     suggested_rect->left,
+                     suggested_rect->top,
+                     suggested_rect->right - suggested_rect->left,
+                     suggested_rect->bottom - suggested_rect->top,
+                     SWP_NOZORDER | SWP_NOACTIVATE);
+
+        return 0;
+    }
+
+    if (window_message.event == WM_ERASEBKGND) {
+        GetClientRect(self.window_handle(), &self.client_rect);
+
+        if (self.dark_mode) {
+            FillRect(reinterpret_cast<HDC>(window_message.wparam),
+                     &self.client_rect,
+                     self.window_dark_background());
+        } else {
+            FillRect(reinterpret_cast<HDC>(window_message.wparam),
+                     &self.client_rect,
+                     self.window_light_background());
+        }
+
+        return 1;
+    }
+
+    if (window_message.event == WM_NCDESTROY) {
+        self.window_handle(nullptr);
+        SetWindowLongPtrW(self.window_handle(), 0, reinterpret_cast<LONG_PTR>(nullptr));
+
+        return 0;
+    }
+
+    return DefWindowProcW(
+        self.window_handle(), window_message.event, window_message.wparam, window_message.lparam);
+}
+
 auto window::window_class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) -> LRESULT {
     if (msg == WM_NCCREATE) {
         if (auto create_struct { reinterpret_cast<CREATESTRUCTW*>(lparam) }) {
@@ -59,55 +123,6 @@ auto window::window_class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM l
     }
 
     if (auto self { reinterpret_cast<Self*>(GetWindowLongPtrW(hwnd, 0)) }) {
-        if (msg == WM_WINDOWPOSCHANGED) {
-            GetClientRect(hwnd, &self->client_rect);
-        }
-
-        if (msg == WM_SETTINGCHANGE) {
-            if (pane::color { winrt::Windows::UI::ViewManagement::UIColorType::Background }
-                    .is_dark()) {
-                self->dark_mode = true;
-            } else {
-                self->dark_mode = false;
-            }
-
-            InvalidateRect(hwnd, nullptr, true);
-        }
-
-        if (msg == WM_DPICHANGED) {
-            self->dpi = HIWORD(wparam);
-            self->scale_factor
-                = static_cast<float>(self->dpi) / static_cast<float>(USER_DEFAULT_SCREEN_DPI);
-
-            auto const suggested_rect { reinterpret_cast<RECT*>(lparam) };
-            SetWindowPos(hwnd,
-                         nullptr,
-                         suggested_rect->left,
-                         suggested_rect->top,
-                         suggested_rect->right - suggested_rect->left,
-                         suggested_rect->bottom - suggested_rect->top,
-                         SWP_NOZORDER | SWP_NOACTIVATE);
-        }
-
-        if (msg == WM_ERASEBKGND) {
-            GetClientRect(hwnd, &self->client_rect);
-
-            if (self->dark_mode) {
-                FillRect(reinterpret_cast<HDC>(wparam),
-                         &self->client_rect,
-                         self->window_dark_background());
-            } else {
-                FillRect(reinterpret_cast<HDC>(wparam),
-                         &self->client_rect,
-                         self->window_light_background());
-            }
-        }
-
-        if (msg == WM_NCDESTROY) {
-            self->window_handle(nullptr);
-            SetWindowLongPtrW(hwnd, 0, reinterpret_cast<LONG_PTR>(nullptr));
-        }
-
         return self->window_procedure(self, { hwnd, msg, wparam, lparam });
     }
 
