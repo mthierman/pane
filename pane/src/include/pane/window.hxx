@@ -22,61 +22,6 @@ struct window_message final {
     LPARAM lparam { 0 };
 };
 
-struct window_config final {
-    std::u8string title;
-    pane::color dark_background;
-    pane::color light_background;
-    bool visible { true };
-    HWND parent_hwnd { nullptr };
-};
-
-struct webview_config final {
-    struct environment_options final {
-        std::u8string AdditionalBrowserArguments;
-        bool AllowSingleSignOnUsingOSPrimaryAccount { false };
-        std::u8string Language;
-        std::u8string TargetCompatibleBrowserVersion;
-        bool ExclusiveUserDataFolderAccess { false };
-        bool IsCustomCrashReportingEnabled { false };
-        bool EnableTrackingPrevention { true };
-        bool AreBrowserExtensionsEnabled { false };
-        COREWEBVIEW2_CHANNEL_SEARCH_KIND ChannelSearchKind {
-            COREWEBVIEW2_CHANNEL_SEARCH_KIND::COREWEBVIEW2_CHANNEL_SEARCH_KIND_MOST_STABLE
-        };
-        COREWEBVIEW2_SCROLLBAR_STYLE ScrollBarStyle {
-            COREWEBVIEW2_SCROLLBAR_STYLE::COREWEBVIEW2_SCROLLBAR_STYLE_DEFAULT
-        };
-    };
-
-    struct settings final {
-        bool AreBrowserAcceleratorKeysEnabled { true };
-        bool AreDefaultContextMenusEnabled { true };
-        bool AreDefaultScriptDialogsEnabled { true };
-        bool AreDevToolsEnabled { true };
-        bool AreHostObjectsAllowed { true };
-        COREWEBVIEW2_PDF_TOOLBAR_ITEMS HiddenPdfToolbarItems {
-            COREWEBVIEW2_PDF_TOOLBAR_ITEMS::COREWEBVIEW2_PDF_TOOLBAR_ITEMS_NONE
-        };
-        bool IsBuiltInErrorPageEnabled { true };
-        bool IsGeneralAutofillEnabled { true };
-        bool IsNonClientRegionSupportEnabled { true };
-        bool IsPasswordAutosaveEnabled { true };
-        bool IsPinchZoomEnabled { true };
-        bool IsReputationCheckingRequired { true };
-        bool IsScriptEnabled { true };
-        bool IsStatusBarEnabled { true };
-        bool IsSwipeNavigationEnabled { true };
-        bool IsWebMessageEnabled { true };
-        bool IsZoomControlEnabled { true };
-    };
-
-    std::u8string home_page { u8"about:blank" };
-    std::filesystem::path browser_executable_folder;
-    std::filesystem::path user_data_folder;
-    environment_options environment_options;
-    settings settings;
-};
-
 template <typename T> struct window_class final {
     using Self = window_class;
 
@@ -156,6 +101,14 @@ private:
     HBRUSH hbrush { nullptr };
 };
 
+struct window_config final {
+    std::u8string title;
+    pane::color dark_background;
+    pane::color light_background;
+    bool visible { true };
+    HWND parent_hwnd { nullptr };
+};
+
 struct window final {
     using Self = window;
 
@@ -194,6 +147,53 @@ public:
     bool dark_mode {
         pane::color { winrt::Windows::UI::ViewManagement::UIColorType::Background }.is_dark()
     };
+};
+
+struct webview_config final {
+    struct environment_options final {
+        std::u8string AdditionalBrowserArguments;
+        bool AllowSingleSignOnUsingOSPrimaryAccount { false };
+        std::u8string Language;
+        std::u8string TargetCompatibleBrowserVersion;
+        bool ExclusiveUserDataFolderAccess { false };
+        bool IsCustomCrashReportingEnabled { false };
+        bool EnableTrackingPrevention { true };
+        bool AreBrowserExtensionsEnabled { false };
+        COREWEBVIEW2_CHANNEL_SEARCH_KIND ChannelSearchKind {
+            COREWEBVIEW2_CHANNEL_SEARCH_KIND::COREWEBVIEW2_CHANNEL_SEARCH_KIND_MOST_STABLE
+        };
+        COREWEBVIEW2_SCROLLBAR_STYLE ScrollBarStyle {
+            COREWEBVIEW2_SCROLLBAR_STYLE::COREWEBVIEW2_SCROLLBAR_STYLE_DEFAULT
+        };
+    };
+
+    struct settings final {
+        bool AreBrowserAcceleratorKeysEnabled { true };
+        bool AreDefaultContextMenusEnabled { true };
+        bool AreDefaultScriptDialogsEnabled { true };
+        bool AreDevToolsEnabled { true };
+        bool AreHostObjectsAllowed { true };
+        COREWEBVIEW2_PDF_TOOLBAR_ITEMS HiddenPdfToolbarItems {
+            COREWEBVIEW2_PDF_TOOLBAR_ITEMS::COREWEBVIEW2_PDF_TOOLBAR_ITEMS_NONE
+        };
+        bool IsBuiltInErrorPageEnabled { true };
+        bool IsGeneralAutofillEnabled { true };
+        bool IsNonClientRegionSupportEnabled { true };
+        bool IsPasswordAutosaveEnabled { true };
+        bool IsPinchZoomEnabled { true };
+        bool IsReputationCheckingRequired { true };
+        bool IsScriptEnabled { true };
+        bool IsStatusBarEnabled { true };
+        bool IsSwipeNavigationEnabled { true };
+        bool IsWebMessageEnabled { true };
+        bool IsZoomControlEnabled { true };
+    };
+
+    std::u8string home_page { u8"about:blank" };
+    std::filesystem::path browser_executable_folder;
+    std::filesystem::path user_data_folder;
+    environment_options environment_options;
+    settings settings;
 };
 
 struct webview final {
