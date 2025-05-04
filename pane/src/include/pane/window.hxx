@@ -229,10 +229,7 @@ private:
 public:
     auto create(this Self& self) -> HWND;
 
-    auto navigate(this const Self& self, const char8_t* url) -> void;
-    auto navigate(this const Self& self, const std::u8string& url) -> void;
-    // auto navigate(this const Self& self, const ada::url& url) -> void;
-    auto navigate(this const Self& self, const std::filesystem::path& path) -> void;
+    auto navigate(this const Self& self, const std::u8string_view url) -> void;
 
     pane::window_config window_config;
     pane::webview_config webview_config;
