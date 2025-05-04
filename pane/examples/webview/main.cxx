@@ -17,10 +17,16 @@ auto wWinMain(HINSTANCE /* hinstance */,
           .creation_callback =
               [](pane::webview* webview) {
         // webview->navigate(std::u8string(u8"file:///D:/mthierman/pane/pane/data/index.html"));
-        webview->navigate(
-            std::filesystem::path { u8"D:/mthierman/pane/pane/data/index.html" }.u8string());
+        // webview->navigate(
+        //     std::filesystem::path { u8"D:/mthierman/pane/pane/data/index.html" }.u8string());
 
-        // webview->navigate(u8"file:///D:/mthierman/pane/pane/data/index.html");
+        auto google { pane::url(u8"https://www.google.com/") };
+
+        if (google) {
+            webview->navigate(google.value());
+        }
+
+        webview->navigate(u8"D:/mthierman/pane/pane/data/index.html");
 
         pane::debug("OK!");
     } },

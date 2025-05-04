@@ -427,11 +427,25 @@ auto webview::create(this Self& self) -> HWND {
     return self.window_handle();
 }
 
-auto webview::navigate(this const Self& self, std::u8string_view url) -> void {
-    const auto u16string { pane::to_utf16(url) };
+// auto webview::navigate(this const Self& self, std::u8string_view url) -> void {
+//     const auto u16string { pane::to_utf16(url) };
+
+//     if (self.core) {
+//         self.core->Navigate(reinterpret_cast<const wchar_t*>(u16string.data()));
+//     }
+// }
+
+auto webview::navigate(this const Self& self, const ada::url& url) -> void {
+    const auto u16string { pane::to_utf16(url.get_href()) };
 
     if (self.core) {
         self.core->Navigate(reinterpret_cast<const wchar_t*>(u16string.data()));
+    }
+}
+
+auto webview::navigate(this const Self& self, const std::filesystem::path& path) -> void {
+    if (self.core) {
+        self.core->Navigate(path.c_str());
     }
 }
 
