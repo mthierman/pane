@@ -16,7 +16,8 @@ auto wWinMain(HINSTANCE /* hinstance */,
         { .home_page = u8"about:blank",
           .creation_callback =
               [](pane::webview* webview) {
-        webview->navigate(std::u8string(u8"file:///D:/mthierman/pane/pane/data/index.html"));
+        // webview->navigate(std::u8string(u8"file:///D:/mthierman/pane/pane/data/index.html"));
+        webview->navigate(std::filesystem::path { u8"D:/mthierman/pane/pane/data/index.html" });
 
         pane::debug("OK!");
     } },
