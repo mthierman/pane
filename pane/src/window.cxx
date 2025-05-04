@@ -429,18 +429,18 @@ auto webview::navigate(this const Self& self, std::u8string_view url) -> void {
     }
 }
 
-auto webview::navigate(this const Self& self, const ada::url& url) -> void {
-    if (self.core) {
-        self.core->Navigate(
-            reinterpret_cast<const wchar_t*>(pane::to_utf16(url.to_string()).data()));
-    }
-}
+// auto webview::navigate(this const Self& self, const ada::url& url) -> void {
+//     if (self.core) {
+//         self.core->Navigate(
+//             reinterpret_cast<const wchar_t*>(pane::to_utf16(url.to_string()).data()));
+//     }
+// }
 
-auto webview::navigate(this const Self& self, const std::filesystem::path& path) -> void {
-    if (self.core) {
-        self.core->Navigate(path.c_str());
-    }
-}
+// auto webview::navigate(this const Self& self, const std::filesystem::path& path) -> void {
+//     if (self.core) {
+//         self.core->Navigate(path.c_str());
+//     }
+// }
 
 auto window_manager::insert(this Self& self, const pane::window_handle& window_handle) -> void {
     self.set.insert(window_handle());
