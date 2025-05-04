@@ -436,6 +436,12 @@ auto webview::navigate(this const Self& self, const ada::url& url) -> void {
     }
 }
 
+auto webview::navigate(this const Self& self, const std::filesystem::path& path) -> void {
+    if (self.core) {
+        self.core->Navigate(path.c_str());
+    }
+}
+
 auto window_manager::insert(this Self& self, const pane::window_handle& window_handle) -> void {
     self.set.insert(window_handle());
 }
