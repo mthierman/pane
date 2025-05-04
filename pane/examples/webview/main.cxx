@@ -21,12 +21,13 @@ auto wWinMain(HINSTANCE /* hinstance */,
         //     std::filesystem::path { u8"D:/mthierman/pane/pane/data/index.html" }.u8string());
 
         auto google { pane::url(u8"https://www.google.com/") };
+        auto local { pane::url(u8"file:///D:/mthierman/pane/pane/data/index.html") };
 
-        if (google) {
-            webview->navigate(google.value());
+        if (local) {
+            webview->navigate(local.value());
         }
 
-        webview->navigate(u8"D:/mthierman/pane/pane/data/index.html");
+        // webview->navigate(u8"D:/mthierman/pane/pane/data/index.html");
 
         pane::debug("OK!");
     } },
