@@ -13,7 +13,13 @@ auto wWinMain(HINSTANCE /* hinstance */,
           pane::color { 255, 255, 255, 0 },
           true,
           nullptr },
-        { .home_page = u8"file:///D:/mthierman/pane/pane/data/index.html" },
+        { .home_page = u8"about:blank",
+          .creation_callback =
+              [](pane::webview* webview) {
+        webview->navigate(std::u8string(u8"file:///D:/mthierman/pane/pane/data/index.html"));
+
+        pane::debug("OK!");
+    } },
         [&](pane::webview* webview, pane::window_message window_message) -> LRESULT {
         switch (window_message.event) {
             case WM_CREATE: {

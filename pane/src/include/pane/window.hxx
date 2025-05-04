@@ -150,6 +150,8 @@ public:
     };
 };
 
+struct webview;
+
 struct webview_config final {
     struct environment_options final {
         std::u8string AdditionalBrowserArguments;
@@ -191,6 +193,7 @@ struct webview_config final {
     };
 
     std::u8string home_page { u8"about:blank" };
+    std::function<void(pane::webview*)> creation_callback;
     std::filesystem::path browser_executable_folder;
     std::filesystem::path user_data_folder;
     environment_options environment_options;

@@ -412,6 +412,8 @@ auto webview::create(this Self& self) -> HWND {
                     }
 
                     self.navigate(self.webview_config.home_page);
+
+                    self.webview_config.creation_callback(&self);
                 }
 
                 return S_OK;
