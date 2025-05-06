@@ -1,5 +1,6 @@
 #pragma once
 #include <Windows.h>
+#include <wrl.h>
 #include <filesystem>
 #include <functional>
 #include <set>
