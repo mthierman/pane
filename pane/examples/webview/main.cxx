@@ -32,11 +32,12 @@ auto wWinMain(HINSTANCE /* hinstance */,
         // webview->navigate_to_string(u8R"(<html><body>raw</body></html>)");
 
         webview->core->SetVirtualHostNameToFolderMapping(
-            L"demo",
+            L"webview.localhost",
             L"D:/mthierman/pane/pane/data",
             COREWEBVIEW2_HOST_RESOURCE_ACCESS_KIND::COREWEBVIEW2_HOST_RESOURCE_ACCESS_KIND_ALLOW);
 
-        webview->navigate(u8"https://demo/index.html");
+        webview->navigate(u8"http://webview.localhost/index.html");
+        // webview->navigate(u8"D:/mthierman/pane/pane/data/index.html");
 
         pane::debug("OK!");
     } },
