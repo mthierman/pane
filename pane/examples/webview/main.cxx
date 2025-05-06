@@ -84,7 +84,8 @@ auto wWinMain(HINSTANCE /* hinstance */,
                 u8"pane.internal", std::filesystem::path(u8"D:/mthierman/pane/pane/data")),
             .creation_callback =
                 [](pane::webview* webview) {
-        webview->navigate_to_string(u8R"(<html><body>navigate_to_string</body></html>)");
+        webview->navigate_to_string(
+            u8R"(<html><body style="background-color: black; color: white;">navigate_to_string</body></html>)");
     } },
         [&](pane::webview* webview, pane::window_message window_message) -> LRESULT {
         switch (window_message.event) {
