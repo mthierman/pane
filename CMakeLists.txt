@@ -6,3 +6,6 @@ list(
     "${CMAKE_CURRENT_SOURCE_DIR}/cmake"
     )
 add_subdirectory(pane)
+if(PROJECT_IS_TOP_LEVEL)
+    add_subdirectory("docs")
+endif()
