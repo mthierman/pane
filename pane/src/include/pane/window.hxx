@@ -3,6 +3,7 @@
 #include <filesystem>
 #include <functional>
 #include <set>
+#include <utility>
 #include <pane/color.hxx>
 #include <pane/math.hxx>
 #include <pane/system.hxx>
@@ -195,6 +196,9 @@ struct webview_config final {
     };
 
     std::u8string home_page { u8"about:blank" };
+    std::optional<std::pair<std::u8string, std::filesystem::path>> virtual_host_name_map {
+        std::nullopt
+    };
     std::function<void(pane::webview*)> creation_callback;
     std::filesystem::path browser_executable_folder;
     std::filesystem::path user_data_folder;

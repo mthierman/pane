@@ -363,6 +363,17 @@ auto webview::create(this Self& self) -> HWND {
 
                     if (created_core) {
                         self.core = created_core.try_query<ICoreWebView2_22>();
+
+                        if (self.webview_config.virtual_host_name_map) {
+                            const auto host_name { pane::to_utf16(
+                                (*self.webview_config.virtual_host_name_map).first) };
+
+                            self.core->SetVirtualHostNameToFolderMapping(
+                                reinterpret_cast<const wchar_t*>(host_name.data()),
+                                (*self.webview_config.virtual_host_name_map).second.c_str(),
+                                COREWEBVIEW2_HOST_RESOURCE_ACCESS_KIND::
+                                    COREWEBVIEW2_HOST_RESOURCE_ACCESS_KIND_ALLOW);
+                        }
                     }
 
                     if (self.core) {

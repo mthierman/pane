@@ -8,38 +8,35 @@ auto wWinMain(HINSTANCE /* hinstance */,
     auto window_manager { pane::window_manager() };
 
     auto webview { pane::webview(
-        { u8"webview",
-          pane::color { 0, 0, 0, 0 },
-          pane::color { 255, 255, 255, 0 },
-          true,
-          nullptr },
-        { .home_page = u8"about:blank",
-          .creation_callback =
-              [](pane::webview* webview) {
+        pane::window_config { u8"webview",
+                              pane::color { 0, 0, 0, 0 },
+                              pane::color { 255, 255, 255, 0 },
+                              true,
+                              nullptr },
+        pane::webview_config {
+            .home_page = u8"about:blank",
+            .virtual_host_name_map = std::make_pair(
+                u8"pane.internal", std::filesystem::path(u8"D:/mthierman/pane/pane/data")),
+            .creation_callback =
+                [](pane::webview* webview) {
         // webview->navigate(std::u8string(u8"file:///D:/mthierman/pane/pane/data/index.html"));
         // webview->navigate(
         //     std::filesystem::path { u8"D:/mthierman/pane/pane/data/index.html" }.u8string());
-
         // auto google { pane::url(u8"https://www.google.com/") };
         // auto local { pane::url(u8"file:///D:/mthierman/pane/pane/data/index.html") };
-
         // if (local) {
         //     webview->navigate(local.value());
         // }
-
         // webview->navigate(u8"D:/mthierman/pane/pane/data/index.html");
-
         // webview->navigate_to_string(u8R"(<html><body>raw</body></html>)");
-
-        webview->core->SetVirtualHostNameToFolderMapping(
-            L"webview.internal",
-            L"D:/mthierman/pane/pane/data",
-            COREWEBVIEW2_HOST_RESOURCE_ACCESS_KIND::COREWEBVIEW2_HOST_RESOURCE_ACCESS_KIND_ALLOW);
-
-        webview->navigate(u8"http://webview.internal/index.html");
+        // webview->core->SetVirtualHostNameToFolderMapping(
+        //     L"webview.internal",
+        //     L"D:/mthierman/pane/pane/data",
+        //     COREWEBVIEW2_HOST_RESOURCE_ACCESS_KIND::COREWEBVIEW2_HOST_RESOURCE_ACCESS_KIND_ALLOW);
+        // webview->navigate(u8"http://webview.internal/index.html");
         // webview->navigate(u8"D:/mthierman/pane/pane/data/index.html");
 
-        pane::debug("OK!");
+        webview->navigate(u8"http://pane.internal/index.html");
     } },
         [&](pane::webview* webview, pane::window_message window_message) -> LRESULT {
         switch (window_message.event) {
