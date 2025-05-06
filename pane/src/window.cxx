@@ -228,13 +228,6 @@ auto webview::default_procedure(this Self& self, const pane::window_message& win
         return 1;
     }
 
-    if (window_message.event == WM_NCDESTROY) {
-        self.window_handle(nullptr);
-        SetWindowLongPtrW(self.window_handle(), 0, reinterpret_cast<LONG_PTR>(nullptr));
-
-        return 0;
-    }
-
     return DefWindowProcW(
         self.window_handle(), window_message.event, window_message.wparam, window_message.lparam);
 }
@@ -246,6 +239,13 @@ auto webview::window_class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM 
                 SetWindowLongPtrW(hwnd, 0, reinterpret_cast<LONG_PTR>(self));
                 self->window_handle(hwnd);
             }
+        }
+    }
+
+    if (msg == WM_NCDESTROY) {
+        if (auto self { reinterpret_cast<Self*>(GetWindowLongPtrW(hwnd, 0)) }) {
+            self->window_handle(nullptr);
+            SetWindowLongPtrW(hwnd, 0, reinterpret_cast<LONG_PTR>(nullptr));
         }
     }
 
