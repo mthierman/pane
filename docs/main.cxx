@@ -14,11 +14,15 @@ auto wWinMain(HINSTANCE /* hinstance */,
                        u8"working-with-local-content?tabs=dotnetcsharp" },
         [&](pane::webview* webview, pane::window_message window_message) -> LRESULT {
         switch (window_message.event) {
+            case WM_CREATE: {
+                ShowWindow(webview->window_handle(), SW_SHOWMAXIMIZED);
+            } break;
+
             case WM_DESTROY: {
                 PostQuitMessage(0);
 
                 return 0;
-            }
+            } break;
         }
 
         return webview->default_procedure(window_message);

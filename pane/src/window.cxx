@@ -73,6 +73,8 @@ auto window::default_procedure(this Self& self, const pane::window_message& wind
             self.dark_mode = false;
         }
 
+        self.window_handle.immersive_dark_mode(self.dark_mode);
+
         InvalidateRect(self.window_handle(), nullptr, true);
 
         return 0;
@@ -144,8 +146,7 @@ auto window::create(this Self& self) -> HWND {
         0,
         self.window_class().lpszClassName,
         reinterpret_cast<const wchar_t*>(pane::to_utf16(self.window_config.title).data()),
-        (self.window_config.parent_hwnd ? WS_CHILDWINDOW : WS_OVERLAPPEDWINDOW)
-            | (self.window_config.visible ? WS_VISIBLE : 0),
+        self.window_config.parent_hwnd ? WS_CHILDWINDOW : WS_OVERLAPPEDWINDOW,
         CW_USEDEFAULT,
         CW_USEDEFAULT,
         CW_USEDEFAULT,
@@ -154,6 +155,12 @@ auto window::create(this Self& self) -> HWND {
         self.window_config.parent_hwnd ? reinterpret_cast<HMENU>(self.id) : nullptr,
         self.window_class().hInstance,
         &self);
+
+    self.window_handle.immersive_dark_mode(self.dark_mode);
+
+    if (self.window_config.visible) {
+        self.window_handle.show();
+    }
 
     return self.window_handle();
 }
@@ -173,14 +180,6 @@ webview::~webview() { }
 
 auto webview::default_procedure(this Self& self, const pane::window_message& window_message)
     -> LRESULT {
-    if (window_message.event == WM_CREATE) {
-        // DwmSetWindowAttribute(self.window_handle(),
-        //                       DWMWINDOWATTRIBUTE::DWMWA_USE_IMMERSIVE_DARK_MODE,
-        //                       &self.dark_mode,
-        //                       sizeof(self.dark_mode));
-        self.window_handle.immersive_dark_mode(self.dark_mode);
-    }
-
     if (window_message.event == WM_WINDOWPOSCHANGED) {
         GetClientRect(self.window_handle(), &self.client_rect);
 
@@ -281,8 +280,7 @@ auto webview::create(this Self& self) -> HWND {
         0,
         self.window_class().lpszClassName,
         reinterpret_cast<const wchar_t*>(pane::to_utf16(self.window_config.title).data()),
-        (self.window_config.parent_hwnd ? WS_CHILDWINDOW : WS_OVERLAPPEDWINDOW)
-            | (self.window_config.visible ? WS_VISIBLE : 0),
+        self.window_config.parent_hwnd ? WS_CHILDWINDOW : WS_OVERLAPPEDWINDOW,
         CW_USEDEFAULT,
         CW_USEDEFAULT,
         CW_USEDEFAULT,
@@ -291,6 +289,12 @@ auto webview::create(this Self& self) -> HWND {
         self.window_config.parent_hwnd ? reinterpret_cast<HMENU>(self.id) : nullptr,
         self.window_class().hInstance,
         &self);
+
+    self.window_handle.immersive_dark_mode(self.dark_mode);
+
+    if (self.window_config.visible) {
+        self.window_handle.show();
+    }
 
     if (self.options) {
         if (!self.webview_config.environment_options.AdditionalBrowserArguments.empty()) {
