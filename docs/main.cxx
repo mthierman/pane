@@ -20,6 +20,10 @@ auto wWinMain(HINSTANCE /* hinstance */,
 
                 return 0;
             } break;
+
+            case WM_SETTINGCHANGE: {
+                webview->core->Reload();
+            } break;
         }
 
         return webview->default_procedure(window_message);
