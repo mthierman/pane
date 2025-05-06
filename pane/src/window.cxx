@@ -1,5 +1,6 @@
 #include <pane/window.hxx>
 #include <pane/text.hxx>
+#include <dwmapi.h>
 #include <wil/wrl.h>
 
 #include <pane/debug.hxx>
@@ -14,6 +15,15 @@ window_handle::~window_handle() { DestroyWindow(this->hwnd); }
 auto window_handle::show(this const Self& self) -> bool { return ShowWindow(self.hwnd, SW_SHOW); }
 
 auto window_handle::hide(this const Self& self) -> bool { return ShowWindow(self.hwnd, SW_HIDE); }
+
+auto window_handle::immersive_dark_mode(this const Self& self, bool enable) -> HRESULT {
+    BOOL dark_mode { enable };
+
+    return DwmSetWindowAttribute(self.hwnd,
+                                 DWMWINDOWATTRIBUTE::DWMWA_USE_IMMERSIVE_DARK_MODE,
+                                 &dark_mode,
+                                 sizeof(dark_mode));
+}
 
 auto window_handle::operator()(this const Self& self) -> HWND { return self.hwnd; }
 
@@ -163,6 +173,14 @@ webview::~webview() { }
 
 auto webview::default_procedure(this Self& self, const pane::window_message& window_message)
     -> LRESULT {
+    if (window_message.event == WM_CREATE) {
+        // DwmSetWindowAttribute(self.window_handle(),
+        //                       DWMWINDOWATTRIBUTE::DWMWA_USE_IMMERSIVE_DARK_MODE,
+        //                       &self.dark_mode,
+        //                       sizeof(self.dark_mode));
+        self.window_handle.immersive_dark_mode(self.dark_mode);
+    }
+
     if (window_message.event == WM_WINDOWPOSCHANGED) {
         GetClientRect(self.window_handle(), &self.client_rect);
 
@@ -179,6 +197,8 @@ auto webview::default_procedure(this Self& self, const pane::window_message& win
         } else {
             self.dark_mode = false;
         }
+
+        self.window_handle.immersive_dark_mode(self.dark_mode);
 
         InvalidateRect(self.window_handle(), nullptr, true);
 
