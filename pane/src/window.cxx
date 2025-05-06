@@ -398,7 +398,7 @@ auto webview::create(this Self& self) -> HWND {
                     self.controller->get_CoreWebView2(created_core.put());
 
                     if (created_core) {
-                        self.core = created_core.try_query<ICoreWebView2_22>();
+                        self.core = created_core.try_query<ICoreWebView2_27>();
 
                         if (self.webview_config.virtual_host_name_map) {
                             const auto host_name { pane::to_utf16(
