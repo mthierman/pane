@@ -36,7 +36,7 @@ auto wWinMain(HINSTANCE /* hinstance */,
         // webview->navigate(u8"http://webview.internal/index.html");
         // webview->navigate(u8"D:/mthierman/pane/pane/data/index.html");
 
-        webview->navigate(u8"http://pane.internal/index.html");
+        webview->navigate(u8"https://pane.internal/index.html");
     } },
         [&](pane::webview* webview, pane::window_message window_message) -> LRESULT {
         switch (window_message.event) {
