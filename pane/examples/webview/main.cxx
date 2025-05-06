@@ -52,11 +52,10 @@ auto wWinMain(HINSTANCE /* hinstance */,
     }) };
 
     auto file { pane::webview(
-        pane::window_config {
-            u8"file", pane::color { 0, 0, 0, 0 }, pane::color { 255, 255, 255, 0 }, true, nullptr },
-        pane::webview_config { .home_page = u8"about:blank",
-                               .creation_callback =
-                                   [](pane::webview* webview) {
+        { u8"file", pane::color { 0, 0, 0, 0 }, pane::color { 255, 255, 255, 0 }, true, nullptr },
+        { .home_page = u8"about:blank",
+          .creation_callback =
+              [](pane::webview* webview) {
         webview->navigate(std::u8string(u8"file:///D:/mthierman/pane/pane/data/index.html"));
     } },
         [&](pane::webview* webview, pane::window_message window_message) -> LRESULT {
@@ -73,17 +72,16 @@ auto wWinMain(HINSTANCE /* hinstance */,
     }) };
 
     auto navigate_to_string { pane::webview(
-        pane::window_config { u8"navigate_to_string",
-                              pane::color { 0, 0, 0, 0 },
-                              pane::color { 255, 255, 255, 0 },
-                              true,
-                              nullptr },
-        pane::webview_config {
-            .home_page = u8"about:blank",
-            .virtual_host_name_map = std::make_pair(
-                u8"pane.internal", std::filesystem::path(u8"D:/mthierman/pane/pane/data")),
-            .creation_callback =
-                [](pane::webview* webview) {
+        { u8"navigate_to_string",
+          pane::color { 0, 0, 0, 0 },
+          pane::color { 255, 255, 255, 0 },
+          true,
+          nullptr },
+        { .home_page = u8"about:blank",
+          .virtual_host_name_map = std::make_pair(
+              u8"pane.internal", std::filesystem::path(u8"D:/mthierman/pane/pane/data")),
+          .creation_callback =
+              [](pane::webview* webview) {
         webview->navigate_to_string(
             u8R"(<html><body style="background-color: black; color: white;">navigate_to_string</body></html>)");
     } },
