@@ -7,8 +7,73 @@ auto wWinMain(HINSTANCE /* hinstance */,
               int /* ncmdshow */) -> int {
     auto window_manager { pane::window_manager() };
 
-    auto webview { pane::webview(
-        pane::window_config { u8"webview",
+    auto url { pane::webview(
+        { u8"url", pane::color { 0, 0, 0, 0 }, pane::color { 255, 255, 255, 0 }, true, nullptr },
+        { .home_page = u8"about:blank",
+          .creation_callback
+          = [](pane::webview* webview) { webview->navigate(u8"https://www.google.com/"); } },
+        [&](pane::webview* webview, pane::window_message window_message) -> LRESULT {
+        switch (window_message.event) {
+            case WM_CREATE: {
+                window_manager.insert(webview->window_handle);
+            } break;
+            case WM_DESTROY: {
+                window_manager.erase(webview->window_handle);
+            } break;
+        }
+
+        return webview->default_procedure(window_message);
+    }) };
+
+    auto virtual_host { pane::webview(
+        { u8"virtual_host",
+          pane::color { 0, 0, 0, 0 },
+          pane::color { 255, 255, 255, 0 },
+          true,
+          nullptr },
+        { .home_page = u8"about:blank",
+          .virtual_host_name_map = std::make_pair(
+              u8"pane.internal", std::filesystem::path(u8"D:/mthierman/pane/pane/data")),
+          .creation_callback =
+              [](pane::webview* webview) {
+        webview->navigate(u8"https://pane.internal/index.html");
+    } },
+        [&](pane::webview* webview, pane::window_message window_message) -> LRESULT {
+        switch (window_message.event) {
+            case WM_CREATE: {
+                window_manager.insert(webview->window_handle);
+            } break;
+            case WM_DESTROY: {
+                window_manager.erase(webview->window_handle);
+            } break;
+        }
+
+        return webview->default_procedure(window_message);
+    }) };
+
+    auto file { pane::webview(
+        pane::window_config {
+            u8"file", pane::color { 0, 0, 0, 0 }, pane::color { 255, 255, 255, 0 }, true, nullptr },
+        pane::webview_config { .home_page = u8"about:blank",
+                               .creation_callback =
+                                   [](pane::webview* webview) {
+        webview->navigate(std::u8string(u8"file:///D:/mthierman/pane/pane/data/index.html"));
+    } },
+        [&](pane::webview* webview, pane::window_message window_message) -> LRESULT {
+        switch (window_message.event) {
+            case WM_CREATE: {
+                window_manager.insert(webview->window_handle);
+            } break;
+            case WM_DESTROY: {
+                window_manager.erase(webview->window_handle);
+            } break;
+        }
+
+        return webview->default_procedure(window_message);
+    }) };
+
+    auto navigate_to_string { pane::webview(
+        pane::window_config { u8"navigate_to_string",
                               pane::color { 0, 0, 0, 0 },
                               pane::color { 255, 255, 255, 0 },
                               true,
@@ -19,24 +84,7 @@ auto wWinMain(HINSTANCE /* hinstance */,
                 u8"pane.internal", std::filesystem::path(u8"D:/mthierman/pane/pane/data")),
             .creation_callback =
                 [](pane::webview* webview) {
-        // webview->navigate(std::u8string(u8"file:///D:/mthierman/pane/pane/data/index.html"));
-        // webview->navigate(
-        //     std::filesystem::path { u8"D:/mthierman/pane/pane/data/index.html" }.u8string());
-        // auto google { pane::url(u8"https://www.google.com/") };
-        // auto local { pane::url(u8"file:///D:/mthierman/pane/pane/data/index.html") };
-        // if (local) {
-        //     webview->navigate(local.value());
-        // }
-        // webview->navigate(u8"D:/mthierman/pane/pane/data/index.html");
-        // webview->navigate_to_string(u8R"(<html><body>raw</body></html>)");
-        // webview->core->SetVirtualHostNameToFolderMapping(
-        //     L"webview.internal",
-        //     L"D:/mthierman/pane/pane/data",
-        //     COREWEBVIEW2_HOST_RESOURCE_ACCESS_KIND::COREWEBVIEW2_HOST_RESOURCE_ACCESS_KIND_ALLOW);
-        // webview->navigate(u8"http://webview.internal/index.html");
-        // webview->navigate(u8"D:/mthierman/pane/pane/data/index.html");
-
-        webview->navigate(u8"https://pane.internal/index.html");
+        webview->navigate_to_string(u8R"(<html><body>navigate_to_string</body></html>)");
     } },
         [&](pane::webview* webview, pane::window_message window_message) -> LRESULT {
         switch (window_message.event) {
