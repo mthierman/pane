@@ -16,6 +16,10 @@ auto window_handle::show(this const Self& self) -> bool { return ShowWindow(self
 
 auto window_handle::hide(this const Self& self) -> bool { return ShowWindow(self.hwnd, SW_HIDE); }
 
+auto window_handle::maximize(this const Self& self) -> bool {
+    return ShowWindow(self.hwnd, SW_SHOWMAXIMIZED);
+}
+
 auto window_handle::immersive_dark_mode(this const Self& self, bool enable) -> HRESULT {
     BOOL dark_mode { enable };
 
@@ -159,7 +163,11 @@ auto window::create(this Self& self) -> HWND {
     self.window_handle.immersive_dark_mode(self.dark_mode);
 
     if (self.window_config.visible) {
-        self.window_handle.show();
+        if (self.window_config.maximized) {
+            self.window_handle.maximize();
+        } else {
+            self.window_handle.show();
+        }
     }
 
     return self.window_handle();
@@ -293,7 +301,11 @@ auto webview::create(this Self& self) -> HWND {
     self.window_handle.immersive_dark_mode(self.dark_mode);
 
     if (self.window_config.visible) {
-        self.window_handle.show();
+        if (self.window_config.maximized) {
+            self.window_handle.maximize();
+        } else {
+            self.window_handle.show();
+        }
     }
 
     if (self.options) {

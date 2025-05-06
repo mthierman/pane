@@ -9,15 +9,12 @@ auto wWinMain(HINSTANCE /* hinstance */,
           pane::color { 0, 0, 0, 0 },
           pane::color { 255, 255, 255, 0 },
           true,
+          true,
           nullptr },
         { .home_page = u8"https://learn.microsoft.com/en-us/microsoft-edge/webview2/concepts/"
                        u8"working-with-local-content?tabs=dotnetcsharp" },
         [&](pane::webview* webview, pane::window_message window_message) -> LRESULT {
         switch (window_message.event) {
-            case WM_CREATE: {
-                ShowWindow(webview->window_handle(), SW_SHOWMAXIMIZED);
-            } break;
-
             case WM_DESTROY: {
                 PostQuitMessage(0);
 

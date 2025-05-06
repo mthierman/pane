@@ -76,6 +76,7 @@ struct window_handle final {
 
     auto show(this const Self& self) -> bool;
     auto hide(this const Self& self) -> bool;
+    auto maximize(this const Self& self) -> bool;
     auto immersive_dark_mode(this const Self& self, bool enable) -> HRESULT;
 
     auto operator()(this const Self& self) -> HWND;
@@ -111,6 +112,7 @@ struct window_config final {
     pane::color dark_background;
     pane::color light_background;
     bool visible { true };
+    bool maximized { false };
     HWND parent_hwnd { nullptr };
 };
 
