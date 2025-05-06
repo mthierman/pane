@@ -20,14 +20,16 @@ auto wWinMain(HINSTANCE /* hinstance */,
         // webview->navigate(
         //     std::filesystem::path { u8"D:/mthierman/pane/pane/data/index.html" }.u8string());
 
-        auto google { pane::url(u8"https://www.google.com/") };
-        auto local { pane::url(u8"file:///D:/mthierman/pane/pane/data/index.html") };
+        // auto google { pane::url(u8"https://www.google.com/") };
+        // auto local { pane::url(u8"file:///D:/mthierman/pane/pane/data/index.html") };
 
-        if (local) {
-            webview->navigate(local.value());
-        }
+        // if (local) {
+        //     webview->navigate(local.value());
+        // }
 
         // webview->navigate(u8"D:/mthierman/pane/pane/data/index.html");
+
+        webview->navigate_to_string(u8R"(<html><body>raw</body></html>)");
 
         pane::debug("OK!");
     } },
