@@ -373,7 +373,7 @@ auto webview::create(this Self& self) -> HWND {
                 ICoreWebView2Environment* created_environment) -> HRESULT {
         if (created_environment) {
             self.environment = wil::com_ptr<ICoreWebView2Environment>(created_environment)
-                                   .try_query<ICoreWebView2Environment13>();
+                                   .try_query<ICoreWebView2Environment14>();
         }
 
         if (self.environment) {

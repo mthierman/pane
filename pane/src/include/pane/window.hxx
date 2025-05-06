@@ -256,7 +256,7 @@ public:
     };
 
     wil::com_ptr<ICoreWebView2Settings9> settings;
-    wil::com_ptr<ICoreWebView2Environment13> environment;
+    wil::com_ptr<ICoreWebView2Environment14> environment;
     wil::com_ptr<ICoreWebView2Controller4> controller;
     wil::com_ptr<ICoreWebView2_22> core;
     wil::com_ptr<ICoreWebView2EnvironmentOptions> options {
