@@ -449,6 +449,14 @@ auto webview::navigate(this const Self& self, const std::filesystem::path& path)
     }
 }
 
+auto webview::navigate_to_string(this const Self& self, const std::u8string& string) -> void {
+    const auto u16string { pane::to_utf16(string) };
+
+    if (self.core) {
+        self.core->NavigateToString(reinterpret_cast<const wchar_t*>(u16string.data()));
+    }
+}
+
 auto window_manager::insert(this Self& self, const pane::window_handle& window_handle) -> void {
     self.set.insert(window_handle());
 }
