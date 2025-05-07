@@ -2,7 +2,6 @@
 #include <Windows.h>
 #include <cstdlib>
 #include <expected>
-#include <functional>
 #include <string>
 #include <system_error>
 #include <vector>
