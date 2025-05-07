@@ -20,19 +20,20 @@ auto window_handle::maximize(this const Self& self) -> bool {
     return ShowWindow(self.hwnd, SW_SHOWMAXIMIZED);
 }
 
-auto window_handle::immersive_dark_mode(this const Self& self, bool enable) -> HRESULT {
-    BOOL dark_mode { enable };
+auto window_handle::immersive_dark_mode(this const Self& self, bool dark_mode) -> HRESULT {
+    BOOL attribute { dark_mode };
 
     return DwmSetWindowAttribute(self.hwnd,
                                  DWMWINDOWATTRIBUTE::DWMWA_USE_IMMERSIVE_DARK_MODE,
-                                 &dark_mode,
-                                 sizeof(dark_mode));
+                                 &attribute,
+                                 sizeof(attribute));
 }
 
-auto window_handle::cloak(this const Self& self, bool enable) -> HRESULT {
-    BOOL cloak { enable };
+auto window_handle::cloak(this const Self& self, bool cloak) -> HRESULT {
+    BOOL attribute { cloak };
 
-    return DwmSetWindowAttribute(self.hwnd, DWMWINDOWATTRIBUTE::DWMWA_CLOAK, &cloak, sizeof(cloak));
+    return DwmSetWindowAttribute(
+        self.hwnd, DWMWINDOWATTRIBUTE::DWMWA_CLOAK, &attribute, sizeof(attribute));
 }
 
 auto window_handle::operator()(this const Self& self) -> HWND { return self.hwnd; }
