@@ -20,7 +20,7 @@ auto wWinMain(HINSTANCE /* hinstance */,
         { .home_page = u8"https://learn.microsoft.com/en-us/microsoft-edge/webview2/concepts/"
                        u8"working-with-local-content?tabs=dotnetcsharp",
           .creation_callback =
-              [&](pane::webview* webview) {
+              [&source_changed_token, &favicon_changed_token, favicon](pane::webview* webview) {
         webview->core->add_NavigationCompleted(
             Microsoft::WRL::Callback<ICoreWebView2NavigationCompletedEventHandler>(
                 [webview](ICoreWebView2* /* sender */,
