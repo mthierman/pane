@@ -14,7 +14,7 @@ auto wWinMain(HINSTANCE /* hinstance */,
           pane::color { 0, 0, 0, 0 },
           pane::color { 255, 255, 255, 0 },
           true,
-          true,
+          false,
           nullptr },
         { .home_page = u8"https://learn.microsoft.com/en-us/microsoft-edge/webview2/concepts/"
                        u8"working-with-local-content?tabs=dotnetcsharp",
