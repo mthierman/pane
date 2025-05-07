@@ -43,7 +43,7 @@ auto wWinMain(HINSTANCE /* hinstance */,
             webview->core->GetFavicon(
                 COREWEBVIEW2_FAVICON_IMAGE_FORMAT::COREWEBVIEW2_FAVICON_IMAGE_FORMAT_PNG,
                 Microsoft::WRL::Callback<ICoreWebView2GetFaviconCompletedHandler>(
-                    [webview, &favicon](HRESULT error_code, IStream* icon_stream) -> HRESULT {
+                    [webview, &favicon](HRESULT /* error_code */, IStream* icon_stream) -> HRESULT {
                 Gdiplus::Bitmap icon_bitmap { icon_stream };
 
                 if (icon_bitmap.GetHICON(&favicon) == Gdiplus::Status::Ok) {
