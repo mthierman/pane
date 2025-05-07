@@ -9,7 +9,6 @@ auto wWinMain(HINSTANCE /* hinstance */,
     EventRegistrationToken source_changed_token;
     EventRegistrationToken favicon_changed_token;
     wil::unique_hicon favicon;
-    // HICON favicon;
 
     auto url { pane::webview(
         { u8"WebView2",
@@ -45,21 +44,14 @@ auto wWinMain(HINSTANCE /* hinstance */,
                 COREWEBVIEW2_FAVICON_IMAGE_FORMAT::COREWEBVIEW2_FAVICON_IMAGE_FORMAT_PNG,
                 Microsoft::WRL::Callback<ICoreWebView2GetFaviconCompletedHandler>(
                     [webview, &favicon](HRESULT error_code, IStream* icon_stream) -> HRESULT {
-                // auto gdi_plus { pane::gdi_plus() };
-                Gdiplus::Bitmap icon_bitmap(icon_stream);
-                // HICON favicon;
-                // wil::unique_hicon favicon;
+                Gdiplus::Bitmap icon_bitmap { icon_stream };
 
                 if (icon_bitmap.GetHICON(&favicon) == Gdiplus::Status::Ok) {
-                    pane::debug("OK!");
-
                     SendMessage(
                         webview->window_handle(), WM_SETICON, ICON_SMALL, LPARAM(favicon.get()));
 
                     SendMessage(
                         webview->window_handle(), WM_SETICON, ICON_BIG, LPARAM(favicon.get()));
-                } else {
-                    pane::debug("Not OK!");
                 }
 
                 return S_OK;
