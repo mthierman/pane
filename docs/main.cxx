@@ -17,7 +17,7 @@ auto wWinMain(HINSTANCE /* hinstance */,
           false,
           nullptr },
         { .home_page = u8"https://learn.microsoft.com/en-us/microsoft-edge/webview2/concepts/"
-                       u8"working-with-local-content?tabs=dotnetcsharp",
+                       u8"win32-api-conventions",
           .creation_callback = [&](pane::webview* webview) -> void {
         webview->core->add_NavigationCompleted(
             Microsoft::WRL::Callback<ICoreWebView2NavigationCompletedEventHandler>(
