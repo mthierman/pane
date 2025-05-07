@@ -5,8 +5,7 @@ add_executable(
 target_sources(
     webview_docs
     PRIVATE "main.cxx"
-            "data/app.manifest"
-            "data/app.rc"
+            "../pane/data/app.manifest"
     )
 target_link_libraries(
     webview_docs
