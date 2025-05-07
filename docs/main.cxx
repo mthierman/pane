@@ -42,9 +42,7 @@ auto wWinMain(HINSTANCE /* hinstance */,
                 Microsoft::WRL::Callback<ICoreWebView2GetFaviconCompletedHandler>(
                     [webview, favicon](HRESULT /* error_code */,
                                        IStream* icon_stream) mutable -> HRESULT {
-                Gdiplus::Bitmap icon_bitmap { icon_stream };
-
-                if (icon_bitmap.GetHICON(&favicon) == Gdiplus::Status::Ok) {
+                if (Gdiplus::Bitmap { icon_stream }.GetHICON(&favicon) == Gdiplus::Status::Ok) {
                     SendMessage(webview->window_handle(), WM_SETICON, ICON_SMALL, LPARAM(favicon));
 
                     SendMessage(webview->window_handle(), WM_SETICON, ICON_BIG, LPARAM(favicon));
