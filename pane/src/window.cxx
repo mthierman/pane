@@ -29,6 +29,12 @@ auto window_handle::immersive_dark_mode(this const Self& self, bool enable) -> H
                                  sizeof(dark_mode));
 }
 
+auto window_handle::cloak(this const Self& self, bool enable) -> HRESULT {
+    BOOL cloak { enable };
+
+    return DwmSetWindowAttribute(self.hwnd, DWMWINDOWATTRIBUTE::DWMWA_CLOAK, &cloak, sizeof(cloak));
+}
+
 auto window_handle::operator()(this const Self& self) -> HWND { return self.hwnd; }
 
 auto window_handle::operator()(this Self& self, HWND hwnd) -> void {
@@ -127,6 +133,7 @@ auto window::window_class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM l
             if (auto self { static_cast<Self*>(create_struct->lpCreateParams) }) {
                 SetWindowLongPtrW(hwnd, 0, reinterpret_cast<LONG_PTR>(self));
                 self->window_handle(hwnd);
+                self->window_handle.cloak(true);
             }
         }
     }
@@ -169,6 +176,8 @@ auto window::create(this Self& self) -> HWND {
             self.window_handle.show();
         }
     }
+
+    self.window_handle.cloak(false);
 
     return self.window_handle();
 }
@@ -265,6 +274,7 @@ auto webview::window_class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM 
             if (auto self { static_cast<Self*>(create_struct->lpCreateParams) }) {
                 SetWindowLongPtrW(hwnd, 0, reinterpret_cast<LONG_PTR>(self));
                 self->window_handle(hwnd);
+                self->window_handle.cloak(true);
             }
         }
     }
@@ -307,6 +317,8 @@ auto webview::create(this Self& self) -> HWND {
             self.window_handle.show();
         }
     }
+
+    self.window_handle.cloak(false);
 
     if (self.options) {
         if (!self.webview_config.environment_options.AdditionalBrowserArguments.empty()) {
