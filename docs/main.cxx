@@ -55,7 +55,7 @@ auto wWinMain(HINSTANCE /* hinstance */,
         [&](pane::webview* webview, pane::window_message window_message) -> LRESULT {
         switch (window_message.event) {
             case WM_DESTROY: {
-                PostQuitMessage(0);
+                pane::system::quit();
 
                 return 0;
             } break;
