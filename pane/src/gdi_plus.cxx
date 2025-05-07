@@ -2,10 +2,10 @@
 
 namespace pane {
 gdi_plus::gdi_plus()
-    : status { Gdiplus::GdiplusStartup(&token, &startup_input, nullptr) } { }
+    : status { Gdiplus::GdiplusStartup(&this->token, &this->startup_input, nullptr) } { }
 
 gdi_plus::~gdi_plus() {
-    if (status == Gdiplus::Status::Ok) {
+    if (this->status == Gdiplus::Status::Ok) {
         Gdiplus::GdiplusShutdown(token);
     }
 }

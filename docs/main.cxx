@@ -4,9 +4,7 @@ auto wWinMain(HINSTANCE /* hinstance */,
               HINSTANCE /* hprevinstance */,
               PWSTR /* pcmdline */,
               int /* ncmdshow */) -> int {
-    Gdiplus::GdiplusStartupInput gdiplusStartupInput;
-    ULONG_PTR token;
-    Gdiplus::GdiplusStartup(&token, &gdiplusStartupInput, NULL);
+    auto gdi_plus { pane::gdi_plus() };
 
     EventRegistrationToken source_changed_token;
     EventRegistrationToken favicon_changed_token;

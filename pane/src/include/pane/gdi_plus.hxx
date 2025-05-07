@@ -16,10 +16,11 @@ struct gdi_plus final {
     gdi_plus(Self&&) noexcept = delete;
     auto operator=(Self&&) noexcept -> Self& = delete;
 
-    Gdiplus::Status status;
-
 private:
-    Gdiplus::GdiplusStartupInput startup_input;
     ULONG_PTR token;
+    Gdiplus::GdiplusStartupInput startup_input;
+
+public:
+    Gdiplus::Status status;
 };
 } // namespace pane
