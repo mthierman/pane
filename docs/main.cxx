@@ -33,12 +33,11 @@ auto wWinMain(HINSTANCE /* hinstance */,
 
         webview->core->add_FaviconChanged(
             Microsoft::WRL::Callback<ICoreWebView2FaviconChangedEventHandler>(
-                [&, webview](ICoreWebView2* /* sender */, IUnknown* /* args */) mutable -> HRESULT {
+                [&, webview](ICoreWebView2* /* sender */, IUnknown* /* args */) -> HRESULT {
             webview->core->GetFavicon(
                 COREWEBVIEW2_FAVICON_IMAGE_FORMAT::COREWEBVIEW2_FAVICON_IMAGE_FORMAT_PNG,
                 Microsoft::WRL::Callback<ICoreWebView2GetFaviconCompletedHandler>(
-                    [&, webview](HRESULT /* error_code */,
-                                 IStream* icon_stream) mutable -> HRESULT {
+                    [&, webview](HRESULT /* error_code */, IStream* icon_stream) -> HRESULT {
                 if (Gdiplus::Bitmap { icon_stream }.GetHICON(&favicon) == Gdiplus::Status::Ok) {
                     SendMessage(
                         webview->window_handle(), WM_SETICON, ICON_SMALL, LPARAM(favicon.get()));
