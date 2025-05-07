@@ -5,10 +5,9 @@ auto wWinMain(HINSTANCE /* hinstance */,
               PWSTR /* pcmdline */,
               int /* ncmdshow */) -> int {
     auto gdi_plus { pane::gdi_plus() };
-
     EventRegistrationToken source_changed_token { 0 };
     EventRegistrationToken favicon_changed_token { 0 };
-    HICON favicon { nullptr };
+    wil::unique_hicon favicon { nullptr };
 
     auto url { pane::webview(
         { u8"WebView2",
@@ -19,12 +18,11 @@ auto wWinMain(HINSTANCE /* hinstance */,
           nullptr },
         { .home_page = u8"https://learn.microsoft.com/en-us/microsoft-edge/webview2/concepts/"
                        u8"working-with-local-content?tabs=dotnetcsharp",
-          .creation_callback =
-              [&source_changed_token, &favicon_changed_token, favicon](pane::webview* webview) {
+          .creation_callback = [&](pane::webview* webview) -> void {
         webview->core->add_NavigationCompleted(
             Microsoft::WRL::Callback<ICoreWebView2NavigationCompletedEventHandler>(
-                [webview](ICoreWebView2* /* sender */,
-                          ICoreWebView2NavigationCompletedEventArgs* /* args */) -> HRESULT {
+                [&, webview](ICoreWebView2* /* sender */,
+                             ICoreWebView2NavigationCompletedEventArgs* /* args */) -> HRESULT {
             wil::unique_cotaskmem_string title;
             webview->core->get_DocumentTitle(&title);
             SetWindowTextW(webview->window_handle(), title.get());
@@ -35,17 +33,17 @@ auto wWinMain(HINSTANCE /* hinstance */,
 
         webview->core->add_FaviconChanged(
             Microsoft::WRL::Callback<ICoreWebView2FaviconChangedEventHandler>(
-                [webview, favicon](ICoreWebView2* /* sender */,
-                                   IUnknown* /* args */) mutable -> HRESULT {
+                [&, webview](ICoreWebView2* /* sender */, IUnknown* /* args */) mutable -> HRESULT {
             webview->core->GetFavicon(
                 COREWEBVIEW2_FAVICON_IMAGE_FORMAT::COREWEBVIEW2_FAVICON_IMAGE_FORMAT_PNG,
                 Microsoft::WRL::Callback<ICoreWebView2GetFaviconCompletedHandler>(
-                    [webview, favicon](HRESULT /* error_code */,
-                                       IStream* icon_stream) mutable -> HRESULT {
+                    [&, webview](HRESULT /* error_code */,
+                                 IStream* icon_stream) mutable -> HRESULT {
                 if (Gdiplus::Bitmap { icon_stream }.GetHICON(&favicon) == Gdiplus::Status::Ok) {
-                    SendMessage(webview->window_handle(), WM_SETICON, ICON_SMALL, LPARAM(favicon));
-
-                    SendMessage(webview->window_handle(), WM_SETICON, ICON_BIG, LPARAM(favicon));
+                    SendMessage(
+                        webview->window_handle(), WM_SETICON, ICON_SMALL, LPARAM(favicon.get()));
+                    SendMessage(
+                        webview->window_handle(), WM_SETICON, ICON_BIG, LPARAM(favicon.get()));
                 }
 
                 return S_OK;
@@ -58,7 +56,6 @@ auto wWinMain(HINSTANCE /* hinstance */,
         [&](pane::webview* webview, pane::window_message window_message) -> LRESULT {
         switch (window_message.event) {
             case WM_DESTROY: {
-                DestroyIcon(favicon);
                 PostQuitMessage(0);
 
                 return 0;
