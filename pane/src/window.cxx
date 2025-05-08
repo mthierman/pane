@@ -182,9 +182,6 @@ auto window::create(this Self& self) -> HWND {
         self.window_handle.maximize();
     }
 
-    self.window_handle.minimize();
-    self.window_handle.show();
-
     if (self.window_config.visible) {
         self.window_handle.cloak(false);
     }
