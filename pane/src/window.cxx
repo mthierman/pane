@@ -20,6 +20,10 @@ auto window_handle::maximize(this const Self& self) -> bool {
     return ShowWindow(self.hwnd, SW_SHOWMAXIMIZED);
 }
 
+auto window_handle::minimize(this const Self& self) -> bool {
+    return ShowWindow(self.hwnd, SW_SHOWMINIMIZED);
+}
+
 auto window_handle::immersive_dark_mode(this const Self& self, bool dark_mode) -> HRESULT {
     BOOL attribute { dark_mode };
 

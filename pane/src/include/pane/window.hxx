@@ -78,6 +78,7 @@ struct window_handle final {
     auto show(this const Self& self) -> bool;
     auto hide(this const Self& self) -> bool;
     auto maximize(this const Self& self) -> bool;
+    auto minimize(this const Self& self) -> bool;
     auto immersive_dark_mode(this const Self& self, bool enable) -> HRESULT;
     auto cloak(this const Self& self, bool enable) -> HRESULT;
 
