@@ -48,6 +48,57 @@ auto window_handle::cloak(this const Self& self, bool cloak) -> HRESULT {
         self.hwnd, DWMWINDOWATTRIBUTE::DWMWA_CLOAK, &attribute, sizeof(attribute));
 }
 
+auto window_handle::mica(this const Self& self, bool enable) -> HRESULT {
+
+    auto backdrop { DWM_SYSTEMBACKDROP_TYPE::DWMSBT_AUTO };
+
+    if (enable) {
+        backdrop = DWM_SYSTEMBACKDROP_TYPE::DWMSBT_MAINWINDOW;
+        MARGINS margins { 0, 0, 0, GetSystemMetrics(SM_CYVIRTUALSCREEN) };
+        DwmExtendFrameIntoClientArea(self.hwnd, &margins);
+    } else {
+        MARGINS margins { 0, 0, 0, 0 };
+        DwmExtendFrameIntoClientArea(self.hwnd, &margins);
+    }
+
+    return DwmSetWindowAttribute(
+        self.hwnd, DWMWINDOWATTRIBUTE::DWMWA_SYSTEMBACKDROP_TYPE, &backdrop, sizeof(backdrop));
+}
+
+auto window_handle::mica_alt(this const Self& self, bool enable) -> HRESULT {
+
+    auto backdrop { DWM_SYSTEMBACKDROP_TYPE::DWMSBT_AUTO };
+
+    if (enable) {
+        backdrop = DWM_SYSTEMBACKDROP_TYPE::DWMSBT_TABBEDWINDOW;
+        MARGINS margins { 0, 0, 0, GetSystemMetrics(SM_CYVIRTUALSCREEN) };
+        DwmExtendFrameIntoClientArea(self.hwnd, &margins);
+    } else {
+        MARGINS margins { 0, 0, 0, 0 };
+        DwmExtendFrameIntoClientArea(self.hwnd, &margins);
+    }
+
+    return DwmSetWindowAttribute(
+        self.hwnd, DWMWINDOWATTRIBUTE::DWMWA_SYSTEMBACKDROP_TYPE, &backdrop, sizeof(backdrop));
+}
+
+auto window_handle::acrylic(this const Self& self, bool enable) -> HRESULT {
+
+    auto backdrop { DWM_SYSTEMBACKDROP_TYPE::DWMSBT_AUTO };
+
+    if (enable) {
+        backdrop = DWM_SYSTEMBACKDROP_TYPE::DWMSBT_TRANSIENTWINDOW;
+        MARGINS margins { 0, 0, 0, GetSystemMetrics(SM_CYVIRTUALSCREEN) };
+        DwmExtendFrameIntoClientArea(self.hwnd, &margins);
+    } else {
+        MARGINS margins { 0, 0, 0, 0 };
+        DwmExtendFrameIntoClientArea(self.hwnd, &margins);
+    }
+
+    return DwmSetWindowAttribute(
+        self.hwnd, DWMWINDOWATTRIBUTE::DWMWA_SYSTEMBACKDROP_TYPE, &backdrop, sizeof(backdrop));
+}
+
 auto window_handle::operator()(this const Self& self) -> HWND { return self.hwnd; }
 
 auto window_handle::operator()(this Self& self, HWND hwnd) -> void {

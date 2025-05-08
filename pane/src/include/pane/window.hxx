@@ -85,6 +85,9 @@ struct window_handle final {
 
     auto immersive_dark_mode(this const Self& self, bool enable) -> HRESULT;
     auto cloak(this const Self& self, bool enable) -> HRESULT;
+    auto mica(this const Self& self, bool enable) -> HRESULT;
+    auto mica_alt(this const Self& self, bool enable) -> HRESULT;
+    auto acrylic(this const Self& self, bool enable) -> HRESULT;
 
     auto operator()(this const Self& self) -> HWND;
     auto operator()(this Self& self, HWND hwnd) -> void;
