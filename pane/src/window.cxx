@@ -77,7 +77,7 @@ window_icon::window_icon(HICON hicon)
 
 window_icon::~window_icon() { DestroyIcon(this->hicon); }
 
-auto window_icon::operator()(this const Self& self) -> HICON { return self.hicon; }
+auto window_icon::operator()(this Self& self) -> HICON& { return self.hicon; }
 
 auto window_icon::operator()(this Self& self, HICON hicon) -> void {
     if (!self.hicon) {

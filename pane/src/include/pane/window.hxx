@@ -125,7 +125,7 @@ struct window_icon final {
     window_icon(Self&&) noexcept = delete;
     auto operator=(Self&&) noexcept -> Self& = delete;
 
-    auto operator()(this const Self& self) -> HICON;
+    auto operator()(this Self& self) -> HICON&;
     auto operator()(this Self& self, HICON hicon) -> void;
 
 private:
