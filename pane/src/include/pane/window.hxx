@@ -112,6 +112,26 @@ private:
     HBRUSH hbrush { nullptr };
 };
 
+struct window_icon final {
+    using Self = window_icon;
+
+    window_icon() = default;
+    explicit window_icon(HICON hicon);
+    ~window_icon();
+
+    window_icon(const Self&) = delete;
+    auto operator=(const Self&) -> Self& = delete;
+
+    window_icon(Self&&) noexcept = delete;
+    auto operator=(Self&&) noexcept -> Self& = delete;
+
+    auto operator()(this const Self& self) -> HICON;
+    auto operator()(this Self& self, HICON hicon) -> void;
+
+private:
+    HICON hicon { nullptr };
+};
+
 struct window;
 
 struct window_config final {

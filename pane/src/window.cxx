@@ -72,6 +72,22 @@ auto window_background::operator()(this Self& self, const pane::color& color) ->
     }
 }
 
+window_icon::window_icon(HICON hicon)
+    : hicon { hicon } { }
+
+window_icon::~window_icon() { DestroyIcon(this->hicon); }
+
+auto window_icon::operator()(this const Self& self) -> HICON { return self.hicon; }
+
+auto window_icon::operator()(this Self& self, HICON hicon) -> void {
+    if (!self.hicon) {
+        self.hicon = hicon;
+    } else {
+        DestroyIcon(self.hicon);
+        self.hicon = hicon;
+    }
+}
+
 window::window(pane::window_config&& window_config,
                std::function<LRESULT(Self*, pane::window_message)>&& window_procedure)
     : window_procedure { std::move(window_procedure) },
