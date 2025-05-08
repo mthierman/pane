@@ -75,6 +75,7 @@ struct window_handle final {
     window_handle(Self&&) noexcept = delete;
     auto operator=(Self&&) noexcept -> Self& = delete;
 
+    auto activate(this const Self& self) -> bool;
     auto show(this const Self& self) -> bool;
     auto hide(this const Self& self) -> bool;
     auto maximize(this const Self& self) -> bool;

@@ -12,6 +12,10 @@ auto window_message::default_procedure(this const Self& self) -> LRESULT {
 
 window_handle::~window_handle() { DestroyWindow(this->hwnd); }
 
+auto window_handle::activate(this const Self& self) -> bool {
+    return ShowWindow(self.hwnd, SW_SHOWNORMAL);
+}
+
 auto window_handle::show(this const Self& self) -> bool { return ShowWindow(self.hwnd, SW_SHOW); }
 
 auto window_handle::hide(this const Self& self) -> bool { return ShowWindow(self.hwnd, SW_HIDE); }
@@ -177,6 +181,9 @@ auto window::create(this Self& self) -> HWND {
     if (self.window_config.maximized) {
         self.window_handle.maximize();
     }
+
+    self.window_handle.minimize();
+    self.window_handle.show();
 
     if (self.window_config.visible) {
         self.window_handle.cloak(false);
