@@ -54,7 +54,7 @@ auto window_handle::mica(this const Self& self, bool enable) -> HRESULT {
 
     if (enable) {
         backdrop = DWM_SYSTEMBACKDROP_TYPE::DWMSBT_MAINWINDOW;
-        MARGINS margins { 0, 0, 0, GetSystemMetrics(SM_CYVIRTUALSCREEN) };
+        MARGINS margins { -1, -1, -1, -1 };
         DwmExtendFrameIntoClientArea(self.hwnd, &margins);
     } else {
         MARGINS margins { 0, 0, 0, 0 };
@@ -71,7 +71,7 @@ auto window_handle::mica_alt(this const Self& self, bool enable) -> HRESULT {
 
     if (enable) {
         backdrop = DWM_SYSTEMBACKDROP_TYPE::DWMSBT_TABBEDWINDOW;
-        MARGINS margins { 0, 0, 0, GetSystemMetrics(SM_CYVIRTUALSCREEN) };
+        MARGINS margins { -1, -1, -1, -1 };
         DwmExtendFrameIntoClientArea(self.hwnd, &margins);
     } else {
         MARGINS margins { 0, 0, 0, 0 };
@@ -88,7 +88,7 @@ auto window_handle::acrylic(this const Self& self, bool enable) -> HRESULT {
 
     if (enable) {
         backdrop = DWM_SYSTEMBACKDROP_TYPE::DWMSBT_TRANSIENTWINDOW;
-        MARGINS margins { 0, 0, 0, GetSystemMetrics(SM_CYVIRTUALSCREEN) };
+        MARGINS margins { -1, -1, -1, -1 };
         DwmExtendFrameIntoClientArea(self.hwnd, &margins);
     } else {
         MARGINS margins { 0, 0, 0, 0 };

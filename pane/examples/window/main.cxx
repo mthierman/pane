@@ -18,6 +18,7 @@ auto wWinMain(HINSTANCE /* hinstance */,
         switch (window_message.event) {
             case WM_CREATE: {
                 window_manager.insert(window->window_handle);
+                window->window_handle.mica(true);
             } break;
             case WM_DESTROY: {
                 window_manager.erase(window->window_handle);
