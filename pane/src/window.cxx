@@ -12,7 +12,7 @@ auto window_message::default_procedure(this const Self& self) -> LRESULT {
 
 window_handle::~window_handle() { DestroyWindow(this->hwnd); }
 
-auto window_handle::activate(this const Self& self) -> bool {
+auto window_handle::restore(this const Self& self) -> bool {
     return ShowWindow(self.hwnd, SW_SHOWNORMAL);
 }
 
