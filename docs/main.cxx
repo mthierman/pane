@@ -18,8 +18,8 @@ auto wWinMain(HINSTANCE /* hinstance */,
 
     auto webview2_docs { pane::webview(
         { u8"WebView2",
-          pane::color { 0, 0, 0, 0 },
-          pane::color { 255, 255, 255, 0 },
+          pane::color { 0, 0, 0, 255 },
+          pane::color { 255, 255, 255, 255 },
           true,
           true,
           nullptr },
@@ -33,6 +33,13 @@ auto wWinMain(HINSTANCE /* hinstance */,
             wil::unique_cotaskmem_string title;
             webview->core->get_DocumentTitle(&title);
             SetWindowTextW(webview->window_handle(), title.get());
+
+            webview->core->ExecuteScript(
+                LR"(document.documentElement.style.background = "#00000000"; document.body.style.background = "#00000000")",
+                Callback<ICoreWebView2ExecuteScriptCompletedHandler>(
+                    [](HRESULT /* error_code */, PCWSTR result) -> HRESULT {
+                return S_OK;
+            }).Get());
 
             return S_OK;
         }).Get(),
@@ -60,6 +67,10 @@ auto wWinMain(HINSTANCE /* hinstance */,
     } },
         [&](pane::webview* webview, pane::window_message window_message) -> LRESULT {
         switch (window_message.event) {
+            case WM_CREATE: {
+                webview->window_handle.mica_alt(true);
+            } break;
+
             case WM_DESTROY: {
                 pane::system::quit();
 
