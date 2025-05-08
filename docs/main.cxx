@@ -6,9 +6,12 @@ auto wWinMain(HINSTANCE /* hinstance */,
               int /* ncmdshow */) -> int {
     auto gdi_plus { pane::gdi_plus() };
 
-    pane::webview_token source_changed_token;
-    pane::webview_token favicon_changed_token;
+    struct event_token {
+        pane::webview_token source_changed;
+        pane::webview_token favicon_changed;
+    };
 
+    event_token token;
     pane::window_icon favicon;
 
     auto webview2_docs { pane::webview(
@@ -31,7 +34,7 @@ auto wWinMain(HINSTANCE /* hinstance */,
 
             return S_OK;
         }).Get(),
-            source_changed_token());
+            token.source_changed());
 
         webview->core->add_FaviconChanged(
             Microsoft::WRL::Callback<ICoreWebView2FaviconChangedEventHandler>(
@@ -51,7 +54,7 @@ auto wWinMain(HINSTANCE /* hinstance */,
 
             return S_OK;
         }).Get(),
-            favicon_changed_token());
+            token.favicon_changed());
     } },
         [&](pane::webview* webview, pane::window_message window_message) -> LRESULT {
         switch (window_message.event) {
