@@ -158,7 +158,7 @@ auto window::create(this Self& self) -> HWND {
         0,
         self.window_class().lpszClassName,
         reinterpret_cast<const wchar_t*>(pane::to_utf16(self.window_config.title).data()),
-        self.window_config.parent_hwnd ? WS_CHILDWINDOW : WS_OVERLAPPEDWINDOW,
+        self.window_config.parent_hwnd ? WS_CHILDWINDOW : WS_OVERLAPPEDWINDOW | WS_VISIBLE,
         CW_USEDEFAULT,
         CW_USEDEFAULT,
         CW_USEDEFAULT,
@@ -170,15 +170,13 @@ auto window::create(this Self& self) -> HWND {
 
     self.window_handle.immersive_dark_mode(self.dark_mode);
 
-    if (self.window_config.visible) {
-        if (self.window_config.maximized) {
-            self.window_handle.maximize();
-        } else {
-            self.window_handle.show();
-        }
+    if (self.window_config.maximized) {
+        self.window_handle.maximize();
     }
 
-    self.window_handle.cloak(false);
+    if (self.window_config.visible) {
+        self.window_handle.cloak(false);
+    }
 
     return self.window_handle();
 }
@@ -299,7 +297,7 @@ auto webview::create(this Self& self) -> HWND {
         0,
         self.window_class().lpszClassName,
         reinterpret_cast<const wchar_t*>(pane::to_utf16(self.window_config.title).data()),
-        self.window_config.parent_hwnd ? WS_CHILDWINDOW : WS_OVERLAPPEDWINDOW,
+        self.window_config.parent_hwnd ? WS_CHILDWINDOW : WS_OVERLAPPEDWINDOW | WS_VISIBLE,
         CW_USEDEFAULT,
         CW_USEDEFAULT,
         CW_USEDEFAULT,
@@ -311,15 +309,13 @@ auto webview::create(this Self& self) -> HWND {
 
     self.window_handle.immersive_dark_mode(self.dark_mode);
 
-    if (self.window_config.visible) {
-        if (self.window_config.maximized) {
-            self.window_handle.maximize();
-        } else {
-            self.window_handle.show();
-        }
+    if (self.window_config.maximized) {
+        self.window_handle.maximize();
     }
 
-    self.window_handle.cloak(false);
+    if (self.window_config.visible) {
+        self.window_handle.cloak(false);
+    }
 
     if (self.options) {
         if (!self.webview_config.environment_options.AdditionalBrowserArguments.empty()) {

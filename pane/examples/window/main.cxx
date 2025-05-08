@@ -12,7 +12,7 @@ auto wWinMain(HINSTANCE /* hinstance */,
           pane::color { 0, 0, 0, 0 },
           pane::color { 255, 255, 255, 0 },
           true,
-          false,
+          true,
           nullptr },
         [&](pane::window* window, pane::window_message window_message) -> LRESULT {
         switch (window_message.event) {
