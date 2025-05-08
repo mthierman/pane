@@ -211,12 +211,6 @@ auto window::create(this Self& self) -> HWND {
 
 auto webview_token::operator()(this Self& self) -> EventRegistrationToken* { return &self.token; }
 
-// auto webview_token::operator()(this Self& self, EventRegistrationToken token) -> void {
-//     if (!self.token.value) {
-//         self.token = token;
-//     }
-// }
-
 webview::webview(pane::window_config&& window_config,
                  pane::webview_config&& webview_config,
                  std::function<LRESULT(Self*, pane::window_message)>&& window_procedure)

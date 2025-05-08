@@ -249,7 +249,6 @@ struct webview_token {
     auto operator=(Self&&) noexcept -> Self& = delete;
 
     auto operator()(this Self& self) -> EventRegistrationToken*;
-    // auto operator()(this Self& self, EventRegistrationToken token) -> void;
 
 private:
     EventRegistrationToken token { 0 };
