@@ -11,12 +11,12 @@ auto wWinMain(HINSTANCE /* hinstance */,
 
     pane::window_icon favicon;
 
-    auto url { pane::webview(
+    auto webview2_docs { pane::webview(
         { u8"WebView2",
           pane::color { 0, 0, 0, 0 },
           pane::color { 255, 255, 255, 0 },
           true,
-          false,
+          true,
           nullptr },
         { .home_page = u8"https://learn.microsoft.com/en-us/microsoft-edge/webview2/concepts/"
                        u8"win32-api-conventions",
