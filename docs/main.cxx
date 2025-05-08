@@ -5,8 +5,9 @@ auto wWinMain(HINSTANCE /* hinstance */,
               PWSTR /* pcmdline */,
               int /* ncmdshow */) -> int {
     auto gdi_plus { pane::gdi_plus() };
-    EventRegistrationToken source_changed_token { 0 };
-    EventRegistrationToken favicon_changed_token { 0 };
+    // EventRegistrationToken source_changed_token { 0 };
+    pane::webview_token source_changed_token;
+    pane::webview_token favicon_changed_token;
     wil::unique_hicon favicon { nullptr };
 
     auto url { pane::webview(
@@ -29,7 +30,7 @@ auto wWinMain(HINSTANCE /* hinstance */,
 
             return S_OK;
         }).Get(),
-            &source_changed_token);
+            source_changed_token());
 
         webview->core->add_FaviconChanged(
             Microsoft::WRL::Callback<ICoreWebView2FaviconChangedEventHandler>(
@@ -50,7 +51,7 @@ auto wWinMain(HINSTANCE /* hinstance */,
 
             return S_OK;
         }).Get(),
-            &favicon_changed_token);
+            favicon_changed_token());
     } },
         [&](pane::webview* webview, pane::window_message window_message) -> LRESULT {
         switch (window_message.event) {

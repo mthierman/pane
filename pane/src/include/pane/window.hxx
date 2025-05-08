@@ -220,7 +220,7 @@ struct webview_token {
     using Self = webview_token;
 
     webview_token() = default;
-    ~webview_token();
+    ~webview_token() = default;
 
     webview_token(const Self&) = delete;
     auto operator=(const Self&) -> Self& = delete;
@@ -228,8 +228,8 @@ struct webview_token {
     webview_token(Self&&) noexcept = delete;
     auto operator=(Self&&) noexcept -> Self& = delete;
 
-    auto operator()(this const Self& self) -> EventRegistrationToken;
-    auto operator()(this Self& self, EventRegistrationToken token) -> void;
+    auto operator()(this Self& self) -> EventRegistrationToken*;
+    // auto operator()(this Self& self, EventRegistrationToken token) -> void;
 
 private:
     EventRegistrationToken token { 0 };

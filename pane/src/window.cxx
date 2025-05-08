@@ -193,15 +193,13 @@ auto window::create(this Self& self) -> HWND {
     return self.window_handle();
 }
 
-auto webview_token::operator()(this const Self& self) -> EventRegistrationToken {
-    return self.token;
-}
+auto webview_token::operator()(this Self& self) -> EventRegistrationToken* { return &self.token; }
 
-auto webview_token::operator()(this Self& self, EventRegistrationToken token) -> void {
-    if (!self.token.value) {
-        self.token = token;
-    }
-}
+// auto webview_token::operator()(this Self& self, EventRegistrationToken token) -> void {
+//     if (!self.token.value) {
+//         self.token = token;
+//     }
+// }
 
 webview::webview(pane::window_config&& window_config,
                  pane::webview_config&& webview_config,
