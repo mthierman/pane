@@ -21,11 +21,11 @@ auto window_handle::show(this const Self& self) -> bool { return ShowWindow(self
 auto window_handle::hide(this const Self& self) -> bool { return ShowWindow(self.hwnd, SW_HIDE); }
 
 auto window_handle::maximize(this const Self& self) -> bool {
-    return ShowWindow(self.hwnd, SW_SHOWMAXIMIZED);
+    return ShowWindow(self.hwnd, SW_MAXIMIZE);
 }
 
 auto window_handle::minimize(this const Self& self) -> bool {
-    return ShowWindow(self.hwnd, SW_SHOWMINIMIZED);
+    return ShowWindow(self.hwnd, SW_MINIMIZE);
 }
 
 auto window_handle::immersive_dark_mode(this const Self& self, bool dark_mode) -> HRESULT {
