@@ -1,5 +1,7 @@
 #include <pane/pane.hxx>
 
+using Microsoft::WRL::Callback;
+
 auto wWinMain(HINSTANCE /* hinstance */,
               HINSTANCE /* hprevinstance */,
               PWSTR /* pcmdline */,
@@ -25,7 +27,7 @@ auto wWinMain(HINSTANCE /* hinstance */,
                        u8"win32-api-conventions",
           .creation_callback = [&](pane::webview* webview) -> void {
         webview->core->add_NavigationCompleted(
-            Microsoft::WRL::Callback<ICoreWebView2NavigationCompletedEventHandler>(
+            Callback<ICoreWebView2NavigationCompletedEventHandler>(
                 [&, webview](ICoreWebView2* /* sender */,
                              ICoreWebView2NavigationCompletedEventArgs* /* args */) -> HRESULT {
             wil::unique_cotaskmem_string title;
@@ -37,11 +39,11 @@ auto wWinMain(HINSTANCE /* hinstance */,
             token.source_changed());
 
         webview->core->add_FaviconChanged(
-            Microsoft::WRL::Callback<ICoreWebView2FaviconChangedEventHandler>(
+            Callback<ICoreWebView2FaviconChangedEventHandler>(
                 [&, webview](ICoreWebView2* /* sender */, IUnknown* /* args */) -> HRESULT {
             webview->core->GetFavicon(
                 COREWEBVIEW2_FAVICON_IMAGE_FORMAT::COREWEBVIEW2_FAVICON_IMAGE_FORMAT_PNG,
-                Microsoft::WRL::Callback<ICoreWebView2GetFaviconCompletedHandler>(
+                Callback<ICoreWebView2GetFaviconCompletedHandler>(
                     [&, webview](HRESULT /* error_code */, IStream* icon_stream) -> HRESULT {
                 if (Gdiplus::Bitmap { icon_stream }.GetHICON(&favicon()) == Gdiplus::Status::Ok) {
                     SendMessage(
