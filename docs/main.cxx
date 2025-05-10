@@ -21,7 +21,7 @@ auto wWinMain(HINSTANCE /* hinstance */,
           pane::color { 0, 0, 0, 255 },
           pane::color { 255, 255, 255, 255 },
           true,
-          true,
+          false,
           nullptr },
         { .home_page = u8"https://learn.microsoft.com/en-us/microsoft-edge/webview2/concepts/"
                        u8"win32-api-conventions",
@@ -68,7 +68,8 @@ auto wWinMain(HINSTANCE /* hinstance */,
         [&](pane::webview* webview, pane::window_message window_message) -> LRESULT {
         switch (window_message.event) {
             case WM_CREATE: {
-                webview->window_handle.mica_alt(true);
+                webview->window_handle.mica(true);
+                SetWindowPos(webview->window_handle(), nullptr, 400, 100, 1000, 800, 0);
             } break;
 
             case WM_DESTROY: {
