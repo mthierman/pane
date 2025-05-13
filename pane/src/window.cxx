@@ -163,9 +163,7 @@ auto window_icon::operator()(this Self& self, HICON hicon) -> void {
 window::window(pane::window_config&& window_config,
                std::function<LRESULT(Self*, pane::window_message)>&& window_procedure)
     : window_procedure { std::move(window_procedure) },
-      window_config { std::move(window_config) },
-      window_dark_background(this->window_config.dark_background),
-      window_light_background(this->window_config.light_background) {
+      window_config { std::move(window_config) } {
     this->create();
 }
 
@@ -189,9 +187,9 @@ auto window::default_procedure(this Self& self, const pane::window_message& wind
                 self.window_handle.text_color(
                     pane::color { winrt::Windows::UI::ViewManagement::UIColorType::Foreground });
                 self.window_handle.caption_color(
-                    pane::color { winrt::Windows::UI::ViewManagement::UIColorType::AccentDark3 });
+                    pane::color { winrt::Windows::UI::ViewManagement::UIColorType::Accent });
                 self.window_handle.border_color(
-                    pane::color { winrt::Windows::UI::ViewManagement::UIColorType::AccentDark3 });
+                    pane::color { winrt::Windows::UI::ViewManagement::UIColorType::Accent });
             } else {
                 self.dark_mode = false;
                 self.window_handle.text_color(
