@@ -173,11 +173,13 @@ auto window::default_procedure(this Self& self, const pane::window_message& wind
         case WM_CREATE: {
             SendMessageW(self.window_handle(), WM_SETTINGCHANGE, 0, 0);
         } break;
+
         case WM_WINDOWPOSCHANGED: {
             GetClientRect(self.window_handle(), &self.client_rect);
 
             return 0;
         } break;
+
         case WM_SETTINGCHANGE: {
             pane::debug("WM_SETTINGCHANGE");
 
@@ -206,6 +208,7 @@ auto window::default_procedure(this Self& self, const pane::window_message& wind
 
             return 0;
         } break;
+
         case WM_DPICHANGED: {
             self.dpi = HIWORD(window_message.wparam);
             self.scale_factor
@@ -222,6 +225,7 @@ auto window::default_procedure(this Self& self, const pane::window_message& wind
 
             return 0;
         } break;
+
         case WM_ERASEBKGND: {
             GetClientRect(self.window_handle(), &self.client_rect);
 
@@ -237,6 +241,7 @@ auto window::default_procedure(this Self& self, const pane::window_message& wind
 
             return 1;
         } break;
+
         default: {
             return DefWindowProcW(self.window_handle(),
                                   window_message.event,
