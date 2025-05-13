@@ -68,7 +68,7 @@ auto wWinMain(HINSTANCE /* hinstance */,
         [&](pane::webview* webview, pane::window_message window_message) -> LRESULT {
         switch (window_message.event) {
             case WM_CREATE: {
-                webview->window_handle.mica(true);
+                webview->window_handle.acrylic(true);
                 SetWindowPos(webview->window_handle(), nullptr, 400, 100, 1000, 800, 0);
             } break;
 
