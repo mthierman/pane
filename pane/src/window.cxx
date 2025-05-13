@@ -181,25 +181,19 @@ auto window::default_procedure(this Self& self, const pane::window_message& wind
         } break;
 
         case WM_SETTINGCHANGE: {
-            pane::debug("WM_SETTINGCHANGE");
+            self.colors = pane::window_colors();
 
             if (pane::color { winrt::Windows::UI::ViewManagement::UIColorType::Background }
                     .is_dark()) {
                 self.dark_mode = true;
-                self.window_handle.text_color(
-                    pane::color { winrt::Windows::UI::ViewManagement::UIColorType::Foreground });
-                self.window_handle.caption_color(
-                    pane::color { winrt::Windows::UI::ViewManagement::UIColorType::Accent });
-                self.window_handle.border_color(
-                    pane::color { winrt::Windows::UI::ViewManagement::UIColorType::Accent });
+                self.window_handle.text_color(self.colors.foreground);
+                self.window_handle.caption_color(self.colors.accent_dark_3);
+                self.window_handle.border_color(self.colors.accent_dark_3);
             } else {
                 self.dark_mode = false;
-                self.window_handle.text_color(
-                    pane::color { winrt::Windows::UI::ViewManagement::UIColorType::Foreground });
-                self.window_handle.caption_color(
-                    pane::color { winrt::Windows::UI::ViewManagement::UIColorType::AccentLight3 });
-                self.window_handle.border_color(
-                    pane::color { winrt::Windows::UI::ViewManagement::UIColorType::AccentLight3 });
+                self.window_handle.text_color(self.colors.foreground);
+                self.window_handle.caption_color(self.colors.accent_dark_3);
+                self.window_handle.border_color(self.colors.accent_dark_3);
             }
 
             self.window_handle.immersive_dark_mode(self.dark_mode);
@@ -338,25 +332,19 @@ auto webview::default_procedure(this Self& self, const pane::window_message& win
         } break;
 
         case WM_SETTINGCHANGE: {
-            pane::debug("WM_SETTINGCHANGE");
+            self.colors = pane::window_colors();
 
             if (pane::color { winrt::Windows::UI::ViewManagement::UIColorType::Background }
                     .is_dark()) {
                 self.dark_mode = true;
-                self.window_handle.text_color(
-                    pane::color { winrt::Windows::UI::ViewManagement::UIColorType::Foreground });
-                self.window_handle.caption_color(
-                    pane::color { winrt::Windows::UI::ViewManagement::UIColorType::Accent });
-                self.window_handle.border_color(
-                    pane::color { winrt::Windows::UI::ViewManagement::UIColorType::Accent });
+                self.window_handle.text_color(self.colors.foreground);
+                self.window_handle.caption_color(self.colors.accent_dark_3);
+                self.window_handle.border_color(self.colors.accent_dark_3);
             } else {
                 self.dark_mode = false;
-                self.window_handle.text_color(
-                    pane::color { winrt::Windows::UI::ViewManagement::UIColorType::Foreground });
-                self.window_handle.caption_color(
-                    pane::color { winrt::Windows::UI::ViewManagement::UIColorType::AccentLight3 });
-                self.window_handle.border_color(
-                    pane::color { winrt::Windows::UI::ViewManagement::UIColorType::AccentLight3 });
+                self.window_handle.text_color(self.colors.foreground);
+                self.window_handle.caption_color(self.colors.accent_dark_3);
+                self.window_handle.border_color(self.colors.accent_dark_3);
             }
 
             self.window_handle.immersive_dark_mode(self.dark_mode);

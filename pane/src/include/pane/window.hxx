@@ -149,6 +149,17 @@ struct window_config final {
     HWND parent_hwnd { nullptr };
 };
 
+struct window_colors {
+    pane::color accent_dark_3 { pane::color {
+        winrt::Windows::UI::ViewManagement::UIColorType::AccentDark3 } };
+    pane::color accent_light_3 { pane::color {
+        winrt::Windows::UI::ViewManagement::UIColorType::AccentLight3 } };
+    pane::color background { pane::color {
+        winrt::Windows::UI::ViewManagement::UIColorType::Background } };
+    pane::color foreground { pane::color {
+        winrt::Windows::UI::ViewManagement::UIColorType::Foreground } };
+};
+
 struct window final {
     using Self = window;
 
@@ -178,10 +189,9 @@ public:
     pane::window_config window_config;
     uintptr_t id { pane::random_number<uintptr_t>() };
     pane::window_class<Self> window_class { u8"PaneWindow", window_class_procedure };
-    pane::window_background window_dark_background { pane::color {
-        winrt::Windows::UI::ViewManagement::UIColorType::AccentDark3 } };
-    pane::window_background window_light_background { pane::color {
-        winrt::Windows::UI::ViewManagement::UIColorType::AccentLight3 } };
+    pane::window_colors colors;
+    pane::window_background window_dark_background { colors.accent_dark_3 };
+    pane::window_background window_light_background { colors.accent_light_3 };
     pane::window_handle window_handle;
     RECT client_rect { 0, 0, 0, 0 };
     UINT dpi { GetDpiForWindow(window_handle()) };
@@ -298,10 +308,9 @@ public:
     pane::webview_config webview_config;
     uintptr_t id { pane::random_number<uintptr_t>() };
     pane::window_class<Self> window_class { u8"PaneWebView", window_class_procedure };
-    pane::window_background window_dark_background { pane::color {
-        winrt::Windows::UI::ViewManagement::UIColorType::AccentDark3 } };
-    pane::window_background window_light_background { pane::color {
-        winrt::Windows::UI::ViewManagement::UIColorType::AccentLight3 } };
+    pane::window_colors colors;
+    pane::window_background window_dark_background { colors.accent_dark_3 };
+    pane::window_background window_light_background { colors.accent_light_3 };
     pane::window_handle window_handle;
     RECT client_rect { 0, 0, 0, 0 };
     UINT dpi { GetDpiForWindow(window_handle()) };
