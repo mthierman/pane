@@ -103,8 +103,10 @@ auto wWinMain(HINSTANCE /* hinstance */,
 
                 if (webview->dark_mode) {
                     webview->window_handle.caption_color(pane::color { 0, 0, 0, 255 });
+                    webview->window_handle.text_color(pane::color { 255, 255, 255, 255 });
                 } else {
                     webview->window_handle.caption_color(pane::color { 255, 255, 255, 255 });
+                    webview->window_handle.text_color(pane::color { 0, 0, 0, 255 });
                 }
 
                 SetWindowPos(webview->window_handle(), nullptr, 400, 100, 1000, 800, 0);
@@ -121,8 +123,10 @@ auto wWinMain(HINSTANCE /* hinstance */,
 
                 if (webview->dark_mode) {
                     webview->window_handle.caption_color(pane::color { 0, 0, 0, 255 });
+                    webview->window_handle.text_color(pane::color { 255, 255, 255, 255 });
                 } else {
                     webview->window_handle.caption_color(pane::color { 255, 255, 255, 255 });
+                    webview->window_handle.text_color(pane::color { 0, 0, 0, 255 });
                 }
             } break;
         }
