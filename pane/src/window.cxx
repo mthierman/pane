@@ -192,7 +192,7 @@ auto window::default_procedure(this Self& self, const pane::window_message& wind
             } else {
                 self.dark_mode = false;
                 self.window_handle.text_color(self.colors.foreground);
-                self.window_handle.caption_color(self.colors.accent_light_2);
+                self.window_handle.caption_color(self.colors.accent_light_3);
                 self.window_handle.border_color(self.colors.accent);
             }
 
