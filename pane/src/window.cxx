@@ -106,6 +106,13 @@ auto window_handle::caption_color(this const Self& self, const pane::color& colo
         self.hwnd, DWMWINDOWATTRIBUTE::DWMWA_CAPTION_COLOR, &caption_color, sizeof(caption_color));
 }
 
+auto window_handle::text_color(this const Self& self, const pane::color& color) -> HRESULT {
+    auto text_color { color.to_colorref() };
+
+    return DwmSetWindowAttribute(
+        self.hwnd, DWMWINDOWATTRIBUTE::DWMWA_TEXT_COLOR, &text_color, sizeof(text_color));
+}
+
 auto window_handle::operator()(this const Self& self) -> HWND { return self.hwnd; }
 
 auto window_handle::operator()(this Self& self, HWND hwnd) -> void {
