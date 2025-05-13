@@ -179,7 +179,7 @@ public:
     uintptr_t id { pane::random_number<uintptr_t>() };
     pane::window_class<Self> window_class { u8"PaneWindow", window_class_procedure };
     pane::window_background window_dark_background { pane::color {
-        winrt::Windows::UI::ViewManagement::UIColorType::Accent } };
+        winrt::Windows::UI::ViewManagement::UIColorType::AccentDark3 } };
     pane::window_background window_light_background { pane::color {
         winrt::Windows::UI::ViewManagement::UIColorType::AccentLight3 } };
     pane::window_handle window_handle;
@@ -298,8 +298,10 @@ public:
     pane::webview_config webview_config;
     uintptr_t id { pane::random_number<uintptr_t>() };
     pane::window_class<Self> window_class { u8"PaneWebView", window_class_procedure };
-    pane::window_background window_dark_background;
-    pane::window_background window_light_background;
+    pane::window_background window_dark_background { pane::color {
+        winrt::Windows::UI::ViewManagement::UIColorType::AccentDark3 } };
+    pane::window_background window_light_background { pane::color {
+        winrt::Windows::UI::ViewManagement::UIColorType::AccentLight3 } };
     pane::window_handle window_handle;
     RECT client_rect { 0, 0, 0, 0 };
     UINT dpi { GetDpiForWindow(window_handle()) };
