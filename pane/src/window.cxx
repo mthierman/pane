@@ -336,15 +336,14 @@ auto webview::default_procedure(this Self& self, const pane::window_message& win
             if (pane::color { winrt::Windows::UI::ViewManagement::UIColorType::Background }
                     .is_dark()) {
                 self.dark_mode = true;
-                self.window_handle.text_color(self.colors.foreground);
-                self.window_handle.caption_color(self.colors.accent_dark_3);
-                self.window_handle.border_color(self.colors.accent_dark_3);
+                self.window_handle.caption_color(self.colors.accent_dark_2);
             } else {
                 self.dark_mode = false;
-                self.window_handle.text_color(self.colors.foreground);
-                self.window_handle.caption_color(self.colors.accent_dark_3);
-                self.window_handle.border_color(self.colors.accent_dark_3);
+                self.window_handle.caption_color(self.colors.accent_light_3);
             }
+
+            self.window_handle.text_color(self.colors.foreground);
+            self.window_handle.border_color(self.colors.accent);
 
             self.window_handle.immersive_dark_mode(self.dark_mode);
 
