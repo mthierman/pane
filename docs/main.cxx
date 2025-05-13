@@ -69,7 +69,7 @@ auto wWinMain(HINSTANCE /* hinstance */,
         [&](pane::webview* webview, pane::window_message window_message) -> LRESULT {
         switch (window_message.event) {
             case WM_CREATE: {
-                // webview->window_handle.acrylic(true);
+                webview->window_handle.acrylic(true);
 
                 // auto render_policy { DWMNCRENDERINGPOLICY::DWMNCRP_ENABLED };
                 // return DwmSetWindowAttribute(webview->window_handle(),

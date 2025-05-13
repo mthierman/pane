@@ -88,6 +88,7 @@ struct window_handle final {
     auto mica(this const Self& self, bool enable) -> HRESULT;
     auto mica_alt(this const Self& self, bool enable) -> HRESULT;
     auto acrylic(this const Self& self, bool enable) -> HRESULT;
+    auto border_color(this const Self& self, const pane::color& color) -> HRESULT;
     auto caption_color(this const Self& self, const pane::color& color) -> HRESULT;
     auto text_color(this const Self& self, const pane::color& color) -> HRESULT;
 
