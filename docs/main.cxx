@@ -101,13 +101,7 @@ auto wWinMain(HINSTANCE /* hinstance */,
                 //                              &caption_color,
                 //                              sizeof(caption_color));
 
-                if (webview->dark_mode) {
-                    webview->window_handle.caption_color(pane::color { 0, 0, 0, 255 });
-                    webview->window_handle.text_color(pane::color { 255, 255, 255, 255 });
-                } else {
-                    webview->window_handle.caption_color(pane::color { 255, 255, 255, 255 });
-                    webview->window_handle.text_color(pane::color { 0, 0, 0, 255 });
-                }
+                SendMessageW(webview->window_handle(), WM_SETTINGCHANGE, 0, 0);
 
                 SetWindowPos(webview->window_handle(), nullptr, 400, 100, 1000, 800, 0);
             } break;
@@ -119,14 +113,24 @@ auto wWinMain(HINSTANCE /* hinstance */,
             } break;
 
             case WM_SETTINGCHANGE: {
-                webview->core->Reload();
+                if (webview->core) {
+                    webview->core->Reload();
+                }
 
                 if (webview->dark_mode) {
-                    webview->window_handle.caption_color(pane::color { 0, 0, 0, 255 });
-                    webview->window_handle.text_color(pane::color { 255, 255, 255, 255 });
+                    webview->window_handle.text_color(pane::color {
+                        winrt::Windows::UI::ViewManagement::UIColorType::Foreground });
+                    webview->window_handle.caption_color(pane::color {
+                        winrt::Windows::UI::ViewManagement::UIColorType::AccentDark3 });
+                    webview->window_handle.border_color(pane::color {
+                        winrt::Windows::UI::ViewManagement::UIColorType::AccentDark3 });
                 } else {
-                    webview->window_handle.caption_color(pane::color { 255, 255, 255, 255 });
-                    webview->window_handle.text_color(pane::color { 0, 0, 0, 255 });
+                    webview->window_handle.text_color(pane::color {
+                        winrt::Windows::UI::ViewManagement::UIColorType::Foreground });
+                    webview->window_handle.caption_color(pane::color {
+                        winrt::Windows::UI::ViewManagement::UIColorType::AccentLight3 });
+                    webview->window_handle.border_color(pane::color {
+                        winrt::Windows::UI::ViewManagement::UIColorType::AccentLight3 });
                 }
             } break;
         }
