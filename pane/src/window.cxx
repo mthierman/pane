@@ -171,57 +171,80 @@ window::window(pane::window_config&& window_config,
 
 auto window::default_procedure(this Self& self, const pane::window_message& window_message)
     -> LRESULT {
-    if (window_message.event == WM_WINDOWPOSCHANGED) {
-        GetClientRect(self.window_handle(), &self.client_rect);
+    switch (window_message.event) {
+        case WM_CREATE: {
+            SendMessageW(self.window_handle(), WM_SETTINGCHANGE, 0, 0);
+        } break;
+        case WM_WINDOWPOSCHANGED: {
+            GetClientRect(self.window_handle(), &self.client_rect);
 
-        return 0;
-    }
+            return 0;
+        } break;
+        case WM_SETTINGCHANGE: {
+            pane::debug("WM_SETTINGCHANGE");
 
-    if (window_message.event == WM_SETTINGCHANGE) {
-        if (pane::color { winrt::Windows::UI::ViewManagement::UIColorType::Background }.is_dark()) {
-            self.dark_mode = true;
-        } else {
-            self.dark_mode = false;
+            if (pane::color { winrt::Windows::UI::ViewManagement::UIColorType::Background }
+                    .is_dark()) {
+                self.dark_mode = true;
+                self.window_handle.text_color(
+                    pane::color { winrt::Windows::UI::ViewManagement::UIColorType::Foreground });
+                self.window_handle.caption_color(
+                    pane::color { winrt::Windows::UI::ViewManagement::UIColorType::AccentDark3 });
+                self.window_handle.border_color(
+                    pane::color { winrt::Windows::UI::ViewManagement::UIColorType::AccentDark3 });
+            } else {
+                self.dark_mode = false;
+                self.window_handle.text_color(
+                    pane::color { winrt::Windows::UI::ViewManagement::UIColorType::Foreground });
+                self.window_handle.caption_color(
+                    pane::color { winrt::Windows::UI::ViewManagement::UIColorType::AccentLight3 });
+                self.window_handle.border_color(
+                    pane::color { winrt::Windows::UI::ViewManagement::UIColorType::AccentLight3 });
+            }
+
+            self.window_handle.immersive_dark_mode(self.dark_mode);
+
+            InvalidateRect(self.window_handle(), nullptr, true);
+
+            return 0;
+        } break;
+        case WM_DPICHANGED: {
+            self.dpi = HIWORD(window_message.wparam);
+            self.scale_factor
+                = static_cast<float>(self.dpi) / static_cast<float>(USER_DEFAULT_SCREEN_DPI);
+
+            auto const suggested_rect { reinterpret_cast<RECT*>(window_message.lparam) };
+            SetWindowPos(self.window_handle(),
+                         nullptr,
+                         suggested_rect->left,
+                         suggested_rect->top,
+                         suggested_rect->right - suggested_rect->left,
+                         suggested_rect->bottom - suggested_rect->top,
+                         SWP_NOZORDER | SWP_NOACTIVATE);
+
+            return 0;
+        } break;
+        case WM_ERASEBKGND: {
+            GetClientRect(self.window_handle(), &self.client_rect);
+
+            if (self.dark_mode) {
+                FillRect(reinterpret_cast<HDC>(window_message.wparam),
+                         &self.client_rect,
+                         self.window_dark_background());
+            } else {
+                FillRect(reinterpret_cast<HDC>(window_message.wparam),
+                         &self.client_rect,
+                         self.window_light_background());
+            }
+
+            return 1;
+        } break;
+        default: {
+            return DefWindowProcW(self.window_handle(),
+                                  window_message.event,
+                                  window_message.wparam,
+                                  window_message.lparam);
         }
-
-        self.window_handle.immersive_dark_mode(self.dark_mode);
-
-        InvalidateRect(self.window_handle(), nullptr, true);
-
-        return 0;
-    }
-
-    if (window_message.event == WM_DPICHANGED) {
-        self.dpi = HIWORD(window_message.wparam);
-        self.scale_factor
-            = static_cast<float>(self.dpi) / static_cast<float>(USER_DEFAULT_SCREEN_DPI);
-
-        auto const suggested_rect { reinterpret_cast<RECT*>(window_message.lparam) };
-        SetWindowPos(self.window_handle(),
-                     nullptr,
-                     suggested_rect->left,
-                     suggested_rect->top,
-                     suggested_rect->right - suggested_rect->left,
-                     suggested_rect->bottom - suggested_rect->top,
-                     SWP_NOZORDER | SWP_NOACTIVATE);
-
-        return 0;
-    }
-
-    if (window_message.event == WM_ERASEBKGND) {
-        GetClientRect(self.window_handle(), &self.client_rect);
-
-        if (self.dark_mode) {
-            FillRect(reinterpret_cast<HDC>(window_message.wparam),
-                     &self.client_rect,
-                     self.window_dark_background());
-        } else {
-            FillRect(reinterpret_cast<HDC>(window_message.wparam),
-                     &self.client_rect,
-                     self.window_light_background());
-        }
-
-        return 1;
     }
 
     return DefWindowProcW(
