@@ -186,9 +186,11 @@ auto window::default_procedure(this Self& self, const pane::window_message& wind
             if (pane::color { winrt::Windows::UI::ViewManagement::UIColorType::Background }
                     .is_dark()) {
                 self.dark_mode = true;
+                self.window_dark_background(self.colors.accent_dark_3);
                 self.window_handle.caption_color(self.colors.accent_dark_2);
             } else {
                 self.dark_mode = false;
+                self.window_light_background(self.colors.accent_light_2);
                 self.window_handle.caption_color(self.colors.accent_light_3);
             }
 
@@ -336,9 +338,11 @@ auto webview::default_procedure(this Self& self, const pane::window_message& win
             if (pane::color { winrt::Windows::UI::ViewManagement::UIColorType::Background }
                     .is_dark()) {
                 self.dark_mode = true;
+                self.window_dark_background(self.colors.accent_dark_3);
                 self.window_handle.caption_color(self.colors.accent_dark_2);
             } else {
                 self.dark_mode = false;
+                self.window_light_background(self.colors.accent_light_2);
                 self.window_handle.caption_color(self.colors.accent_light_3);
             }
 
