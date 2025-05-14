@@ -1,4 +1,5 @@
 #include <pane/system.hxx>
+#include <pane/color.hxx>
 #include <pane/text.hxx>
 #include <shellapi.h>
 #include <wil/resource.h>
@@ -80,6 +81,10 @@ auto resource_icon() -> std::expected<HICON, HRESULT> {
 
 auto ui_settings() -> winrt::Windows::UI::ViewManagement::UISettings {
     return winrt::Windows::UI::ViewManagement::UISettings();
+}
+
+auto dark_mode() -> bool {
+    return pane::color { winrt::Windows::UI::ViewManagement::UIColorType::Background }.is_dark();
 }
 
 auto command_line_arguments() -> std::vector<std::u8string> {
