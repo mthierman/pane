@@ -9,7 +9,7 @@ auto wWinMain(HINSTANCE /* hinstance */,
 
     auto window { pane::window(
         { u8"window",
-          pane::color { 0, 0, 0, 255 },
+          pane::color { 50, 50, 50, 255 },
           pane::color { 255, 255, 255, 255 },
           true,
           false,

@@ -181,21 +181,29 @@ auto window::default_procedure(this Self& self, const pane::window_message& wind
         } break;
 
         case WM_SETTINGCHANGE: {
-            self.colors = pane::window_colors();
+            // self.colors = pane::window_colors();
 
             if (pane::color { winrt::Windows::UI::ViewManagement::UIColorType::Background }
                     .is_dark()) {
                 self.dark_mode = true;
-                self.window_dark_background(self.colors.accent_dark_3);
-                self.window_handle.caption_color(self.colors.accent_dark_2);
+                // self.window_dark_background(self.colors.accent_dark_3);
+                // self.window_handle.caption_color(self.colors.accent_dark_2);
+                self.window_handle.caption_color(self.window_config.dark_background);
+                self.window_handle.border_color(self.window_config.dark_background);
             } else {
                 self.dark_mode = false;
-                self.window_light_background(self.colors.accent_light_2);
-                self.window_handle.caption_color(self.colors.accent_light_3);
+                // self.window_light_background(self.colors.accent_light_2);
+                // self.window_handle.caption_color(self.colors.accent_light_3);
+                self.window_handle.caption_color(self.window_config.light_background);
+                self.window_handle.border_color(self.window_config.light_background);
             }
 
-            self.window_handle.text_color(self.colors.foreground);
-            self.window_handle.border_color(self.colors.accent);
+            // self.window_handle.text_color(self.colors.foreground);
+            // self.window_handle.border_color(self.colors.accent);
+
+            self.window_handle.caption_color(self.window_config.dark_background);
+            // self.window_handle.text_color(self.window_config.light_background);
+            self.window_handle.border_color(self.window_config.dark_background);
 
             self.window_handle.immersive_dark_mode(self.dark_mode);
 

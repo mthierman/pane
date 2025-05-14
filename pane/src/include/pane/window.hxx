@@ -199,8 +199,8 @@ public:
     uintptr_t id { pane::random_number<uintptr_t>() };
     pane::window_class<Self> window_class { u8"PaneWindow", window_class_procedure };
     pane::window_colors colors;
-    pane::window_background window_dark_background { colors.accent_dark_3 };
-    pane::window_background window_light_background { colors.accent_light_2 };
+    pane::window_background window_dark_background { window_config.dark_background };
+    pane::window_background window_light_background { window_config.light_background };
     pane::window_handle window_handle;
     RECT client_rect { 0, 0, 0, 0 };
     UINT dpi { GetDpiForWindow(window_handle()) };
