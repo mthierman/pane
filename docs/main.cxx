@@ -69,40 +69,6 @@ auto wWinMain(HINSTANCE /* hinstance */,
         [&](pane::webview* webview, pane::window_message window_message) -> LRESULT {
         switch (window_message.event) {
             case WM_CREATE: {
-                // webview->window_handle.acrylic(true);
-
-                // auto render_policy { DWMNCRENDERINGPOLICY::DWMNCRP_ENABLED };
-                // return DwmSetWindowAttribute(webview->window_handle(),
-                //                              DWMWINDOWATTRIBUTE::DWMWA_NCRENDERING_POLICY,
-                //                              &render_policy,
-                //                              sizeof(render_policy));
-
-                // auto ncpaint { TRUE };
-                // return DwmSetWindowAttribute(webview->window_handle(),
-                //                              DWMWINDOWATTRIBUTE::DWMWA_ALLOW_NCPAINT,
-                //                              &ncpaint,
-                //                              sizeof(ncpaint));
-
-                // auto corner_preference { DWM_WINDOW_CORNER_PREFERENCE::DWMWCP_ROUNDSMALL };
-                // return DwmSetWindowAttribute(webview->window_handle(),
-                //                              DWMWINDOWATTRIBUTE::DWMWA_WINDOW_CORNER_PREFERENCE,
-                //                              &corner_preference,
-                //                              sizeof(corner_preference));
-
-                // auto border_color { DWMWA_COLOR_NONE };
-                // return DwmSetWindowAttribute(webview->window_handle(),
-                //                              DWMWINDOWATTRIBUTE::DWMWA_BORDER_COLOR,
-                //                              &border_color,
-                //                              sizeof(border_color));
-
-                // auto caption_color { pane::color(0, 0, 0, 0).to_colorref() };
-                // return DwmSetWindowAttribute(webview->window_handle(),
-                //                              DWMWINDOWATTRIBUTE::DWMWA_CAPTION_COLOR,
-                //                              &caption_color,
-                //                              sizeof(caption_color));
-
-                SendMessageW(webview->window_handle(), WM_SETTINGCHANGE, 0, 0);
-
                 SetWindowPos(webview->window_handle(), nullptr, 400, 100, 1000, 800, 0);
             } break;
 
@@ -116,22 +82,6 @@ auto wWinMain(HINSTANCE /* hinstance */,
                 if (webview->core) {
                     webview->core->Reload();
                 }
-
-                // if (webview->dark_mode) {
-                //     webview->window_handle.text_color(pane::color {
-                //         winrt::Windows::UI::ViewManagement::UIColorType::Foreground });
-                //     webview->window_handle.caption_color(pane::color {
-                //         winrt::Windows::UI::ViewManagement::UIColorType::AccentDark3 });
-                //     webview->window_handle.border_color(pane::color {
-                //         winrt::Windows::UI::ViewManagement::UIColorType::AccentDark3 });
-                // } else {
-                //     webview->window_handle.text_color(pane::color {
-                //         winrt::Windows::UI::ViewManagement::UIColorType::Foreground });
-                //     webview->window_handle.caption_color(pane::color {
-                //         winrt::Windows::UI::ViewManagement::UIColorType::AccentLight3 });
-                //     webview->window_handle.border_color(pane::color {
-                //         winrt::Windows::UI::ViewManagement::UIColorType::AccentLight3 });
-                // }
             } break;
         }
 
