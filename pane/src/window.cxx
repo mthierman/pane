@@ -172,6 +172,8 @@ auto window::default_procedure(this Self& self, const pane::window_message& wind
     switch (window_message.event) {
         case WM_CREATE: {
             self.set_theme();
+
+            return 0;
         } break;
 
         case WM_WINDOWPOSCHANGED: {
@@ -308,6 +310,8 @@ auto webview::default_procedure(this Self& self, const pane::window_message& win
     switch (window_message.event) {
         case WM_CREATE: {
             self.set_theme();
+
+            return 0;
         } break;
 
         case WM_WINDOWPOSCHANGED: {
@@ -361,6 +365,8 @@ auto webview::default_procedure(this Self& self, const pane::window_message& win
                     self.controller->put_IsVisible(false);
                 }
             }
+
+            return 0;
         } break;
 
         default: {
