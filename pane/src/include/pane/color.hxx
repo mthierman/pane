@@ -49,6 +49,26 @@ struct color final {
     uint8_t a { std::numeric_limits<uint8_t>::min() };
     winrt::Windows::UI::ViewManagement::UISettings ui_settings { pane::system::ui_settings() };
 };
+
+struct system_colors {
+    pane::color accent { pane::color { winrt::Windows::UI::ViewManagement::UIColorType::Accent } };
+    pane::color accent_dark_1 { pane::color {
+        winrt::Windows::UI::ViewManagement::UIColorType::AccentDark1 } };
+    pane::color accent_dark_2 { pane::color {
+        winrt::Windows::UI::ViewManagement::UIColorType::AccentDark2 } };
+    pane::color accent_dark_3 { pane::color {
+        winrt::Windows::UI::ViewManagement::UIColorType::AccentDark3 } };
+    pane::color accent_light_1 { pane::color {
+        winrt::Windows::UI::ViewManagement::UIColorType::AccentLight1 } };
+    pane::color accent_light_2 { pane::color {
+        winrt::Windows::UI::ViewManagement::UIColorType::AccentLight2 } };
+    pane::color accent_light_3 { pane::color {
+        winrt::Windows::UI::ViewManagement::UIColorType::AccentLight3 } };
+    pane::color background { pane::color {
+        winrt::Windows::UI::ViewManagement::UIColorType::Background } };
+    pane::color foreground { pane::color {
+        winrt::Windows::UI::ViewManagement::UIColorType::Foreground } };
+};
 } // namespace pane
 
 namespace std {

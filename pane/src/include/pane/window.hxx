@@ -149,26 +149,6 @@ struct window_config final {
     HWND parent_hwnd { nullptr };
 };
 
-struct window_colors {
-    pane::color accent { pane::color { winrt::Windows::UI::ViewManagement::UIColorType::Accent } };
-    pane::color accent_dark_1 { pane::color {
-        winrt::Windows::UI::ViewManagement::UIColorType::AccentDark1 } };
-    pane::color accent_dark_2 { pane::color {
-        winrt::Windows::UI::ViewManagement::UIColorType::AccentDark2 } };
-    pane::color accent_dark_3 { pane::color {
-        winrt::Windows::UI::ViewManagement::UIColorType::AccentDark3 } };
-    pane::color accent_light_1 { pane::color {
-        winrt::Windows::UI::ViewManagement::UIColorType::AccentLight1 } };
-    pane::color accent_light_2 { pane::color {
-        winrt::Windows::UI::ViewManagement::UIColorType::AccentLight2 } };
-    pane::color accent_light_3 { pane::color {
-        winrt::Windows::UI::ViewManagement::UIColorType::AccentLight3 } };
-    pane::color background { pane::color {
-        winrt::Windows::UI::ViewManagement::UIColorType::Background } };
-    pane::color foreground { pane::color {
-        winrt::Windows::UI::ViewManagement::UIColorType::Foreground } };
-};
-
 struct window final {
     using Self = window;
 
@@ -198,16 +178,13 @@ public:
     pane::window_config window_config;
     uintptr_t id { pane::random_number<uintptr_t>() };
     pane::window_class<Self> window_class { u8"PaneWindow", window_class_procedure };
-    pane::window_colors colors;
-    pane::window_background window_dark_background { window_config.dark_background };
-    pane::window_background window_light_background { window_config.light_background };
+    pane::window_background window_background { pane::system::dark_mode()
+                                                    ? window_config.dark_background
+                                                    : window_config.light_background };
     pane::window_handle window_handle;
     RECT client_rect { 0, 0, 0, 0 };
     UINT dpi { GetDpiForWindow(window_handle()) };
     float scale_factor { static_cast<float>(dpi) / static_cast<float>(USER_DEFAULT_SCREEN_DPI) };
-    bool dark_mode {
-        pane::color { winrt::Windows::UI::ViewManagement::UIColorType::Background }.is_dark()
-    };
 };
 
 struct webview;
@@ -317,16 +294,13 @@ public:
     pane::webview_config webview_config;
     uintptr_t id { pane::random_number<uintptr_t>() };
     pane::window_class<Self> window_class { u8"PaneWebView", window_class_procedure };
-    pane::window_colors colors;
-    pane::window_background window_dark_background { colors.accent_dark_3 };
-    pane::window_background window_light_background { colors.accent_light_3 };
+    pane::window_background window_background { pane::system::dark_mode()
+                                                    ? window_config.dark_background
+                                                    : window_config.light_background };
     pane::window_handle window_handle;
     RECT client_rect { 0, 0, 0, 0 };
     UINT dpi { GetDpiForWindow(window_handle()) };
     float scale_factor { static_cast<float>(dpi) / static_cast<float>(USER_DEFAULT_SCREEN_DPI) };
-    bool dark_mode {
-        pane::color { winrt::Windows::UI::ViewManagement::UIColorType::Background }.is_dark()
-    };
 
     wil::com_ptr<ICoreWebView2Settings9> settings;
     wil::com_ptr<ICoreWebView2Environment14> environment;

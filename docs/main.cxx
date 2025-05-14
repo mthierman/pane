@@ -117,21 +117,21 @@ auto wWinMain(HINSTANCE /* hinstance */,
                     webview->core->Reload();
                 }
 
-                if (webview->dark_mode) {
-                    webview->window_handle.text_color(pane::color {
-                        winrt::Windows::UI::ViewManagement::UIColorType::Foreground });
-                    webview->window_handle.caption_color(pane::color {
-                        winrt::Windows::UI::ViewManagement::UIColorType::AccentDark3 });
-                    webview->window_handle.border_color(pane::color {
-                        winrt::Windows::UI::ViewManagement::UIColorType::AccentDark3 });
-                } else {
-                    webview->window_handle.text_color(pane::color {
-                        winrt::Windows::UI::ViewManagement::UIColorType::Foreground });
-                    webview->window_handle.caption_color(pane::color {
-                        winrt::Windows::UI::ViewManagement::UIColorType::AccentLight3 });
-                    webview->window_handle.border_color(pane::color {
-                        winrt::Windows::UI::ViewManagement::UIColorType::AccentLight3 });
-                }
+                // if (webview->dark_mode) {
+                //     webview->window_handle.text_color(pane::color {
+                //         winrt::Windows::UI::ViewManagement::UIColorType::Foreground });
+                //     webview->window_handle.caption_color(pane::color {
+                //         winrt::Windows::UI::ViewManagement::UIColorType::AccentDark3 });
+                //     webview->window_handle.border_color(pane::color {
+                //         winrt::Windows::UI::ViewManagement::UIColorType::AccentDark3 });
+                // } else {
+                //     webview->window_handle.text_color(pane::color {
+                //         winrt::Windows::UI::ViewManagement::UIColorType::Foreground });
+                //     webview->window_handle.caption_color(pane::color {
+                //         winrt::Windows::UI::ViewManagement::UIColorType::AccentLight3 });
+                //     webview->window_handle.border_color(pane::color {
+                //         winrt::Windows::UI::ViewManagement::UIColorType::AccentLight3 });
+                // }
             } break;
         }
 

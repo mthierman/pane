@@ -181,31 +181,22 @@ auto window::default_procedure(this Self& self, const pane::window_message& wind
         } break;
 
         case WM_SETTINGCHANGE: {
-            // self.colors = pane::window_colors();
+            auto dark_mode { pane::system::dark_mode() };
 
-            if (pane::color { winrt::Windows::UI::ViewManagement::UIColorType::Background }
-                    .is_dark()) {
-                self.dark_mode = true;
-                // self.window_dark_background(self.colors.accent_dark_3);
-                // self.window_handle.caption_color(self.colors.accent_dark_2);
+            if (dark_mode) {
+                self.window_background(self.window_config.dark_background);
                 self.window_handle.caption_color(self.window_config.dark_background);
+                self.window_handle.text_color(pane::system_colors {}.foreground);
                 self.window_handle.border_color(self.window_config.dark_background);
             } else {
-                self.dark_mode = false;
-                // self.window_light_background(self.colors.accent_light_2);
-                // self.window_handle.caption_color(self.colors.accent_light_3);
+                self.window_background(self.window_config.light_background);
+                self.window_background(self.window_config.light_background);
                 self.window_handle.caption_color(self.window_config.light_background);
+                self.window_handle.text_color(pane::system_colors {}.foreground);
                 self.window_handle.border_color(self.window_config.light_background);
             }
 
-            // self.window_handle.text_color(self.colors.foreground);
-            // self.window_handle.border_color(self.colors.accent);
-
-            self.window_handle.caption_color(self.window_config.dark_background);
-            // self.window_handle.text_color(self.window_config.light_background);
-            self.window_handle.border_color(self.window_config.dark_background);
-
-            self.window_handle.immersive_dark_mode(self.dark_mode);
+            self.window_handle.immersive_dark_mode(dark_mode);
 
             InvalidateRect(self.window_handle(), nullptr, true);
 
@@ -232,15 +223,9 @@ auto window::default_procedure(this Self& self, const pane::window_message& wind
         case WM_ERASEBKGND: {
             GetClientRect(self.window_handle(), &self.client_rect);
 
-            if (self.dark_mode) {
-                FillRect(reinterpret_cast<HDC>(window_message.wparam),
-                         &self.client_rect,
-                         self.window_dark_background());
-            } else {
-                FillRect(reinterpret_cast<HDC>(window_message.wparam),
-                         &self.client_rect,
-                         self.window_light_background());
-            }
+            FillRect(reinterpret_cast<HDC>(window_message.wparam),
+                     &self.client_rect,
+                     self.window_background());
 
             return 1;
         } break;
@@ -297,8 +282,6 @@ auto window::create(this Self& self) -> HWND {
         self.window_class().hInstance,
         &self);
 
-    self.window_handle.immersive_dark_mode(self.dark_mode);
-
     if (self.window_config.maximized) {
         self.window_handle.maximize();
     }
@@ -341,23 +324,22 @@ auto webview::default_procedure(this Self& self, const pane::window_message& win
         } break;
 
         case WM_SETTINGCHANGE: {
-            self.colors = pane::window_colors();
+            auto dark_mode { pane::system::dark_mode() };
 
-            if (pane::color { winrt::Windows::UI::ViewManagement::UIColorType::Background }
-                    .is_dark()) {
-                self.dark_mode = true;
-                self.window_dark_background(self.colors.accent_dark_3);
-                self.window_handle.caption_color(self.colors.accent_dark_2);
+            if (dark_mode) {
+                self.window_background(self.window_config.dark_background);
+                self.window_handle.caption_color(self.window_config.dark_background);
+                self.window_handle.text_color(pane::system_colors {}.foreground);
+                self.window_handle.border_color(self.window_config.dark_background);
             } else {
-                self.dark_mode = false;
-                self.window_light_background(self.colors.accent_light_2);
-                self.window_handle.caption_color(self.colors.accent_light_3);
+                self.window_background(self.window_config.light_background);
+                self.window_background(self.window_config.light_background);
+                self.window_handle.caption_color(self.window_config.light_background);
+                self.window_handle.text_color(pane::system_colors {}.foreground);
+                self.window_handle.border_color(self.window_config.light_background);
             }
 
-            self.window_handle.text_color(self.colors.foreground);
-            self.window_handle.border_color(self.colors.accent);
-
-            self.window_handle.immersive_dark_mode(self.dark_mode);
+            self.window_handle.immersive_dark_mode(dark_mode);
 
             InvalidateRect(self.window_handle(), nullptr, true);
 
@@ -384,15 +366,9 @@ auto webview::default_procedure(this Self& self, const pane::window_message& win
         case WM_ERASEBKGND: {
             GetClientRect(self.window_handle(), &self.client_rect);
 
-            if (self.dark_mode) {
-                FillRect(reinterpret_cast<HDC>(window_message.wparam),
-                         &self.client_rect,
-                         self.window_dark_background());
-            } else {
-                FillRect(reinterpret_cast<HDC>(window_message.wparam),
-                         &self.client_rect,
-                         self.window_light_background());
-            }
+            FillRect(reinterpret_cast<HDC>(window_message.wparam),
+                     &self.client_rect,
+                     self.window_background());
 
             return 1;
         } break;
@@ -458,8 +434,6 @@ auto webview::create(this Self& self) -> HWND {
         self.window_config.parent_hwnd ? reinterpret_cast<HMENU>(self.id) : nullptr,
         self.window_class().hInstance,
         &self);
-
-    self.window_handle.immersive_dark_mode(self.dark_mode);
 
     if (self.window_config.maximized) {
         self.window_handle.maximize();

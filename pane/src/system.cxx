@@ -1,8 +1,7 @@
 #include <pane/system.hxx>
-#include <pane/color.hxx>
-#include <pane/text.hxx>
 #include <shellapi.h>
 #include <wil/resource.h>
+#include <pane/color.hxx>
 
 namespace pane::system {
 auto hresult_error(HRESULT hresult) -> std::error_code {
