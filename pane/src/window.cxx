@@ -171,7 +171,7 @@ auto window::default_procedure(this Self& self, const pane::window_message& wind
     -> LRESULT {
     switch (window_message.event) {
         case WM_CREATE: {
-            SendMessageW(self.window_handle(), WM_SETTINGCHANGE, 0, 0);
+            self.set_theme();
         } break;
 
         case WM_WINDOWPOSCHANGED: {
@@ -181,24 +181,7 @@ auto window::default_procedure(this Self& self, const pane::window_message& wind
         } break;
 
         case WM_SETTINGCHANGE: {
-            auto dark_mode { pane::system::dark_mode() };
-
-            if (dark_mode) {
-                self.window_background(self.window_config.dark_background);
-                self.window_handle.caption_color(self.window_config.dark_background);
-                self.window_handle.text_color(pane::system_colors {}.foreground);
-                self.window_handle.border_color(self.window_config.dark_background);
-            } else {
-                self.window_background(self.window_config.light_background);
-                self.window_background(self.window_config.light_background);
-                self.window_handle.caption_color(self.window_config.light_background);
-                self.window_handle.text_color(pane::system_colors {}.foreground);
-                self.window_handle.border_color(self.window_config.light_background);
-            }
-
-            self.window_handle.immersive_dark_mode(dark_mode);
-
-            InvalidateRect(self.window_handle(), nullptr, true);
+            self.set_theme();
 
             return 0;
         } break;
@@ -265,6 +248,20 @@ auto window::window_class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM l
     }
 
     return DefWindowProcW(hwnd, msg, wparam, lparam);
+}
+
+auto window::set_theme(this Self& self) -> void {
+    auto dark_mode { pane::system::dark_mode() };
+
+    if (dark_mode) {
+        self.window_background(self.window_config.dark_background);
+    } else {
+        self.window_background(self.window_config.light_background);
+    }
+
+    self.window_handle.immersive_dark_mode(dark_mode);
+
+    InvalidateRect(self.window_handle(), nullptr, true);
 }
 
 auto window::create(this Self& self) -> HWND {
