@@ -284,6 +284,8 @@ private:
         -> LRESULT;
     std::function<LRESULT(Self*, pane::window_message)> window_procedure;
 
+    auto set_theme(this Self& self) -> void;
+
 public:
     auto create(this Self& self) -> HWND;
 
