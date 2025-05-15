@@ -255,11 +255,8 @@ auto window::window_class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM l
 auto window::set_theme(this Self& self) -> void {
     auto dark_mode { pane::system::dark_mode() };
 
-    if (dark_mode) {
-        self.window_background(self.window_config.dark_background);
-    } else {
-        self.window_background(self.window_config.light_background);
-    }
+    self.window_background(dark_mode ? self.window_config.dark_background
+                                     : self.window_config.light_background);
 
     self.window_handle.immersive_dark_mode(dark_mode);
 
@@ -409,11 +406,8 @@ auto webview::window_class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM 
 auto webview::set_theme(this Self& self) -> void {
     auto dark_mode { pane::system::dark_mode() };
 
-    if (dark_mode) {
-        self.window_background(self.window_config.dark_background);
-    } else {
-        self.window_background(self.window_config.light_background);
-    }
+    self.window_background(dark_mode ? self.window_config.dark_background
+                                     : self.window_config.light_background);
 
     self.window_handle.immersive_dark_mode(dark_mode);
 
