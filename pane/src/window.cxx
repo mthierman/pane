@@ -3,8 +3,6 @@
 #include <dwmapi.h>
 #include <wil/wrl.h>
 
-#include <pane/debug.hxx>
-
 namespace pane {
 auto window_message::default_procedure(this const Self& self) -> LRESULT {
     return DefWindowProcW(self.hwnd, self.event, self.wparam, self.lparam);
