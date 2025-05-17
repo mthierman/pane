@@ -47,7 +47,6 @@ target_link_libraries(
     pane
     PRIVATE pane::config
     PUBLIC dwmapi
-           Uxtheme
            gdiplus
            Urlmon
            WindowsApp
