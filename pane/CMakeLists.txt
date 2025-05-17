@@ -49,7 +49,6 @@ target_link_libraries(
     PUBLIC dwmapi
            Uxtheme
            gdiplus
-           icu
            Urlmon
            WindowsApp
            ada
