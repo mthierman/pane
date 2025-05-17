@@ -24,8 +24,8 @@ auto wWinMain(HINSTANCE /* hinstance */,
           true,
           false,
           nullptr },
-        { .home_page = u8"https://learn.microsoft.com/en-us/microsoft-edge/webview2/concepts/"
-                       u8"win32-api-conventions",
+        { .home_page = u8"https://learn.microsoft.com/en-us/microsoft-edge/webview2/reference/"
+                       u8"win32/",
           .creation_callback = [&](pane::webview* webview) -> void {
         webview->core->add_NavigationCompleted(
             Callback<ICoreWebView2NavigationCompletedEventHandler>(
