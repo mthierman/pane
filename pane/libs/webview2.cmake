@@ -1,5 +1,3 @@
-include(FetchContent)
-
 FetchContent_Declare(
     webview2
     DOWNLOAD_NO_PROGRESS ON

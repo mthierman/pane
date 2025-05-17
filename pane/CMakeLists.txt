@@ -3,6 +3,7 @@ list(
     CMAKE_MODULE_PATH
     "${CMAKE_CURRENT_SOURCE_DIR}/libs"
     )
+include(FetchContent)
 include(config)
 include(webview2)
 include(wil)

@@ -1,5 +1,3 @@
-include(FetchContent)
-
 FetchContent_Declare(
     wil
     DOWNLOAD_NO_PROGRESS ON
