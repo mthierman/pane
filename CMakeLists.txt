@@ -7,5 +7,5 @@ list(
     )
 add_subdirectory(pane)
 if(PROJECT_IS_TOP_LEVEL)
-    add_subdirectory("docs")
+    add_subdirectory("webview_docs")
 endif()
