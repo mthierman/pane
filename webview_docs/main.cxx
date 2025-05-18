@@ -35,12 +35,13 @@ auto wWinMain(HINSTANCE /* hinstance */,
             webview->core->get_DocumentTitle(&title);
             SetWindowTextW(webview->window_handle(), title.get());
 
-            webview->core->ExecuteScript(
-                LR"(document.documentElement.style.background = "#00000000"; document.body.style.background = "#00000000")",
-                Callback<ICoreWebView2ExecuteScriptCompletedHandler>(
-                    [](HRESULT /* error_code */, PCWSTR result) -> HRESULT {
-                return S_OK;
-            }).Get());
+            // webview->core->ExecuteScript(
+            //     LR"(document.documentElement.style.background = "#00000000";
+            //     document.body.style.background = "#00000000")",
+            //     Callback<ICoreWebView2ExecuteScriptCompletedHandler>(
+            //         [](HRESULT /* error_code */, PCWSTR result) -> HRESULT {
+            //     return S_OK;
+            // }).Get());
 
             return S_OK;
         }).Get(),
@@ -75,9 +76,9 @@ auto wWinMain(HINSTANCE /* hinstance */,
             } break;
 
             case WM_SETTINGCHANGE: {
-                if (webview->core) {
-                    webview->core->Reload();
-                }
+                // if (webview->core) {
+                //     webview->core->Reload();
+                // }
             } break;
         }
 
