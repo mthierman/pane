@@ -1,5 +1,7 @@
 #include <pane/pane.hxx>
 
+auto is_key_down(int virtual_key) -> bool { return GetKeyState(virtual_key) & 0x8000; }
+
 // https://learn.microsoft.com/en-us/windows/win32/learnwin32/winmain--the-application-entry-point
 auto wWinMain(HINSTANCE /* hinstance */,
               HINSTANCE /* hprevinstance */,
@@ -21,6 +23,17 @@ auto wWinMain(HINSTANCE /* hinstance */,
             } break;
             case WM_DESTROY: {
                 window_manager.erase(window->window_handle);
+            } break;
+            case WM_KEYDOWN: {
+                switch (window_message.wparam) {
+                    case 'N': {
+                        if (is_key_down(VK_LCONTROL) || is_key_down(VK_RCONTROL)) {
+                            pane::debug("Ctrl+N");
+                        } else {
+                            pane::debug("N");
+                        }
+                    } break;
+                }
             } break;
         }
 
