@@ -4,7 +4,8 @@ add_executable(
     )
 target_sources(
     window
-    PRIVATE "main.cxx"
+    PRIVATE "main.cpp"
+            "manager.cpp"
             "../../data/app.manifest"
     )
 target_link_libraries(
