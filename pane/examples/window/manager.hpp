@@ -5,19 +5,16 @@ namespace pane::example {
 struct window_manager final {
     using Self = window_manager;
 
-    window_manager(pane::window_config&& window_config = {});
-    ~window_manager() = default;
-
-    auto insert(this Self& self, const pane::window_handle& window_handle) -> void;
-    auto erase(this Self& self, const pane::window_handle& window_handle) -> void;
+    auto insert(this Self& self, pane::window_handle& window_handle) -> void;
+    auto erase(this Self& self, pane::window_handle& window_handle) -> void;
     auto clear(this Self& self) -> void;
     auto size(this const Self& self) -> uint64_t;
-    auto contains(this const Self& self, HWND hwnd) -> bool;
+    auto contains(this const Self& self, pane::window_handle& window_handle) -> bool;
     auto empty(this const Self& self) -> bool;
-    auto first(this const Self& self) -> HWND;
-    auto last(this const Self& self) -> HWND;
+    auto first(this const Self& self) -> pane::window_handle*;
+    auto last(this const Self& self) -> pane::window_handle*;
 
 private:
-    std::set<HWND> set;
+    std::set<pane::window_handle*> set;
 };
 } // namespace pane::example

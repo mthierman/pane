@@ -1,11 +1,12 @@
 #include <pane/pane.hxx>
+#include "manager.hpp"
 
 // https://learn.microsoft.com/en-us/windows/win32/learnwin32/winmain--the-application-entry-point
 auto wWinMain(HINSTANCE /* hinstance */,
               HINSTANCE /* hprevinstance */,
               PWSTR /* pcmdline */,
               int /* ncmdshow */) -> int {
-    pane::window_manager window_manager;
+    pane::example::window_manager window_manager;
 
     pane::window window { { u8"window",
                             pane::color { 0, 0, 0, 255 },
