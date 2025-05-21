@@ -1,4 +1,6 @@
 #pragma once
 #include <Windows.h>
 
-namespace pane { } // namespace pane
+namespace pane::input {
+auto is_key_down(int virtual_key) -> bool;
+} // namespace pane
