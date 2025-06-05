@@ -1,7 +1,7 @@
 FetchContent_Declare(
     ada
     DOWNLOAD_NO_PROGRESS ON
-    URL "https://github.com/ada-url/ada/releases/download/v3.2.1/singleheader.zip"
+    URL "https://github.com/ada-url/ada/releases/download/v3.2.4/singleheader.zip"
         SOURCE_SUBDIR
         "NULL"
     )
