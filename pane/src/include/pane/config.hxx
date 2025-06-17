@@ -4,7 +4,6 @@
 #include <filesystem>
 #include <system_error>
 #include <pane/filesystem.hxx>
-#include "../../src/glaze.hxx"
 
 namespace pane {
 template <typename T> struct config final {

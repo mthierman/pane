@@ -19,7 +19,6 @@ target_sources(
             "src/file_picker.cxx"
             "src/filesystem.cxx"
             "src/gdi_plus.cxx"
-            "src/glaze.cxx"
             "src/guid.cxx"
             "src/hstring.cxx"
             "src/icu.cxx"
