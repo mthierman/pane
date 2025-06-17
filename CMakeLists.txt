@@ -5,6 +5,18 @@ list(
     CMAKE_MODULE_PATH
     "${CMAKE_CURRENT_SOURCE_DIR}/cmake"
     )
+list(
+    APPEND
+    CMAKE_MODULE_PATH
+    "${CMAKE_CURRENT_SOURCE_DIR}/libs"
+    )
+include(FetchContent)
+include(config)
+include(webview2)
+include(wil)
+include(cppwinrt)
+include(ada)
+include(glaze)
 add_subdirectory(pane)
 if(PROJECT_IS_TOP_LEVEL)
     add_subdirectory("webview_docs")
