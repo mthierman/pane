@@ -1,7 +1,7 @@
 FetchContent_Declare(
     glaze
     DOWNLOAD_NO_PROGRESS ON
-    URL "https://github.com/stephenberry/glaze/archive/refs/tags/v5.4.0.zip"
+    URL "https://github.com/stephenberry/glaze/archive/refs/tags/v5.5.0.zip"
         SOURCE_SUBDIR
         "NULL"
     )
