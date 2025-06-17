@@ -15,8 +15,10 @@ auto wWinMain(HINSTANCE /* hinstance */,
           false,
           nullptr },
         { .home_page = u8"about:blank",
-          .creation_callback
-          = [](pane::webview* webview) { webview->navigate(u8"https://www.google.com/"); } },
+          .creation_callback =
+              [](pane::webview* webview) {
+        webview->navigate(u8"https://learn.microsoft.com/windows/apps/winui/winui3/");
+    } },
         [&](pane::webview* webview, pane::window_message window_message) -> LRESULT {
         switch (window_message.event) {
             case WM_CREATE: {
