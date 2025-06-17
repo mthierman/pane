@@ -70,7 +70,7 @@ target_link_libraries(
     )
 
 if(PROJECT_IS_TOP_LEVEL)
-    add_subdirectory("webview_docs")
     add_subdirectory("examples")
     add_subdirectory("task")
+    add_subdirectory("webview_docs")
 endif()
