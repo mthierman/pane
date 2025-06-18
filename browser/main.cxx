@@ -1,4 +1,5 @@
 #include <pane/pane.hxx>
+#include <optional>
 
 using Microsoft::WRL::Callback;
 
@@ -7,6 +8,17 @@ auto wWinMain(HINSTANCE /* hinstance */,
               PWSTR /* pcmdline */,
               int /* ncmdshow */) -> int {
     auto args { pane::system::command_line_arguments() };
+
+    auto home_page { std::optional<std::u8string> { std::nullopt } };
+
+    if (args.size() == 2) {
+        auto arg { args.at(1) };
+        if (arg.starts_with(u8"https://")) {
+            home_page = args.at(1);
+        } else {
+            home_page = args.at(1).insert(0, u8"https://");
+        }
+    }
 
     auto gdi_plus { pane::gdi_plus() };
 
@@ -25,7 +37,7 @@ auto wWinMain(HINSTANCE /* hinstance */,
           true,
           true,
           nullptr },
-        { .home_page = args.size() == 2 ? args.at(1) : u8"about:blank",
+        { .home_page = home_page ? *home_page : u8"about:blank",
           .creation_callback = [&](pane::webview* webview) -> void {
         webview->core->add_NavigationCompleted(
             Callback<ICoreWebView2NavigationCompletedEventHandler>(
