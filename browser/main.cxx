@@ -7,6 +7,8 @@ auto wWinMain(HINSTANCE /* hinstance */,
               HINSTANCE /* hprevinstance */,
               PWSTR /* pcmdline */,
               int /* ncmdshow */) -> int {
+    auto args { pane::system::command_line_arguments() };
+
     auto gdi_plus { pane::gdi_plus() };
 
     struct event_token {
@@ -24,7 +26,7 @@ auto wWinMain(HINSTANCE /* hinstance */,
           true,
           true,
           nullptr },
-        { .home_page = u8"about:blank",
+        { .home_page = args.size() > 1 ? args.at(1) : u8"about:blank",
           .creation_callback = [&](pane::webview* webview) -> void {
         webview->core->add_NavigationCompleted(
             Callback<ICoreWebView2NavigationCompletedEventHandler>(
