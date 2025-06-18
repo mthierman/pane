@@ -1,5 +1,4 @@
 #include <pane/pane.hxx>
-#include <dwmapi.h>
 
 using Microsoft::WRL::Callback;
 
