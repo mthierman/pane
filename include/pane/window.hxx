@@ -26,6 +26,8 @@ struct window_position final {
     uint64_t bottom;
 };
 
+enum struct window_backdrop { automatic, mica, mica_alt, acrylic, none };
+
 struct window_message final {
     using Self = window_message;
 
@@ -97,9 +99,7 @@ struct window_handle final {
 
     auto immersive_dark_mode(this const Self& self, bool enable) -> HRESULT;
     auto cloak(this const Self& self, bool enable) -> HRESULT;
-    auto mica(this const Self& self, bool enable) -> HRESULT;
-    auto mica_alt(this const Self& self, bool enable) -> HRESULT;
-    auto acrylic(this const Self& self, bool enable) -> HRESULT;
+    auto backdrop(this const Self& self, pane::window_backdrop window_backdrop) -> HRESULT;
     auto border_color(this const Self& self, const pane::color& color) -> HRESULT;
     auto caption_color(this const Self& self, const pane::color& color) -> HRESULT;
     auto text_color(this const Self& self, const pane::color& color) -> HRESULT;

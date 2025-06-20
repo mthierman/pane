@@ -46,55 +46,42 @@ auto window_handle::cloak(this const Self& self, bool cloak) -> HRESULT {
         self.hwnd, DWMWINDOWATTRIBUTE::DWMWA_CLOAK, &attribute, sizeof(attribute));
 }
 
-auto window_handle::mica(this const Self& self, bool enable) -> HRESULT {
-
+auto window_handle::backdrop(this const Self& self, pane::window_backdrop window_backdrop)
+    -> HRESULT {
     auto backdrop { DWM_SYSTEMBACKDROP_TYPE::DWMSBT_AUTO };
 
-    if (enable) {
-        backdrop = DWM_SYSTEMBACKDROP_TYPE::DWMSBT_MAINWINDOW;
-        MARGINS margins { -1, -1, -1, -1 };
-        DwmExtendFrameIntoClientArea(self.hwnd, &margins);
-    } else {
-        MARGINS margins { 0, 0, 0, 0 };
-        DwmExtendFrameIntoClientArea(self.hwnd, &margins);
+    MARGINS margins { -1, -1, -1, -1 };
+    DwmExtendFrameIntoClientArea(self.hwnd, &margins);
+
+    switch (window_backdrop) {
+        case pane::window_backdrop::automatic: {
+            backdrop = DWM_SYSTEMBACKDROP_TYPE::DWMSBT_AUTO;
+            MARGINS margins { 0, 0, 0, 0 };
+            DwmExtendFrameIntoClientArea(self.hwnd, &margins);
+        } break;
+        case pane::window_backdrop::mica: {
+            backdrop = DWM_SYSTEMBACKDROP_TYPE::DWMSBT_MAINWINDOW;
+            MARGINS margins { -1, -1, -1, -1 };
+            DwmExtendFrameIntoClientArea(self.hwnd, &margins);
+        } break;
+        case pane::window_backdrop::mica_alt: {
+            backdrop = DWM_SYSTEMBACKDROP_TYPE::DWMSBT_TABBEDWINDOW;
+            MARGINS margins { -1, -1, -1, -1 };
+            DwmExtendFrameIntoClientArea(self.hwnd, &margins);
+        } break;
+        case pane::window_backdrop::acrylic: {
+            backdrop = DWM_SYSTEMBACKDROP_TYPE::DWMSBT_TRANSIENTWINDOW;
+            MARGINS margins { -1, -1, -1, -1 };
+            DwmExtendFrameIntoClientArea(self.hwnd, &margins);
+        } break;
+        case pane::window_backdrop::none: {
+            backdrop = DWM_SYSTEMBACKDROP_TYPE::DWMSBT_NONE;
+            MARGINS margins { 0, 0, 0, 0 };
+            DwmExtendFrameIntoClientArea(self.hwnd, &margins);
+        } break;
     }
 
-    return DwmSetWindowAttribute(
-        self.hwnd, DWMWINDOWATTRIBUTE::DWMWA_SYSTEMBACKDROP_TYPE, &backdrop, sizeof(backdrop));
-}
-
-auto window_handle::mica_alt(this const Self& self, bool enable) -> HRESULT {
-
-    auto backdrop { DWM_SYSTEMBACKDROP_TYPE::DWMSBT_AUTO };
-
-    if (enable) {
-        backdrop = DWM_SYSTEMBACKDROP_TYPE::DWMSBT_TABBEDWINDOW;
-        MARGINS margins { -1, -1, -1, -1 };
-        DwmExtendFrameIntoClientArea(self.hwnd, &margins);
-    } else {
-        MARGINS margins { 0, 0, 0, 0 };
-        DwmExtendFrameIntoClientArea(self.hwnd, &margins);
-    }
-
-    return DwmSetWindowAttribute(
-        self.hwnd, DWMWINDOWATTRIBUTE::DWMWA_SYSTEMBACKDROP_TYPE, &backdrop, sizeof(backdrop));
-}
-
-auto window_handle::acrylic(this const Self& self, bool enable) -> HRESULT {
-
-    auto backdrop { DWM_SYSTEMBACKDROP_TYPE::DWMSBT_AUTO };
-
-    if (enable) {
-        backdrop = DWM_SYSTEMBACKDROP_TYPE::DWMSBT_TRANSIENTWINDOW;
-        MARGINS margins { -1, -1, -1, -1 };
-        DwmExtendFrameIntoClientArea(self.hwnd, &margins);
-    } else {
-        MARGINS margins { 0, 0, 0, 0 };
-        DwmExtendFrameIntoClientArea(self.hwnd, &margins);
-    }
-
-    return DwmSetWindowAttribute(
-        self.hwnd, DWMWINDOWATTRIBUTE::DWMWA_SYSTEMBACKDROP_TYPE, &backdrop, sizeof(backdrop));
+    return DwmSetWindowAttribute(self.hwnd, backdrop, &backdrop, sizeof(backdrop));
 }
 
 auto window_handle::border_color(this const Self& self, const pane::color& color) -> HRESULT {
