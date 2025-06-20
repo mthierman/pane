@@ -18,6 +18,12 @@ struct window_position final {
     using Self = window_position;
 
     bool fullscreen { false };
+    bool maximized { false };
+    RECT client_rect { 0, 0, 0, 0 };
+    uint64_t left;
+    uint64_t top;
+    uint64_t right;
+    uint64_t bottom;
 };
 
 struct window_message final {
