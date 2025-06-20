@@ -175,7 +175,7 @@ auto window::default_procedure(this Self& self, const pane::window_message& wind
         } break;
 
         case WM_WINDOWPOSCHANGED: {
-            GetClientRect(self.window_handle(), &self.client_rect);
+            GetClientRect(self.window_handle(), &self.window_position.client_rect);
 
             return 0;
         } break;
@@ -204,10 +204,10 @@ auto window::default_procedure(this Self& self, const pane::window_message& wind
         } break;
 
         case WM_ERASEBKGND: {
-            GetClientRect(self.window_handle(), &self.client_rect);
+            GetClientRect(self.window_handle(), &self.window_position.client_rect);
 
             FillRect(reinterpret_cast<HDC>(window_message.wparam),
-                     &self.client_rect,
+                     &self.window_position.client_rect,
                      self.window_background());
 
             return 1;
@@ -310,10 +310,10 @@ auto webview::default_procedure(this Self& self, const pane::window_message& win
         } break;
 
         case WM_WINDOWPOSCHANGED: {
-            GetClientRect(self.window_handle(), &self.client_rect);
+            GetClientRect(self.window_handle(), &self.window_position.client_rect);
 
             if (self.controller) {
-                self.controller->put_Bounds(self.client_rect);
+                self.controller->put_Bounds(self.window_position.client_rect);
             }
 
             return 0;
@@ -343,10 +343,10 @@ auto webview::default_procedure(this Self& self, const pane::window_message& win
         } break;
 
         case WM_ERASEBKGND: {
-            GetClientRect(self.window_handle(), &self.client_rect);
+            GetClientRect(self.window_handle(), &self.window_position.client_rect);
 
             FillRect(reinterpret_cast<HDC>(window_message.wparam),
-                     &self.client_rect,
+                     &self.window_position.client_rect,
                      self.window_background());
 
             return 1;
