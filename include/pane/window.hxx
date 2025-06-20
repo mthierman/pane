@@ -14,6 +14,12 @@
 #include <ada.h>
 
 namespace pane {
+struct window_position final {
+    using Self = window_position;
+
+    bool fullscreen { false };
+};
+
 struct window_message final {
     using Self = window_message;
 
