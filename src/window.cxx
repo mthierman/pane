@@ -33,6 +33,7 @@ auto window_handle::restore(this const Self& self) -> bool {
     return ShowWindow(self.hwnd, SW_RESTORE);
 }
 
+// https://devblogs.microsoft.com/oldnewthing/20100412-00/?p=14353
 auto window_handle::fullscreen(this Self& self) -> bool {
     auto style { GetWindowLongPtrW(self.hwnd, GWL_STYLE) };
 
