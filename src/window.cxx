@@ -236,6 +236,23 @@ auto window::default_procedure(this Self& self, const pane::window_message& wind
             return 0;
         } break;
 
+        case WM_SYSCOMMAND: {
+            // pane::debug("WM_SYSCOMMAND: {}", window_message.wparam);
+            switch (window_message.wparam) {
+                case SC_MAXIMIZE: {
+                    pane::debug("SC_MAXIMIZE");
+                } break;
+                case SC_MINIMIZE: {
+                    pane::debug("SC_MINIMIZE");
+                } break;
+                case SC_RESTORE: {
+                    pane::debug("SC_RESTORE");
+                } break;
+            }
+
+            // return 0;
+        } break;
+
         case WM_SHOWWINDOW: {
             pane::debug("WM_SHOWWINDOW");
 
