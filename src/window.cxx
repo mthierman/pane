@@ -53,10 +53,10 @@ auto window_handle::toggle_fullscreen(this Self& self) -> bool {
                          (monitor.bottom - monitor.top),
                          SWP_NOOWNERZORDER | SWP_FRAMECHANGED);
 
+            self.window_position.fullscreen = true;
+
             return true;
         }
-
-        return false;
     }
 
     if (!(style & WS_OVERLAPPEDWINDOW)) {
@@ -70,11 +70,11 @@ auto window_handle::toggle_fullscreen(this Self& self) -> bool {
                      (restore.right - restore.left),
                      (restore.bottom - restore.top),
                      SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_NOOWNERZORDER | SWP_FRAMECHANGED);
-
-        return false;
     }
 
-    return true;
+    self.window_position.fullscreen = false;
+
+    return false;
 }
 
 auto window_handle::immersive_dark_mode(this const Self& self, bool dark_mode) -> HRESULT {
