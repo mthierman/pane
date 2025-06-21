@@ -34,7 +34,7 @@ auto window_handle::restore(this const Self& self) -> bool {
 }
 
 // https://devblogs.microsoft.com/oldnewthing/20100412-00/?p=14353
-auto window_handle::fullscreen(this Self& self) -> bool {
+auto window_handle::toggle_fullscreen(this Self& self) -> bool {
     auto style { GetWindowLongPtrW(self.hwnd, GWL_STYLE) };
 
     if (style & WS_OVERLAPPEDWINDOW) {
@@ -259,7 +259,7 @@ auto window::default_procedure(this Self& self, const pane::window_message& wind
 
             switch (window_message.wparam) {
                 case VK_F11: {
-                    self.window_handle.fullscreen();
+                    self.window_handle.toggle_fullscreen();
 
                     return 0;
                 } break;
