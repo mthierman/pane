@@ -34,8 +34,8 @@ auto window_handle::restore(this const Self& self) -> bool {
 }
 
 auto window_handle::fullscreen(this Self& self) -> bool {
-    WINDOWPLACEMENT window_placement { .length { sizeof(WINDOWPLACEMENT) } };
-    GetWindowPlacement(self.hwnd, &window_placement);
+    // WINDOWPLACEMENT window_placement { .length { sizeof(WINDOWPLACEMENT) } };
+    // GetWindowPlacement(self.hwnd, &window_placement);
 
     MONITORINFO monitor_info { .cbSize { sizeof(MONITORINFO) } };
     GetMonitorInfoW(MonitorFromWindow(self.hwnd, MONITOR_DEFAULTTONEAREST), &monitor_info);
@@ -43,7 +43,6 @@ auto window_handle::fullscreen(this Self& self) -> bool {
     auto style { GetWindowLongPtrW(self.hwnd, GWL_STYLE) };
 
     if (style & WS_OVERLAPPEDWINDOW) {
-        // positions.restoreFullscreen = positions.window;
         auto& monitor { monitor_info.rcMonitor };
         SetWindowLongPtrW(self.hwnd, GWL_STYLE, style & ~WS_OVERLAPPEDWINDOW);
         SetWindowPos(self.hwnd,
@@ -53,6 +52,22 @@ auto window_handle::fullscreen(this Self& self) -> bool {
                      (monitor.right - monitor.left),
                      (monitor.bottom - monitor.top),
                      SWP_FRAMECHANGED);
+
+        return true;
+    }
+
+    if (!(style & WS_OVERLAPPEDWINDOW)) {
+        auto& restore_position { self.window_position.window_placement.rcNormalPosition };
+        SetWindowLongPtrW(self.hwnd, GWL_STYLE, style | WS_OVERLAPPEDWINDOW);
+        SetWindowPos(self.hwnd,
+                     HWND_TOP,
+                     restore_position.left,
+                     restore_position.top,
+                     (restore_position.right - restore_position.left),
+                     (restore_position.bottom - restore_position.top),
+                     SWP_FRAMECHANGED);
+
+        return false;
     }
 
     return true;
@@ -190,7 +205,14 @@ auto window::default_procedure(this Self& self, const pane::window_message& wind
         } break;
 
         case WM_WINDOWPOSCHANGED: {
-            GetClientRect(self.window_handle(), &self.window_position.client_rect);
+            GetClientRect(self.window_handle(), &self.window_handle.window_position.client_rect);
+
+            auto style { GetWindowLongPtrW(self.window_handle(), GWL_STYLE) };
+
+            if (style & WS_OVERLAPPEDWINDOW) {
+                GetWindowPlacement(self.window_handle(),
+                                   &self.window_handle.window_position.window_placement);
+            }
 
             return 0;
         } break;
@@ -219,10 +241,10 @@ auto window::default_procedure(this Self& self, const pane::window_message& wind
         } break;
 
         case WM_ERASEBKGND: {
-            GetClientRect(self.window_handle(), &self.window_position.client_rect);
+            GetClientRect(self.window_handle(), &self.window_handle.window_position.client_rect);
 
             FillRect(reinterpret_cast<HDC>(window_message.wparam),
-                     &self.window_position.client_rect,
+                     &self.window_handle.window_position.client_rect,
                      self.window_background());
 
             return 1;

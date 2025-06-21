@@ -20,10 +20,7 @@ struct window_position final {
     bool fullscreen { false };
     bool maximized { false };
     RECT client_rect { 0, 0, 0, 0 };
-    uint64_t left;
-    uint64_t top;
-    uint64_t right;
-    uint64_t bottom;
+    WINDOWPLACEMENT window_placement { .length { sizeof(WINDOWPLACEMENT) } };
 };
 
 enum struct window_backdrop { automatic, mica, mica_alt, acrylic, none };
@@ -107,6 +104,8 @@ struct window_handle final {
 
     auto operator()(this const Self& self) -> HWND;
     auto operator()(this Self& self, HWND hwnd) -> void;
+
+    pane::window_position window_position;
 
 private:
     HWND hwnd { nullptr };
@@ -197,7 +196,6 @@ public:
                                                     ? window_config.dark_background
                                                     : window_config.light_background };
     pane::window_handle window_handle;
-    pane::window_position window_position;
     UINT dpi { GetDpiForWindow(window_handle()) };
     float scale_factor { static_cast<float>(dpi) / static_cast<float>(USER_DEFAULT_SCREEN_DPI) };
 };
