@@ -19,6 +19,7 @@ struct window_position final {
 
     bool fullscreen { false };
     bool maximized { false };
+    bool minimized { false };
     RECT client_rect { 0, 0, 0, 0 };
     WINDOWPLACEMENT window_placement { .length { sizeof(WINDOWPLACEMENT) } };
 };

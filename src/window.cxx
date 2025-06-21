@@ -216,6 +216,20 @@ auto window::default_procedure(this Self& self, const pane::window_message& wind
             if (style & WS_OVERLAPPEDWINDOW) {
                 GetWindowPlacement(self.window_handle(),
                                    &self.window_handle.window_position.window_placement);
+
+                if (self.window_handle.window_position.window_placement.showCmd
+                    == SW_SHOWMAXIMIZED) {
+                    self.window_handle.window_position.maximized = true;
+                } else {
+                    self.window_handle.window_position.maximized = false;
+                }
+
+                if (self.window_handle.window_position.window_placement.showCmd
+                    == SW_SHOWMINIMIZED) {
+                    self.window_handle.window_position.minimized = true;
+                } else {
+                    self.window_handle.window_position.minimized = false;
+                }
             }
 
             return 0;
