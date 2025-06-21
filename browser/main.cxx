@@ -35,7 +35,6 @@ auto wWinMain(HINSTANCE /* hinstance */,
           pane::color { 0, 0, 0, 255 },
           pane::color { 255, 255, 255, 255 },
           true,
-          true,
           nullptr },
         { .home_page = home_page ? *home_page : u8"about:blank",
           .creation_callback = [&](pane::webview* webview) -> void {

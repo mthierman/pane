@@ -8,12 +8,7 @@ auto wWinMain(HINSTANCE /* hinstance */,
     auto window_manager { pane::window_manager() };
 
     auto url { pane::webview(
-        { u8"url",
-          pane::color { 0, 0, 0, 0 },
-          pane::color { 255, 255, 255, 0 },
-          true,
-          false,
-          nullptr },
+        { u8"url", pane::color { 0, 0, 0, 0 }, pane::color { 255, 255, 255, 0 }, true, nullptr },
         { .home_page = u8"about:blank",
           .creation_callback =
               [](pane::webview* webview) {
@@ -37,7 +32,6 @@ auto wWinMain(HINSTANCE /* hinstance */,
           pane::color { 0, 0, 0, 0 },
           pane::color { 255, 255, 255, 0 },
           true,
-          false,
           nullptr },
         { .home_page = u8"about:blank",
           .virtual_host_name_map = std::make_pair(
@@ -60,12 +54,7 @@ auto wWinMain(HINSTANCE /* hinstance */,
     }) };
 
     auto file { pane::webview(
-        { u8"file",
-          pane::color { 0, 0, 0, 0 },
-          pane::color { 255, 255, 255, 0 },
-          true,
-          false,
-          nullptr },
+        { u8"file", pane::color { 0, 0, 0, 0 }, pane::color { 255, 255, 255, 0 }, true, nullptr },
         { .home_page = u8"about:blank",
           .creation_callback =
               [](pane::webview* webview) {
@@ -89,7 +78,6 @@ auto wWinMain(HINSTANCE /* hinstance */,
           pane::color { 0, 0, 0, 0 },
           pane::color { 255, 255, 255, 0 },
           true,
-          false,
           nullptr },
         { .home_page = u8"about:blank",
           .virtual_host_name_map = std::make_pair(

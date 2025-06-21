@@ -22,7 +22,6 @@ auto wWinMain(HINSTANCE /* hinstance */,
           pane::color { 0, 0, 0, 255 },
           pane::color { 255, 255, 255, 255 },
           true,
-          true,
           nullptr },
         { .home_page = u8"https://learn.microsoft.com/en-us/microsoft-edge/webview2/reference/"
                        u8"win32/",

@@ -11,7 +11,6 @@ auto wWinMain(HINSTANCE /* hinstance */,
                                  pane::color { 0, 0, 0, 255 },
                                  pane::color { 255, 255, 255, 255 },
                                  true,
-                                 false,
                                  nullptr },
                                [&](pane::window* window,
                                    pane::window_message window_message) -> LRESULT {

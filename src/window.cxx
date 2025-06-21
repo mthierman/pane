@@ -284,7 +284,6 @@ auto window::window_class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM l
             if (auto self { static_cast<Self*>(create_struct->lpCreateParams) }) {
                 SetWindowLongPtrW(hwnd, 0, reinterpret_cast<LONG_PTR>(self));
                 self->window_handle(hwnd);
-                self->window_handle.cloak(true);
             }
         }
     }
@@ -319,7 +318,9 @@ auto window::create(this Self& self) -> HWND {
         0,
         self.window_class().lpszClassName,
         reinterpret_cast<const wchar_t*>(pane::to_utf16(self.window_config.title).data()),
-        self.window_config.parent_hwnd ? WS_CHILDWINDOW : WS_OVERLAPPEDWINDOW | WS_VISIBLE,
+        self.window_config.parent_hwnd
+            ? WS_CHILDWINDOW
+            : WS_OVERLAPPEDWINDOW | (self.window_config.visible ? WS_VISIBLE : 0),
         CW_USEDEFAULT,
         CW_USEDEFAULT,
         CW_USEDEFAULT,
@@ -328,14 +329,6 @@ auto window::create(this Self& self) -> HWND {
         self.window_config.parent_hwnd ? reinterpret_cast<HMENU>(self.id) : nullptr,
         self.window_class().hInstance,
         &self);
-
-    if (self.window_config.maximized) {
-        self.window_handle.maximize();
-    }
-
-    if (self.window_config.visible) {
-        self.window_handle.cloak(false);
-    }
 
     return self.window_handle();
 }
@@ -435,7 +428,6 @@ auto webview::window_class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM 
             if (auto self { static_cast<Self*>(create_struct->lpCreateParams) }) {
                 SetWindowLongPtrW(hwnd, 0, reinterpret_cast<LONG_PTR>(self));
                 self->window_handle(hwnd);
-                self->window_handle.cloak(true);
             }
         }
     }
@@ -470,7 +462,9 @@ auto webview::create(this Self& self) -> HWND {
         0,
         self.window_class().lpszClassName,
         reinterpret_cast<const wchar_t*>(pane::to_utf16(self.window_config.title).data()),
-        self.window_config.parent_hwnd ? WS_CHILDWINDOW : WS_OVERLAPPEDWINDOW | WS_VISIBLE,
+        self.window_config.parent_hwnd
+            ? WS_CHILDWINDOW
+            : WS_OVERLAPPEDWINDOW | (self.window_config.visible ? WS_VISIBLE : 0),
         CW_USEDEFAULT,
         CW_USEDEFAULT,
         CW_USEDEFAULT,
@@ -479,14 +473,6 @@ auto webview::create(this Self& self) -> HWND {
         self.window_config.parent_hwnd ? reinterpret_cast<HMENU>(self.id) : nullptr,
         self.window_class().hInstance,
         &self);
-
-    if (self.window_config.maximized) {
-        self.window_handle.maximize();
-    }
-
-    if (self.window_config.visible) {
-        self.window_handle.cloak(false);
-    }
 
     if (self.options) {
         if (!self.webview_config.environment_options.AdditionalBrowserArguments.empty()) {

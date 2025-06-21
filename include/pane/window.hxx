@@ -157,7 +157,6 @@ struct window_config final {
     pane::color dark_background;
     pane::color light_background;
     bool visible { true };
-    bool maximized { false };
     HWND parent_hwnd { nullptr };
 };
 
