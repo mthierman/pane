@@ -239,14 +239,19 @@ auto window::default_procedure(this Self& self, const pane::window_message& wind
         case WM_SYSCOMMAND: {
             // pane::debug("WM_SYSCOMMAND: {}", window_message.wparam);
             switch (window_message.wparam) {
-                case SC_MAXIMIZE: {
-                    pane::debug("SC_MAXIMIZE");
-                } break;
-                case SC_MINIMIZE: {
-                    pane::debug("SC_MINIMIZE");
-                } break;
+                // case SC_MAXIMIZE: {
+                //     pane::debug("SC_MAXIMIZE");
+                // } break;
+                // case SC_MINIMIZE: {
+                //     pane::debug("SC_MINIMIZE");
+                // } break;
                 case SC_RESTORE: {
                     pane::debug("SC_RESTORE");
+                    if (self.window_handle.window_position.fullscreen) {
+                        self.window_handle.toggle_fullscreen();
+
+                        return 0;
+                    }
                 } break;
             }
 
