@@ -310,6 +310,7 @@ auto window::default_procedure(this Self& self, const pane::window_message& wind
 }
 
 auto window::window_class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) -> LRESULT {
+    // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-nccreate
     if (msg == WM_NCCREATE) {
         if (auto create_struct { reinterpret_cast<CREATESTRUCTW*>(lparam) }) {
             if (auto self { static_cast<Self*>(create_struct->lpCreateParams) }) {
@@ -319,6 +320,7 @@ auto window::window_class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM l
         }
     }
 
+    // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-ncdestroy
     if (msg == WM_NCDESTROY) {
         if (auto self { reinterpret_cast<Self*>(GetWindowLongPtrW(hwnd, 0)) }) {
             self->window_handle(nullptr);
@@ -501,6 +503,7 @@ auto webview::default_procedure(this Self& self, const pane::window_message& win
 }
 
 auto webview::window_class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) -> LRESULT {
+    // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-nccreate
     if (msg == WM_NCCREATE) {
         if (auto create_struct { reinterpret_cast<CREATESTRUCTW*>(lparam) }) {
             if (auto self { static_cast<Self*>(create_struct->lpCreateParams) }) {
@@ -510,6 +513,7 @@ auto webview::window_class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM 
         }
     }
 
+    // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-ncdestroy
     if (msg == WM_NCDESTROY) {
         if (auto self { reinterpret_cast<Self*>(GetWindowLongPtrW(hwnd, 0)) }) {
             self->window_handle(nullptr);
