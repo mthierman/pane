@@ -1,7 +1,10 @@
+#include <pane/input.hxx>
 #include <pane/window.hxx>
 #include <pane/text.hxx>
 #include <dwmapi.h>
 #include <wil/wrl.h>
+
+#include <pane/debug.hxx>
 
 namespace pane {
 auto window_message::default_procedure(this const Self& self) -> LRESULT {
@@ -28,6 +31,31 @@ auto window_handle::minimize(this const Self& self) -> bool {
 
 auto window_handle::restore(this const Self& self) -> bool {
     return ShowWindow(self.hwnd, SW_RESTORE);
+}
+
+auto window_handle::fullscreen(this Self& self) -> bool {
+    WINDOWPLACEMENT window_placement { .length { sizeof(WINDOWPLACEMENT) } };
+    GetWindowPlacement(self.hwnd, &window_placement);
+
+    MONITORINFO monitor_info { .cbSize { sizeof(MONITORINFO) } };
+    GetMonitorInfoW(MonitorFromWindow(self.hwnd, MONITOR_DEFAULTTONEAREST), &monitor_info);
+
+    auto style { GetWindowLongPtrW(self.hwnd, GWL_STYLE) };
+
+    if (style & WS_OVERLAPPEDWINDOW) {
+        // positions.restoreFullscreen = positions.window;
+        auto& monitor { monitor_info.rcMonitor };
+        SetWindowLongPtrW(self.hwnd, GWL_STYLE, style & ~WS_OVERLAPPEDWINDOW);
+        SetWindowPos(self.hwnd,
+                     HWND_TOP,
+                     monitor.left,
+                     monitor.top,
+                     (monitor.right - monitor.left),
+                     (monitor.bottom - monitor.top),
+                     SWP_FRAMECHANGED);
+    }
+
+    return true;
 }
 
 auto window_handle::immersive_dark_mode(this const Self& self, bool dark_mode) -> HRESULT {
@@ -198,6 +226,18 @@ auto window::default_procedure(this Self& self, const pane::window_message& wind
                      self.window_background());
 
             return 1;
+        } break;
+
+        case WM_KEYDOWN: {
+            pane::debug("{}", window_message.wparam);
+
+            switch (window_message.wparam) {
+                case VK_F11: {
+                    self.window_handle.fullscreen();
+
+                    return 0;
+                } break;
+            }
         } break;
 
         default: {
