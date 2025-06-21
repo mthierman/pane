@@ -34,17 +34,15 @@ auto window_handle::restore(this const Self& self) -> bool {
 }
 
 auto window_handle::fullscreen(this Self& self) -> bool {
-    // WINDOWPLACEMENT window_placement { .length { sizeof(WINDOWPLACEMENT) } };
-    // GetWindowPlacement(self.hwnd, &window_placement);
-
     MONITORINFO monitor_info { .cbSize { sizeof(MONITORINFO) } };
     GetMonitorInfoW(MonitorFromWindow(self.hwnd, MONITOR_DEFAULTTONEAREST), &monitor_info);
 
     auto style { GetWindowLongPtrW(self.hwnd, GWL_STYLE) };
 
     if (style & WS_OVERLAPPEDWINDOW) {
-        auto& monitor { monitor_info.rcMonitor };
         SetWindowLongPtrW(self.hwnd, GWL_STYLE, style & ~WS_OVERLAPPEDWINDOW);
+
+        auto& monitor { monitor_info.rcMonitor };
         SetWindowPos(self.hwnd,
                      HWND_TOP,
                      monitor.left,
@@ -57,14 +55,15 @@ auto window_handle::fullscreen(this Self& self) -> bool {
     }
 
     if (!(style & WS_OVERLAPPEDWINDOW)) {
-        auto& restore_position { self.window_position.window_placement.rcNormalPosition };
         SetWindowLongPtrW(self.hwnd, GWL_STYLE, style | WS_OVERLAPPEDWINDOW);
+
+        auto& pos { self.window_position.window_placement.rcNormalPosition };
         SetWindowPos(self.hwnd,
                      HWND_TOP,
-                     restore_position.left,
-                     restore_position.top,
-                     (restore_position.right - restore_position.left),
-                     (restore_position.bottom - restore_position.top),
+                     pos.left,
+                     pos.top,
+                     (pos.right - pos.left),
+                     (pos.bottom - pos.top),
                      SWP_FRAMECHANGED);
 
         return false;
