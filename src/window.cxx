@@ -237,6 +237,13 @@ auto window::default_procedure(this Self& self, const pane::window_message& wind
             return 0;
         } break;
 
+            // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-settingchange
+        case WM_SETTINGCHANGE: {
+            self.set_theme();
+
+            return 0;
+        } break;
+
             // https://learn.microsoft.com/en-us/windows/win32/menurc/wm-syscommand
         case WM_SYSCOMMAND: {
             switch (window_message.wparam) {
@@ -248,13 +255,6 @@ auto window::default_procedure(this Self& self, const pane::window_message& wind
                     }
                 } break;
             }
-        } break;
-
-            // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-settingchange
-        case WM_SETTINGCHANGE: {
-            self.set_theme();
-
-            return 0;
         } break;
 
             // https://learn.microsoft.com/en-us/windows/win32/hidpi/wm-dpichanged
@@ -380,28 +380,62 @@ webview::~webview() { }
 auto webview::default_procedure(this Self& self, const pane::window_message& window_message)
     -> LRESULT {
     switch (window_message.event) {
+        // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-create
         case WM_CREATE: {
             self.set_theme();
 
             return 0;
         } break;
 
+            // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-windowposchanged
         case WM_WINDOWPOSCHANGED: {
-            GetClientRect(self.window_handle(), &self.window_position.client_rect);
+            GetClientRect(self.window_handle(), &self.window_handle.window_position.client_rect);
 
-            if (self.controller) {
-                self.controller->put_Bounds(self.window_position.client_rect);
+            if (auto style { GetWindowLongPtrW(self.window_handle(), GWL_STYLE) };
+                style & WS_OVERLAPPEDWINDOW) {
+                GetWindowPlacement(self.window_handle(),
+                                   &self.window_handle.window_position.window_placement);
+            }
+
+            WINDOWPLACEMENT window_placement { .length { sizeof(WINDOWPLACEMENT) } };
+            GetWindowPlacement(self.window_handle(), &window_placement);
+
+            if (window_placement.showCmd == SW_SHOWMAXIMIZED) {
+                self.window_handle.window_position.maximized = true;
+            } else {
+                self.window_handle.window_position.maximized = false;
+            }
+
+            if (window_placement.showCmd == SW_SHOWMINIMIZED) {
+                self.window_handle.window_position.minimized = true;
+            } else {
+                self.window_handle.window_position.minimized = false;
             }
 
             return 0;
         } break;
 
+            // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-settingchange
         case WM_SETTINGCHANGE: {
             self.set_theme();
 
             return 0;
         } break;
 
+            // https://learn.microsoft.com/en-us/windows/win32/menurc/wm-syscommand
+        case WM_SYSCOMMAND: {
+            switch (window_message.wparam) {
+                case SC_RESTORE: {
+                    if (self.window_handle.window_position.fullscreen) {
+                        self.window_handle.toggle_fullscreen();
+
+                        return 0;
+                    }
+                } break;
+            }
+        } break;
+
+            // https://learn.microsoft.com/en-us/windows/win32/hidpi/wm-dpichanged
         case WM_DPICHANGED: {
             self.dpi = HIWORD(window_message.wparam);
             self.scale_factor
@@ -419,6 +453,7 @@ auto webview::default_procedure(this Self& self, const pane::window_message& win
             return 0;
         } break;
 
+            // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-erasebkgnd
         case WM_ERASEBKGND: {
             GetClientRect(self.window_handle(), &self.window_position.client_rect);
 
@@ -429,6 +464,7 @@ auto webview::default_procedure(this Self& self, const pane::window_message& win
             return 1;
         } break;
 
+            // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-showwindow
         case WM_SHOWWINDOW: {
             if (self.controller) {
                 if (window_message.wparam) {
@@ -439,6 +475,17 @@ auto webview::default_procedure(this Self& self, const pane::window_message& win
             }
 
             return 0;
+        } break;
+
+            // https://learn.microsoft.com/en-us/windows/win32/inputdev/wm-keydown
+        case WM_KEYDOWN: {
+            switch (window_message.wparam) {
+                case VK_F11: {
+                    self.window_handle.toggle_fullscreen();
+
+                    return 0;
+                } break;
+            }
         } break;
 
         default: {
