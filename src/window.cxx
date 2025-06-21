@@ -235,6 +235,12 @@ auto window::default_procedure(this Self& self, const pane::window_message& wind
             return 0;
         } break;
 
+        case WM_SHOWWINDOW: {
+            pane::debug("WM_SHOWWINDOW");
+
+            return 0;
+        } break;
+
         case WM_SETTINGCHANGE: {
             self.set_theme();
 
@@ -269,8 +275,6 @@ auto window::default_procedure(this Self& self, const pane::window_message& wind
         } break;
 
         case WM_KEYDOWN: {
-            pane::debug("{}", window_message.wparam);
-
             switch (window_message.wparam) {
                 case VK_F11: {
                     self.window_handle.toggle_fullscreen();
