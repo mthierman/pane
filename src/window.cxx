@@ -202,12 +202,14 @@ window::window(pane::window_config&& window_config,
 auto window::default_procedure(this Self& self, const pane::window_message& window_message)
     -> LRESULT {
     switch (window_message.event) {
+            // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-create
         case WM_CREATE: {
             self.set_theme();
 
             return 0;
         } break;
 
+            // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-windowposchanged
         case WM_WINDOWPOSCHANGED: {
             GetClientRect(self.window_handle(), &self.window_handle.window_position.client_rect);
 
@@ -236,17 +238,10 @@ auto window::default_procedure(this Self& self, const pane::window_message& wind
             return 0;
         } break;
 
+            // https://learn.microsoft.com/en-us/windows/win32/menurc/wm-syscommand
         case WM_SYSCOMMAND: {
-            // pane::debug("WM_SYSCOMMAND: {}", window_message.wparam);
             switch (window_message.wparam) {
-                // case SC_MAXIMIZE: {
-                //     pane::debug("SC_MAXIMIZE");
-                // } break;
-                // case SC_MINIMIZE: {
-                //     pane::debug("SC_MINIMIZE");
-                // } break;
                 case SC_RESTORE: {
-                    pane::debug("SC_RESTORE");
                     if (self.window_handle.window_position.fullscreen) {
                         self.window_handle.toggle_fullscreen();
 
@@ -254,22 +249,16 @@ auto window::default_procedure(this Self& self, const pane::window_message& wind
                     }
                 } break;
             }
-
-            // return 0;
         } break;
 
-        case WM_SHOWWINDOW: {
-            pane::debug("WM_SHOWWINDOW");
-
-            return 0;
-        } break;
-
+            // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-settingchange
         case WM_SETTINGCHANGE: {
             self.set_theme();
 
             return 0;
         } break;
 
+            // https://learn.microsoft.com/en-us/windows/win32/hidpi/wm-dpichanged
         case WM_DPICHANGED: {
             self.dpi = HIWORD(window_message.wparam);
             self.scale_factor
@@ -287,6 +276,7 @@ auto window::default_procedure(this Self& self, const pane::window_message& wind
             return 0;
         } break;
 
+            // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-erasebkgnd
         case WM_ERASEBKGND: {
             GetClientRect(self.window_handle(), &self.window_handle.window_position.client_rect);
 
@@ -297,6 +287,7 @@ auto window::default_procedure(this Self& self, const pane::window_message& wind
             return 1;
         } break;
 
+            // https://learn.microsoft.com/en-us/windows/win32/inputdev/wm-keydown
         case WM_KEYDOWN: {
             switch (window_message.wparam) {
                 case VK_F11: {
