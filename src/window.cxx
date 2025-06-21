@@ -258,14 +258,8 @@ auto window::default_procedure(this Self& self, const pane::window_message& wind
 
             // https://learn.microsoft.com/en-us/windows/win32/menurc/wm-syscommand
         case WM_SYSCOMMAND: {
-            switch (window_message.wparam) {
-                case SC_RESTORE: {
-                    if (self.window_handle.window_position.fullscreen) {
-                        self.window_handle.toggle_fullscreen();
-
-                        return 0;
-                    }
-                } break;
+            if (self.window_handle.window_position.fullscreen) {
+                return 0;
             }
         } break;
 
@@ -449,16 +443,10 @@ auto webview::default_procedure(this Self& self, const pane::window_message& win
             return 0;
         } break;
 
-            // https://learn.microsoft.com/en-us/windows/win32/menurc/wm-syscommand
+        // https://learn.microsoft.com/en-us/windows/win32/menurc/wm-syscommand
         case WM_SYSCOMMAND: {
-            switch (window_message.wparam) {
-                case SC_RESTORE: {
-                    if (self.window_handle.window_position.fullscreen) {
-                        self.window_handle.toggle_fullscreen();
-
-                        return 0;
-                    }
-                } break;
+            if (self.window_handle.window_position.fullscreen) {
+                return 0;
             }
         } break;
 
