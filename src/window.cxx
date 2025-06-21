@@ -213,9 +213,8 @@ auto window::default_procedure(this Self& self, const pane::window_message& wind
         case WM_WINDOWPOSCHANGED: {
             GetClientRect(self.window_handle(), &self.window_handle.window_position.client_rect);
 
-            auto style { GetWindowLongPtrW(self.window_handle(), GWL_STYLE) };
-
-            if (style & WS_OVERLAPPEDWINDOW) {
+            if (auto style { GetWindowLongPtrW(self.window_handle(), GWL_STYLE) };
+                style & WS_OVERLAPPEDWINDOW) {
                 GetWindowPlacement(self.window_handle(),
                                    &self.window_handle.window_position.window_placement);
             }
