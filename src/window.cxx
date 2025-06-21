@@ -34,37 +34,41 @@ auto window_handle::restore(this const Self& self) -> bool {
 }
 
 auto window_handle::fullscreen(this Self& self) -> bool {
-    MONITORINFO monitor_info { .cbSize { sizeof(MONITORINFO) } };
-    GetMonitorInfoW(MonitorFromWindow(self.hwnd, MONITOR_DEFAULTTONEAREST), &monitor_info);
-
     auto style { GetWindowLongPtrW(self.hwnd, GWL_STYLE) };
 
     if (style & WS_OVERLAPPEDWINDOW) {
-        SetWindowLongPtrW(self.hwnd, GWL_STYLE, style & ~WS_OVERLAPPEDWINDOW);
+        MONITORINFO monitor_info { .cbSize { sizeof(MONITORINFO) } };
 
-        auto& monitor { monitor_info.rcMonitor };
-        SetWindowPos(self.hwnd,
-                     HWND_TOP,
-                     monitor.left,
-                     monitor.top,
-                     (monitor.right - monitor.left),
-                     (monitor.bottom - monitor.top),
-                     SWP_FRAMECHANGED);
+        if (GetWindowPlacement(self.hwnd, &self.window_position.window_placement)
+            && GetMonitorInfoW(MonitorFromWindow(self.hwnd, MONITOR_DEFAULTTONEAREST),
+                               &monitor_info)) {
+            SetWindowLongPtrW(self.hwnd, GWL_STYLE, style & ~WS_OVERLAPPEDWINDOW);
+            auto& monitor { monitor_info.rcMonitor };
+            SetWindowPos(self.hwnd,
+                         HWND_TOP,
+                         monitor.left,
+                         monitor.top,
+                         (monitor.right - monitor.left),
+                         (monitor.bottom - monitor.top),
+                         SWP_NOOWNERZORDER | SWP_FRAMECHANGED);
 
-        return true;
+            return true;
+        }
+
+        return false;
     }
 
     if (!(style & WS_OVERLAPPEDWINDOW)) {
         SetWindowLongPtrW(self.hwnd, GWL_STYLE, style | WS_OVERLAPPEDWINDOW);
-
-        auto& pos { self.window_position.window_placement.rcNormalPosition };
+        SetWindowPlacement(self.hwnd, &self.window_position.window_placement);
+        auto& restore { self.window_position.window_placement.rcNormalPosition };
         SetWindowPos(self.hwnd,
                      HWND_TOP,
-                     pos.left,
-                     pos.top,
-                     (pos.right - pos.left),
-                     (pos.bottom - pos.top),
-                     SWP_FRAMECHANGED);
+                     restore.left,
+                     restore.top,
+                     (restore.right - restore.left),
+                     (restore.bottom - restore.top),
+                     SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_NOOWNERZORDER | SWP_FRAMECHANGED);
 
         return false;
     }
