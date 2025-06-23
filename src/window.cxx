@@ -475,6 +475,10 @@ auto webview::default_procedure(this Self& self, const pane::window_message& win
                 self.window_handle.window_position.minimized = false;
             }
 
+            if (self.controller) {
+                self.controller->put_Bounds(self.window_position.client_rect);
+            }
+
             return 0;
         } break;
 
