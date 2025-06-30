@@ -514,7 +514,9 @@ auto webview::window_class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM 
     }
 
     if (auto self { reinterpret_cast<Self*>(GetWindowLongPtrW(hwnd, 0)) }) {
-        return self->window_procedure(self, { hwnd, msg, wparam, lparam });
+        if (self->window_procedure) {
+            return self->window_procedure(self, { hwnd, msg, wparam, lparam });
+        }
     }
 
     return DefWindowProcW(hwnd, msg, wparam, lparam);
