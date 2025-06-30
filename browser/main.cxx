@@ -72,6 +72,10 @@ auto wWinMain(HINSTANCE /* hinstance */,
     } },
         [&](pane::webview* webview, pane::window_message window_message) -> LRESULT {
         switch (window_message.event) {
+            case WM_CREATE: {
+                webview->window_handle.maximize();
+            } break;
+
             case WM_DESTROY: {
                 pane::system::quit();
 
