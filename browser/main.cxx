@@ -74,6 +74,8 @@ auto wWinMain(HINSTANCE /* hinstance */,
         switch (window_message.event) {
             case WM_CREATE: {
                 webview->window_handle.maximize();
+
+                return 0;
             } break;
 
             case WM_DESTROY: {
