@@ -202,13 +202,6 @@ window::window(pane::window_config&& window_config,
 auto window::default_procedure(this Self& self, const pane::window_message& window_message)
     -> LRESULT {
     switch (window_message.event) {
-            // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-create
-        case WM_CREATE: {
-            self.set_theme();
-
-            return 0;
-        } break;
-
             // https://learn.microsoft.com/en-us/windows/win32/hidpi/wm-dpichanged
         case WM_DPICHANGED: {
             self.dpi = HIWORD(window_message.wparam);
@@ -310,6 +303,7 @@ auto window::window_class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM l
             if (auto self { static_cast<Self*>(create_struct->lpCreateParams) }) {
                 SetWindowLongPtrW(hwnd, 0, reinterpret_cast<LONG_PTR>(self));
                 self->window_handle(hwnd);
+                self->set_theme();
             }
         }
     }
@@ -378,13 +372,6 @@ webview::~webview() { }
 auto webview::default_procedure(this Self& self, const pane::window_message& window_message)
     -> LRESULT {
     switch (window_message.event) {
-        // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-create
-        case WM_CREATE: {
-            self.set_theme();
-
-            return 0;
-        } break;
-
         // https://learn.microsoft.com/en-us/windows/win32/hidpi/wm-dpichanged
         case WM_DPICHANGED: {
             self.dpi = HIWORD(window_message.wparam);
@@ -503,6 +490,7 @@ auto webview::window_class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM 
             if (auto self { static_cast<Self*>(create_struct->lpCreateParams) }) {
                 SetWindowLongPtrW(hwnd, 0, reinterpret_cast<LONG_PTR>(self));
                 self->window_handle(hwnd);
+                self->set_theme();
             }
         }
     }
