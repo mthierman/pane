@@ -19,3 +19,4 @@
 #include <pane/text.hxx>
 #include <pane/url.hxx>
 #include <pane/window.hxx>
+#include <pane/window2.hxx>

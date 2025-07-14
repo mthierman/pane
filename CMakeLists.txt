@@ -54,6 +54,7 @@ target_sources(
             "src/text.cxx"
             "src/url.cxx"
             "src/window.cxx"
+            "src/window2.cxx"
     )
 target_link_libraries(
     pane
