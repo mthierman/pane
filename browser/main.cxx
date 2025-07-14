@@ -25,6 +25,7 @@ auto wWinMain(HINSTANCE /* hinstance */,
     struct event_token {
         pane::webview_token source_changed;
         pane::webview_token favicon_changed;
+        pane::webview_token accelerator_key_pressed;
     };
 
     event_token token;
@@ -69,6 +70,15 @@ auto wWinMain(HINSTANCE /* hinstance */,
             return S_OK;
         }).Get(),
             token.favicon_changed());
+
+        webview->controller->add_AcceleratorKeyPressed(
+            Callback<ICoreWebView2AcceleratorKeyPressedEventHandler>(
+                [&](ICoreWebView2Controller* sender,
+                    ICoreWebView2AcceleratorKeyPressedEventArgs* args) -> HRESULT {
+            //
+            return S_OK;
+        }).Get(),
+            token.accelerator_key_pressed());
     } },
         [&](pane::webview* webview, pane::window_message window_message) -> LRESULT {
         switch (window_message.event) {
