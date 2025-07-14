@@ -3,6 +3,6 @@
     "private": true,
     "type": "module",
     "devDependencies": {
-        "prettier": "^3.5.3"
+        "prettier": "^3.6.2"
     }
 }
