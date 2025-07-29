@@ -390,12 +390,12 @@ auto webview::create(this Self& self) -> HWND {
                                     self.webview_config.settings.IsZoomControlEnabled);
                             }
                         }
-                    }
 
-                    self.navigate(self.webview_config.home_page);
+                        self.navigate(self.webview_config.home_page);
 
-                    if (self.webview_config.creation_callback) {
-                        self.webview_config.creation_callback(&self);
+                        if (self.webview_config.creation_callback) {
+                            self.webview_config.creation_callback(&self);
+                        }
                     }
                 }
 
