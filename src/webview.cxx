@@ -273,6 +273,10 @@ auto webview::create(this Self& self) -> HWND {
                 if (self.controller) {
                     self.controller->put_DefaultBackgroundColor(COREWEBVIEW2_COLOR { 0, 0, 0, 0 });
 
+                    RECT client_rect { 0, 0, 0, 0 };
+                    GetClientRect(self.window_handle(), &client_rect);
+                    self.controller->put_Bounds(client_rect);
+
                     self.controller->add_AcceleratorKeyPressed(
                         Microsoft::WRL::Callback<ICoreWebView2AcceleratorKeyPressedEventHandler>(
                             [&](ICoreWebView2Controller* sender,
@@ -293,10 +297,6 @@ auto webview::create(this Self& self) -> HWND {
                     }).Get(),
                         self.token.accelerator_key_pressed());
 
-                    RECT client_rect { 0, 0, 0, 0 };
-                    GetClientRect(self.window_handle(), &client_rect);
-                    self.controller->put_Bounds(client_rect);
-
                     wil::com_ptr<ICoreWebView2> created_core;
                     self.controller->get_CoreWebView2(created_core.put());
 
@@ -305,48 +305,6 @@ auto webview::create(this Self& self) -> HWND {
                     }
 
                     if (self.core) {
-                        self.core->add_FaviconChanged(
-                            Microsoft::WRL::Callback<ICoreWebView2FaviconChangedEventHandler>(
-                                [&](ICoreWebView2* /* sender */, IUnknown* /* args */) -> HRESULT {
-                            self.core->GetFavicon(
-                                COREWEBVIEW2_FAVICON_IMAGE_FORMAT::
-                                    COREWEBVIEW2_FAVICON_IMAGE_FORMAT_PNG,
-                                Microsoft::WRL::Callback<ICoreWebView2GetFaviconCompletedHandler>(
-                                    [&](HRESULT /* error_code */, IStream* icon_stream) -> HRESULT {
-                                self.favicon_status
-                                    = Gdiplus::Bitmap { icon_stream }.GetHICON(&self.favicon());
-
-                                return S_OK;
-                            }).Get());
-
-                            return S_OK;
-                        }).Get(),
-                            self.token.favicon_changed());
-
-                        self.core->add_NavigationCompleted(
-                            Microsoft::WRL::Callback<ICoreWebView2NavigationCompletedEventHandler>(
-                                [&](ICoreWebView2* /* sender */,
-                                    ICoreWebView2NavigationCompletedEventArgs* /* args */)
-                                    -> HRESULT {
-                            wil::unique_cotaskmem_string title;
-                            self.core->get_DocumentTitle(&title);
-                            self.current_title = pane::to_utf8(title.get());
-
-                            return S_OK;
-                        }).Get(),
-                            self.token.source_changed());
-
-                        if (self.webview_config.virtual_host_name_map) {
-                            const auto host_name { pane::to_utf16(
-                                (*self.webview_config.virtual_host_name_map).first) };
-
-                            self.core->SetVirtualHostNameToFolderMapping(
-                                reinterpret_cast<const wchar_t*>(host_name.data()),
-                                (*self.webview_config.virtual_host_name_map).second.c_str(),
-                                COREWEBVIEW2_HOST_RESOURCE_ACCESS_KIND::
-                                    COREWEBVIEW2_HOST_RESOURCE_ACCESS_KIND_ALLOW);
-                        }
-
                         wil::com_ptr<ICoreWebView2Settings> created_settings;
                         self.core->get_Settings(created_settings.put());
 
@@ -390,6 +348,48 @@ auto webview::create(this Self& self) -> HWND {
                                     self.webview_config.settings.IsZoomControlEnabled);
                             }
                         }
+
+                        if (self.webview_config.virtual_host_name_map) {
+                            const auto host_name { pane::to_utf16(
+                                (*self.webview_config.virtual_host_name_map).first) };
+
+                            self.core->SetVirtualHostNameToFolderMapping(
+                                reinterpret_cast<const wchar_t*>(host_name.data()),
+                                (*self.webview_config.virtual_host_name_map).second.c_str(),
+                                COREWEBVIEW2_HOST_RESOURCE_ACCESS_KIND::
+                                    COREWEBVIEW2_HOST_RESOURCE_ACCESS_KIND_ALLOW);
+                        }
+
+                        self.core->add_FaviconChanged(
+                            Microsoft::WRL::Callback<ICoreWebView2FaviconChangedEventHandler>(
+                                [&](ICoreWebView2* /* sender */, IUnknown* /* args */) -> HRESULT {
+                            self.core->GetFavicon(
+                                COREWEBVIEW2_FAVICON_IMAGE_FORMAT::
+                                    COREWEBVIEW2_FAVICON_IMAGE_FORMAT_PNG,
+                                Microsoft::WRL::Callback<ICoreWebView2GetFaviconCompletedHandler>(
+                                    [&](HRESULT /* error_code */, IStream* icon_stream) -> HRESULT {
+                                self.favicon_status
+                                    = Gdiplus::Bitmap { icon_stream }.GetHICON(&self.favicon());
+
+                                return S_OK;
+                            }).Get());
+
+                            return S_OK;
+                        }).Get(),
+                            self.token.favicon_changed());
+
+                        self.core->add_NavigationCompleted(
+                            Microsoft::WRL::Callback<ICoreWebView2NavigationCompletedEventHandler>(
+                                [&](ICoreWebView2* /* sender */,
+                                    ICoreWebView2NavigationCompletedEventArgs* /* args */)
+                                    -> HRESULT {
+                            wil::unique_cotaskmem_string title;
+                            self.core->get_DocumentTitle(&title);
+                            self.current_title = pane::to_utf8(title.get());
+
+                            return S_OK;
+                        }).Get(),
+                            self.token.source_changed());
 
                         self.navigate(self.webview_config.home_page);
 
