@@ -76,7 +76,7 @@ private:
                 if (auto self { static_cast<T*>(create_struct->lpCreateParams) }) {
                     SetWindowLongPtrW(hwnd, 0, reinterpret_cast<LONG_PTR>(self));
                     self->window_handle(hwnd);
-                    self->set_theme();
+                    SendMessageW(hwnd, WM_SETTINGCHANGE, 0, 0);
                 }
             }
         }
@@ -208,8 +208,6 @@ struct window final {
 
 private:
     std::function<LRESULT(Self*, pane::window_message)> window_procedure;
-
-    auto set_theme(this Self& self) -> void;
 
 public:
     pane::window_config window_config;

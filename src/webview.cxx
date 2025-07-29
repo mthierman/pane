@@ -331,7 +331,14 @@ auto webview::default_procedure(this Self& self, const pane::window_message& win
 
             // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-settingchange
         case WM_SETTINGCHANGE: {
-            self.set_theme();
+            auto dark_mode { pane::system::dark_mode() };
+
+            self.window_background(dark_mode ? self.window_config.dark_background
+                                             : self.window_config.light_background);
+
+            self.window_handle.immersive_dark_mode(dark_mode);
+
+            InvalidateRect(self.window_handle(), nullptr, true);
 
             return 0;
         } break;
@@ -398,17 +405,6 @@ auto webview::default_procedure(this Self& self, const pane::window_message& win
 
     return DefWindowProcW(
         self.window_handle(), window_message.event, window_message.wparam, window_message.lparam);
-}
-
-auto webview::set_theme(this Self& self) -> void {
-    auto dark_mode { pane::system::dark_mode() };
-
-    self.window_background(dark_mode ? self.window_config.dark_background
-                                     : self.window_config.light_background);
-
-    self.window_handle.immersive_dark_mode(dark_mode);
-
-    InvalidateRect(self.window_handle(), nullptr, true);
 }
 
 // auto webview::navigate(this const Self& self, std::u8string_view url) -> void {

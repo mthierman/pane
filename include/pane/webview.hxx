@@ -108,8 +108,6 @@ struct webview final {
 private:
     std::function<LRESULT(Self*, pane::window_message)> window_procedure;
 
-    auto set_theme(this Self& self) -> void;
-
 public:
     // auto navigate(this const Self& self, std::u8string_view url) -> void;
     auto navigate(this Self& self, const ada::url& url) -> void;
