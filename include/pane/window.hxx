@@ -149,8 +149,6 @@ private:
     HICON hicon { nullptr };
 };
 
-struct window;
-
 struct window_config final {
     std::u8string title;
     pane::color dark_background;
