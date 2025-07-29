@@ -149,27 +149,27 @@ public:
     wil::com_ptr<ICoreWebView2EnvironmentOptions> environment_options {
         Microsoft::WRL::Make<CoreWebView2EnvironmentOptions>()
     };
-    wil::com_ptr<ICoreWebView2EnvironmentOptions2> environment_options2 {
-        environment_options.try_query<ICoreWebView2EnvironmentOptions2>()
-    };
-    wil::com_ptr<ICoreWebView2EnvironmentOptions3> environment_options3 {
-        environment_options.try_query<ICoreWebView2EnvironmentOptions3>()
-    };
-    wil::com_ptr<ICoreWebView2EnvironmentOptions4> environment_options4 {
-        environment_options.try_query<ICoreWebView2EnvironmentOptions4>()
-    };
-    wil::com_ptr<ICoreWebView2EnvironmentOptions5> environment_options5 {
-        environment_options.try_query<ICoreWebView2EnvironmentOptions5>()
-    };
-    wil::com_ptr<ICoreWebView2EnvironmentOptions6> environment_options6 {
-        environment_options.try_query<ICoreWebView2EnvironmentOptions6>()
-    };
-    wil::com_ptr<ICoreWebView2EnvironmentOptions7> environment_options7 {
-        environment_options.try_query<ICoreWebView2EnvironmentOptions7>()
-    };
-    wil::com_ptr<ICoreWebView2EnvironmentOptions8> environment_options8 {
-        environment_options.try_query<ICoreWebView2EnvironmentOptions8>()
-    };
+    // wil::com_ptr<ICoreWebView2EnvironmentOptions2> environment_options2 {
+    //     environment_options.try_query<ICoreWebView2EnvironmentOptions2>()
+    // };
+    // wil::com_ptr<ICoreWebView2EnvironmentOptions3> environment_options3 {
+    //     environment_options.try_query<ICoreWebView2EnvironmentOptions3>()
+    // };
+    // wil::com_ptr<ICoreWebView2EnvironmentOptions4> environment_options4 {
+    //     environment_options.try_query<ICoreWebView2EnvironmentOptions4>()
+    // };
+    // wil::com_ptr<ICoreWebView2EnvironmentOptions5> environment_options5 {
+    //     environment_options.try_query<ICoreWebView2EnvironmentOptions5>()
+    // };
+    // wil::com_ptr<ICoreWebView2EnvironmentOptions6> environment_options6 {
+    //     environment_options.try_query<ICoreWebView2EnvironmentOptions6>()
+    // };
+    // wil::com_ptr<ICoreWebView2EnvironmentOptions7> environment_options7 {
+    //     environment_options.try_query<ICoreWebView2EnvironmentOptions7>()
+    // };
+    // wil::com_ptr<ICoreWebView2EnvironmentOptions8> environment_options8 {
+    //     environment_options.try_query<ICoreWebView2EnvironmentOptions8>()
+    // };
     wil::com_ptr<ICoreWebView2Environment14> environment;
 
     wil::com_ptr<ICoreWebView2ControllerOptions4> controller_options;
