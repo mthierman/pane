@@ -38,11 +38,11 @@ struct window_message final {
 template <typename T> struct window_class final {
     using Self = window_class;
 
-    window_class(std::u8string_view class_name, WNDPROC window_procedure)
+    window_class(std::u8string_view class_name)
         : class_name { pane::to_utf16(class_name) },
           wndclass { { sizeof(WNDCLASSEXW) },
                      { 0 },
-                     { window_procedure },
+                     { this->class_procedure },
                      { 0 },
                      { sizeof(T) },
                      { pane::system::module_handle().value_or(nullptr) },
@@ -69,6 +69,35 @@ template <typename T> struct window_class final {
     auto operator()(this const Self& self) -> const WNDCLASSEXW& { return self.wndclass; }
 
 private:
+    static auto class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) -> LRESULT {
+        // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-nccreate
+        if (msg == WM_NCCREATE) {
+            if (auto create_struct { reinterpret_cast<CREATESTRUCTW*>(lparam) }) {
+                if (auto self { static_cast<T*>(create_struct->lpCreateParams) }) {
+                    SetWindowLongPtrW(hwnd, 0, reinterpret_cast<LONG_PTR>(self));
+                    self->window_handle(hwnd);
+                    self->set_theme();
+                }
+            }
+        }
+
+        // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-ncdestroy
+        if (msg == WM_NCDESTROY) {
+            if (auto self { reinterpret_cast<T*>(GetWindowLongPtrW(hwnd, 0)) }) {
+                self->window_handle(nullptr);
+                SetWindowLongPtrW(hwnd, 0, reinterpret_cast<LONG_PTR>(nullptr));
+            }
+        }
+
+        if (auto self { reinterpret_cast<T*>(GetWindowLongPtrW(hwnd, 0)) }) {
+            if (self->window_procedure) {
+                return self->window_procedure(self, { hwnd, msg, wparam, lparam });
+            }
+        }
+
+        return DefWindowProcW(hwnd, msg, wparam, lparam);
+    }
+
     std::u16string class_name;
     WNDCLASSEXW wndclass;
 };
@@ -160,6 +189,8 @@ struct window_config final {
 struct window final {
     using Self = window;
 
+    template <typename T> friend struct window_class;
+
     window(pane::window_config&& window_config = {},
            std::function<LRESULT(Self*, pane::window_message)>&& window_procedure
            = [](Self*, pane::window_message window_message) {
@@ -176,8 +207,6 @@ struct window final {
     auto default_procedure(this Self& self, const pane::window_message& window_message) -> LRESULT;
 
 private:
-    static auto window_class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
-        -> LRESULT;
     std::function<LRESULT(Self*, pane::window_message)> window_procedure;
 
     auto set_theme(this Self& self) -> void;
@@ -185,7 +214,7 @@ private:
 public:
     pane::window_config window_config;
     uintptr_t window_id { pane::random_number<uintptr_t>() };
-    pane::window_class<Self> window_class { u8"PaneWindow", window_class_procedure };
+    pane::window_class<Self> window_class { u8"PaneWindow" };
     pane::window_background window_background { pane::system::dark_mode()
                                                     ? window_config.dark_background
                                                     : window_config.light_background };

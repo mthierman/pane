@@ -87,6 +87,8 @@ private:
 struct webview final {
     using Self = webview;
 
+    template <typename T> friend struct window_class;
+
     webview(pane::window_config&& window_config = {},
             pane::webview_config&& webview_config = {},
             std::function<LRESULT(Self*, pane::window_message)>&& window_procedure
@@ -104,8 +106,6 @@ struct webview final {
     auto default_procedure(this Self& self, const pane::window_message& window_message) -> LRESULT;
 
 private:
-    static auto window_class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
-        -> LRESULT;
     std::function<LRESULT(Self*, pane::window_message)> window_procedure;
 
     auto set_theme(this Self& self) -> void;
@@ -132,7 +132,7 @@ public:
     pane::window_config window_config;
     pane::webview_config webview_config;
     uintptr_t window_id { pane::random_number<uintptr_t>() };
-    pane::window_class<Self> window_class { u8"PaneWebView", window_class_procedure };
+    pane::window_class<Self> window_class { u8"PaneWebView" };
     pane::window_background window_background { pane::system::dark_mode()
                                                     ? window_config.dark_background
                                                     : window_config.light_background };

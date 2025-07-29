@@ -400,35 +400,6 @@ auto webview::default_procedure(this Self& self, const pane::window_message& win
         self.window_handle(), window_message.event, window_message.wparam, window_message.lparam);
 }
 
-auto webview::window_class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) -> LRESULT {
-    // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-nccreate
-    if (msg == WM_NCCREATE) {
-        if (auto create_struct { reinterpret_cast<CREATESTRUCTW*>(lparam) }) {
-            if (auto self { static_cast<Self*>(create_struct->lpCreateParams) }) {
-                SetWindowLongPtrW(hwnd, 0, reinterpret_cast<LONG_PTR>(self));
-                self->window_handle(hwnd);
-                self->set_theme();
-            }
-        }
-    }
-
-    // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-ncdestroy
-    if (msg == WM_NCDESTROY) {
-        if (auto self { reinterpret_cast<Self*>(GetWindowLongPtrW(hwnd, 0)) }) {
-            self->window_handle(nullptr);
-            SetWindowLongPtrW(hwnd, 0, reinterpret_cast<LONG_PTR>(nullptr));
-        }
-    }
-
-    if (auto self { reinterpret_cast<Self*>(GetWindowLongPtrW(hwnd, 0)) }) {
-        if (self->window_procedure) {
-            return self->window_procedure(self, { hwnd, msg, wparam, lparam });
-        }
-    }
-
-    return DefWindowProcW(hwnd, msg, wparam, lparam);
-}
-
 auto webview::set_theme(this Self& self) -> void {
     auto dark_mode { pane::system::dark_mode() };
 
