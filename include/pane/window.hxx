@@ -184,7 +184,7 @@ private:
 
 public:
     pane::window_config window_config;
-    uintptr_t id { pane::random_number<uintptr_t>() };
+    uintptr_t window_id { pane::random_number<uintptr_t>() };
     pane::window_class<Self> window_class { u8"PaneWindow", window_class_procedure };
     pane::window_background window_background { pane::system::dark_mode()
                                                     ? window_config.dark_background
