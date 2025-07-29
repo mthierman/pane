@@ -313,16 +313,18 @@ auto webview::create(this Self& self) -> HWND {
                                     COREWEBVIEW2_FAVICON_IMAGE_FORMAT_PNG,
                                 Microsoft::WRL::Callback<ICoreWebView2GetFaviconCompletedHandler>(
                                     [&](HRESULT /* error_code */, IStream* icon_stream) -> HRESULT {
-                                if (Gdiplus::Bitmap { icon_stream }.GetHICON(&self.favicon())
-                                    == Gdiplus::Status::Ok) {
-                                    SendMessage(self.window_handle(),
-                                                WM_SETICON,
-                                                ICON_SMALL,
-                                                reinterpret_cast<LPARAM>(self.favicon()));
-                                    SendMessage(self.window_handle(),
-                                                WM_SETICON,
-                                                ICON_BIG,
-                                                reinterpret_cast<LPARAM>(self.favicon()));
+                                self.favicon_status
+                                    = Gdiplus::Bitmap { icon_stream }.GetHICON(&self.favicon());
+
+                                if (self.favicon_status == Gdiplus::Status::Ok) {
+                                    // SendMessage(self.window_handle(),
+                                    //             WM_SETICON,
+                                    //             ICON_SMALL,
+                                    //             reinterpret_cast<LPARAM>(self.favicon()));
+                                    // SendMessage(self.window_handle(),
+                                    //             WM_SETICON,
+                                    //             ICON_BIG,
+                                    //             reinterpret_cast<LPARAM>(self.favicon()));
                                 }
 
                                 return S_OK;

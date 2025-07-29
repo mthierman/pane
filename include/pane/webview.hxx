@@ -122,6 +122,7 @@ public:
 
     pane::gdi_plus gdi_plus;
     pane::window_icon favicon;
+    Gdiplus::Status favicon_status;
     ada::url current_url;
     std::u8string current_title;
 
