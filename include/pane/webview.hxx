@@ -116,6 +116,13 @@ public:
     auto navigate(this Self& self, const std::filesystem::path& path) -> void;
     auto navigate_to_string(this Self& self, const std::u8string& string) -> void;
 
+    struct event_token {
+        pane::webview_token accelerator_key_pressed;
+        pane::webview_token favicon_changed;
+        pane::webview_token source_changed;
+    };
+    event_token token;
+
     pane::gdi_plus gdi_plus;
     pane::window_icon favicon;
     Gdiplus::Status favicon_status;
@@ -134,45 +141,13 @@ public:
     UINT dpi { GetDpiForWindow(window_handle()) };
     float scale_factor { static_cast<float>(dpi) / static_cast<float>(USER_DEFAULT_SCREEN_DPI) };
 
-    struct event_token {
-        pane::webview_token accelerator_key_pressed;
-        pane::webview_token favicon_changed;
-        pane::webview_token source_changed;
-    };
-
-    event_token token;
-
     wil::com_ptr<ICoreWebView2Settings9> settings;
-
     wil::com_ptr<ICoreWebView2EnvironmentOptions> environment_options {
         Microsoft::WRL::Make<CoreWebView2EnvironmentOptions>()
     };
-    // wil::com_ptr<ICoreWebView2EnvironmentOptions2> environment_options2 {
-    //     environment_options.try_query<ICoreWebView2EnvironmentOptions2>()
-    // };
-    // wil::com_ptr<ICoreWebView2EnvironmentOptions3> environment_options3 {
-    //     environment_options.try_query<ICoreWebView2EnvironmentOptions3>()
-    // };
-    // wil::com_ptr<ICoreWebView2EnvironmentOptions4> environment_options4 {
-    //     environment_options.try_query<ICoreWebView2EnvironmentOptions4>()
-    // };
-    // wil::com_ptr<ICoreWebView2EnvironmentOptions5> environment_options5 {
-    //     environment_options.try_query<ICoreWebView2EnvironmentOptions5>()
-    // };
-    // wil::com_ptr<ICoreWebView2EnvironmentOptions6> environment_options6 {
-    //     environment_options.try_query<ICoreWebView2EnvironmentOptions6>()
-    // };
-    // wil::com_ptr<ICoreWebView2EnvironmentOptions7> environment_options7 {
-    //     environment_options.try_query<ICoreWebView2EnvironmentOptions7>()
-    // };
-    // wil::com_ptr<ICoreWebView2EnvironmentOptions8> environment_options8 {
-    //     environment_options.try_query<ICoreWebView2EnvironmentOptions8>()
-    // };
     wil::com_ptr<ICoreWebView2Environment14> environment;
-
     wil::com_ptr<ICoreWebView2ControllerOptions4> controller_options;
     wil::com_ptr<ICoreWebView2Controller4> controller;
-
     wil::com_ptr<ICoreWebView2_27> core;
 };
 } // namespace pane
