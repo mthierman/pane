@@ -113,8 +113,6 @@ private:
     auto set_theme(this Self& self) -> void;
 
 public:
-    auto create(this Self& self) -> HWND;
-
     // auto navigate(this const Self& self, std::u8string_view url) -> void;
     auto navigate(this Self& self, const ada::url& url) -> void;
     auto navigate(this Self& self, const std::filesystem::path& path) -> void;

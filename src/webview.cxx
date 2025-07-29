@@ -15,166 +15,8 @@ webview::webview(pane::window_config&& window_config,
     : window_procedure { std::move(window_procedure) },
       window_config { std::move(window_config) },
       webview_config { std::move(webview_config) } {
-    this->create();
-}
+    auto& self = *this;
 
-webview::~webview() { }
-
-auto webview::default_procedure(this Self& self, const pane::window_message& window_message)
-    -> LRESULT {
-    switch (window_message.event) {
-        // https://learn.microsoft.com/en-us/windows/win32/hidpi/wm-dpichanged
-        case WM_DPICHANGED: {
-            self.dpi = HIWORD(window_message.wparam);
-            self.scale_factor
-                = static_cast<float>(self.dpi) / static_cast<float>(USER_DEFAULT_SCREEN_DPI);
-
-            auto const suggested_rect { reinterpret_cast<RECT*>(window_message.lparam) };
-            SetWindowPos(self.window_handle(),
-                         nullptr,
-                         suggested_rect->left,
-                         suggested_rect->top,
-                         suggested_rect->right - suggested_rect->left,
-                         suggested_rect->bottom - suggested_rect->top,
-                         SWP_NOZORDER | SWP_NOACTIVATE);
-
-            return 0;
-        } break;
-
-            // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-erasebkgnd
-        case WM_ERASEBKGND: {
-            GetClientRect(self.window_handle(), &self.window_position.client_rect);
-
-            FillRect(reinterpret_cast<HDC>(window_message.wparam),
-                     &self.window_position.client_rect,
-                     self.window_background());
-
-            return 1;
-        } break;
-
-            // https://learn.microsoft.com/en-us/windows/win32/inputdev/wm-keydown
-        case WM_KEYDOWN: {
-            switch (window_message.wparam) {
-                case VK_F11: {
-                    self.window_handle.toggle_fullscreen();
-
-                    return 0;
-                } break;
-            }
-        } break;
-
-            // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-settingchange
-        case WM_SETTINGCHANGE: {
-            self.set_theme();
-
-            return 0;
-        } break;
-
-            // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-showwindow
-        case WM_SHOWWINDOW: {
-            if (self.controller) {
-                if (window_message.wparam) {
-                    self.controller->put_IsVisible(true);
-                } else {
-                    self.controller->put_IsVisible(false);
-                }
-            }
-
-            return 0;
-        } break;
-
-        // https://learn.microsoft.com/en-us/windows/win32/menurc/wm-syscommand
-        case WM_SYSCOMMAND: {
-            if (self.window_handle.window_position.fullscreen) {
-                return 0;
-            }
-        } break;
-
-            // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-windowposchanged
-        case WM_WINDOWPOSCHANGED: {
-            GetClientRect(self.window_handle(), &self.window_handle.window_position.client_rect);
-
-            if (auto style { GetWindowLongPtrW(self.window_handle(), GWL_STYLE) };
-                style & WS_OVERLAPPEDWINDOW) {
-                GetWindowPlacement(self.window_handle(),
-                                   &self.window_handle.window_position.window_placement);
-            }
-
-            WINDOWPLACEMENT window_placement { .length { sizeof(WINDOWPLACEMENT) } };
-            GetWindowPlacement(self.window_handle(), &window_placement);
-
-            if (window_placement.showCmd == SW_SHOWMAXIMIZED) {
-                self.window_handle.window_position.maximized = true;
-            } else {
-                self.window_handle.window_position.maximized = false;
-            }
-
-            if (window_placement.showCmd == SW_SHOWMINIMIZED) {
-                self.window_handle.window_position.minimized = true;
-            } else {
-                self.window_handle.window_position.minimized = false;
-            }
-
-            if (self.controller) {
-                self.controller->put_Bounds(self.window_position.client_rect);
-            }
-
-            return 0;
-        } break;
-
-        default: {
-            return DefWindowProcW(self.window_handle(),
-                                  window_message.event,
-                                  window_message.wparam,
-                                  window_message.lparam);
-        }
-    }
-
-    return DefWindowProcW(
-        self.window_handle(), window_message.event, window_message.wparam, window_message.lparam);
-}
-
-auto webview::window_class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) -> LRESULT {
-    // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-nccreate
-    if (msg == WM_NCCREATE) {
-        if (auto create_struct { reinterpret_cast<CREATESTRUCTW*>(lparam) }) {
-            if (auto self { static_cast<Self*>(create_struct->lpCreateParams) }) {
-                SetWindowLongPtrW(hwnd, 0, reinterpret_cast<LONG_PTR>(self));
-                self->window_handle(hwnd);
-                self->set_theme();
-            }
-        }
-    }
-
-    // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-ncdestroy
-    if (msg == WM_NCDESTROY) {
-        if (auto self { reinterpret_cast<Self*>(GetWindowLongPtrW(hwnd, 0)) }) {
-            self->window_handle(nullptr);
-            SetWindowLongPtrW(hwnd, 0, reinterpret_cast<LONG_PTR>(nullptr));
-        }
-    }
-
-    if (auto self { reinterpret_cast<Self*>(GetWindowLongPtrW(hwnd, 0)) }) {
-        if (self->window_procedure) {
-            return self->window_procedure(self, { hwnd, msg, wparam, lparam });
-        }
-    }
-
-    return DefWindowProcW(hwnd, msg, wparam, lparam);
-}
-
-auto webview::set_theme(this Self& self) -> void {
-    auto dark_mode { pane::system::dark_mode() };
-
-    self.window_background(dark_mode ? self.window_config.dark_background
-                                     : self.window_config.light_background);
-
-    self.window_handle.immersive_dark_mode(dark_mode);
-
-    InvalidateRect(self.window_handle(), nullptr, true);
-}
-
-auto webview::create(this Self& self) -> HWND {
     CreateWindowExW(
         0,
         self.window_class().lpszClassName,
@@ -404,8 +246,162 @@ auto webview::create(this Self& self) -> HWND {
         }
         return S_OK;
     }).Get());
+}
 
-    return self.window_handle();
+webview::~webview() { }
+
+auto webview::default_procedure(this Self& self, const pane::window_message& window_message)
+    -> LRESULT {
+    switch (window_message.event) {
+        // https://learn.microsoft.com/en-us/windows/win32/hidpi/wm-dpichanged
+        case WM_DPICHANGED: {
+            self.dpi = HIWORD(window_message.wparam);
+            self.scale_factor
+                = static_cast<float>(self.dpi) / static_cast<float>(USER_DEFAULT_SCREEN_DPI);
+
+            auto const suggested_rect { reinterpret_cast<RECT*>(window_message.lparam) };
+            SetWindowPos(self.window_handle(),
+                         nullptr,
+                         suggested_rect->left,
+                         suggested_rect->top,
+                         suggested_rect->right - suggested_rect->left,
+                         suggested_rect->bottom - suggested_rect->top,
+                         SWP_NOZORDER | SWP_NOACTIVATE);
+
+            return 0;
+        } break;
+
+            // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-erasebkgnd
+        case WM_ERASEBKGND: {
+            GetClientRect(self.window_handle(), &self.window_position.client_rect);
+
+            FillRect(reinterpret_cast<HDC>(window_message.wparam),
+                     &self.window_position.client_rect,
+                     self.window_background());
+
+            return 1;
+        } break;
+
+            // https://learn.microsoft.com/en-us/windows/win32/inputdev/wm-keydown
+        case WM_KEYDOWN: {
+            switch (window_message.wparam) {
+                case VK_F11: {
+                    self.window_handle.toggle_fullscreen();
+
+                    return 0;
+                } break;
+            }
+        } break;
+
+            // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-settingchange
+        case WM_SETTINGCHANGE: {
+            self.set_theme();
+
+            return 0;
+        } break;
+
+            // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-showwindow
+        case WM_SHOWWINDOW: {
+            if (self.controller) {
+                if (window_message.wparam) {
+                    self.controller->put_IsVisible(true);
+                } else {
+                    self.controller->put_IsVisible(false);
+                }
+            }
+
+            return 0;
+        } break;
+
+        // https://learn.microsoft.com/en-us/windows/win32/menurc/wm-syscommand
+        case WM_SYSCOMMAND: {
+            if (self.window_handle.window_position.fullscreen) {
+                return 0;
+            }
+        } break;
+
+            // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-windowposchanged
+        case WM_WINDOWPOSCHANGED: {
+            GetClientRect(self.window_handle(), &self.window_handle.window_position.client_rect);
+
+            if (auto style { GetWindowLongPtrW(self.window_handle(), GWL_STYLE) };
+                style & WS_OVERLAPPEDWINDOW) {
+                GetWindowPlacement(self.window_handle(),
+                                   &self.window_handle.window_position.window_placement);
+            }
+
+            WINDOWPLACEMENT window_placement { .length { sizeof(WINDOWPLACEMENT) } };
+            GetWindowPlacement(self.window_handle(), &window_placement);
+
+            if (window_placement.showCmd == SW_SHOWMAXIMIZED) {
+                self.window_handle.window_position.maximized = true;
+            } else {
+                self.window_handle.window_position.maximized = false;
+            }
+
+            if (window_placement.showCmd == SW_SHOWMINIMIZED) {
+                self.window_handle.window_position.minimized = true;
+            } else {
+                self.window_handle.window_position.minimized = false;
+            }
+
+            if (self.controller) {
+                self.controller->put_Bounds(self.window_position.client_rect);
+            }
+
+            return 0;
+        } break;
+
+        default: {
+            return DefWindowProcW(self.window_handle(),
+                                  window_message.event,
+                                  window_message.wparam,
+                                  window_message.lparam);
+        }
+    }
+
+    return DefWindowProcW(
+        self.window_handle(), window_message.event, window_message.wparam, window_message.lparam);
+}
+
+auto webview::window_class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) -> LRESULT {
+    // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-nccreate
+    if (msg == WM_NCCREATE) {
+        if (auto create_struct { reinterpret_cast<CREATESTRUCTW*>(lparam) }) {
+            if (auto self { static_cast<Self*>(create_struct->lpCreateParams) }) {
+                SetWindowLongPtrW(hwnd, 0, reinterpret_cast<LONG_PTR>(self));
+                self->window_handle(hwnd);
+                self->set_theme();
+            }
+        }
+    }
+
+    // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-ncdestroy
+    if (msg == WM_NCDESTROY) {
+        if (auto self { reinterpret_cast<Self*>(GetWindowLongPtrW(hwnd, 0)) }) {
+            self->window_handle(nullptr);
+            SetWindowLongPtrW(hwnd, 0, reinterpret_cast<LONG_PTR>(nullptr));
+        }
+    }
+
+    if (auto self { reinterpret_cast<Self*>(GetWindowLongPtrW(hwnd, 0)) }) {
+        if (self->window_procedure) {
+            return self->window_procedure(self, { hwnd, msg, wparam, lparam });
+        }
+    }
+
+    return DefWindowProcW(hwnd, msg, wparam, lparam);
+}
+
+auto webview::set_theme(this Self& self) -> void {
+    auto dark_mode { pane::system::dark_mode() };
+
+    self.window_background(dark_mode ? self.window_config.dark_background
+                                     : self.window_config.light_background);
+
+    self.window_handle.immersive_dark_mode(dark_mode);
+
+    InvalidateRect(self.window_handle(), nullptr, true);
 }
 
 // auto webview::navigate(this const Self& self, std::u8string_view url) -> void {
