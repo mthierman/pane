@@ -102,20 +102,21 @@ webview::webview(pane::window_config&& window_config,
         }
 
         if (self.environment) {
-            wil::com_ptr<ICoreWebView2ControllerOptions> controller_options;
-            self.environment->CreateCoreWebView2ControllerOptions(controller_options.addressof());
+            self.environment->CreateCoreWebView2ControllerOptions(
+                self.controller_options.addressof());
 
-            self.controller_options
+            self.controller_options4
                 = self.controller_options.try_query<ICoreWebView2ControllerOptions4>();
 
-            if (self.controller_options) {
-                self.controller_options->put_AllowHostInputProcessing(TRUE);
-                self.controller_options->put_DefaultBackgroundColor(
-                    COREWEBVIEW2_COLOR { 255, 255, 0, 0 });
+            if (self.controller_options4) {
+                self.controller_options4->put_AllowHostInputProcessing(TRUE);
+                self.controller_options4->put_DefaultBackgroundColor(
+                    COREWEBVIEW2_COLOR { 0, 0, 0, 0 });
             }
 
-            self.environment->CreateCoreWebView2Controller(
+            self.environment->CreateCoreWebView2ControllerWithOptions(
                 self.window_handle(),
+                self.controller_options.get(),
                 wil::MakeAgileCallback<ICoreWebView2CreateCoreWebView2ControllerCompletedHandler>(
                     [&]([[maybe_unused]] HRESULT error_code,
                         ICoreWebView2Controller* created_controller) -> HRESULT {
