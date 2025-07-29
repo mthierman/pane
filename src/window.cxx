@@ -196,7 +196,23 @@ window::window(pane::window_config&& window_config,
                std::function<LRESULT(Self*, pane::window_message)>&& window_procedure)
     : window_procedure { std::move(window_procedure) },
       window_config { std::move(window_config) } {
-    this->create();
+    auto& self = *this;
+
+    CreateWindowExW(
+        0,
+        self.window_class().lpszClassName,
+        reinterpret_cast<const wchar_t*>(pane::to_utf16(self.window_config.title).data()),
+        self.window_config.parent_hwnd
+            ? WS_CHILDWINDOW
+            : WS_OVERLAPPEDWINDOW | (self.window_config.visible ? WS_VISIBLE : 0),
+        CW_USEDEFAULT,
+        CW_USEDEFAULT,
+        CW_USEDEFAULT,
+        CW_USEDEFAULT,
+        self.window_config.parent_hwnd,
+        self.window_config.parent_hwnd ? reinterpret_cast<HMENU>(self.id) : nullptr,
+        self.window_class().hInstance,
+        &self);
 }
 
 auto window::default_procedure(this Self& self, const pane::window_message& window_message)
@@ -334,26 +350,6 @@ auto window::set_theme(this Self& self) -> void {
     self.window_handle.immersive_dark_mode(dark_mode);
 
     InvalidateRect(self.window_handle(), nullptr, true);
-}
-
-auto window::create(this Self& self) -> HWND {
-    CreateWindowExW(
-        0,
-        self.window_class().lpszClassName,
-        reinterpret_cast<const wchar_t*>(pane::to_utf16(self.window_config.title).data()),
-        self.window_config.parent_hwnd
-            ? WS_CHILDWINDOW
-            : WS_OVERLAPPEDWINDOW | (self.window_config.visible ? WS_VISIBLE : 0),
-        CW_USEDEFAULT,
-        CW_USEDEFAULT,
-        CW_USEDEFAULT,
-        CW_USEDEFAULT,
-        self.window_config.parent_hwnd,
-        self.window_config.parent_hwnd ? reinterpret_cast<HMENU>(self.id) : nullptr,
-        self.window_class().hInstance,
-        &self);
-
-    return self.window_handle();
 }
 
 auto window_manager::insert(this Self& self, const pane::window_handle& window_handle) -> void {
