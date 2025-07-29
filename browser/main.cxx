@@ -21,7 +21,6 @@ auto wWinMain(HINSTANCE /* hinstance */,
     struct event_token {
         pane::webview_token source_changed;
         pane::webview_token favicon_changed;
-        pane::webview_token accelerator_key_pressed;
     };
 
     event_token token;
