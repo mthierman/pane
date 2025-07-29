@@ -82,12 +82,13 @@ private:
         // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-nccreate
         if (msg == WM_NCCREATE) {
             if (auto create_struct { reinterpret_cast<CREATESTRUCTW*>(lparam) }) {
-                if (auto self { static_cast<T*>(create_struct->lpCreateParams) }) {
-                    SetWindowLongPtrW(hwnd, 0, reinterpret_cast<LONG_PTR>(self));
-                    self->window_handle(hwnd);
-                    self->window_handle.position.dpi = GetDpiForWindow(hwnd);
-                    self->window_handle.position.scale_factor
-                        = static_cast<float>(self->window_handle.position.dpi)
+                if (auto create_params { create_struct->lpCreateParams }) {
+                    auto& self { *(static_cast<T*>(create_params)) };
+                    SetWindowLongPtrW(hwnd, 0, reinterpret_cast<LONG_PTR>(&self));
+                    self.window_handle(hwnd);
+                    self.window_handle.position.dpi = GetDpiForWindow(hwnd);
+                    self.window_handle.position.scale_factor
+                        = static_cast<float>(self.window_handle.position.dpi)
                         / static_cast<float>(USER_DEFAULT_SCREEN_DPI);
                     SendMessageW(hwnd, WM_SETTINGCHANGE, 0, 0);
                 }
@@ -96,23 +97,26 @@ private:
 
         // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-ncdestroy
         if (msg == WM_NCDESTROY) {
-            if (auto self { reinterpret_cast<T*>(GetWindowLongPtrW(hwnd, 0)) }) {
-                self->window_handle(nullptr);
+            if (auto window_long_ptr { GetWindowLongPtrW(hwnd, 0) }) {
+                auto& self { *(reinterpret_cast<T*>(window_long_ptr)) };
+                self.window_handle(nullptr);
                 SetWindowLongPtrW(hwnd, 0, reinterpret_cast<LONG_PTR>(nullptr));
             }
         }
 
-        if (auto self { reinterpret_cast<T*>(GetWindowLongPtrW(hwnd, 0)) }) {
+        if (auto window_long_ptr { GetWindowLongPtrW(hwnd, 0) }) {
+            auto& self { *(reinterpret_cast<T*>(window_long_ptr)) };
+
             // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-settingchange
             if (msg == WM_SETTINGCHANGE) {
                 auto dark_mode { pane::system::dark_mode() };
-                self->window_background(dark_mode ? self->window_config.dark_background
-                                                  : self->window_config.light_background);
-                self->window_handle.immersive_dark_mode(dark_mode);
+                self.window_background(dark_mode ? self.window_config.dark_background
+                                                 : self.window_config.light_background);
+                self.window_handle.immersive_dark_mode(dark_mode);
             }
 
-            if (self->window_procedure) {
-                return self->window_procedure(self, { hwnd, msg, wparam, lparam });
+            if (self.window_procedure) {
+                return self.window_procedure(&self, { hwnd, msg, wparam, lparam });
             }
         }
 
