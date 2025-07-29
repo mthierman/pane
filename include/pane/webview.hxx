@@ -145,33 +145,36 @@ public:
     event_token token;
 
     wil::com_ptr<ICoreWebView2Settings9> settings;
-    wil::com_ptr<ICoreWebView2Environment14> environment;
-    wil::com_ptr<ICoreWebView2ControllerOptions4> controller_options;
-    wil::com_ptr<ICoreWebView2Controller4> controller;
-    wil::com_ptr<ICoreWebView2_27> core;
-    wil::com_ptr<ICoreWebView2EnvironmentOptions> options {
+
+    wil::com_ptr<ICoreWebView2EnvironmentOptions> environment_options {
         Microsoft::WRL::Make<CoreWebView2EnvironmentOptions>()
     };
-    wil::com_ptr<ICoreWebView2EnvironmentOptions2> options2 {
-        options.try_query<ICoreWebView2EnvironmentOptions2>()
+    wil::com_ptr<ICoreWebView2EnvironmentOptions2> environment_options2 {
+        environment_options.try_query<ICoreWebView2EnvironmentOptions2>()
     };
-    wil::com_ptr<ICoreWebView2EnvironmentOptions3> options3 {
-        options.try_query<ICoreWebView2EnvironmentOptions3>()
+    wil::com_ptr<ICoreWebView2EnvironmentOptions3> environment_options3 {
+        environment_options.try_query<ICoreWebView2EnvironmentOptions3>()
     };
-    wil::com_ptr<ICoreWebView2EnvironmentOptions4> options4 {
-        options.try_query<ICoreWebView2EnvironmentOptions4>()
+    wil::com_ptr<ICoreWebView2EnvironmentOptions4> environment_options4 {
+        environment_options.try_query<ICoreWebView2EnvironmentOptions4>()
     };
-    wil::com_ptr<ICoreWebView2EnvironmentOptions5> options5 {
-        options.try_query<ICoreWebView2EnvironmentOptions5>()
+    wil::com_ptr<ICoreWebView2EnvironmentOptions5> environment_options5 {
+        environment_options.try_query<ICoreWebView2EnvironmentOptions5>()
     };
-    wil::com_ptr<ICoreWebView2EnvironmentOptions6> options6 {
-        options.try_query<ICoreWebView2EnvironmentOptions6>()
+    wil::com_ptr<ICoreWebView2EnvironmentOptions6> environment_options6 {
+        environment_options.try_query<ICoreWebView2EnvironmentOptions6>()
     };
-    wil::com_ptr<ICoreWebView2EnvironmentOptions7> options7 {
-        options.try_query<ICoreWebView2EnvironmentOptions7>()
+    wil::com_ptr<ICoreWebView2EnvironmentOptions7> environment_options7 {
+        environment_options.try_query<ICoreWebView2EnvironmentOptions7>()
     };
-    wil::com_ptr<ICoreWebView2EnvironmentOptions8> options8 {
-        options.try_query<ICoreWebView2EnvironmentOptions8>()
+    wil::com_ptr<ICoreWebView2EnvironmentOptions8> environment_options8 {
+        environment_options.try_query<ICoreWebView2EnvironmentOptions8>()
     };
+    wil::com_ptr<ICoreWebView2Environment14> environment;
+
+    wil::com_ptr<ICoreWebView2ControllerOptions4> controller_options;
+    wil::com_ptr<ICoreWebView2Controller4> controller;
+
+    wil::com_ptr<ICoreWebView2_27> core;
 };
 } // namespace pane

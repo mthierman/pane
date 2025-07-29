@@ -33,66 +33,70 @@ webview::webview(pane::window_config&& window_config,
         self.window_class().hInstance,
         &self);
 
-    if (self.options) {
+    if (self.environment_options) {
         if (!self.webview_config.environment_options.AdditionalBrowserArguments.empty()) {
-            self.options->put_AdditionalBrowserArguments(reinterpret_cast<const wchar_t*>(
-                pane::to_utf16(self.webview_config.environment_options.AdditionalBrowserArguments)
-                    .data()));
+            self.environment_options->put_AdditionalBrowserArguments(
+                reinterpret_cast<const wchar_t*>(
+                    pane::to_utf16(
+                        self.webview_config.environment_options.AdditionalBrowserArguments)
+                        .data()));
         }
 
-        self.options->put_AllowSingleSignOnUsingOSPrimaryAccount(
+        self.environment_options->put_AllowSingleSignOnUsingOSPrimaryAccount(
             self.webview_config.environment_options.AllowSingleSignOnUsingOSPrimaryAccount);
 
         if (!self.webview_config.environment_options.Language.empty()) {
-            self.options->put_Language(reinterpret_cast<const wchar_t*>(
+            self.environment_options->put_Language(reinterpret_cast<const wchar_t*>(
                 pane::to_utf16(self.webview_config.environment_options.Language).data()));
         }
 
         if (!self.webview_config.environment_options.TargetCompatibleBrowserVersion.empty()) {
-            self.options->put_TargetCompatibleBrowserVersion(reinterpret_cast<const wchar_t*>(
-                pane::to_utf16(
-                    self.webview_config.environment_options.TargetCompatibleBrowserVersion)
-                    .data()));
+            self.environment_options->put_TargetCompatibleBrowserVersion(
+                reinterpret_cast<const wchar_t*>(
+                    pane::to_utf16(
+                        self.webview_config.environment_options.TargetCompatibleBrowserVersion)
+                        .data()));
         }
     }
 
-    if (self.options2) {
-        self.options2->put_ExclusiveUserDataFolderAccess(
+    if (self.environment_options2) {
+        self.environment_options2->put_ExclusiveUserDataFolderAccess(
             self.webview_config.environment_options.ExclusiveUserDataFolderAccess);
     }
 
-    if (self.options3) {
-        self.options3->put_IsCustomCrashReportingEnabled(
+    if (self.environment_options3) {
+        self.environment_options3->put_IsCustomCrashReportingEnabled(
             self.webview_config.environment_options.IsCustomCrashReportingEnabled);
     }
 
-    // if (self.options4) {
-    //     self.options4->SetCustomSchemeRegistrations();
+    // if (self.environment_options4) {
+    //     self.environment_options4->SetCustomSchemeRegistrations();
     // }
 
-    if (self.options5) {
-        self.options5->put_EnableTrackingPrevention(
+    if (self.environment_options5) {
+        self.environment_options5->put_EnableTrackingPrevention(
             self.webview_config.environment_options.EnableTrackingPrevention);
     }
 
-    if (self.options6) {
-        self.options6->put_AreBrowserExtensionsEnabled(
+    if (self.environment_options6) {
+        self.environment_options6->put_AreBrowserExtensionsEnabled(
             self.webview_config.environment_options.AreBrowserExtensionsEnabled);
     }
 
-    if (self.options7) {
-        self.options7->put_ChannelSearchKind(
+    if (self.environment_options7) {
+        self.environment_options7->put_ChannelSearchKind(
             self.webview_config.environment_options.ChannelSearchKind);
     }
 
-    if (self.options8) {
-        self.options8->put_ScrollBarStyle(self.webview_config.environment_options.ScrollBarStyle);
+    if (self.environment_options8) {
+        self.environment_options8->put_ScrollBarStyle(
+            self.webview_config.environment_options.ScrollBarStyle);
     }
 
     CreateCoreWebView2EnvironmentWithOptions(
         self.webview_config.browser_executable_folder.c_str(),
         self.webview_config.user_data_folder.c_str(),
-        self.options.get(),
+        self.environment_options.get(),
         wil::MakeAgileCallback<ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler>(
             [&]([[maybe_unused]] HRESULT error_code,
                 ICoreWebView2Environment* created_environment) -> HRESULT {
