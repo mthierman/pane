@@ -41,24 +41,25 @@ template <typename T> struct window_class final {
     using Self = window_class;
 
     window_class(std::u8string_view class_name)
-        : class_name { pane::to_utf16(class_name) },
-          wndclass { { sizeof(WNDCLASSEXW) },
-                     { 0 },
-                     { this->class_procedure },
-                     { 0 },
-                     { sizeof(T) },
-                     { pane::system::module_handle().value_or(nullptr) },
-                     { pane::system::resource_icon().value_or(pane::system::application_icon()) },
-                     { pane::system::arrow_cursor() },
-                     { nullptr },
-                     { nullptr },
-                     { reinterpret_cast<const wchar_t*>(this->class_name.data()) },
-                     { pane::system::resource_icon().value_or(
-                         pane::system::application_icon()) } } {
+        : class_name { pane::to_utf16(class_name) } {
         auto& self = *this;
 
         if (GetClassInfoExW(self.wndclass.hInstance, self.wndclass.lpszClassName, &self.wndclass)
             == 0) {
+            self.wndclass = WNDCLASSEXW {
+                { sizeof(WNDCLASSEXW) },
+                { 0 },
+                { class_procedure },
+                { 0 },
+                { sizeof(T) },
+                { pane::system::module_handle().value_or(nullptr) },
+                { pane::system::resource_icon().value_or(pane::system::application_icon()) },
+                { pane::system::arrow_cursor() },
+                { nullptr },
+                { nullptr },
+                { reinterpret_cast<const wchar_t*>(self.class_name.data()) },
+                { pane::system::resource_icon().value_or(pane::system::application_icon()) }
+            };
             RegisterClassExW(&self.wndclass);
         };
     }
