@@ -44,24 +44,24 @@ template <typename T> struct window_class final {
         : class_name { pane::to_utf16(class_name) } {
         auto& self = *this;
 
-        if (GetClassInfoExW(pane::system::module_handle().value_or(nullptr),
-                            reinterpret_cast<const wchar_t*>(self.class_name.data()),
-                            &self.data)
+        auto hinstance { pane::system::module_handle().value_or(nullptr) };
+        auto hicon { pane::system::resource_icon().value_or(pane::system::application_icon()) };
+
+        if (GetClassInfoExW(
+                hinstance, reinterpret_cast<const wchar_t*>(self.class_name.data()), &self.data)
             == 0) {
-            self.data = WNDCLASSEXW {
-                { sizeof(WNDCLASSEXW) },
-                { 0 },
-                { window_procedure },
-                { 0 },
-                { sizeof(T) },
-                { pane::system::module_handle().value_or(nullptr) },
-                { pane::system::resource_icon().value_or(pane::system::application_icon()) },
-                { pane::system::arrow_cursor() },
-                { nullptr },
-                { nullptr },
-                { reinterpret_cast<const wchar_t*>(self.class_name.data()) },
-                { pane::system::resource_icon().value_or(pane::system::application_icon()) }
-            };
+            self.data = WNDCLASSEXW { { sizeof(WNDCLASSEXW) },
+                                      { 0 },
+                                      { window_procedure },
+                                      { 0 },
+                                      { sizeof(T) },
+                                      { hinstance },
+                                      { hicon },
+                                      { pane::system::arrow_cursor() },
+                                      { nullptr },
+                                      { nullptr },
+                                      { reinterpret_cast<const wchar_t*>(self.class_name.data()) },
+                                      { hicon } };
             RegisterClassExW(&self.data);
         };
     }
