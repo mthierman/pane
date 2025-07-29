@@ -316,17 +316,6 @@ auto webview::create(this Self& self) -> HWND {
                                 self.favicon_status
                                     = Gdiplus::Bitmap { icon_stream }.GetHICON(&self.favicon());
 
-                                if (self.favicon_status == Gdiplus::Status::Ok) {
-                                    // SendMessage(self.window_handle(),
-                                    //             WM_SETICON,
-                                    //             ICON_SMALL,
-                                    //             reinterpret_cast<LPARAM>(self.favicon()));
-                                    // SendMessage(self.window_handle(),
-                                    //             WM_SETICON,
-                                    //             ICON_BIG,
-                                    //             reinterpret_cast<LPARAM>(self.favicon()));
-                                }
-
                                 return S_OK;
                             }).Get());
 
@@ -342,7 +331,6 @@ auto webview::create(this Self& self) -> HWND {
                             wil::unique_cotaskmem_string title;
                             self.core->get_DocumentTitle(&title);
                             self.current_title = pane::to_utf8(title.get());
-                            SetWindowTextW(self.window_handle(), title.get());
 
                             return S_OK;
                         }).Get(),

@@ -18,8 +18,6 @@ auto wWinMain(HINSTANCE /* hinstance */,
         }
     }
 
-    auto gdi_plus { pane::gdi_plus() };
-
     struct event_token {
         pane::webview_token source_changed;
         pane::webview_token favicon_changed;
