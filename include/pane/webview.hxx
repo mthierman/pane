@@ -131,6 +131,14 @@ public:
     UINT dpi { GetDpiForWindow(window_handle()) };
     float scale_factor { static_cast<float>(dpi) / static_cast<float>(USER_DEFAULT_SCREEN_DPI) };
 
+    struct event_token {
+        pane::webview_token source_changed;
+        pane::webview_token favicon_changed;
+        pane::webview_token accelerator_key_pressed;
+    };
+
+    event_token token;
+
     wil::com_ptr<ICoreWebView2Settings9> settings;
     wil::com_ptr<ICoreWebView2Environment14> environment;
     wil::com_ptr<ICoreWebView2Controller4> controller;

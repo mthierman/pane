@@ -273,6 +273,26 @@ auto webview::create(this Self& self) -> HWND {
                 if (self.controller) {
                     self.controller->put_DefaultBackgroundColor(COREWEBVIEW2_COLOR { 0, 0, 0, 0 });
 
+                    self.controller->add_AcceleratorKeyPressed(
+                        Microsoft::WRL::Callback<ICoreWebView2AcceleratorKeyPressedEventHandler>(
+                            [&](ICoreWebView2Controller* sender,
+                                ICoreWebView2AcceleratorKeyPressedEventArgs* args) -> HRESULT {
+                        UINT key;
+                        args->get_VirtualKey(&key);
+
+                        COREWEBVIEW2_PHYSICAL_KEY_STATUS key_status;
+                        args->get_PhysicalKeyStatus(&key_status);
+
+                        if (key == VK_F11) {
+                            if (!key_status.WasKeyDown) {
+                                self.window_handle.toggle_fullscreen();
+                            }
+                        }
+
+                        return S_OK;
+                    }).Get(),
+                        self.token.accelerator_key_pressed());
+
                     RECT client_rect { 0, 0, 0, 0 };
                     GetClientRect(self.window_handle(), &client_rect);
                     self.controller->put_Bounds(client_rect);
