@@ -53,12 +53,18 @@ template <typename T> struct window_class final {
                      { reinterpret_cast<const wchar_t*>(this->class_name.data()) },
                      { pane::system::resource_icon().value_or(
                          pane::system::application_icon()) } } {
-        if (GetClassInfoExW(this->wndclass.hInstance, this->wndclass.lpszClassName, &this->wndclass)
+        auto& self = *this;
+
+        if (GetClassInfoExW(self.wndclass.hInstance, self.wndclass.lpszClassName, &self.wndclass)
             == 0) {
-            RegisterClassExW(&this->wndclass);
+            RegisterClassExW(&self.wndclass);
         };
     }
-    ~window_class() { UnregisterClassW(this->wndclass.lpszClassName, this->wndclass.hInstance); }
+    ~window_class() {
+        auto& self = *this;
+
+        UnregisterClassW(self.wndclass.lpszClassName, self.wndclass.hInstance);
+    }
 
     window_class(const Self&) = delete;
     auto operator=(const Self&) -> Self& = delete;
