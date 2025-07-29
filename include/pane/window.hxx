@@ -44,7 +44,10 @@ template <typename T> struct window_class final {
         : class_name { pane::to_utf16(class_name) } {
         auto& self = *this;
 
-        if (GetClassInfoExW(self.data.hInstance, self.data.lpszClassName, &self.data) == 0) {
+        if (GetClassInfoExW(pane::system::module_handle().value_or(nullptr),
+                            reinterpret_cast<const wchar_t*>(self.class_name.data()),
+                            &self.data)
+            == 0) {
             self.data = WNDCLASSEXW {
                 { sizeof(WNDCLASSEXW) },
                 { 0 },
