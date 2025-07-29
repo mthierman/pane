@@ -90,6 +90,14 @@ private:
         }
 
         if (auto self { reinterpret_cast<T*>(GetWindowLongPtrW(hwnd, 0)) }) {
+            // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-settingchange
+            if (msg == WM_SETTINGCHANGE) {
+                auto dark_mode { pane::system::dark_mode() };
+                self->window_background(dark_mode ? self->window_config.dark_background
+                                                  : self->window_config.light_background);
+                self->window_handle.immersive_dark_mode(dark_mode);
+            }
+
             if (self->window_procedure) {
                 return self->window_procedure(self, { hwnd, msg, wparam, lparam });
             }

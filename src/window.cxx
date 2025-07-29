@@ -258,20 +258,6 @@ auto window::default_procedure(this Self& self, const pane::window_message& wind
             }
         } break;
 
-            // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-settingchange
-        case WM_SETTINGCHANGE: {
-            auto dark_mode { pane::system::dark_mode() };
-
-            self.window_background(dark_mode ? self.window_config.dark_background
-                                             : self.window_config.light_background);
-
-            self.window_handle.immersive_dark_mode(dark_mode);
-
-            InvalidateRect(self.window_handle(), nullptr, true);
-
-            return 0;
-        } break;
-
             // https://learn.microsoft.com/en-us/windows/win32/menurc/wm-syscommand
         case WM_SYSCOMMAND: {
             if (self.window_handle.window_position.fullscreen) {
