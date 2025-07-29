@@ -102,6 +102,18 @@ webview::webview(pane::window_config&& window_config,
         }
 
         if (self.environment) {
+            wil::com_ptr<ICoreWebView2ControllerOptions> controller_options;
+            self.environment->CreateCoreWebView2ControllerOptions(controller_options.addressof());
+
+            self.controller_options
+                = self.controller_options.try_query<ICoreWebView2ControllerOptions4>();
+
+            if (self.controller_options) {
+                self.controller_options->put_AllowHostInputProcessing(TRUE);
+                self.controller_options->put_DefaultBackgroundColor(
+                    COREWEBVIEW2_COLOR { 255, 255, 0, 0 });
+            }
+
             self.environment->CreateCoreWebView2Controller(
                 self.window_handle(),
                 wil::MakeAgileCallback<ICoreWebView2CreateCoreWebView2ControllerCompletedHandler>(
@@ -113,8 +125,6 @@ webview::webview(pane::window_config&& window_config,
                 }
 
                 if (self.controller) {
-                    self.controller->put_DefaultBackgroundColor(COREWEBVIEW2_COLOR { 0, 0, 0, 0 });
-
                     RECT client_rect { 0, 0, 0, 0 };
                     GetClientRect(self.window_handle(), &client_rect);
                     self.controller->put_Bounds(client_rect);
