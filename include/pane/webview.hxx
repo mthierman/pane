@@ -5,6 +5,7 @@
 #include <functional>
 #include <utility>
 #include <pane/color.hxx>
+#include <pane/gdi_plus.hxx>
 #include <pane/math.hxx>
 #include <pane/system.hxx>
 #include <pane/window.hxx>
@@ -118,6 +119,9 @@ public:
     auto navigate(this const Self& self, const ada::url& url) -> void;
     auto navigate(this const Self& self, const std::filesystem::path& path) -> void;
     auto navigate_to_string(this const Self& self, const std::u8string& string) -> void;
+
+    pane::gdi_plus gdi_plus;
+    pane::window_icon favicon;
 
     pane::window_config window_config;
     pane::webview_config webview_config;

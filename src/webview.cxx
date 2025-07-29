@@ -302,6 +302,35 @@ auto webview::create(this Self& self) -> HWND {
 
                     if (created_core) {
                         self.core = created_core.try_query<ICoreWebView2_27>();
+                    }
+
+                    if (self.core) {
+                        self.core->add_FaviconChanged(
+                            Microsoft::WRL::Callback<ICoreWebView2FaviconChangedEventHandler>(
+                                [&](ICoreWebView2* /* sender */, IUnknown* /* args */) -> HRESULT {
+                            self.core->GetFavicon(
+                                COREWEBVIEW2_FAVICON_IMAGE_FORMAT::
+                                    COREWEBVIEW2_FAVICON_IMAGE_FORMAT_PNG,
+                                Microsoft::WRL::Callback<ICoreWebView2GetFaviconCompletedHandler>(
+                                    [&](HRESULT /* error_code */, IStream* icon_stream) -> HRESULT {
+                                if (Gdiplus::Bitmap { icon_stream }.GetHICON(&self.favicon())
+                                    == Gdiplus::Status::Ok) {
+                                    SendMessage(self.window_handle(),
+                                                WM_SETICON,
+                                                ICON_SMALL,
+                                                reinterpret_cast<LPARAM>(self.favicon()));
+                                    SendMessage(self.window_handle(),
+                                                WM_SETICON,
+                                                ICON_BIG,
+                                                reinterpret_cast<LPARAM>(self.favicon()));
+                                }
+
+                                return S_OK;
+                            }).Get());
+
+                            return S_OK;
+                        }).Get(),
+                            self.token.favicon_changed());
 
                         if (self.webview_config.virtual_host_name_map) {
                             const auto host_name { pane::to_utf16(
@@ -313,9 +342,7 @@ auto webview::create(this Self& self) -> HWND {
                                 COREWEBVIEW2_HOST_RESOURCE_ACCESS_KIND::
                                     COREWEBVIEW2_HOST_RESOURCE_ACCESS_KIND_ALLOW);
                         }
-                    }
 
-                    if (self.core) {
                         wil::com_ptr<ICoreWebView2Settings> created_settings;
                         self.core->get_Settings(created_settings.put());
 
