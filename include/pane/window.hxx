@@ -1,10 +1,8 @@
 #pragma once
 #include <Windows.h>
 #include <wrl.h>
-#include <filesystem>
 #include <functional>
 #include <set>
-#include <utility>
 #include <pane/color.hxx>
 #include <pane/math.hxx>
 #include <pane/system.hxx>

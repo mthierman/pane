@@ -3,7 +3,6 @@
 #include <wrl.h>
 #include <filesystem>
 #include <functional>
-// #include <set>
 #include <utility>
 #include <pane/color.hxx>
 #include <pane/math.hxx>
