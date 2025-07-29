@@ -123,6 +123,7 @@ public:
     pane::gdi_plus gdi_plus;
     pane::window_icon favicon;
     ada::url current_url;
+    std::u8string current_title;
 
     pane::window_config window_config;
     pane::webview_config webview_config;

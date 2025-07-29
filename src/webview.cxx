@@ -339,6 +339,7 @@ auto webview::create(this Self& self) -> HWND {
                                     -> HRESULT {
                             wil::unique_cotaskmem_string title;
                             self.core->get_DocumentTitle(&title);
+                            self.current_title = pane::to_utf8(title.get());
                             SetWindowTextW(self.window_handle(), title.get());
 
                             return S_OK;
