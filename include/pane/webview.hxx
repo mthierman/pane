@@ -15,8 +15,6 @@
 #include <ada.h>
 
 namespace pane {
-struct webview;
-
 struct webview_config final {
     struct environment_options final {
         std::u8string AdditionalBrowserArguments;
