@@ -291,9 +291,10 @@ auto webview::default_procedure(this Self& self, const pane::window_message& win
     switch (window_message.event) {
         // https://learn.microsoft.com/en-us/windows/win32/hidpi/wm-dpichanged
         case WM_DPICHANGED: {
-            self.dpi = HIWORD(window_message.wparam);
-            self.scale_factor
-                = static_cast<float>(self.dpi) / static_cast<float>(USER_DEFAULT_SCREEN_DPI);
+            self.window_handle.position.dpi = HIWORD(window_message.wparam);
+            self.window_handle.position.scale_factor
+                = static_cast<float>(self.window_handle.position.dpi)
+                / static_cast<float>(USER_DEFAULT_SCREEN_DPI);
 
             auto const suggested_rect { reinterpret_cast<RECT*>(window_message.lparam) };
             SetWindowPos(self.window_handle(),
@@ -309,10 +310,10 @@ auto webview::default_procedure(this Self& self, const pane::window_message& win
 
             // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-erasebkgnd
         case WM_ERASEBKGND: {
-            GetClientRect(self.window_handle(), &self.window_position.client_rect);
+            GetClientRect(self.window_handle(), &self.window_handle.position.client_rect);
 
             FillRect(reinterpret_cast<HDC>(window_message.wparam),
-                     &self.window_position.client_rect,
+                     &self.window_handle.position.client_rect,
                      self.window_background());
 
             return 1;
@@ -375,7 +376,7 @@ auto webview::default_procedure(this Self& self, const pane::window_message& win
             }
 
             if (self.controller) {
-                self.controller->put_Bounds(self.window_position.client_rect);
+                self.controller->put_Bounds(self.window_handle.position.client_rect);
             }
 
             return 0;

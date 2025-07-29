@@ -135,9 +135,6 @@ public:
                                                     ? window_config.dark_background
                                                     : window_config.light_background };
     pane::window_handle window_handle;
-    pane::window_position window_position;
-    UINT dpi { GetDpiForWindow(window_handle()) };
-    float scale_factor { static_cast<float>(dpi) / static_cast<float>(USER_DEFAULT_SCREEN_DPI) };
 
     wil::com_ptr<ICoreWebView2Settings9> settings;
     wil::com_ptr<ICoreWebView2EnvironmentOptions> environment_options {
