@@ -137,9 +137,9 @@ public:
     float scale_factor { static_cast<float>(dpi) / static_cast<float>(USER_DEFAULT_SCREEN_DPI) };
 
     struct event_token {
-        pane::webview_token source_changed;
-        pane::webview_token favicon_changed;
         pane::webview_token accelerator_key_pressed;
+        pane::webview_token favicon_changed;
+        pane::webview_token source_changed;
     };
 
     event_token token;

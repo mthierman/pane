@@ -332,6 +332,19 @@ auto webview::create(this Self& self) -> HWND {
                         }).Get(),
                             self.token.favicon_changed());
 
+                        self.core->add_NavigationCompleted(
+                            Microsoft::WRL::Callback<ICoreWebView2NavigationCompletedEventHandler>(
+                                [&](ICoreWebView2* /* sender */,
+                                    ICoreWebView2NavigationCompletedEventArgs* /* args */)
+                                    -> HRESULT {
+                            wil::unique_cotaskmem_string title;
+                            self.core->get_DocumentTitle(&title);
+                            SetWindowTextW(self.window_handle(), title.get());
+
+                            return S_OK;
+                        }).Get(),
+                            self.token.source_changed());
+
                         if (self.webview_config.virtual_host_name_map) {
                             const auto host_name { pane::to_utf16(
                                 (*self.webview_config.virtual_host_name_map).first) };
