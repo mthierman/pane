@@ -95,17 +95,14 @@ private:
             }
         }
 
-        // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-ncdestroy
-        if (msg == WM_NCDESTROY) {
-            if (auto window_long_ptr { GetWindowLongPtrW(hwnd, 0) }) {
-                auto& self { *(reinterpret_cast<T*>(window_long_ptr)) };
+        if (auto window_long_ptr { GetWindowLongPtrW(hwnd, 0) }) {
+            auto& self { *(reinterpret_cast<T*>(window_long_ptr)) };
+
+            // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-ncdestroy
+            if (msg == WM_NCDESTROY) {
                 self.window_handle(nullptr);
                 SetWindowLongPtrW(hwnd, 0, reinterpret_cast<LONG_PTR>(nullptr));
             }
-        }
-
-        if (auto window_long_ptr { GetWindowLongPtrW(hwnd, 0) }) {
-            auto& self { *(reinterpret_cast<T*>(window_long_ptr)) };
 
             // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-settingchange
             if (msg == WM_SETTINGCHANGE) {
