@@ -189,7 +189,7 @@ struct window_config final {
 struct window final {
     using Self = window;
 
-    template <typename T> friend struct window_class;
+    friend struct window_class<Self>;
 
     window(pane::window_config&& window_config = {},
            std::function<LRESULT(Self*, pane::window_message)>&& window_procedure

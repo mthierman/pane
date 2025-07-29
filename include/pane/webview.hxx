@@ -87,7 +87,7 @@ private:
 struct webview final {
     using Self = webview;
 
-    template <typename T> friend struct window_class;
+    friend struct window_class<Self>;
 
     webview(pane::window_config&& window_config = {},
             pane::webview_config&& webview_config = {},
