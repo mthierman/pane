@@ -44,12 +44,11 @@ template <typename T> struct window_class final {
         : class_name { pane::to_utf16(class_name) } {
         auto& self = *this;
 
-        if (GetClassInfoExW(self.wndclass.hInstance, self.wndclass.lpszClassName, &self.wndclass)
-            == 0) {
-            self.wndclass = WNDCLASSEXW {
+        if (GetClassInfoExW(self.data.hInstance, self.data.lpszClassName, &self.data) == 0) {
+            self.data = WNDCLASSEXW {
                 { sizeof(WNDCLASSEXW) },
                 { 0 },
-                { class_procedure },
+                { window_procedure },
                 { 0 },
                 { sizeof(T) },
                 { pane::system::module_handle().value_or(nullptr) },
@@ -60,13 +59,13 @@ template <typename T> struct window_class final {
                 { reinterpret_cast<const wchar_t*>(self.class_name.data()) },
                 { pane::system::resource_icon().value_or(pane::system::application_icon()) }
             };
-            RegisterClassExW(&self.wndclass);
+            RegisterClassExW(&self.data);
         };
     }
     ~window_class() {
         auto& self = *this;
 
-        UnregisterClassW(self.wndclass.lpszClassName, self.wndclass.hInstance);
+        UnregisterClassW(self.data.lpszClassName, self.data.hInstance);
     }
 
     window_class(const Self&) = delete;
@@ -75,10 +74,11 @@ template <typename T> struct window_class final {
     window_class(Self&&) noexcept = delete;
     auto operator=(Self&&) noexcept -> Self& = delete;
 
-    auto operator()(this const Self& self) -> const WNDCLASSEXW& { return self.wndclass; }
+    std::u16string class_name;
+    WNDCLASSEXW data;
 
 private:
-    static auto class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) -> LRESULT {
+    static auto window_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) -> LRESULT {
         // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-nccreate
         if (msg == WM_NCCREATE) {
             if (auto create_struct { reinterpret_cast<CREATESTRUCTW*>(lparam) }) {
@@ -118,9 +118,6 @@ private:
 
         return DefWindowProcW(hwnd, msg, wparam, lparam);
     }
-
-    std::u16string class_name;
-    WNDCLASSEXW wndclass;
 };
 
 struct window_handle final {

@@ -200,7 +200,7 @@ window::window(pane::window_config&& window_config,
 
     CreateWindowExW(
         0,
-        self.window_class().lpszClassName,
+        self.window_class.data.lpszClassName,
         reinterpret_cast<const wchar_t*>(pane::to_utf16(self.window_config.title).data()),
         self.window_config.parent_hwnd
             ? WS_CHILDWINDOW
@@ -211,7 +211,7 @@ window::window(pane::window_config&& window_config,
         CW_USEDEFAULT,
         self.window_config.parent_hwnd,
         self.window_config.parent_hwnd ? reinterpret_cast<HMENU>(self.window_id) : nullptr,
-        self.window_class().hInstance,
+        self.window_class.data.hInstance,
         &self);
 }
 
