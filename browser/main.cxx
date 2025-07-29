@@ -25,31 +25,31 @@ auto wWinMain(HINSTANCE /* hinstance */,
 
     event_token token;
 
-    auto browser { pane::webview(
+    pane::webview browser { pane::webview(
         { u8"Browser",
           pane::color { 0, 0, 0, 255 },
           pane::color { 255, 255, 255, 255 },
           true,
           nullptr },
         { .home_page = home_page ? *home_page : u8"about:blank",
-          .creation_callback = [&](pane::webview* webview) -> void {
-        webview->core->add_FaviconChanged(
+          .creation_callback = [&]() -> void {
+        browser.core->add_FaviconChanged(
             Microsoft::WRL::Callback<ICoreWebView2FaviconChangedEventHandler>(
-                [webview](ICoreWebView2* /* sender */, IUnknown* /* args */) -> HRESULT {
-            webview->core->GetFavicon(
+                [&](ICoreWebView2* /* sender */, IUnknown* /* args */) -> HRESULT {
+            browser.core->GetFavicon(
                 COREWEBVIEW2_FAVICON_IMAGE_FORMAT::COREWEBVIEW2_FAVICON_IMAGE_FORMAT_PNG,
                 Microsoft::WRL::Callback<ICoreWebView2GetFaviconCompletedHandler>(
                     [&](HRESULT /* error_code */, IStream* icon_stream) -> HRESULT {
-                if (Gdiplus::Bitmap { icon_stream }.GetHICON(&webview->favicon())
+                if (Gdiplus::Bitmap { icon_stream }.GetHICON(&browser.favicon())
                     == Gdiplus::Status::Ok) {
-                    SendMessage(webview->window_handle(),
+                    SendMessage(browser.window_handle(),
                                 WM_SETICON,
                                 ICON_SMALL,
-                                reinterpret_cast<LPARAM>(webview->favicon()));
-                    SendMessage(webview->window_handle(),
+                                reinterpret_cast<LPARAM>(browser.favicon()));
+                    SendMessage(browser.window_handle(),
                                 WM_SETICON,
                                 ICON_BIG,
-                                reinterpret_cast<LPARAM>(webview->favicon()));
+                                reinterpret_cast<LPARAM>(browser.favicon()));
                 }
 
                 return S_OK;
@@ -59,13 +59,13 @@ auto wWinMain(HINSTANCE /* hinstance */,
         }).Get(),
             token.favicon_changed());
 
-        webview->core->add_NavigationCompleted(
+        browser.core->add_NavigationCompleted(
             Microsoft::WRL::Callback<ICoreWebView2NavigationCompletedEventHandler>(
-                [webview](ICoreWebView2* /* sender */,
-                          ICoreWebView2NavigationCompletedEventArgs* /* args */) -> HRESULT {
+                [&](ICoreWebView2* /* sender */,
+                    ICoreWebView2NavigationCompletedEventArgs* /* args */) -> HRESULT {
             wil::unique_cotaskmem_string title;
-            webview->core->get_DocumentTitle(&title);
-            SetWindowTextW(webview->window_handle(), title.get());
+            browser.core->get_DocumentTitle(&title);
+            SetWindowTextW(browser.window_handle(), title.get());
 
             return S_OK;
         }).Get(),

@@ -272,7 +272,7 @@ webview::webview(pane::window_config&& window_config,
                         self.navigate(self.webview_config.home_page);
 
                         if (self.webview_config.creation_callback) {
-                            self.webview_config.creation_callback(&self);
+                            self.webview_config.creation_callback();
                         }
                     }
                 }

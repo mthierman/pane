@@ -17,7 +17,7 @@ auto wWinMain(HINSTANCE /* hinstance */,
     event_token token;
     pane::window_icon favicon;
 
-    auto webview2_docs { pane::webview(
+    pane::webview webview2_docs { pane::webview(
         { u8"WebView2",
           pane::color { 0, 0, 0, 255 },
           pane::color { 255, 255, 255, 255 },
@@ -25,14 +25,14 @@ auto wWinMain(HINSTANCE /* hinstance */,
           nullptr },
         { .home_page = u8"https://learn.microsoft.com/en-us/microsoft-edge/webview2/reference/"
                        u8"win32/",
-          .creation_callback = [&](pane::webview* webview) -> void {
-        webview->core->add_NavigationCompleted(
+          .creation_callback = [&]() -> void {
+        webview2_docs.core->add_NavigationCompleted(
             Callback<ICoreWebView2NavigationCompletedEventHandler>(
-                [&, webview](ICoreWebView2* /* sender */,
-                             ICoreWebView2NavigationCompletedEventArgs* /* args */) -> HRESULT {
+                [&](ICoreWebView2* /* sender */,
+                    ICoreWebView2NavigationCompletedEventArgs* /* args */) -> HRESULT {
             wil::unique_cotaskmem_string title;
-            webview->core->get_DocumentTitle(&title);
-            SetWindowTextW(webview->window_handle(), title.get());
+            webview2_docs.core->get_DocumentTitle(&title);
+            SetWindowTextW(webview2_docs.window_handle(), title.get());
 
             // webview->core->ExecuteScript(
             //     LR"(document.documentElement.style.background = "#00000000";
@@ -46,17 +46,18 @@ auto wWinMain(HINSTANCE /* hinstance */,
         }).Get(),
             token.source_changed());
 
-        webview->core->add_FaviconChanged(
+        webview2_docs.core->add_FaviconChanged(
             Callback<ICoreWebView2FaviconChangedEventHandler>(
-                [&, webview](ICoreWebView2* /* sender */, IUnknown* /* args */) -> HRESULT {
-            webview->core->GetFavicon(
+                [&](ICoreWebView2* /* sender */, IUnknown* /* args */) -> HRESULT {
+            webview2_docs.core->GetFavicon(
                 COREWEBVIEW2_FAVICON_IMAGE_FORMAT::COREWEBVIEW2_FAVICON_IMAGE_FORMAT_PNG,
                 Callback<ICoreWebView2GetFaviconCompletedHandler>(
-                    [&, webview](HRESULT /* error_code */, IStream* icon_stream) -> HRESULT {
+                    [&](HRESULT /* error_code */, IStream* icon_stream) -> HRESULT {
                 if (Gdiplus::Bitmap { icon_stream }.GetHICON(&favicon()) == Gdiplus::Status::Ok) {
                     SendMessage(
-                        webview->window_handle(), WM_SETICON, ICON_SMALL, LPARAM(favicon()));
-                    SendMessage(webview->window_handle(), WM_SETICON, ICON_BIG, LPARAM(favicon()));
+                        webview2_docs.window_handle(), WM_SETICON, ICON_SMALL, LPARAM(favicon()));
+                    SendMessage(
+                        webview2_docs.window_handle(), WM_SETICON, ICON_BIG, LPARAM(favicon()));
                 }
 
                 return S_OK;
@@ -75,13 +76,13 @@ auto wWinMain(HINSTANCE /* hinstance */,
             } break;
 
             case WM_SETTINGCHANGE: {
-                // if (webview->core) {
-                //     webview->core->Reload();
+                // if (webview2_docs.core) {
+                //     webview2_docs.core->Reload();
                 // }
             } break;
         }
 
-        return webview->default_procedure(window_message);
+        return webview2_docs.default_procedure(window_message);
     }) };
 
     return pane::system::message_loop();
