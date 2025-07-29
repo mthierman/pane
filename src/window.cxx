@@ -40,7 +40,7 @@ auto window_handle::toggle_fullscreen(this Self& self) -> bool {
     if (style & WS_OVERLAPPEDWINDOW) {
         MONITORINFO monitor_info { .cbSize { sizeof(MONITORINFO) } };
 
-        if (GetWindowPlacement(self.hwnd, &self.window_position.window_placement)
+        if (GetWindowPlacement(self.hwnd, &self.position.window_placement)
             && GetMonitorInfoW(MonitorFromWindow(self.hwnd, MONITOR_DEFAULTTONEAREST),
                                &monitor_info)) {
             SetWindowLongPtrW(self.hwnd, GWL_STYLE, style & ~WS_OVERLAPPEDWINDOW);
@@ -53,7 +53,7 @@ auto window_handle::toggle_fullscreen(this Self& self) -> bool {
                          (monitor.bottom - monitor.top),
                          SWP_NOOWNERZORDER | SWP_FRAMECHANGED);
 
-            self.window_position.fullscreen = true;
+            self.position.fullscreen = true;
 
             return true;
         }
@@ -61,8 +61,8 @@ auto window_handle::toggle_fullscreen(this Self& self) -> bool {
 
     if (!(style & WS_OVERLAPPEDWINDOW)) {
         SetWindowLongPtrW(self.hwnd, GWL_STYLE, style | WS_OVERLAPPEDWINDOW);
-        SetWindowPlacement(self.hwnd, &self.window_position.window_placement);
-        auto& restore { self.window_position.window_placement.rcNormalPosition };
+        SetWindowPlacement(self.hwnd, &self.position.window_placement);
+        auto& restore { self.position.window_placement.rcNormalPosition };
         SetWindowPos(self.hwnd,
                      HWND_TOP,
                      restore.left,
@@ -72,7 +72,7 @@ auto window_handle::toggle_fullscreen(this Self& self) -> bool {
                      SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_NOOWNERZORDER | SWP_FRAMECHANGED);
     }
 
-    self.window_position.fullscreen = false;
+    self.position.fullscreen = false;
 
     return false;
 }
@@ -220,9 +220,10 @@ auto window::default_procedure(this Self& self, const pane::window_message& wind
     switch (window_message.event) {
             // https://learn.microsoft.com/en-us/windows/win32/hidpi/wm-dpichanged
         case WM_DPICHANGED: {
-            self.dpi = HIWORD(window_message.wparam);
-            self.scale_factor
-                = static_cast<float>(self.dpi) / static_cast<float>(USER_DEFAULT_SCREEN_DPI);
+            self.window_handle.position.dpi = HIWORD(window_message.wparam);
+            self.window_handle.position.scale_factor
+                = static_cast<float>(self.window_handle.position.dpi)
+                / static_cast<float>(USER_DEFAULT_SCREEN_DPI);
 
             auto const suggested_rect { reinterpret_cast<RECT*>(window_message.lparam) };
             SetWindowPos(self.window_handle(),
@@ -238,10 +239,10 @@ auto window::default_procedure(this Self& self, const pane::window_message& wind
 
             // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-erasebkgnd
         case WM_ERASEBKGND: {
-            GetClientRect(self.window_handle(), &self.window_handle.window_position.client_rect);
+            GetClientRect(self.window_handle(), &self.window_handle.position.client_rect);
 
             FillRect(reinterpret_cast<HDC>(window_message.wparam),
-                     &self.window_handle.window_position.client_rect,
+                     &self.window_handle.position.client_rect,
                      self.window_background());
 
             return 1;
@@ -260,34 +261,34 @@ auto window::default_procedure(this Self& self, const pane::window_message& wind
 
             // https://learn.microsoft.com/en-us/windows/win32/menurc/wm-syscommand
         case WM_SYSCOMMAND: {
-            if (self.window_handle.window_position.fullscreen) {
+            if (self.window_handle.position.fullscreen) {
                 return 0;
             }
         } break;
 
             // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-windowposchanged
         case WM_WINDOWPOSCHANGED: {
-            GetClientRect(self.window_handle(), &self.window_handle.window_position.client_rect);
+            GetClientRect(self.window_handle(), &self.window_handle.position.client_rect);
 
             if (auto style { GetWindowLongPtrW(self.window_handle(), GWL_STYLE) };
                 style & WS_OVERLAPPEDWINDOW) {
                 GetWindowPlacement(self.window_handle(),
-                                   &self.window_handle.window_position.window_placement);
+                                   &self.window_handle.position.window_placement);
             }
 
             WINDOWPLACEMENT window_placement { .length { sizeof(WINDOWPLACEMENT) } };
             GetWindowPlacement(self.window_handle(), &window_placement);
 
             if (window_placement.showCmd == SW_SHOWMAXIMIZED) {
-                self.window_handle.window_position.maximized = true;
+                self.window_handle.position.maximized = true;
             } else {
-                self.window_handle.window_position.maximized = false;
+                self.window_handle.position.maximized = false;
             }
 
             if (window_placement.showCmd == SW_SHOWMINIMIZED) {
-                self.window_handle.window_position.minimized = true;
+                self.window_handle.position.minimized = true;
             } else {
-                self.window_handle.window_position.minimized = false;
+                self.window_handle.position.minimized = false;
             }
 
             return 0;

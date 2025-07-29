@@ -344,34 +344,34 @@ auto webview::default_procedure(this Self& self, const pane::window_message& win
 
         // https://learn.microsoft.com/en-us/windows/win32/menurc/wm-syscommand
         case WM_SYSCOMMAND: {
-            if (self.window_handle.window_position.fullscreen) {
+            if (self.window_handle.position.fullscreen) {
                 return 0;
             }
         } break;
 
             // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-windowposchanged
         case WM_WINDOWPOSCHANGED: {
-            GetClientRect(self.window_handle(), &self.window_handle.window_position.client_rect);
+            GetClientRect(self.window_handle(), &self.window_handle.position.client_rect);
 
             if (auto style { GetWindowLongPtrW(self.window_handle(), GWL_STYLE) };
                 style & WS_OVERLAPPEDWINDOW) {
                 GetWindowPlacement(self.window_handle(),
-                                   &self.window_handle.window_position.window_placement);
+                                   &self.window_handle.position.window_placement);
             }
 
             WINDOWPLACEMENT window_placement { .length { sizeof(WINDOWPLACEMENT) } };
             GetWindowPlacement(self.window_handle(), &window_placement);
 
             if (window_placement.showCmd == SW_SHOWMAXIMIZED) {
-                self.window_handle.window_position.maximized = true;
+                self.window_handle.position.maximized = true;
             } else {
-                self.window_handle.window_position.maximized = false;
+                self.window_handle.position.maximized = false;
             }
 
             if (window_placement.showCmd == SW_SHOWMINIMIZED) {
-                self.window_handle.window_position.minimized = true;
+                self.window_handle.position.minimized = true;
             } else {
-                self.window_handle.window_position.minimized = false;
+                self.window_handle.position.minimized = false;
             }
 
             if (self.controller) {

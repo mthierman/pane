@@ -20,6 +20,8 @@ struct window_position final {
     bool minimized { false };
     RECT client_rect { 0, 0, 0, 0 };
     WINDOWPLACEMENT window_placement { .length { sizeof(WINDOWPLACEMENT) } };
+    UINT dpi { 0 };
+    float scale_factor { 0.0f };
 };
 
 enum struct window_backdrop { automatic, mica, mica_alt, acrylic, none };
@@ -82,6 +84,10 @@ private:
                 if (auto self { static_cast<T*>(create_struct->lpCreateParams) }) {
                     SetWindowLongPtrW(hwnd, 0, reinterpret_cast<LONG_PTR>(self));
                     self->window_handle(hwnd);
+                    self->window_handle.position.dpi = GetDpiForWindow(hwnd);
+                    self->window_handle.position.scale_factor
+                        = static_cast<float>(self->window_handle.position.dpi)
+                        / static_cast<float>(USER_DEFAULT_SCREEN_DPI);
                     SendMessageW(hwnd, WM_SETTINGCHANGE, 0, 0);
                 }
             }
@@ -147,7 +153,7 @@ struct window_handle final {
     auto operator()(this const Self& self) -> HWND;
     auto operator()(this Self& self, HWND hwnd) -> void;
 
-    pane::window_position window_position;
+    pane::window_position position;
 
 private:
     HWND hwnd { nullptr };
@@ -231,8 +237,6 @@ public:
                                                     ? window_config.dark_background
                                                     : window_config.light_background };
     pane::window_handle window_handle;
-    UINT dpi { GetDpiForWindow(window_handle()) };
-    float scale_factor { static_cast<float>(dpi) / static_cast<float>(USER_DEFAULT_SCREEN_DPI) };
 };
 
 struct window_manager final {
