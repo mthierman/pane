@@ -144,8 +144,7 @@ public:
 
     event_token token;
 
-    wil::com_ptr<ICoreWebView2ControllerOptions> controller_options;
-    wil::com_ptr<ICoreWebView2ControllerOptions4> controller_options4;
+    wil::com_ptr<ICoreWebView2ControllerOptions4> controller_options;
     wil::com_ptr<ICoreWebView2Settings9> settings;
     wil::com_ptr<ICoreWebView2Environment14> environment;
     wil::com_ptr<ICoreWebView2Controller4> controller;
