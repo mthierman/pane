@@ -412,7 +412,8 @@ auto webview::create(this Self& self) -> HWND {
 //     }
 // }
 
-auto webview::navigate(this const Self& self, const ada::url& url) -> void {
+auto webview::navigate(this Self& self, const ada::url& url) -> void {
+    self.current_url = url;
     const auto u16string { pane::to_utf16(url.get_href()) };
 
     if (self.core) {
@@ -420,17 +421,25 @@ auto webview::navigate(this const Self& self, const ada::url& url) -> void {
     }
 }
 
-auto webview::navigate(this const Self& self, const std::filesystem::path& path) -> void {
+auto webview::navigate(this Self& self, const std::filesystem::path& path) -> void {
+    if (auto parse { ada::parse<ada::url>(path.string()) }; parse) {
+        self.current_url = parse.value();
+    }
+
     if (self.core) {
         self.core->Navigate(path.c_str());
     }
 }
 
-auto webview::navigate_to_string(this const Self& self, const std::u8string& string) -> void {
+auto webview::navigate_to_string(this Self& self, const std::u8string& string) -> void {
+    if (auto parse { ada::parse<ada::url>(reinterpret_cast<const char*>(string.c_str())) }; parse) {
+        self.current_url = parse.value();
+    }
+
     const auto u16string { pane::to_utf16(string) };
 
     if (self.core) {
-        self.core->NavigateToString(reinterpret_cast<const wchar_t*>(u16string.data()));
+        self.core->NavigateToString(reinterpret_cast<const wchar_t*>(u16string.c_str()));
     }
 }
 } // namespace pane
