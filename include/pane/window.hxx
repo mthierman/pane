@@ -117,6 +117,26 @@ private:
                         / static_cast<float>(USER_DEFAULT_SCREEN_DPI);
                 } break;
 
+                    // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-windowposchanged
+                case WM_WINDOWPOSCHANGED: {
+                    GetClientRect(window_message.hwnd, &self.window_handle.position.client_rect);
+
+                    if (auto style { GetWindowLongPtrW(window_message.hwnd, GWL_STYLE) };
+                        style & WS_OVERLAPPEDWINDOW) {
+                        GetWindowPlacement(self.window_handle(),
+                                           &self.window_handle.position.window_placement);
+                    }
+
+                    WINDOWPLACEMENT window_placement { .length { sizeof(WINDOWPLACEMENT) } };
+                    GetWindowPlacement(window_message.hwnd, &window_placement);
+
+                    self.window_handle.position.maximized
+                        = window_placement.showCmd == SW_SHOWMAXIMIZED;
+
+                    self.window_handle.position.minimized
+                        = window_placement.showCmd == SW_SHOWMINIMIZED;
+                } break;
+
                     // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-settingchange
                 case WM_SETTINGCHANGE: {
                     auto dark_mode { pane::system::dark_mode() };

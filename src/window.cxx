@@ -253,34 +253,6 @@ auto window::default_procedure(this Self& self, const pane::window_message& wind
                 } break;
             }
         } break;
-
-            // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-windowposchanged
-        case WM_WINDOWPOSCHANGED: {
-            GetClientRect(self.window_handle(), &self.window_handle.position.client_rect);
-
-            if (auto style { GetWindowLongPtrW(self.window_handle(), GWL_STYLE) };
-                style & WS_OVERLAPPEDWINDOW) {
-                GetWindowPlacement(self.window_handle(),
-                                   &self.window_handle.position.window_placement);
-            }
-
-            WINDOWPLACEMENT window_placement { .length { sizeof(WINDOWPLACEMENT) } };
-            GetWindowPlacement(self.window_handle(), &window_placement);
-
-            if (window_placement.showCmd == SW_SHOWMAXIMIZED) {
-                self.window_handle.position.maximized = true;
-            } else {
-                self.window_handle.position.maximized = false;
-            }
-
-            if (window_placement.showCmd == SW_SHOWMINIMIZED) {
-                self.window_handle.position.minimized = true;
-            } else {
-                self.window_handle.position.minimized = false;
-            }
-
-            return 0;
-        } break;
     }
 
     return window_message.default_procedure();
