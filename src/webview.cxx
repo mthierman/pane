@@ -277,10 +277,6 @@ webview::webview(pane::window_config&& window_config,
                                      std::to_underlying(message::WEBVIEW_CREATE),
                                      0,
                                      0);
-
-                        if (self.webview_config.creation_callback) {
-                            self.webview_config.creation_callback();
-                        }
                     }
                 }
 

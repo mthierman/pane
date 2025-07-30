@@ -30,8 +30,7 @@ auto wWinMain(HINSTANCE /* hinstance */,
                               pane::color { 255, 255, 255, 255 },
                               true,
                               nullptr },
-                            { .home_page = home_page ? *home_page : u8"about:blank",
-                              .creation_callback = [&]() -> HRESULT { return S_OK; } },
+                            { home_page.value_or(u8"about:blank") },
                             [&](pane::window_message window_message) -> LRESULT {
         switch (window_message.event) {
             using enum pane::webview::message;

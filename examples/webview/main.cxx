@@ -9,19 +9,19 @@ auto wWinMain(HINSTANCE /* hinstance */,
 
     pane::webview url { pane::webview(
         { u8"url", pane::color { 0, 0, 0, 0 }, pane::color { 255, 255, 255, 0 }, true, nullptr },
-        { .home_page = u8"about:blank",
-          .creation_callback = [&]() -> HRESULT {
-        url.navigate(u8"https://learn.microsoft.com/windows/apps/winui/winui3/");
-
-        return S_OK;
-    } },
+        { .home_page = u8"about:blank" },
         [&](pane::window_message window_message) -> LRESULT {
+        using enum pane::webview::message;
+
         switch (window_message.event) {
             case WM_CREATE: {
                 window_manager.insert(url.window_handle);
             } break;
             case WM_DESTROY: {
                 window_manager.erase(url.window_handle);
+            } break;
+            case std::to_underlying(WEBVIEW_CREATE): {
+                url.navigate(u8"https://learn.microsoft.com/windows/apps/winui/winui3/");
             } break;
         }
 
@@ -36,19 +36,19 @@ auto wWinMain(HINSTANCE /* hinstance */,
           nullptr },
         { .home_page = u8"about:blank",
           .virtual_host_name_map = std::make_pair(
-              u8"pane.internal", std::filesystem::path(u8"D:/mthierman/pane/pane/data")),
-          .creation_callback = [&]() -> HRESULT {
-        virtual_host.navigate(u8"https://pane.internal/index.html");
-
-        return S_OK;
-    } },
+              u8"pane.internal", std::filesystem::path(u8"D:/mthierman/pane/pane/data")) },
         [&](pane::window_message window_message) -> LRESULT {
+        using enum pane::webview::message;
+
         switch (window_message.event) {
             case WM_CREATE: {
                 window_manager.insert(virtual_host.window_handle);
             } break;
             case WM_DESTROY: {
                 window_manager.erase(virtual_host.window_handle);
+            } break;
+            case std::to_underlying(WEBVIEW_CREATE): {
+                virtual_host.navigate(u8"https://pane.internal/index.html");
             } break;
         }
 
@@ -57,19 +57,19 @@ auto wWinMain(HINSTANCE /* hinstance */,
 
     pane::webview file { pane::webview(
         { u8"file", pane::color { 0, 0, 0, 0 }, pane::color { 255, 255, 255, 0 }, true, nullptr },
-        { .home_page = u8"about:blank",
-          .creation_callback = [&]() -> HRESULT {
-        file.navigate(std::u8string(u8"file:///D:/mthierman/pane/pane/data/index.html"));
-
-        return S_OK;
-    } },
+        { .home_page = u8"about:blank" },
         [&](pane::window_message window_message) -> LRESULT {
+        using enum pane::webview::message;
+
         switch (window_message.event) {
             case WM_CREATE: {
                 window_manager.insert(file.window_handle);
             } break;
             case WM_DESTROY: {
                 window_manager.erase(file.window_handle);
+            } break;
+            case std::to_underlying(WEBVIEW_CREATE): {
+                file.navigate(std::u8string(u8"file:///D:/mthierman/pane/pane/data/index.html"));
             } break;
         }
 
@@ -84,20 +84,20 @@ auto wWinMain(HINSTANCE /* hinstance */,
           nullptr },
         { .home_page = u8"about:blank",
           .virtual_host_name_map = std::make_pair(
-              u8"pane.internal", std::filesystem::path(u8"D:/mthierman/pane/pane/data")),
-          .creation_callback = [&]() -> HRESULT {
-        navigate_to_string.navigate_to_string(
-            u8R"(<html><body style="background-color: black; color: white;">navigate_to_string</body></html>)");
-
-        return S_OK;
-    } },
+              u8"pane.internal", std::filesystem::path(u8"D:/mthierman/pane/pane/data")) },
         [&](pane::window_message window_message) -> LRESULT {
+        using enum pane::webview::message;
+
         switch (window_message.event) {
             case WM_CREATE: {
                 window_manager.insert(navigate_to_string.window_handle);
             } break;
             case WM_DESTROY: {
                 window_manager.erase(navigate_to_string.window_handle);
+            } break;
+            case std::to_underlying(WEBVIEW_CREATE): {
+                navigate_to_string.navigate_to_string(
+                    u8R"(<html><body style="background-color: black; color: white;">navigate_to_string</body></html>)");
             } break;
         }
 
