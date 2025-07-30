@@ -7,8 +7,6 @@ auto wWinMain(HINSTANCE /* hinstance */,
               HINSTANCE /* hprevinstance */,
               PWSTR /* pcmdline */,
               int /* ncmdshow */) -> int {
-    auto gdi_plus { pane::gdi_plus() };
-
     struct event_token {
         pane::webview_token source_changed;
         pane::webview_token favicon_changed;
@@ -17,7 +15,7 @@ auto wWinMain(HINSTANCE /* hinstance */,
     event_token token;
     pane::window_icon favicon;
 
-    pane::webview webview2_docs { pane::webview(
+    pane::webview webview2_docs {
         { u8"WebView2",
           pane::color { 0, 0, 0, 255 },
           pane::color { 255, 255, 255, 255 },
@@ -91,7 +89,8 @@ auto wWinMain(HINSTANCE /* hinstance */,
         }
 
         return webview2_docs.default_procedure(window_message);
-    }) };
+    }
+    };
 
     return pane::system::message_loop();
 }
