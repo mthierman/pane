@@ -6,12 +6,10 @@ auto wWinMain(HINSTANCE /* hinstance */,
               PWSTR /* pcmdline */,
               int /* ncmdshow */) -> int {
     auto args { pane::system::command_line_arguments() };
-
-    auto home_page { std::optional<std::u8string> { std::nullopt } };
+    std::optional<std::u8string> home_page { std::nullopt };
 
     if (args.size() == 2) {
-        auto arg { args.at(1) };
-        if (arg.starts_with(u8"https://")) {
+        if (args.at(1).starts_with(u8"https://")) {
             home_page = args.at(1);
         } else {
             home_page = args.at(1).insert(0, u8"https://");
@@ -34,12 +32,6 @@ auto wWinMain(HINSTANCE /* hinstance */,
                             [&](pane::window_message window_message) -> LRESULT {
         switch (window_message.event) {
             using enum pane::webview::message;
-
-            case WM_CREATE: {
-                // browser.window_handle.maximize();
-
-                return 0;
-            } break;
 
             case WM_DESTROY: {
                 pane::system::quit();
