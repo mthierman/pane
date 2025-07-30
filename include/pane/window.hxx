@@ -31,7 +31,7 @@ template <typename T> struct window_class final {
           data { WNDCLASSEXW {
               { sizeof(WNDCLASSEXW) },
               { 0 },
-              { window_procedure },
+              { class_procedure },
               { 0 },
               { sizeof(T*) },
               { this->instance },
@@ -71,7 +71,7 @@ public:
     WNDCLASSEXW data;
 
 private:
-    static auto window_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) -> LRESULT {
+    static auto class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) -> LRESULT {
         pane::window_message window_message { hwnd, msg, wparam, lparam };
 
         // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-nccreate
