@@ -120,7 +120,7 @@ webview::webview(pane::window_config&& window_config,
         self.webview_config.user_data_folder.c_str(),
         self.environment_options.get(),
         wil::MakeAgileCallback<ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler>(
-            [&]([[maybe_unused]] HRESULT error_code,
+            [&](HRESULT /* error_code */,
                 ICoreWebView2Environment* created_environment) -> HRESULT {
         if (created_environment) {
             self.environment = wil::com_ptr<ICoreWebView2Environment>(created_environment)
@@ -143,7 +143,7 @@ webview::webview(pane::window_config&& window_config,
                 self.window_handle(),
                 self.controller_options.get(),
                 wil::MakeAgileCallback<ICoreWebView2CreateCoreWebView2ControllerCompletedHandler>(
-                    [&]([[maybe_unused]] HRESULT error_code,
+                    [&](HRESULT /* error_code */,
                         ICoreWebView2Controller* created_controller) -> HRESULT {
                 if (created_controller) {
                     self.controller = wil::com_ptr<ICoreWebView2Controller>(created_controller)
@@ -157,7 +157,7 @@ webview::webview(pane::window_config&& window_config,
 
                     self.controller->add_AcceleratorKeyPressed(
                         Microsoft::WRL::Callback<ICoreWebView2AcceleratorKeyPressedEventHandler>(
-                            [&](ICoreWebView2Controller* sender,
+                            [&](ICoreWebView2Controller* /* sender */,
                                 ICoreWebView2AcceleratorKeyPressedEventArgs* args) -> HRESULT {
                         UINT key;
                         args->get_VirtualKey(&key);
@@ -272,7 +272,7 @@ webview::webview(pane::window_config&& window_config,
                         self.navigate(self.webview_config.home_page);
 
                         if (self.webview_config.creation_callback) {
-                            self.webview_config.creation_callback();
+                            return self.webview_config.creation_callback();
                         }
                     }
                 }
