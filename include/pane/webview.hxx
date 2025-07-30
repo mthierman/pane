@@ -109,10 +109,10 @@ struct webview final {
     pane::window_class<Self> window_class { u8"pane_webview" };
     pane::window_config window_config;
     pane::webview_config webview_config;
-    pane::window_handle window_handle;
     pane::window_background window_background { pane::system::dark_mode()
                                                     ? window_config.dark_background
                                                     : window_config.light_background };
+    pane::window_handle window_handle;
     std::function<LRESULT(pane::window_message)> custom_procedure;
 
     struct event_token {
