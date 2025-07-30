@@ -29,7 +29,7 @@ webview::webview(pane::window_config&& window_config,
         CW_USEDEFAULT,
         CW_USEDEFAULT,
         self.window_config.parent_hwnd,
-        self.window_config.parent_hwnd ? reinterpret_cast<HMENU>(self.window_id) : nullptr,
+        self.window_config.parent_hwnd ? reinterpret_cast<HMENU>(self.window_handle.id) : nullptr,
         self.window_class.data.hInstance,
         &self);
 
