@@ -77,7 +77,6 @@ template <typename T> struct window_class final {
     window_class(Self&&) noexcept = delete;
     auto operator=(Self&&) noexcept -> Self& = delete;
 
-    std::u16string class_name;
     WNDCLASSEXW data;
 
 private:
@@ -122,6 +121,8 @@ private:
 
         return DefWindowProcW(hwnd, msg, wparam, lparam);
     }
+
+    std::u16string class_name;
 };
 
 struct window_handle final {
