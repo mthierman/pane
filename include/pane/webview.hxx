@@ -87,6 +87,8 @@ private:
 struct webview final {
     using Self = webview;
 
+    enum struct message : int { WEBVIEW_CREATE = WM_USER + 0, WEBVIEW_DESTROY = WM_USER + 1 };
+
     friend struct window_class<Self>;
 
     webview(pane::window_config&& window_config = {},

@@ -31,49 +31,11 @@ auto wWinMain(HINSTANCE /* hinstance */,
                               true,
                               nullptr },
                             { .home_page = home_page ? *home_page : u8"about:blank",
-                              .creation_callback = [&]() -> HRESULT {
-        browser.core->add_FaviconChanged(
-            Microsoft::WRL::Callback<ICoreWebView2FaviconChangedEventHandler>(
-                [&](ICoreWebView2* /* sender */, IUnknown* /* args */) -> HRESULT {
-            browser.core->GetFavicon(
-                COREWEBVIEW2_FAVICON_IMAGE_FORMAT::COREWEBVIEW2_FAVICON_IMAGE_FORMAT_PNG,
-                Microsoft::WRL::Callback<ICoreWebView2GetFaviconCompletedHandler>(
-                    [&](HRESULT /* error_code */, IStream* icon_stream) -> HRESULT {
-                if (Gdiplus::Bitmap { icon_stream }.GetHICON(&browser.favicon())
-                    == Gdiplus::Status::Ok) {
-                    SendMessage(browser.window_handle(),
-                                WM_SETICON,
-                                ICON_SMALL,
-                                reinterpret_cast<LPARAM>(browser.favicon()));
-                    SendMessage(browser.window_handle(),
-                                WM_SETICON,
-                                ICON_BIG,
-                                reinterpret_cast<LPARAM>(browser.favicon()));
-                }
-
-                return S_OK;
-            }).Get());
-
-            return S_OK;
-        }).Get(),
-            token.favicon_changed());
-
-        browser.core->add_NavigationCompleted(
-            Microsoft::WRL::Callback<ICoreWebView2NavigationCompletedEventHandler>(
-                [&](ICoreWebView2* /* sender */,
-                    ICoreWebView2NavigationCompletedEventArgs* /* args */) -> HRESULT {
-            wil::unique_cotaskmem_string title;
-            browser.core->get_DocumentTitle(&title);
-            SetWindowTextW(browser.window_handle(), title.get());
-
-            return S_OK;
-        }).Get(),
-            token.source_changed());
-
-        return S_OK;
-    } },
+                              .creation_callback = [&]() -> HRESULT { return S_OK; } },
                             [&](pane::window_message window_message) -> LRESULT {
         switch (window_message.event) {
+            using enum pane::webview::message;
+
             case WM_CREATE: {
                 // browser.window_handle.maximize();
 
@@ -84,6 +46,46 @@ auto wWinMain(HINSTANCE /* hinstance */,
                 pane::system::quit();
 
                 return 0;
+            } break;
+
+            case std::to_underlying(WEBVIEW_CREATE): {
+                browser.core->add_FaviconChanged(
+                    Microsoft::WRL::Callback<ICoreWebView2FaviconChangedEventHandler>(
+                        [&](ICoreWebView2* /* sender */, IUnknown* /* args */) -> HRESULT {
+                    browser.core->GetFavicon(
+                        COREWEBVIEW2_FAVICON_IMAGE_FORMAT::COREWEBVIEW2_FAVICON_IMAGE_FORMAT_PNG,
+                        Microsoft::WRL::Callback<ICoreWebView2GetFaviconCompletedHandler>(
+                            [&](HRESULT /* error_code */, IStream* icon_stream) -> HRESULT {
+                        if (Gdiplus::Bitmap { icon_stream }.GetHICON(&browser.favicon())
+                            == Gdiplus::Status::Ok) {
+                            SendMessage(browser.window_handle(),
+                                        WM_SETICON,
+                                        ICON_SMALL,
+                                        reinterpret_cast<LPARAM>(browser.favicon()));
+                            SendMessage(browser.window_handle(),
+                                        WM_SETICON,
+                                        ICON_BIG,
+                                        reinterpret_cast<LPARAM>(browser.favicon()));
+                        }
+
+                        return S_OK;
+                    }).Get());
+
+                    return S_OK;
+                }).Get(),
+                    token.favicon_changed());
+
+                browser.core->add_NavigationCompleted(
+                    Microsoft::WRL::Callback<ICoreWebView2NavigationCompletedEventHandler>(
+                        [&](ICoreWebView2* /* sender */,
+                            ICoreWebView2NavigationCompletedEventArgs* /* args */) -> HRESULT {
+                    wil::unique_cotaskmem_string title;
+                    browser.core->get_DocumentTitle(&title);
+                    SetWindowTextW(browser.window_handle(), title.get());
+
+                    return S_OK;
+                }).Get(),
+                    token.source_changed());
             } break;
         }
 
