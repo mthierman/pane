@@ -294,7 +294,7 @@ auto webview::default_procedure(this Self& self, const pane::window_message& win
         // https://learn.microsoft.com/en-us/windows/win32/hidpi/wm-dpichanged
         case WM_DPICHANGED: {
             auto const suggested_rect { reinterpret_cast<RECT*>(window_message.lparam) };
-            SetWindowPos(self.window_handle(),
+            SetWindowPos(window_message.hwnd,
                          nullptr,
                          suggested_rect->left,
                          suggested_rect->top,
@@ -307,7 +307,7 @@ auto webview::default_procedure(this Self& self, const pane::window_message& win
 
             // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-erasebkgnd
         case WM_ERASEBKGND: {
-            GetClientRect(self.window_handle(), &self.window_handle.position.client_rect);
+            GetClientRect(window_message.hwnd, &self.window_handle.position.client_rect);
 
             FillRect(reinterpret_cast<HDC>(window_message.wparam),
                      &self.window_handle.position.client_rect,
