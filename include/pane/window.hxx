@@ -12,20 +12,6 @@
 #include <ada.h>
 
 namespace pane {
-struct window_position final {
-    using Self = window_position;
-
-    bool fullscreen { false };
-    bool maximized { false };
-    bool minimized { false };
-    RECT client_rect { 0, 0, 0, 0 };
-    WINDOWPLACEMENT window_placement { .length { sizeof(WINDOWPLACEMENT) } };
-    UINT dpi { 0 };
-    float scale_factor { 0.0f };
-};
-
-enum struct window_backdrop { automatic, mica, mica_alt, acrylic, none };
-
 struct window_message final {
     using Self = window_message;
 
@@ -157,6 +143,39 @@ private:
     std::u16string class_name;
 };
 
+struct window_position final {
+    using Self = window_position;
+
+    bool fullscreen { false };
+    bool maximized { false };
+    bool minimized { false };
+    RECT client_rect { 0, 0, 0, 0 };
+    WINDOWPLACEMENT window_placement { .length { sizeof(WINDOWPLACEMENT) } };
+    UINT dpi { 0 };
+    float scale_factor { 0.0f };
+};
+
+enum struct window_backdrop { automatic, mica, mica_alt, acrylic, none };
+
+struct window_background final {
+    using Self = window_background;
+
+    explicit window_background(const pane::color& color);
+    ~window_background();
+
+    window_background(const Self&) = delete;
+    auto operator=(const Self&) -> Self& = delete;
+
+    window_background(Self&&) noexcept = delete;
+    auto operator=(Self&&) noexcept -> Self& = delete;
+
+    auto operator()(this const Self& self) -> HBRUSH;
+    auto operator()(this Self& self, const pane::color& color) -> void;
+
+private:
+    HBRUSH hbrush { nullptr };
+};
+
 struct window_handle final {
     using Self = window_handle;
 
@@ -193,25 +212,6 @@ struct window_handle final {
 
 private:
     HWND hwnd { nullptr };
-};
-
-struct window_background final {
-    using Self = window_background;
-
-    explicit window_background(const pane::color& color);
-    ~window_background();
-
-    window_background(const Self&) = delete;
-    auto operator=(const Self&) -> Self& = delete;
-
-    window_background(Self&&) noexcept = delete;
-    auto operator=(Self&&) noexcept -> Self& = delete;
-
-    auto operator()(this const Self& self) -> HBRUSH;
-    auto operator()(this Self& self, const pane::color& color) -> void;
-
-private:
-    HBRUSH hbrush { nullptr };
 };
 
 struct window_icon final {
@@ -259,13 +259,13 @@ struct window final {
 
     auto default_procedure(this Self& self, const pane::window_message& window_message) -> LRESULT;
 
-    std::function<LRESULT(const pane::window_message&)> custom_procedure;
-    pane::window_config window_config;
     pane::window_class<Self> window_class { u8"PaneWindow" };
+    pane::window_config window_config;
     pane::window_background window_background { pane::system::dark_mode()
                                                     ? window_config.dark_background
                                                     : window_config.light_background };
     pane::window_handle window_handle;
+    std::function<LRESULT(const pane::window_message&)> custom_procedure;
 };
 
 struct window_manager final {

@@ -107,6 +107,12 @@ struct webview final {
     auto navigate_to_string(this Self& self, const std::u8string& string) -> void;
 
     std::function<LRESULT(pane::window_message)> custom_procedure;
+    pane::window_class<Self> window_class { u8"PaneWebView" };
+    pane::window_config window_config;
+    pane::webview_config webview_config;
+    pane::window_background window_background { pane::system::dark_mode()
+                                                    ? window_config.dark_background
+                                                    : window_config.light_background };
     struct event_token {
         pane::webview_token accelerator_key_pressed;
         pane::webview_token favicon_changed;
@@ -118,12 +124,6 @@ struct webview final {
     Gdiplus::Status favicon_status;
     ada::url current_url;
     std::u8string current_title;
-    pane::window_config window_config;
-    pane::webview_config webview_config;
-    pane::window_class<Self> window_class { u8"PaneWebView" };
-    pane::window_background window_background { pane::system::dark_mode()
-                                                    ? window_config.dark_background
-                                                    : window_config.light_background };
     pane::window_handle window_handle;
     wil::com_ptr<ICoreWebView2Settings9> settings;
     wil::com_ptr<ICoreWebView2EnvironmentOptions> environment_options {
