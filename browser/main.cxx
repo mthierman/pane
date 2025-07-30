@@ -44,9 +44,11 @@ auto wWinMain(HINSTANCE /* hinstance */,
             } break;
 
             case std::to_underlying(NAVIGATION_COMPLETED): {
-                SetWindowTextW(
-                    browser.window_handle(),
-                    reinterpret_cast<const wchar_t*>(pane::to_utf16(browser.current_title).data()));
+                // SetWindowTextW(
+                //     browser.window_handle(),
+                //     reinterpret_cast<const
+                //     wchar_t*>(pane::to_utf16(browser.current_title).data()));
+                browser.window_handle.title(browser.current_title);
             } break;
         }
 
