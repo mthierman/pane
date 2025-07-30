@@ -295,8 +295,7 @@ auto window::default_procedure(this Self& self, const pane::window_message& wind
         } break;
     }
 
-    return DefWindowProcW(
-        self.window_handle(), window_message.event, window_message.wparam, window_message.lparam);
+    return window_message.default_procedure();
 }
 
 auto window_manager::insert(this Self& self, const pane::window_handle& window_handle) -> void {
