@@ -11,6 +11,8 @@
 #include <WebView2EnvironmentOptions.h>
 #include <ada.h>
 
+#include <pane/debug.hxx>
+
 namespace pane {
 struct window_message final {
     using Self = window_message;
@@ -34,18 +36,16 @@ template <typename T> struct window_class final {
               { class_procedure },
               { 0 },
               { sizeof(T*) },
-              { this->instance },
-              { this->icon },
-              { this->cursor },
+              { pane::system::module_handle().value_or(nullptr) },
+              { pane::system::resource_icon().value_or(pane::system::application_icon()) },
+              { pane::system::arrow_cursor() },
               { nullptr },
               { nullptr },
               { reinterpret_cast<const wchar_t*>(this->name.data()) },
               { pane::system::resource_icon().value_or(pane::system::application_icon()) } } } {
         auto& self = *this;
 
-        if (GetClassInfoExW(
-                self.data.hInstance, reinterpret_cast<const wchar_t*>(self.name.data()), &self.data)
-            == 0) {
+        if (GetClassInfoExW(self.data.hInstance, self.data.lpszClassName, &self.data) == 0) {
             RegisterClassExW(&self.data);
         };
     }
@@ -61,13 +61,7 @@ template <typename T> struct window_class final {
     window_class(Self&&) noexcept = delete;
     auto operator=(Self&&) noexcept -> Self& = delete;
 
-private:
     std::u16string name;
-    HICON icon { pane::system::resource_icon().value_or(pane::system::application_icon()) };
-    HCURSOR cursor { pane::system::arrow_cursor() };
-    HINSTANCE instance { pane::system::module_handle().value_or(nullptr) };
-
-public:
     WNDCLASSEXW data;
 
 private:
