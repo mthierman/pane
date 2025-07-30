@@ -29,6 +29,11 @@ auto window_handle::title(this const Self& self, std::u8string_view title) -> bo
                           reinterpret_cast<const wchar_t*>(pane::to_utf16(title).data()));
 }
 
+auto window_handle::icon(this const Self& self, HICON icon) -> void {
+    SendMessageW(self.hwnd, WM_SETICON, ICON_SMALL, reinterpret_cast<LPARAM>(icon));
+    SendMessageW(self.hwnd, WM_SETICON, ICON_BIG, reinterpret_cast<LPARAM>(icon));
+}
+
 auto window_handle::maximize(this const Self& self) -> bool {
     return ShowWindow(self.hwnd, SW_MAXIMIZE);
 }

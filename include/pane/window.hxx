@@ -197,6 +197,7 @@ struct window_handle final {
     auto hide(this const Self& self) -> bool;
 
     auto title(this const Self& self, std::u8string_view title) -> bool;
+    auto icon(this const Self& self, HICON icon) -> void;
 
     auto maximize(this const Self& self) -> bool;
     auto minimize(this const Self& self) -> bool;

@@ -33,21 +33,10 @@ auto wWinMain(HINSTANCE /* hinstance */,
             } break;
 
             case std::to_underlying(FAVICON_CHANGED): {
-                SendMessage(browser.window_handle(),
-                            WM_SETICON,
-                            ICON_SMALL,
-                            reinterpret_cast<LPARAM>(browser.favicon()));
-                SendMessage(browser.window_handle(),
-                            WM_SETICON,
-                            ICON_BIG,
-                            reinterpret_cast<LPARAM>(browser.favicon()));
+                browser.window_handle.icon(browser.favicon());
             } break;
 
             case std::to_underlying(NAVIGATION_COMPLETED): {
-                // SetWindowTextW(
-                //     browser.window_handle(),
-                //     reinterpret_cast<const
-                //     wchar_t*>(pane::to_utf16(browser.current_title).data()));
                 browser.window_handle.title(browser.current_title);
             } break;
         }
