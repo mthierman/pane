@@ -12,9 +12,9 @@ auto webview_token::operator()(this Self& self) -> EventRegistrationToken* { ret
 webview::webview(pane::window_config&& window_config,
                  pane::webview_config&& webview_config,
                  std::function<LRESULT(pane::window_message)>&& window_procedure)
-    : custom_procedure { std::move(window_procedure) },
-      window_config { std::move(window_config) },
-      webview_config { std::move(webview_config) } {
+    : window_config { std::move(window_config) },
+      webview_config { std::move(webview_config) },
+      custom_procedure { std::move(window_procedure) } {
     auto& self = *this;
 
     CreateWindowExW(
