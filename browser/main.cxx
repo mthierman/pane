@@ -43,12 +43,12 @@ auto wWinMain(HINSTANCE /* hinstance */,
                 browser.core->add_FaviconChanged(
                     Microsoft::WRL::Callback<ICoreWebView2FaviconChangedEventHandler>(
                         [&](ICoreWebView2* /* sender */, IUnknown* /* args */) -> HRESULT {
+                    pane::debug("custom add_FaviconChanged");
                     browser.core->GetFavicon(
                         COREWEBVIEW2_FAVICON_IMAGE_FORMAT::COREWEBVIEW2_FAVICON_IMAGE_FORMAT_PNG,
                         Microsoft::WRL::Callback<ICoreWebView2GetFaviconCompletedHandler>(
                             [&](HRESULT /* error_code */, IStream* icon_stream) -> HRESULT {
-                        if (Gdiplus::Bitmap { icon_stream }.GetHICON(&browser.favicon())
-                            == Gdiplus::Status::Ok) {
+                        if (browser.favicon_status == Gdiplus::Status::Ok) {
                             SendMessage(browser.window_handle(),
                                         WM_SETICON,
                                         ICON_SMALL,

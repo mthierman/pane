@@ -243,6 +243,7 @@ webview::webview(pane::window_config&& window_config,
                         self.core->add_FaviconChanged(
                             Microsoft::WRL::Callback<ICoreWebView2FaviconChangedEventHandler>(
                                 [&](ICoreWebView2* /* sender */, IUnknown* /* args */) -> HRESULT {
+                            pane::debug("ctor add_FaviconChanged");
                             self.core->GetFavicon(
                                 COREWEBVIEW2_FAVICON_IMAGE_FORMAT::
                                     COREWEBVIEW2_FAVICON_IMAGE_FORMAT_PNG,
