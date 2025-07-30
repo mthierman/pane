@@ -91,10 +91,7 @@ struct webview final {
 
     webview(pane::window_config&& window_config = {},
             pane::webview_config&& webview_config = {},
-            std::function<LRESULT(pane::window_message)>&& window_procedure
-            = [](pane::window_message window_message) -> LRESULT {
-                return window_message.default_procedure();
-            });
+            std::function<LRESULT(pane::window_message)>&& window_procedure = {});
     ~webview();
 
     webview(const Self&) = delete;
