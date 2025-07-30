@@ -219,10 +219,7 @@ struct window final {
     friend struct window_class<Self>;
 
     window(pane::window_config&& window_config = {},
-           std::function<LRESULT(const pane::window_message&)>&& window_procedure
-           = [](const pane::window_message& window_message) -> LRESULT {
-               return window_message.default_procedure();
-           });
+           std::function<LRESULT(const pane::window_message&)>&& window_procedure = {});
     ~window() = default;
 
     window(const Self&) = delete;
