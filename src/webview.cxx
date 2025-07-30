@@ -130,8 +130,11 @@ webview::webview(pane::window_config&& window_config,
         if (self.environment) {
             wil::com_ptr<ICoreWebView2ControllerOptions> controller_options;
             self.environment->CreateCoreWebView2ControllerOptions(controller_options.addressof());
-            self.controller_options
-                = controller_options.try_query<ICoreWebView2ControllerOptions4>();
+
+            if (controller_options) {
+                self.controller_options
+                    = controller_options.try_query<ICoreWebView2ControllerOptions4>();
+            }
 
             if (self.controller_options) {
                 self.controller_options->put_AllowHostInputProcessing(TRUE);
