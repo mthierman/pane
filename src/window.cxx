@@ -259,13 +259,6 @@ auto window::default_procedure(this Self& self, const pane::window_message& wind
             }
         } break;
 
-            // https://learn.microsoft.com/en-us/windows/win32/menurc/wm-syscommand
-        case WM_SYSCOMMAND: {
-            if (self.window_handle.position.fullscreen) {
-                return 0;
-            }
-        } break;
-
             // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-windowposchanged
         case WM_WINDOWPOSCHANGED: {
             GetClientRect(self.window_handle(), &self.window_handle.position.client_rect);
