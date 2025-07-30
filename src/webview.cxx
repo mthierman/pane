@@ -291,11 +291,6 @@ auto webview::default_procedure(this Self& self, const pane::window_message& win
     switch (window_message.event) {
         // https://learn.microsoft.com/en-us/windows/win32/hidpi/wm-dpichanged
         case WM_DPICHANGED: {
-            self.window_handle.position.dpi = HIWORD(window_message.wparam);
-            self.window_handle.position.scale_factor
-                = static_cast<float>(self.window_handle.position.dpi)
-                / static_cast<float>(USER_DEFAULT_SCREEN_DPI);
-
             auto const suggested_rect { reinterpret_cast<RECT*>(window_message.lparam) };
             SetWindowPos(self.window_handle(),
                          nullptr,
@@ -343,13 +338,6 @@ auto webview::default_procedure(this Self& self, const pane::window_message& win
             return 0;
         } break;
 
-        // https://learn.microsoft.com/en-us/windows/win32/menurc/wm-syscommand
-        case WM_SYSCOMMAND: {
-            if (self.window_handle.position.fullscreen) {
-                return 0;
-            }
-        } break;
-
             // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-windowposchanged
         case WM_WINDOWPOSCHANGED: {
             GetClientRect(self.window_handle(), &self.window_handle.position.client_rect);
@@ -381,17 +369,9 @@ auto webview::default_procedure(this Self& self, const pane::window_message& win
 
             return 0;
         } break;
-
-        default: {
-            return DefWindowProcW(self.window_handle(),
-                                  window_message.event,
-                                  window_message.wparam,
-                                  window_message.lparam);
-        }
     }
 
-    return DefWindowProcW(
-        self.window_handle(), window_message.event, window_message.wparam, window_message.lparam);
+    return window_message.default_procedure();
 }
 
 // auto webview::navigate(this const Self& self, std::u8string_view url) -> void {

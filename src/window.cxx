@@ -220,11 +220,6 @@ auto window::default_procedure(this Self& self, const pane::window_message& wind
     switch (window_message.event) {
             // https://learn.microsoft.com/en-us/windows/win32/hidpi/wm-dpichanged
         case WM_DPICHANGED: {
-            self.window_handle.position.dpi = HIWORD(window_message.wparam);
-            self.window_handle.position.scale_factor
-                = static_cast<float>(self.window_handle.position.dpi)
-                / static_cast<float>(USER_DEFAULT_SCREEN_DPI);
-
             auto const suggested_rect { reinterpret_cast<RECT*>(window_message.lparam) };
             SetWindowPos(self.window_handle(),
                          nullptr,

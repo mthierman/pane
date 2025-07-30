@@ -109,6 +109,14 @@ private:
                     SetWindowLongPtrW(window_message.hwnd, 0, reinterpret_cast<LONG_PTR>(nullptr));
                 } break;
 
+                    // https://learn.microsoft.com/en-us/windows/win32/hidpi/wm-dpichanged
+                case WM_DPICHANGED: {
+                    self.window_handle.position.dpi = HIWORD(window_message.wparam);
+                    self.window_handle.position.scale_factor
+                        = static_cast<float>(self.window_handle.position.dpi)
+                        / static_cast<float>(USER_DEFAULT_SCREEN_DPI);
+                } break;
+
                     // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-settingchange
                 case WM_SETTINGCHANGE: {
                     auto dark_mode { pane::system::dark_mode() };
