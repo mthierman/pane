@@ -31,7 +31,7 @@ auto wWinMain(HINSTANCE /* hinstance */,
                               true,
                               nullptr },
                             { .home_page = home_page ? *home_page : u8"about:blank",
-                              .creation_callback = [&]() -> void {
+                              .creation_callback = [&]() -> HRESULT {
         browser.core->add_FaviconChanged(
             Microsoft::WRL::Callback<ICoreWebView2FaviconChangedEventHandler>(
                 [&](ICoreWebView2* /* sender */, IUnknown* /* args */) -> HRESULT {
@@ -69,6 +69,8 @@ auto wWinMain(HINSTANCE /* hinstance */,
             return S_OK;
         }).Get(),
             token.source_changed());
+
+        return S_OK;
     } },
                             [&](pane::window_message window_message) -> LRESULT {
         switch (window_message.event) {

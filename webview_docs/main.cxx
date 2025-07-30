@@ -25,7 +25,7 @@ auto wWinMain(HINSTANCE /* hinstance */,
           nullptr },
         { .home_page = u8"https://learn.microsoft.com/en-us/microsoft-edge/webview2/reference/"
                        u8"win32/",
-          .creation_callback = [&]() -> void {
+          .creation_callback = [&]() -> HRESULT {
         webview2_docs.core->add_NavigationCompleted(
             Callback<ICoreWebView2NavigationCompletedEventHandler>(
                 [&](ICoreWebView2* /* sender */,
@@ -66,6 +66,8 @@ auto wWinMain(HINSTANCE /* hinstance */,
             return S_OK;
         }).Get(),
             token.favicon_changed());
+
+        return S_OK;
     } },
         [&](pane::window_message window_message) -> LRESULT {
         switch (window_message.event) {

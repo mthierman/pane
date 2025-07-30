@@ -10,8 +10,11 @@ auto wWinMain(HINSTANCE /* hinstance */,
     pane::webview url { pane::webview(
         { u8"url", pane::color { 0, 0, 0, 0 }, pane::color { 255, 255, 255, 0 }, true, nullptr },
         { .home_page = u8"about:blank",
-          .creation_callback
-          = [&]() { url.navigate(u8"https://learn.microsoft.com/windows/apps/winui/winui3/"); } },
+          .creation_callback = [&]() -> HRESULT {
+        url.navigate(u8"https://learn.microsoft.com/windows/apps/winui/winui3/");
+
+        return S_OK;
+    } },
         [&](pane::window_message window_message) -> LRESULT {
         switch (window_message.event) {
             case WM_CREATE: {
@@ -34,8 +37,11 @@ auto wWinMain(HINSTANCE /* hinstance */,
         { .home_page = u8"about:blank",
           .virtual_host_name_map = std::make_pair(
               u8"pane.internal", std::filesystem::path(u8"D:/mthierman/pane/pane/data")),
-          .creation_callback
-          = [&]() { virtual_host.navigate(u8"https://pane.internal/index.html"); } },
+          .creation_callback = [&]() -> HRESULT {
+        virtual_host.navigate(u8"https://pane.internal/index.html");
+
+        return S_OK;
+    } },
         [&](pane::window_message window_message) -> LRESULT {
         switch (window_message.event) {
             case WM_CREATE: {
@@ -52,9 +58,10 @@ auto wWinMain(HINSTANCE /* hinstance */,
     pane::webview file { pane::webview(
         { u8"file", pane::color { 0, 0, 0, 0 }, pane::color { 255, 255, 255, 0 }, true, nullptr },
         { .home_page = u8"about:blank",
-          .creation_callback =
-              [&]() {
+          .creation_callback = [&]() -> HRESULT {
         file.navigate(std::u8string(u8"file:///D:/mthierman/pane/pane/data/index.html"));
+
+        return S_OK;
     } },
         [&](pane::window_message window_message) -> LRESULT {
         switch (window_message.event) {
@@ -78,10 +85,11 @@ auto wWinMain(HINSTANCE /* hinstance */,
         { .home_page = u8"about:blank",
           .virtual_host_name_map = std::make_pair(
               u8"pane.internal", std::filesystem::path(u8"D:/mthierman/pane/pane/data")),
-          .creation_callback =
-              [&]() {
+          .creation_callback = [&]() -> HRESULT {
         navigate_to_string.navigate_to_string(
             u8R"(<html><body style="background-color: black; color: white;">navigate_to_string</body></html>)");
+
+        return S_OK;
     } },
         [&](pane::window_message window_message) -> LRESULT {
         switch (window_message.event) {

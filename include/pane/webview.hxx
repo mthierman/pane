@@ -59,7 +59,7 @@ struct webview_config final {
     std::optional<std::pair<std::u8string, std::filesystem::path>> virtual_host_name_map {
         std::nullopt
     };
-    std::function<void()> creation_callback;
+    std::function<HRESULT()> creation_callback;
     std::filesystem::path browser_executable_folder;
     std::filesystem::path user_data_folder;
     environment_options environment_options;
