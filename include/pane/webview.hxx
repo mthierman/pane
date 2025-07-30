@@ -104,29 +104,23 @@ struct webview final {
     auto operator=(Self&&) noexcept -> Self& = delete;
 
     auto default_procedure(this Self& self, const pane::window_message& window_message) -> LRESULT;
-
-private:
-    std::function<LRESULT(pane::window_message)> custom_procedure;
-
-public:
     // auto navigate(this const Self& self, std::u8string_view url) -> void;
     auto navigate(this Self& self, const ada::url& url) -> void;
     auto navigate(this Self& self, const std::filesystem::path& path) -> void;
     auto navigate_to_string(this Self& self, const std::u8string& string) -> void;
 
+    std::function<LRESULT(pane::window_message)> custom_procedure;
     struct event_token {
         pane::webview_token accelerator_key_pressed;
         pane::webview_token favicon_changed;
         pane::webview_token source_changed;
     };
     event_token token;
-
     pane::gdi_plus gdi_plus;
     pane::window_icon favicon;
     Gdiplus::Status favicon_status;
     ada::url current_url;
     std::u8string current_title;
-
     pane::window_config window_config;
     pane::webview_config webview_config;
     pane::window_class<Self> window_class { u8"PaneWebView" };
@@ -134,7 +128,6 @@ public:
                                                     ? window_config.dark_background
                                                     : window_config.light_background };
     pane::window_handle window_handle;
-
     wil::com_ptr<ICoreWebView2Settings9> settings;
     wil::com_ptr<ICoreWebView2EnvironmentOptions> environment_options {
         Microsoft::WRL::Make<CoreWebView2EnvironmentOptions>()
