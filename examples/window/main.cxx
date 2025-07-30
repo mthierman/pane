@@ -12,7 +12,7 @@ auto wWinMain(HINSTANCE /* hinstance */,
                                  pane::color { 255, 255, 255, 255 },
                                  true,
                                  nullptr },
-                               [&](pane::window_message window_message) -> LRESULT {
+                               [&](const pane::window_message& window_message) -> LRESULT {
         switch (window_message.event) {
             case WM_CREATE: {
                 window_manager.insert(main_window.window_handle);

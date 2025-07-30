@@ -215,8 +215,8 @@ struct window final {
     friend struct window_class<Self>;
 
     window(pane::window_config&& window_config = {},
-           std::function<LRESULT(pane::window_message)>&& window_procedure
-           = [](pane::window_message window_message) -> LRESULT {
+           std::function<LRESULT(const pane::window_message&)>&& window_procedure
+           = [](const pane::window_message& window_message) -> LRESULT {
                return window_message.default_procedure();
            });
     ~window() = default;
@@ -230,7 +230,7 @@ struct window final {
     auto default_procedure(this Self& self, const pane::window_message& window_message) -> LRESULT;
 
 private:
-    std::function<LRESULT(pane::window_message)> custom_procedure;
+    std::function<LRESULT(const pane::window_message&)> custom_procedure;
 
 public:
     pane::window_config window_config;
