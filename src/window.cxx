@@ -11,6 +11,9 @@ auto window_message::default_procedure(this const Self& self) -> LRESULT {
     return DefWindowProcW(self.hwnd, self.event, self.wparam, self.lparam);
 }
 
+window_handle::window_handle(HWND hwnd)
+    : hwnd { hwnd } { }
+
 window_handle::~window_handle() { DestroyWindow(this->hwnd); }
 
 auto window_handle::activate(this const Self& self) -> bool {

@@ -183,6 +183,7 @@ struct window_handle final {
     using Self = window_handle;
 
     window_handle() = default;
+    explicit window_handle(HWND hwnd);
     ~window_handle();
 
     window_handle(const Self&) = delete;
