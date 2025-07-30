@@ -81,14 +81,16 @@ template <typename T> struct window_class final {
 
 private:
     static auto window_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) -> LRESULT {
+        pane::window_message window_message { hwnd, msg, wparam, lparam };
+
         // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-nccreate
         if (msg == WM_NCCREATE) {
-            if (auto create_struct { reinterpret_cast<CREATESTRUCTW*>(lparam) }) {
+            if (auto create_struct { reinterpret_cast<CREATESTRUCTW*>(window_message.lparam) }) {
                 if (auto create_params { create_struct->lpCreateParams }) {
                     auto& self { *(static_cast<T*>(create_params)) };
-                    SetWindowLongPtrW(hwnd, 0, reinterpret_cast<LONG_PTR>(&self));
-                    self.window_handle(hwnd);
-                    self.window_handle.position.dpi = GetDpiForWindow(hwnd);
+                    SetWindowLongPtrW(window_message.hwnd, 0, reinterpret_cast<LONG_PTR>(&self));
+                    self.window_handle(window_message.hwnd);
+                    self.window_handle.position.dpi = GetDpiForWindow(window_message.hwnd);
                     self.window_handle.position.scale_factor
                         = static_cast<float>(self.window_handle.position.dpi)
                         / static_cast<float>(USER_DEFAULT_SCREEN_DPI);
@@ -104,7 +106,7 @@ private:
                     // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-ncdestroy
                 case WM_NCDESTROY: {
                     self.window_handle(nullptr);
-                    SetWindowLongPtrW(hwnd, 0, reinterpret_cast<LONG_PTR>(nullptr));
+                    SetWindowLongPtrW(window_message.hwnd, 0, reinterpret_cast<LONG_PTR>(nullptr));
                 } break;
 
                     // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-settingchange
@@ -117,11 +119,11 @@ private:
             }
 
             if (self.custom_procedure) {
-                return self.custom_procedure(pane::window_message { hwnd, msg, wparam, lparam });
+                return self.custom_procedure(window_message);
             }
         }
 
-        return DefWindowProcW(hwnd, msg, wparam, lparam);
+        return window_message.default_procedure();
     }
 
     std::u16string class_name;
