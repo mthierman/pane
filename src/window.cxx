@@ -198,9 +198,11 @@ window::window(pane::window_config&& window_config,
       custom_procedure { std::move(window_procedure) } {
     auto& self = *this;
 
+    pane::window_class<Self> window_class { u8"pane_window" };
+
     CreateWindowExW(
         0,
-        self.window_class.data.lpszClassName,
+        window_class.data.lpszClassName,
         reinterpret_cast<const wchar_t*>(pane::to_utf16(self.window_config.title).data()),
         self.window_config.parent_hwnd
             ? WS_CHILDWINDOW
@@ -211,7 +213,7 @@ window::window(pane::window_config&& window_config,
         CW_USEDEFAULT,
         self.window_config.parent_hwnd,
         self.window_config.parent_hwnd ? reinterpret_cast<HMENU>(self.window_handle.id) : nullptr,
-        self.window_class.data.hInstance,
+        window_class.data.hInstance,
         &self);
 }
 

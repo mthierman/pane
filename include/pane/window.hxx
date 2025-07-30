@@ -259,7 +259,6 @@ struct window final {
 
     auto default_procedure(this Self& self, const pane::window_message& window_message) -> LRESULT;
 
-    pane::window_class<Self> window_class { u8"pane_window" };
     pane::window_config window_config;
     pane::window_background window_background { pane::system::dark_mode()
                                                     ? window_config.dark_background

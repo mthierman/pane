@@ -106,7 +106,6 @@ struct webview final {
     auto navigate(this Self& self, const std::filesystem::path& path) -> void;
     auto navigate_to_string(this Self& self, const std::u8string& string) -> void;
 
-    pane::window_class<Self> window_class { u8"pane_webview" };
     pane::window_config window_config;
     pane::webview_config webview_config;
     pane::window_background window_background { pane::system::dark_mode()
