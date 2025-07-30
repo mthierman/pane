@@ -126,8 +126,8 @@ private:
                     // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-settingchange
                 case WM_SETTINGCHANGE: {
                     auto dark_mode { pane::system::dark_mode() };
-                    self.window_background(dark_mode ? self.window_config.dark_background
-                                                     : self.window_config.light_background);
+                    self.window_background(dark_mode ? self.window_config.bg_dark
+                                                     : self.window_config.bg_light);
                     self.window_handle.immersive_dark_mode(dark_mode);
                 } break;
             }
@@ -236,8 +236,8 @@ private:
 
 struct window_config final {
     std::u8string title;
-    pane::color dark_background;
-    pane::color light_background;
+    pane::color bg_dark;
+    pane::color bg_light;
     bool visible { true };
     HWND parent_hwnd { nullptr };
 };
@@ -261,8 +261,8 @@ struct window final {
 
     pane::window_config window_config;
     pane::window_background window_background { pane::system::dark_mode()
-                                                    ? window_config.dark_background
-                                                    : window_config.light_background };
+                                                    ? window_config.bg_dark
+                                                    : window_config.bg_light };
     pane::window_handle window_handle;
     std::function<LRESULT(const pane::window_message&)> custom_procedure;
 };

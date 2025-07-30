@@ -109,8 +109,8 @@ struct webview final {
     pane::window_config window_config;
     pane::webview_config webview_config;
     pane::window_background window_background { pane::system::dark_mode()
-                                                    ? window_config.dark_background
-                                                    : window_config.light_background };
+                                                    ? window_config.bg_dark
+                                                    : window_config.bg_light };
     pane::window_handle window_handle;
     std::function<LRESULT(pane::window_message)> custom_procedure;
 
