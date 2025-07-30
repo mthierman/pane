@@ -127,7 +127,7 @@ private:
                                            &self.window_handle.position.window_placement);
                     }
 
-                    WINDOWPLACEMENT window_placement { .length { sizeof(WINDOWPLACEMENT) } };
+                    WINDOWPLACEMENT window_placement { sizeof(WINDOWPLACEMENT) };
                     GetWindowPlacement(window_message.hwnd, &window_placement);
 
                     self.window_handle.position.maximized
