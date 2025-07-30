@@ -26,28 +26,26 @@ struct window_message final {
 template <typename T> struct window_class final {
     using Self = window_class;
 
-    window_class(std::u8string_view class_name)
-        : class_name { pane::to_utf16(class_name) } {
+    window_class(std::u8string_view name)
+        : name { pane::to_utf16(name) },
+          data { WNDCLASSEXW {
+              { sizeof(WNDCLASSEXW) },
+              { 0 },
+              { window_procedure },
+              { 0 },
+              { sizeof(T*) },
+              { this->instance },
+              { this->icon },
+              { this->cursor },
+              { nullptr },
+              { nullptr },
+              { reinterpret_cast<const wchar_t*>(this->name.data()) },
+              { pane::system::resource_icon().value_or(pane::system::application_icon()) } } } {
         auto& self = *this;
 
-        auto hinstance { pane::system::module_handle().value_or(nullptr) };
-        auto hicon { pane::system::resource_icon().value_or(pane::system::application_icon()) };
-
         if (GetClassInfoExW(
-                hinstance, reinterpret_cast<const wchar_t*>(self.class_name.data()), &self.data)
+                self.data.hInstance, reinterpret_cast<const wchar_t*>(self.name.data()), &self.data)
             == 0) {
-            self.data = WNDCLASSEXW { { sizeof(WNDCLASSEXW) },
-                                      { 0 },
-                                      { window_procedure },
-                                      { 0 },
-                                      { sizeof(T*) },
-                                      { hinstance },
-                                      { hicon },
-                                      { pane::system::arrow_cursor() },
-                                      { nullptr },
-                                      { nullptr },
-                                      { reinterpret_cast<const wchar_t*>(self.class_name.data()) },
-                                      { hicon } };
             RegisterClassExW(&self.data);
         };
     }
@@ -63,6 +61,13 @@ template <typename T> struct window_class final {
     window_class(Self&&) noexcept = delete;
     auto operator=(Self&&) noexcept -> Self& = delete;
 
+private:
+    std::u16string name;
+    HICON icon { pane::system::resource_icon().value_or(pane::system::application_icon()) };
+    HCURSOR cursor { pane::system::arrow_cursor() };
+    HINSTANCE instance { pane::system::module_handle().value_or(nullptr) };
+
+public:
     WNDCLASSEXW data;
 
 private:
@@ -139,8 +144,6 @@ private:
 
         return window_message.default_procedure();
     }
-
-    std::u16string class_name;
 };
 
 struct window_position final {
