@@ -91,10 +91,10 @@ struct webview final {
 
     webview(pane::window_config&& window_config = {},
             pane::webview_config&& webview_config = {},
-            std::function<LRESULT(Self*, pane::window_message)>&& window_procedure
-            = [](Self*, pane::window_message window_message) {
-                  return window_message.default_procedure();
-              });
+            std::function<LRESULT(pane::window_message)>&& window_procedure
+            = [](pane::window_message window_message) -> LRESULT {
+                return window_message.default_procedure();
+            });
     ~webview();
 
     webview(const Self&) = delete;
@@ -106,7 +106,7 @@ struct webview final {
     auto default_procedure(this Self& self, const pane::window_message& window_message) -> LRESULT;
 
 private:
-    std::function<LRESULT(Self*, pane::window_message)> window_procedure;
+    std::function<LRESULT(pane::window_message)> custom_procedure;
 
 public:
     // auto navigate(this const Self& self, std::u8string_view url) -> void;

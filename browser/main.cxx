@@ -25,14 +25,13 @@ auto wWinMain(HINSTANCE /* hinstance */,
 
     event_token token;
 
-    pane::webview browser { pane::webview(
-        { u8"Browser",
-          pane::color { 0, 0, 0, 255 },
-          pane::color { 255, 255, 255, 255 },
-          true,
-          nullptr },
-        { .home_page = home_page ? *home_page : u8"about:blank",
-          .creation_callback = [&]() -> void {
+    pane::webview browser { pane::webview({ u8"Browser",
+                                            pane::color { 0, 0, 0, 255 },
+                                            pane::color { 255, 255, 255, 255 },
+                                            true,
+                                            nullptr },
+                                          { .home_page = home_page ? *home_page : u8"about:blank",
+                                            .creation_callback = [&]() -> void {
         browser.core->add_FaviconChanged(
             Microsoft::WRL::Callback<ICoreWebView2FaviconChangedEventHandler>(
                 [&](ICoreWebView2* /* sender */, IUnknown* /* args */) -> HRESULT {
@@ -71,10 +70,10 @@ auto wWinMain(HINSTANCE /* hinstance */,
         }).Get(),
             token.source_changed());
     } },
-        [&](pane::webview* webview, pane::window_message window_message) -> LRESULT {
+                                          [&](pane::window_message window_message) -> LRESULT {
         switch (window_message.event) {
             case WM_CREATE: {
-                webview->window_handle.maximize();
+                browser.window_handle.maximize();
 
                 return 0;
             } break;
@@ -86,7 +85,7 @@ auto wWinMain(HINSTANCE /* hinstance */,
             } break;
         }
 
-        return webview->default_procedure(window_message);
+        return browser.default_procedure(window_message);
     }) };
 
     return pane::system::message_loop();

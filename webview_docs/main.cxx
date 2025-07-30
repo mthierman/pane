@@ -67,7 +67,7 @@ auto wWinMain(HINSTANCE /* hinstance */,
         }).Get(),
             token.favicon_changed());
     } },
-        [&](pane::webview* webview, pane::window_message window_message) -> LRESULT {
+        [&](pane::window_message window_message) -> LRESULT {
         switch (window_message.event) {
             case WM_DESTROY: {
                 pane::system::quit();
