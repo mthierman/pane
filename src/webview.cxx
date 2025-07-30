@@ -252,6 +252,11 @@ webview::webview(pane::window_config&& window_config,
                                 self.favicon_status
                                     = Gdiplus::Bitmap { icon_stream }.GetHICON(&self.favicon());
 
+                                SendMessageW(self.window_handle(),
+                                             std::to_underlying(message::FAVICON_CHANGED),
+                                             0,
+                                             0);
+
                                 return S_OK;
                             }).Get());
 
@@ -267,6 +272,11 @@ webview::webview(pane::window_config&& window_config,
                             wil::unique_cotaskmem_string title;
                             self.core->get_DocumentTitle(&title);
                             self.current_title = pane::to_utf8(title.get());
+
+                            SendMessageW(self.window_handle(),
+                                         std::to_underlying(message::NAVIGATION_COMPLETED),
+                                         0,
+                                         0);
 
                             return S_OK;
                         }).Get(),

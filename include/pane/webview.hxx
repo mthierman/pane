@@ -86,7 +86,12 @@ private:
 struct webview final {
     using Self = webview;
 
-    enum struct message : int { WEBVIEW_CREATE = WM_USER + 0, WEBVIEW_DESTROY = WM_USER + 1 };
+    enum struct message : int {
+        WEBVIEW_CREATE = WM_USER + 0,
+        WEBVIEW_DESTROY,
+        FAVICON_CHANGED,
+        NAVIGATION_COMPLETED
+    };
 
     friend struct window_class<Self>;
 

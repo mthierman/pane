@@ -16,13 +16,6 @@ auto wWinMain(HINSTANCE /* hinstance */,
         }
     }
 
-    struct event_token {
-        pane::webview_token source_changed;
-        pane::webview_token favicon_changed;
-    };
-
-    event_token token;
-
     pane::webview browser { { u8"Browser",
                               pane::color { 0, 0, 0, 255 },
                               pane::color { 255, 255, 255, 255 },
@@ -39,44 +32,21 @@ auto wWinMain(HINSTANCE /* hinstance */,
                 return 0;
             } break;
 
-            case std::to_underlying(WEBVIEW_CREATE): {
-                browser.core->add_FaviconChanged(
-                    Microsoft::WRL::Callback<ICoreWebView2FaviconChangedEventHandler>(
-                        [&](ICoreWebView2* /* sender */, IUnknown* /* args */) -> HRESULT {
-                    pane::debug("custom add_FaviconChanged");
-                    browser.core->GetFavicon(
-                        COREWEBVIEW2_FAVICON_IMAGE_FORMAT::COREWEBVIEW2_FAVICON_IMAGE_FORMAT_PNG,
-                        Microsoft::WRL::Callback<ICoreWebView2GetFaviconCompletedHandler>(
-                            [&](HRESULT /* error_code */, IStream* icon_stream) -> HRESULT {
-                        if (browser.favicon_status == Gdiplus::Status::Ok) {
-                            SendMessage(browser.window_handle(),
-                                        WM_SETICON,
-                                        ICON_SMALL,
-                                        reinterpret_cast<LPARAM>(browser.favicon()));
-                            SendMessage(browser.window_handle(),
-                                        WM_SETICON,
-                                        ICON_BIG,
-                                        reinterpret_cast<LPARAM>(browser.favicon()));
-                        }
+            case std::to_underlying(FAVICON_CHANGED): {
+                SendMessage(browser.window_handle(),
+                            WM_SETICON,
+                            ICON_SMALL,
+                            reinterpret_cast<LPARAM>(browser.favicon()));
+                SendMessage(browser.window_handle(),
+                            WM_SETICON,
+                            ICON_BIG,
+                            reinterpret_cast<LPARAM>(browser.favicon()));
+            } break;
 
-                        return S_OK;
-                    }).Get());
-
-                    return S_OK;
-                }).Get(),
-                    token.favicon_changed());
-
-                browser.core->add_NavigationCompleted(
-                    Microsoft::WRL::Callback<ICoreWebView2NavigationCompletedEventHandler>(
-                        [&](ICoreWebView2* /* sender */,
-                            ICoreWebView2NavigationCompletedEventArgs* /* args */) -> HRESULT {
-                    wil::unique_cotaskmem_string title;
-                    browser.core->get_DocumentTitle(&title);
-                    SetWindowTextW(browser.window_handle(), title.get());
-
-                    return S_OK;
-                }).Get(),
-                    token.source_changed());
+            case std::to_underlying(NAVIGATION_COMPLETED): {
+                SetWindowTextW(
+                    browser.window_handle(),
+                    reinterpret_cast<const wchar_t*>(pane::to_utf16(browser.current_title).data()));
             } break;
         }
 
