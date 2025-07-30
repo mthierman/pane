@@ -17,9 +17,11 @@ auto wWinMain(HINSTANCE /* hinstance */,
             case WM_CREATE: {
                 window_manager.insert(window.window_handle);
             } break;
+
             case WM_DESTROY: {
                 window_manager.erase(window.window_handle);
             } break;
+
             case WM_KEYDOWN: {
                 switch (window_message.wparam) {
                     case 'N': {
