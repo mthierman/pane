@@ -137,8 +137,8 @@ private:
                 } break;
             }
 
-            if (self.custom_procedure) {
-                return self.custom_procedure(window_message);
+            if (self.window_procedure) {
+                return self.window_procedure(window_message);
             }
         }
 
@@ -268,7 +268,7 @@ struct window final {
                                                     ? window_config.bg_dark
                                                     : window_config.bg_light };
     pane::window_handle window_handle;
-    std::function<LRESULT(const pane::window_message&)> custom_procedure;
+    std::function<LRESULT(const pane::window_message&)> window_procedure;
 };
 
 struct window_manager final {

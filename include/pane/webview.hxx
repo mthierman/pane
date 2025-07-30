@@ -92,7 +92,7 @@ struct webview final {
 
     webview(pane::window_config&& window_config = {},
             pane::webview_config&& webview_config = {},
-            std::function<LRESULT(pane::window_message)>&& window_procedure = {});
+            std::function<LRESULT(const pane::window_message&)>&& window_procedure = {});
     ~webview();
 
     webview(const Self&) = delete;
@@ -113,7 +113,7 @@ struct webview final {
                                                     ? window_config.bg_dark
                                                     : window_config.bg_light };
     pane::window_handle window_handle;
-    std::function<LRESULT(pane::window_message)> custom_procedure;
+    std::function<LRESULT(const pane::window_message&)> window_procedure;
 
     struct event_token {
         pane::webview_token accelerator_key_pressed;

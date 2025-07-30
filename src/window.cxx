@@ -198,7 +198,7 @@ auto window_icon::operator()(this Self& self, HICON hicon) -> void {
 window::window(pane::window_config&& window_config,
                std::function<LRESULT(const pane::window_message&)>&& window_procedure)
     : window_config { std::move(window_config) },
-      custom_procedure { std::move(window_procedure) } {
+      window_procedure { std::move(window_procedure) } {
     auto& self = *this;
 
     pane::window_class<Self> window_class { u8"pane_window" };
