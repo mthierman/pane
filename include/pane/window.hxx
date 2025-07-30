@@ -79,6 +79,7 @@ private:
             if (auto create_struct { reinterpret_cast<CREATESTRUCTW*>(window_message.lparam) }) {
                 if (auto create_params { create_struct->lpCreateParams }) {
                     auto& self { *(static_cast<T*>(create_params)) };
+
                     SetWindowLongPtrW(window_message.hwnd, 0, reinterpret_cast<LONG_PTR>(&self));
                     self.window_handle(window_message.hwnd);
                     self.window_handle.position.dpi = GetDpiForWindow(window_message.hwnd);
