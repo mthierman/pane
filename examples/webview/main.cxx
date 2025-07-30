@@ -9,7 +9,7 @@ auto wWinMain(HINSTANCE /* hinstance */,
 
     pane::webview url {
         { u8"url", pane::color { 0, 0, 0, 0 }, pane::color { 255, 255, 255, 0 }, true, nullptr },
-        { .home_page = u8"about:blank" },
+        { u8"about:blank" },
         [&](pane::window_message window_message) -> LRESULT {
         switch (window_message.event) {
             using enum pane::webview::message;
@@ -36,8 +36,8 @@ auto wWinMain(HINSTANCE /* hinstance */,
                                    pane::color { 255, 255, 255, 0 },
                                    true,
                                    nullptr },
-                                 { .home_page = u8"about:blank",
-                                   .virtual_host_name_map = std::make_pair(
+                                 { u8"about:blank",
+                                   std::make_pair(
                                        u8"pane.internal",
                                        std::filesystem::path(u8"D:/mthierman/pane/pane/data")) },
                                  [&](pane::window_message window_message) -> LRESULT {
@@ -62,7 +62,7 @@ auto wWinMain(HINSTANCE /* hinstance */,
 
     pane::webview file {
         { u8"file", pane::color { 0, 0, 0, 0 }, pane::color { 255, 255, 255, 0 }, true, nullptr },
-        { .home_page = u8"about:blank" },
+        { u8"about:blank" },
         [&](pane::window_message window_message) -> LRESULT {
         switch (window_message.event) {
             using enum pane::webview::message;
@@ -90,9 +90,9 @@ auto wWinMain(HINSTANCE /* hinstance */,
           pane::color { 255, 255, 255, 0 },
           true,
           nullptr },
-        { .home_page = u8"about:blank",
-          .virtual_host_name_map = std::make_pair(
-              u8"pane.internal", std::filesystem::path(u8"D:/mthierman/pane/pane/data")) },
+        { u8"about:blank",
+          std::make_pair(u8"pane.internal",
+                         std::filesystem::path(u8"D:/mthierman/pane/pane/data")) },
         [&](pane::window_message window_message) -> LRESULT {
         switch (window_message.event) {
             using enum pane::webview::message;
