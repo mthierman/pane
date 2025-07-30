@@ -91,8 +91,8 @@ private:
             }
         }
 
-        if (auto window_long_ptr { GetWindowLongPtrW(hwnd, 0) }) {
-            auto& self { *(reinterpret_cast<T*>(window_long_ptr)) };
+        if (auto instance { GetWindowLongPtrW(hwnd, 0) }) {
+            auto& self { *(reinterpret_cast<T*>(instance)) };
 
             switch (msg) {
                     // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-ncdestroy
