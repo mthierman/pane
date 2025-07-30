@@ -293,13 +293,6 @@ auto window::default_procedure(this Self& self, const pane::window_message& wind
 
             return 0;
         } break;
-
-        default: {
-            return DefWindowProcW(self.window_handle(),
-                                  window_message.event,
-                                  window_message.wparam,
-                                  window_message.lparam);
-        }
     }
 
     return DefWindowProcW(

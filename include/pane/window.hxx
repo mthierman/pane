@@ -100,18 +100,20 @@ private:
         if (auto window_long_ptr { GetWindowLongPtrW(hwnd, 0) }) {
             auto& self { *(reinterpret_cast<T*>(window_long_ptr)) };
 
-            // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-ncdestroy
-            if (msg == WM_NCDESTROY) {
-                self.window_handle(nullptr);
-                SetWindowLongPtrW(hwnd, 0, reinterpret_cast<LONG_PTR>(nullptr));
-            }
+            switch (msg) {
+                    // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-ncdestroy
+                case WM_NCDESTROY: {
+                    self.window_handle(nullptr);
+                    SetWindowLongPtrW(hwnd, 0, reinterpret_cast<LONG_PTR>(nullptr));
+                } break;
 
-            // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-settingchange
-            if (msg == WM_SETTINGCHANGE) {
-                auto dark_mode { pane::system::dark_mode() };
-                self.window_background(dark_mode ? self.window_config.dark_background
-                                                 : self.window_config.light_background);
-                self.window_handle.immersive_dark_mode(dark_mode);
+                    // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-settingchange
+                case WM_SETTINGCHANGE: {
+                    auto dark_mode { pane::system::dark_mode() };
+                    self.window_background(dark_mode ? self.window_config.dark_background
+                                                     : self.window_config.light_background);
+                    self.window_handle.immersive_dark_mode(dark_mode);
+                } break;
             }
 
             if (self.custom_procedure) {
