@@ -40,7 +40,7 @@ template <typename T> struct window_class final {
                                       { 0 },
                                       { window_procedure },
                                       { 0 },
-                                      { sizeof(T) },
+                                      { sizeof(T*) },
                                       { hinstance },
                                       { hicon },
                                       { pane::system::arrow_cursor() },
