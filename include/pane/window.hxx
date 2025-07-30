@@ -30,19 +30,18 @@ template <typename T> struct window_class final {
 
     window_class(std::u8string_view name)
         : name { pane::to_utf16(name) },
-          data { WNDCLASSEXW {
-              { sizeof(WNDCLASSEXW) },
-              { 0 },
-              { class_procedure },
-              { 0 },
-              { sizeof(T*) },
-              { pane::system::module_handle().value_or(nullptr) },
-              { pane::system::resource_icon().value_or(pane::system::application_icon()) },
-              { pane::system::arrow_cursor() },
-              { nullptr },
-              { nullptr },
-              { reinterpret_cast<const wchar_t*>(this->name.data()) },
-              { pane::system::resource_icon().value_or(pane::system::application_icon()) } } } {
+          data { WNDCLASSEXW { { sizeof(WNDCLASSEXW) },
+                               { 0 },
+                               { class_window_procedure },
+                               { 0 },
+                               { sizeof(T*) },
+                               { this->instance },
+                               { this->icon },
+                               { this->cursor },
+                               { nullptr },
+                               { nullptr },
+                               { reinterpret_cast<const wchar_t*>(this->name.data()) },
+                               { this->icon } } } {
         auto& self = *this;
 
         if (GetClassInfoExW(self.data.hInstance, self.data.lpszClassName, &self.data) == 0) {
@@ -61,11 +60,18 @@ template <typename T> struct window_class final {
     window_class(Self&&) noexcept = delete;
     auto operator=(Self&&) noexcept -> Self& = delete;
 
+private:
     std::u16string name;
+    HINSTANCE instance { pane::system::module_handle().value_or(nullptr) };
+    HICON icon { pane::system::resource_icon().value_or(pane::system::application_icon()) };
+    HCURSOR cursor { pane::system::arrow_cursor() };
+
+public:
     WNDCLASSEXW data;
 
 private:
-    static auto class_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) -> LRESULT {
+    static auto class_window_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
+        -> LRESULT {
         pane::window_message window_message { hwnd, msg, wparam, lparam };
 
         // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-nccreate
