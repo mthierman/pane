@@ -1,4 +1,3 @@
-#include <pane/input.hxx>
 #include <pane/webview.hxx>
 #include <pane/text.hxx>
 #include <dwmapi.h>

@@ -1,5 +1,4 @@
 #include <pane/window.hxx>
-#include <pane/text.hxx>
 #include <dwmapi.h>
 
 namespace pane {

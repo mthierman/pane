@@ -8,6 +8,7 @@
 #include <pane/color.hxx>
 #include <pane/math.hxx>
 #include <pane/system.hxx>
+#include <pane/text.hxx>
 #include <pane/utility.hxx>
 #include <wil/com.h>
 #include <WebView2.h>
