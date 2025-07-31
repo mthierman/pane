@@ -7,18 +7,13 @@
 #include <pane/color.hxx>
 #include <pane/math.hxx>
 #include <pane/system.hxx>
+#include <pane/utility.hxx>
 #include <wil/com.h>
 #include <WebView2.h>
 #include <WebView2EnvironmentOptions.h>
 #include <ada.h>
 
 namespace pane {
-template <typename E>
-    requires std::is_enum_v<E>
-constexpr auto operator+(E e) noexcept {
-    return std::to_underlying(e);
-}
-
 struct window_message final {
     using Self = window_message;
 

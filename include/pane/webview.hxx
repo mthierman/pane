@@ -8,6 +8,7 @@
 #include <pane/gdi_plus.hxx>
 #include <pane/math.hxx>
 #include <pane/system.hxx>
+#include <pane/utility.hxx>
 #include <pane/window.hxx>
 #include <wil/com.h>
 #include <WebView2.h>
