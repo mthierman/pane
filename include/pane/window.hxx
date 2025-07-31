@@ -11,8 +11,6 @@
 #include <WebView2EnvironmentOptions.h>
 #include <ada.h>
 
-#include <pane/debug.hxx>
-
 namespace pane {
 template <typename T> constexpr auto msg(T msg) -> UINT { return std::to_underlying(msg); }
 
