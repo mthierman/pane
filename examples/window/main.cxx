@@ -1,5 +1,9 @@
 #include <pane/pane.hxx>
 
+enum struct message : int {
+    NOTIFY = WM_APP,
+};
+
 // https://learn.microsoft.com/en-us/windows/win32/learnwin32/winmain--the-application-entry-point
 auto wWinMain(HINSTANCE /* hinstance */,
               HINSTANCE /* hprevinstance */,
@@ -8,8 +12,8 @@ auto wWinMain(HINSTANCE /* hinstance */,
     pane::window_manager window_manager;
     pane::message_window message_window {
         [&](const pane::window_message& window_message) -> LRESULT {
-        if (window_message.msg == WM_USER) {
-            pane::debug("WM_USER!");
+        if (window_message.msg == +message::NOTIFY) {
+            pane::debug("message::NOTIFY");
         }
 
         return message_window.default_procedure(window_message);
@@ -26,7 +30,8 @@ auto wWinMain(HINSTANCE /* hinstance */,
             case WM_CREATE: {
                 window_manager.insert(window.window_handle);
 
-                pane::window_message { message_window.window_handle(), WM_USER, 0, 0 }.send();
+                pane::window_message { message_window.window_handle(), +message::NOTIFY, 0, 0 }
+                    .send();
             } break;
 
             case WM_DESTROY: {
