@@ -34,28 +34,6 @@ webview::webview(pane::window_config&& window_config,
         &self);
 
     if (self.environment_options) {
-        wil::com_ptr<ICoreWebView2EnvironmentOptions2> environment_options2 {
-            self.environment_options.try_query<ICoreWebView2EnvironmentOptions2>()
-        };
-        wil::com_ptr<ICoreWebView2EnvironmentOptions3> environment_options3 {
-            self.environment_options.try_query<ICoreWebView2EnvironmentOptions3>()
-        };
-        wil::com_ptr<ICoreWebView2EnvironmentOptions4> environment_options4 {
-            self.environment_options.try_query<ICoreWebView2EnvironmentOptions4>()
-        };
-        wil::com_ptr<ICoreWebView2EnvironmentOptions5> environment_options5 {
-            self.environment_options.try_query<ICoreWebView2EnvironmentOptions5>()
-        };
-        wil::com_ptr<ICoreWebView2EnvironmentOptions6> environment_options6 {
-            self.environment_options.try_query<ICoreWebView2EnvironmentOptions6>()
-        };
-        wil::com_ptr<ICoreWebView2EnvironmentOptions7> environment_options7 {
-            self.environment_options.try_query<ICoreWebView2EnvironmentOptions7>()
-        };
-        wil::com_ptr<ICoreWebView2EnvironmentOptions8> environment_options8 {
-            self.environment_options.try_query<ICoreWebView2EnvironmentOptions8>()
-        };
-
         if (!self.webview_config.environment_options.AdditionalBrowserArguments.empty()) {
             self.environment_options->put_AdditionalBrowserArguments(
                 reinterpret_cast<const wchar_t*>(
@@ -80,36 +58,43 @@ webview::webview(pane::window_config&& window_config,
                         .data()));
         }
 
-        if (environment_options2) {
+        if (auto environment_options2 {
+                self.environment_options.try_query<ICoreWebView2EnvironmentOptions2>() }) {
             environment_options2->put_ExclusiveUserDataFolderAccess(
                 self.webview_config.environment_options.ExclusiveUserDataFolderAccess);
         }
 
-        if (environment_options3) {
+        if (auto environment_options3 {
+                self.environment_options.try_query<ICoreWebView2EnvironmentOptions3>() }) {
             environment_options3->put_IsCustomCrashReportingEnabled(
                 self.webview_config.environment_options.IsCustomCrashReportingEnabled);
         }
 
-        // if (environment_options4) {
+        // if (auto environment_options4 {
+        //         self.environment_options.try_query<ICoreWebView2EnvironmentOptions4>() }) {
         //     environment_options4->SetCustomSchemeRegistrations();
         // }
 
-        if (environment_options5) {
+        if (auto environment_options5 {
+                self.environment_options.try_query<ICoreWebView2EnvironmentOptions5>() }) {
             environment_options5->put_EnableTrackingPrevention(
                 self.webview_config.environment_options.EnableTrackingPrevention);
         }
 
-        if (environment_options6) {
+        if (auto environment_options6 {
+                self.environment_options.try_query<ICoreWebView2EnvironmentOptions6>() }) {
             environment_options6->put_AreBrowserExtensionsEnabled(
                 self.webview_config.environment_options.AreBrowserExtensionsEnabled);
         }
 
-        if (environment_options7) {
+        if (auto environment_options7 {
+                self.environment_options.try_query<ICoreWebView2EnvironmentOptions7>() }) {
             environment_options7->put_ChannelSearchKind(
                 self.webview_config.environment_options.ChannelSearchKind);
         }
 
-        if (environment_options8) {
+        if (auto environment_options8 {
+                self.environment_options.try_query<ICoreWebView2EnvironmentOptions8>() }) {
             environment_options8->put_ScrollBarStyle(
                 self.webview_config.environment_options.ScrollBarStyle);
         }
