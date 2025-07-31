@@ -20,22 +20,25 @@ auto wWinMain(HINSTANCE /* hinstance */,
     }
     };
 
-    pane::window window { { u8"window",
-                            pane::color { 0, 0, 0, 255 },
-                            pane::color { 255, 255, 255, 255 },
-                            true,
-                            nullptr },
-                          [&](const pane::window_message& window_message) -> LRESULT {
+    auto window { pane::window {
+        { u8"window",
+          pane::color { 0, 0, 0, 255 },
+          pane::color { 255, 255, 255, 255 },
+          true,
+          nullptr },
+        [&](const pane::window_message& window_message, pane::window* window) -> LRESULT {
+        auto& self = *window;
+
         switch (window_message.msg) {
             case WM_CREATE: {
-                window_manager.insert(window.window_handle);
+                window_manager.insert(self.window_handle);
 
                 pane::window_message { message_window.window_handle(), +message::NOTIFY, 0, 0 }
                     .send();
             } break;
 
             case WM_DESTROY: {
-                window_manager.erase(window.window_handle);
+                window_manager.erase(self.window_handle);
             } break;
 
             case WM_KEYDOWN: {
@@ -52,8 +55,8 @@ auto wWinMain(HINSTANCE /* hinstance */,
             } break;
         }
 
-        return window.default_procedure(window_message);
-    } };
+        return self.default_procedure(window_message);
+    } } };
 
     return pane::system::message_loop();
 }

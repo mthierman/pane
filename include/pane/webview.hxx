@@ -98,7 +98,7 @@ struct webview final {
 
     webview(window_config&& window_config = {},
             webview_config&& webview_config = {},
-            std::function<LRESULT(const window_message&)>&& window_procedure = {});
+            std::function<LRESULT(const window_message&, Self*)>&& window_procedure = {});
     ~webview() = default;
 
     webview(const Self&) = delete;
@@ -118,7 +118,7 @@ struct webview final {
     window_background window_background { system::dark_mode() ? window_config.bg_dark
                                                               : window_config.bg_light };
     window_handle window_handle;
-    std::function<LRESULT(const window_message&)> window_procedure;
+    std::function<LRESULT(const window_message&, Self*)> window_procedure;
 
     struct event_token {
         webview_token accelerator_key_pressed;

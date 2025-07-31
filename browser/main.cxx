@@ -16,13 +16,16 @@ auto wWinMain(HINSTANCE /* hinstance */,
         }
     }
 
-    pane::webview browser { { u8"Browser",
-                              pane::color { 0, 0, 0, 255 },
-                              pane::color { 255, 255, 255, 255 },
-                              true,
-                              nullptr },
-                            { home_page.value_or(u8"about:blank") },
-                            [&](pane::window_message window_message) -> LRESULT {
+    auto browser { pane::webview {
+        { u8"Browser",
+          pane::color { 0, 0, 0, 255 },
+          pane::color { 255, 255, 255, 255 },
+          true,
+          nullptr },
+        { home_page.value_or(u8"about:blank") },
+        [&](const pane::window_message& window_message, pane::webview* webview) -> LRESULT {
+        auto& self = *webview;
+
         switch (window_message.msg) {
             using enum pane::webview::message;
 
@@ -33,16 +36,16 @@ auto wWinMain(HINSTANCE /* hinstance */,
             } break;
 
             case +FAVICON_CHANGED: {
-                browser.window_handle.icon(browser.favicon());
+                self.window_handle.icon(self.favicon());
             } break;
 
             case +NAVIGATION_COMPLETED: {
-                browser.window_handle.title(browser.current_title);
+                self.window_handle.title(self.current_title);
             } break;
         }
 
-        return browser.default_procedure(window_message);
-    } };
+        return self.default_procedure(window_message);
+    } } };
 
     return pane::system::message_loop();
 }
