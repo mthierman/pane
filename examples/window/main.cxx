@@ -1,7 +1,8 @@
 #include <pane/pane.hxx>
-#include <map>
-#include <chrono>
+// #include <map>
+// #include <chrono>
 #include <memory>
+#include <vector>
 
 enum struct message : int {
     NEW_WINDOW = WM_APP,
@@ -47,18 +48,18 @@ struct window_manager final {
             return window.default_procedure(window_message);
         }) };
 
-        self.windows.emplace(window->window_handle(), std::move(window));
+        self.windows.push_back(std::move(window));
     }
 
     auto remove(this Self& self, HWND hwnd) -> void {
-        self.windows.erase(hwnd);
+        std::erase_if(self.windows, [&](auto& ptr) { return ptr && ptr->window_handle() == hwnd; });
 
         if (self.windows.empty()) {
             PostQuitMessage(0);
         }
     }
 
-    std::map<HWND, std::unique_ptr<pane::window>> windows;
+    std::vector<std::unique_ptr<pane::window>> windows;
 };
 
 // https://learn.microsoft.com/en-us/windows/win32/learnwin32/winmain--the-application-entry-point
