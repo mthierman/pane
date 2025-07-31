@@ -94,15 +94,11 @@ struct webview final {
         NAVIGATION_COMPLETED
     };
 
-    // constexpr std::underlying_type_t<message> operator+(message msg) noexcept {
-    //     return static_cast<std::underlying_type_t<message>>(msg);
-    // }
-
     friend struct window_class<Self>;
 
-    webview(pane::window_config&& window_config = {},
-            pane::webview_config&& webview_config = {},
-            std::function<LRESULT(const pane::window_message&)>&& window_procedure = {});
+    webview(window_config&& window_config = {},
+            webview_config&& webview_config = {},
+            std::function<LRESULT(const window_message&)>&& window_procedure = {});
     ~webview() = default;
 
     webview(const Self&) = delete;
@@ -111,28 +107,27 @@ struct webview final {
     webview(Self&&) noexcept = delete;
     auto operator=(Self&&) noexcept -> Self& = delete;
 
-    auto default_procedure(this Self& self, const pane::window_message& window_message) -> LRESULT;
+    auto default_procedure(this Self& self, const window_message& window_message) -> LRESULT;
     // auto navigate(this const Self& self, std::u8string_view url) -> void;
     auto navigate(this Self& self, const ada::url& url) -> void;
     auto navigate(this Self& self, const std::filesystem::path& path) -> void;
     auto navigate_to_string(this Self& self, const std::u8string& string) -> void;
 
-    pane::window_config window_config;
-    pane::webview_config webview_config;
-    pane::window_background window_background { pane::system::dark_mode()
-                                                    ? window_config.bg_dark
-                                                    : window_config.bg_light };
-    pane::window_handle window_handle;
-    std::function<LRESULT(const pane::window_message&)> window_procedure;
+    window_config window_config;
+    webview_config webview_config;
+    window_background window_background { system::dark_mode() ? window_config.bg_dark
+                                                              : window_config.bg_light };
+    window_handle window_handle;
+    std::function<LRESULT(const window_message&)> window_procedure;
 
     struct event_token {
-        pane::webview_token accelerator_key_pressed;
-        pane::webview_token favicon_changed;
-        pane::webview_token navigation_completed;
+        webview_token accelerator_key_pressed;
+        webview_token favicon_changed;
+        webview_token navigation_completed;
     };
     event_token token;
-    pane::gdi_plus gdi_plus;
-    pane::window_icon favicon;
+    gdi_plus gdi_plus;
+    window_icon favicon;
     Gdiplus::Status favicon_status;
     ada::url current_url;
     std::u8string current_title;
@@ -145,6 +140,4 @@ struct webview final {
     wil::com_ptr<ICoreWebView2Controller4> controller;
     wil::com_ptr<ICoreWebView2_27> core;
 };
-
-// constexpr auto operator+(webview::message msg) noexcept { return std::to_underlying(msg); }
 } // namespace pane

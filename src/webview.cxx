@@ -7,38 +7,37 @@
 namespace pane {
 auto webview_token::operator()(this Self& self) -> EventRegistrationToken* { return &self.token; }
 
-webview::webview(pane::window_config&& window_config,
-                 pane::webview_config&& webview_config,
-                 std::function<LRESULT(const pane::window_message&)>&& window_procedure)
+webview::webview(struct window_config&& window_config,
+                 struct webview_config&& webview_config,
+                 std::function<LRESULT(const window_message&)>&& window_procedure)
     : window_config { std::move(window_config) },
       webview_config { std::move(webview_config) },
       window_procedure { std::move(window_procedure) } {
     auto& self = *this;
 
-    pane::window_class<Self> window_class { u8"pane_webview" };
+    window_class<Self> window_class { u8"pane_webview" };
 
-    CreateWindowExW(
-        0,
-        window_class.data.lpszClassName,
-        reinterpret_cast<const wchar_t*>(pane::to_utf16(self.window_config.title).data()),
-        self.window_config.parent_hwnd
-            ? WS_CHILDWINDOW
-            : WS_OVERLAPPEDWINDOW | (self.window_config.visible ? WS_VISIBLE : 0),
-        CW_USEDEFAULT,
-        CW_USEDEFAULT,
-        CW_USEDEFAULT,
-        CW_USEDEFAULT,
-        self.window_config.parent_hwnd,
-        self.window_config.parent_hwnd ? reinterpret_cast<HMENU>(self.window_handle.id) : nullptr,
-        window_class.data.hInstance,
-        &self);
+    CreateWindowExW(0,
+                    window_class.data.lpszClassName,
+                    reinterpret_cast<const wchar_t*>(to_utf16(self.window_config.title).data()),
+                    self.window_config.parent_hwnd
+                        ? WS_CHILDWINDOW
+                        : WS_OVERLAPPEDWINDOW | (self.window_config.visible ? WS_VISIBLE : 0),
+                    CW_USEDEFAULT,
+                    CW_USEDEFAULT,
+                    CW_USEDEFAULT,
+                    CW_USEDEFAULT,
+                    self.window_config.parent_hwnd,
+                    self.window_config.parent_hwnd ? reinterpret_cast<HMENU>(self.window_handle.id)
+                                                   : nullptr,
+                    window_class.data.hInstance,
+                    &self);
 
     if (self.environment_options) {
         if (!self.webview_config.environment_options.AdditionalBrowserArguments.empty()) {
             self.environment_options->put_AdditionalBrowserArguments(
                 reinterpret_cast<const wchar_t*>(
-                    pane::to_utf16(
-                        self.webview_config.environment_options.AdditionalBrowserArguments)
+                    to_utf16(self.webview_config.environment_options.AdditionalBrowserArguments)
                         .data()));
         }
 
@@ -47,14 +46,13 @@ webview::webview(pane::window_config&& window_config,
 
         if (!self.webview_config.environment_options.Language.empty()) {
             self.environment_options->put_Language(reinterpret_cast<const wchar_t*>(
-                pane::to_utf16(self.webview_config.environment_options.Language).data()));
+                to_utf16(self.webview_config.environment_options.Language).data()));
         }
 
         if (!self.webview_config.environment_options.TargetCompatibleBrowserVersion.empty()) {
             self.environment_options->put_TargetCompatibleBrowserVersion(
                 reinterpret_cast<const wchar_t*>(
-                    pane::to_utf16(
-                        self.webview_config.environment_options.TargetCompatibleBrowserVersion)
+                    to_utf16(self.webview_config.environment_options.TargetCompatibleBrowserVersion)
                         .data()));
         }
 
@@ -222,7 +220,7 @@ webview::webview(pane::window_config&& window_config,
                             }
 
                             if (self.webview_config.virtual_host_name_map) {
-                                const auto host_name { pane::to_utf16(
+                                const auto host_name { to_utf16(
                                     (*self.webview_config.virtual_host_name_map).first) };
 
                                 self.core->SetVirtualHostNameToFolderMapping(
@@ -245,10 +243,10 @@ webview::webview(pane::window_config&& window_config,
                                     self.favicon_status
                                         = Gdiplus::Bitmap { icon_stream }.GetHICON(&self.favicon());
 
-                                    pane::make_window_message(self.window_handle(),
-                                                              message::FAVICON_CHANGED,
-                                                              0,
-                                                              self.favicon())
+                                    make_window_message(self.window_handle(),
+                                                        message::FAVICON_CHANGED,
+                                                        0,
+                                                        self.favicon())
                                         .send();
 
                                     return S_OK;
@@ -266,9 +264,9 @@ webview::webview(pane::window_config&& window_config,
                                         -> HRESULT {
                                 wil::unique_cotaskmem_string title;
                                 self.core->get_DocumentTitle(&title);
-                                self.current_title = pane::to_utf8(title.get());
+                                self.current_title = to_utf8(title.get());
 
-                                pane::make_window_message(
+                                make_window_message(
                                     self.window_handle(), message::NAVIGATION_COMPLETED, 0, 0)
                                     .send();
 
@@ -278,7 +276,7 @@ webview::webview(pane::window_config&& window_config,
 
                             self.navigate(self.webview_config.home_page);
 
-                            pane::make_window_message(
+                            make_window_message(
                                 self.window_handle(), message::WEBVIEW_CREATE, 0, self.favicon())
                                 .send();
                         }
@@ -292,13 +290,12 @@ webview::webview(pane::window_config&& window_config,
     }
 }
 
-auto webview::default_procedure(this Self& self, const pane::window_message& window_message)
-    -> LRESULT {
+auto webview::default_procedure(this Self& self, const window_message& window_message) -> LRESULT {
     switch (window_message.msg) {
         case WM_CLOSE: {
             if (self.webview_config.virtual_host_name_map) {
                 self.core->ClearVirtualHostNameToFolderMapping(reinterpret_cast<const wchar_t*>(
-                    pane::to_utf16((*self.webview_config.virtual_host_name_map).first).data()));
+                    to_utf16((*self.webview_config.virtual_host_name_map).first).data()));
             }
 
             self.controller->remove_AcceleratorKeyPressed(*self.token.accelerator_key_pressed());
@@ -363,7 +360,7 @@ auto webview::default_procedure(this Self& self, const pane::window_message& win
 }
 
 // auto webview::navigate(this const Self& self, std::u8string_view url) -> void {
-//     const auto u16string { pane::to_utf16(url) };
+//     const auto u16string { to_utf16(url) };
 
 //     if (self.core) {
 //         self.core->Navigate(reinterpret_cast<const wchar_t*>(u16string.data()));
@@ -372,7 +369,7 @@ auto webview::default_procedure(this Self& self, const pane::window_message& win
 
 auto webview::navigate(this Self& self, const ada::url& url) -> void {
     self.current_url = url;
-    const auto u16string { pane::to_utf16(url.get_href()) };
+    const auto u16string { to_utf16(url.get_href()) };
 
     if (self.core) {
         self.core->Navigate(reinterpret_cast<const wchar_t*>(u16string.data()));
@@ -394,7 +391,7 @@ auto webview::navigate_to_string(this Self& self, const std::u8string& string) -
         self.current_url = parse.value();
     }
 
-    const auto u16string { pane::to_utf16(string) };
+    const auto u16string { to_utf16(string) };
 
     if (self.core) {
         self.core->NavigateToString(reinterpret_cast<const wchar_t*>(u16string.c_str()));
