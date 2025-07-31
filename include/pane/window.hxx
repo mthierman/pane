@@ -17,25 +17,28 @@ namespace pane {
 struct window_message final {
     using Self = window_message;
 
-    template <typename T, typename W = WPARAM, typename L = LPARAM>
-    static auto send(HWND hwnd, T msg, W wparam = 0, L lparam = 0) -> void {
-        auto wp { []<typename U>(U value) -> WPARAM {
+    template <typename M = UINT, typename W = WPARAM, typename L = LPARAM>
+        requires std::is_enum_v<M> || std::is_integral_v<M>
+    static auto send(HWND hwnd, M msg, W wparam = 0, L lparam = 0) -> LRESULT {
+        return SendMessageW(hwnd, []<typename U>(U value) -> UINT {
+            if constexpr (std::is_enum_v<U>) {
+                return static_cast<UINT>(std::to_underlying(value));
+            } else {
+                return static_cast<UINT>(value);
+            }
+        }(msg), []<typename U>(U value) -> WPARAM {
             if constexpr (std::is_pointer_v<U>) {
                 return reinterpret_cast<WPARAM>(value);
             } else {
                 return static_cast<WPARAM>(value);
             }
-        }(wparam) };
-
-        auto lp { []<typename U>(U value) -> LPARAM {
+        }(wparam), []<typename U>(U value) -> LPARAM {
             if constexpr (std::is_pointer_v<U>) {
                 return reinterpret_cast<LPARAM>(value);
             } else {
                 return static_cast<LPARAM>(value);
             }
-        }(lparam) };
-
-        SendMessageW(hwnd, std::to_underlying(msg), wp, lp);
+        }(lparam));
     }
 
     auto default_procedure(this const Self& self) -> LRESULT;
