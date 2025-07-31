@@ -50,7 +50,7 @@ public:
     }
 
     template <typename M = UINT, typename W = WPARAM, typename L = LPARAM>
-    auto post(HWND hwnd, M msg, W wparam = 0, L lparam = 0) -> BOOL {
+    static auto post(HWND hwnd, M msg, W wparam = 0, L lparam = 0) -> BOOL {
         return dispatch_message(PostMessageW, hwnd, msg, wparam, lparam);
     }
 
