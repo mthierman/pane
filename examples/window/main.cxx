@@ -6,17 +6,17 @@ enum struct message : int {
     NEW_WINDOW = WM_APP,
 };
 
-struct window_manager final {
+template <typename T> struct window_manager final {
     using Self = window_manager;
 
     auto add(this Self& self) -> void {
-        auto window { std::make_unique<pane::window>(
+        auto window { std::make_unique<T>(
             pane::window_config { u8"window",
                                   pane::color { 0, 0, 0, 255 },
                                   pane::color { 255, 255, 255, 255 },
                                   true,
                                   nullptr },
-            [&](const pane::window_message& window_message, pane::window& window) -> LRESULT {
+            [&](const pane::window_message& window_message, T& window) -> LRESULT {
             switch (window_message.msg) {
                 case WM_CREATE: {
                 } break;
@@ -59,7 +59,7 @@ struct window_manager final {
         }
     }
 
-    std::vector<std::unique_ptr<pane::window>> windows;
+    std::vector<std::unique_ptr<T>> windows;
 };
 
 // https://learn.microsoft.com/en-us/windows/win32/learnwin32/winmain--the-application-entry-point
@@ -67,7 +67,7 @@ auto wWinMain(HINSTANCE /* hinstance */,
               HINSTANCE /* hprevinstance */,
               PWSTR /* pcmdline */,
               int /* ncmdshow */) -> int {
-    window_manager window_manager;
+    window_manager<pane::window> window_manager;
 
     pane::message_window app { [&](const pane::window_message& window_message,
                                    pane::message_window& app) -> LRESULT {
