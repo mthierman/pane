@@ -1,6 +1,7 @@
 #pragma once
 #include <Windows.h>
 #include <wrl.h>
+#include <chrono>
 #include <functional>
 #include <set>
 #include <string>
@@ -245,6 +246,7 @@ struct window_handle final {
 
     window_position position;
     uintptr_t id { random_number<uintptr_t>() };
+    std::chrono::steady_clock::time_point creation_time { std::chrono::steady_clock::now() };
 
 private:
     HWND hwnd { nullptr };

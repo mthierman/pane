@@ -1,6 +1,4 @@
 #include <pane/pane.hxx>
-// #include <map>
-// #include <chrono>
 #include <memory>
 #include <vector>
 
