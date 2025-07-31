@@ -6,6 +6,15 @@ auto wWinMain(HINSTANCE /* hinstance */,
               PWSTR /* pcmdline */,
               int /* ncmdshow */) -> int {
     pane::window_manager window_manager;
+    pane::message_window message_window {
+        [&](const pane::window_message& window_message) -> LRESULT {
+        if (window_message.msg == WM_USER) {
+            pane::debug("WM_USER!");
+        }
+
+        return message_window.default_procedure(window_message);
+    }
+    };
 
     pane::window window { { u8"window",
                             pane::color { 0, 0, 0, 255 },
@@ -16,6 +25,8 @@ auto wWinMain(HINSTANCE /* hinstance */,
         switch (window_message.msg) {
             case WM_CREATE: {
                 window_manager.insert(window.window_handle);
+
+                pane::window_message { message_window.window_handle(), WM_USER, 0, 0 }.send();
             } break;
 
             case WM_DESTROY: {
