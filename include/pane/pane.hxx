@@ -13,10 +13,12 @@
 #include <pane/input.hxx>
 #include <pane/math.hxx>
 #include <pane/message_box.hxx>
+#include <pane/message_window.hxx>
 #include <pane/process.hxx>
 // #include <pane/string.hxx>
 #include <pane/system.hxx>
 #include <pane/text.hxx>
 #include <pane/url.hxx>
+#include <pane/utility.hxx>
 #include <pane/webview.hxx>
 #include <pane/window.hxx>
