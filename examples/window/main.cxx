@@ -10,15 +10,13 @@ auto wWinMain(HINSTANCE /* hinstance */,
               PWSTR /* pcmdline */,
               int /* ncmdshow */) -> int {
     pane::window_manager window_manager;
-    pane::message_window message_window { [&](const pane::window_message& window_message,
-                                              pane::message_window* message_window) -> LRESULT {
-        auto& self = *message_window;
-
+    pane::message_window app { [&](const pane::window_message& window_message,
+                                   pane::message_window& app) -> LRESULT {
         if (window_message.msg == +message::NOTIFY) {
             pane::debug("message::NOTIFY");
         }
 
-        return self.default_procedure(window_message);
+        return app.default_procedure(window_message);
     } };
 
     auto window { pane::window {
@@ -34,8 +32,7 @@ auto wWinMain(HINSTANCE /* hinstance */,
             case WM_CREATE: {
                 window_manager.insert(self.window_handle);
 
-                pane::window_message { message_window.window_handle(), +message::NOTIFY, 0, 0 }
-                    .send();
+                pane::window_message { app.window_handle(), +message::NOTIFY, 0, 0 }.send();
             } break;
 
             case WM_DESTROY: {

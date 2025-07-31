@@ -78,7 +78,7 @@ private:
             }
 
             if (self.window_procedure) {
-                return self.window_procedure(window_message, &self);
+                return self.window_procedure(window_message, self);
             }
         }
 
@@ -91,7 +91,7 @@ struct message_window final {
 
     friend struct message_window_class<Self>;
 
-    message_window(std::function<LRESULT(const window_message&, Self*)>&& window_procedure = {});
+    message_window(std::function<LRESULT(const window_message&, Self&)>&& window_procedure = {});
     ~message_window() = default;
 
     message_window(const Self&) = delete;
@@ -103,6 +103,6 @@ struct message_window final {
     auto default_procedure(this Self& self, const window_message& window_message) -> LRESULT;
 
     window_handle window_handle;
-    std::function<LRESULT(const window_message&, Self*)> window_procedure;
+    std::function<LRESULT(const window_message&, Self&)> window_procedure;
 };
 } // namespace pane
