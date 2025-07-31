@@ -32,11 +32,11 @@ auto wWinMain(HINSTANCE /* hinstance */,
                 return 0;
             } break;
 
-            case std::to_underlying(FAVICON_CHANGED): {
+            case pane::msg(FAVICON_CHANGED): {
                 browser.window_handle.icon(browser.favicon());
             } break;
 
-            case std::to_underlying(NAVIGATION_COMPLETED): {
+            case pane::msg(NAVIGATION_COMPLETED): {
                 browser.window_handle.title(browser.current_title);
             } break;
         }

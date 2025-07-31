@@ -14,6 +14,8 @@
 #include <pane/debug.hxx>
 
 namespace pane {
+template <typename T> constexpr auto msg(T msg) -> UINT { return std::to_underlying(msg); }
+
 struct window_message final {
     using Self = window_message;
 
