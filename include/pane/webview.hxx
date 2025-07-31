@@ -98,7 +98,7 @@ struct webview final {
     webview(pane::window_config&& window_config = {},
             pane::webview_config&& webview_config = {},
             std::function<LRESULT(const pane::window_message&)>&& window_procedure = {});
-    ~webview();
+    ~webview() = default;
 
     webview(const Self&) = delete;
     auto operator=(const Self&) -> Self& = delete;
@@ -123,7 +123,7 @@ struct webview final {
     struct event_token {
         pane::webview_token accelerator_key_pressed;
         pane::webview_token favicon_changed;
-        pane::webview_token source_changed;
+        pane::webview_token navigation_completed;
     };
     event_token token;
     pane::gdi_plus gdi_plus;

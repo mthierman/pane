@@ -158,6 +158,7 @@ webview::webview(pane::window_config&& window_config,
                     GetClientRect(self.window_handle(), &client_rect);
                     self.controller->put_Bounds(client_rect);
 
+                    // https://learn.microsoft.com/en-us/microsoft-edge/webview2/reference/win32/icorewebview2controller?view=webview2-1.0.3351.48#add_acceleratorkeypressed
                     self.controller->add_AcceleratorKeyPressed(
                         Microsoft::WRL::Callback<ICoreWebView2AcceleratorKeyPressedEventHandler>(
                             [&](ICoreWebView2Controller* /* sender */,
@@ -280,7 +281,7 @@ webview::webview(pane::window_config&& window_config,
 
                             return S_OK;
                         }).Get(),
-                            self.token.source_changed());
+                            self.token.navigation_completed());
 
                         self.navigate(self.webview_config.home_page);
 
@@ -298,11 +299,20 @@ webview::webview(pane::window_config&& window_config,
     }).Get());
 }
 
-webview::~webview() { }
-
 auto webview::default_procedure(this Self& self, const pane::window_message& window_message)
     -> LRESULT {
     switch (window_message.event) {
+        case WM_CLOSE: {
+            if (self.webview_config.virtual_host_name_map) {
+                self.core->ClearVirtualHostNameToFolderMapping(reinterpret_cast<const wchar_t*>(
+                    pane::to_utf16((*self.webview_config.virtual_host_name_map).first).data()));
+            }
+
+            self.controller->remove_AcceleratorKeyPressed(*self.token.accelerator_key_pressed());
+            self.core->remove_FaviconChanged(*self.token.favicon_changed());
+            self.core->remove_NavigationCompleted(*self.token.navigation_completed());
+        } break;
+
         // https://learn.microsoft.com/en-us/windows/win32/hidpi/wm-dpichanged
         case WM_DPICHANGED: {
             auto const suggested_rect { reinterpret_cast<RECT*>(window_message.lparam) };
