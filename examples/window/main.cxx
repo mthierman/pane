@@ -34,6 +34,12 @@ struct window_manager final {
                                 self.add();
                             }
                         } break;
+                        case 'W': {
+                            if (pane::input::is_key_down(VK_LCONTROL)
+                                || pane::input::is_key_down(VK_RCONTROL)) {
+                                self.remove(window.window_handle());
+                            }
+                        } break;
                     }
                 } break;
             }
