@@ -265,10 +265,7 @@ webview::webview(pane::window_config&& window_config,
                                 self.core->get_DocumentTitle(&title);
                                 self.current_title = pane::to_utf8(title.get());
 
-                                SendMessageW(self.window_handle(),
-                                             std::to_underlying(message::NAVIGATION_COMPLETED),
-                                             0,
-                                             0);
+                                self.window_handle.message_self(message::NAVIGATION_COMPLETED);
 
                                 return S_OK;
                             }).Get(),
@@ -276,10 +273,7 @@ webview::webview(pane::window_config&& window_config,
 
                             self.navigate(self.webview_config.home_page);
 
-                            SendMessageW(self.window_handle(),
-                                         std::to_underlying(message::WEBVIEW_CREATE),
-                                         0,
-                                         0);
+                            self.window_handle.message_self(message::WEBVIEW_CREATE);
                         }
                     }
 
