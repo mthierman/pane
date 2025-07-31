@@ -32,11 +32,11 @@ auto wWinMain(HINSTANCE /* hinstance */,
                 return 0;
             } break;
 
-            case +pane::webview::message::FAVICON_CHANGED: {
+            case +FAVICON_CHANGED: {
                 browser.window_handle.icon(browser.favicon());
             } break;
 
-            case +pane::webview::message::NAVIGATION_COMPLETED: {
+            case +NAVIGATION_COMPLETED: {
                 browser.window_handle.title(browser.current_title);
             } break;
         }
