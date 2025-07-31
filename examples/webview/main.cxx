@@ -22,7 +22,7 @@ auto wWinMain(HINSTANCE /* hinstance */,
                 window_manager.erase(url.window_handle);
             } break;
 
-            case std::to_underlying(WEBVIEW_CREATE): {
+            case pane::msg(WEBVIEW_CREATE): {
                 url.navigate(u8"https://learn.microsoft.com/windows/apps/winui/winui3/");
             } break;
         }
@@ -52,7 +52,7 @@ auto wWinMain(HINSTANCE /* hinstance */,
                 window_manager.erase(virtual_host.window_handle);
             } break;
 
-            case std::to_underlying(WEBVIEW_CREATE): {
+            case pane::msg(WEBVIEW_CREATE): {
                 virtual_host.navigate(u8"https://pane.internal/index.html");
             } break;
         }
@@ -75,7 +75,7 @@ auto wWinMain(HINSTANCE /* hinstance */,
                 window_manager.erase(file.window_handle);
             } break;
 
-            case std::to_underlying(WEBVIEW_CREATE): {
+            case pane::msg(WEBVIEW_CREATE): {
                 file.navigate(std::u8string(u8"file:///D:/mthierman/pane/pane/data/index.html"));
             } break;
         }
@@ -105,7 +105,7 @@ auto wWinMain(HINSTANCE /* hinstance */,
                 window_manager.erase(navigate_to_string.window_handle);
             } break;
 
-            case std::to_underlying(WEBVIEW_CREATE): {
+            case pane::msg(WEBVIEW_CREATE): {
                 navigate_to_string.navigate_to_string(
                     u8R"(<html><body style="background-color: black; color: white;">navigate_to_string</body></html>)");
             } break;
