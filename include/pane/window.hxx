@@ -329,9 +329,9 @@ template <typename T> struct window_manager final {
         self.windows.push_back(std::move(std::make_unique<T>(std::forward<Args>(args)...)));
     }
 
-    auto remove(this Self& self, HWND hwnd) -> void {
+    template <typename U> auto remove(this Self& self, U hwnd) -> void {
         std::erase_if(self.windows, [&](const auto& window) {
-            return window && window->window_handle() == hwnd;
+            return window && window->window_handle() == reinterpret_cast<HWND>(hwnd);
         });
 
         if (self.windows.empty()) {

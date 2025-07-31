@@ -20,13 +20,14 @@ auto wWinMain(HINSTANCE /* hinstance */,
                                                          nullptr },
                                    [&](const pane::window_message& window_message,
                                        pane::window& window) -> LRESULT {
+                    auto new_window { pane::make_window_message(
+                        app.window_handle(), +message::NEW_WINDOW, 0, 0) };
+                    auto close_window { pane::make_window_message(
+                        app.window_handle(), +message::CLOSE_WINDOW, 0, window.window_handle()) };
+
                     switch (window_message.msg) {
                         case WM_CLOSE: {
-                            return pane::window_message { app.window_handle(),
-                                                          +message::CLOSE_WINDOW,
-                                                          0,
-                                                          (LPARAM)window.window_handle() }
-                                .send();
+                            close_window.send();
                         } break;
 
                         case WM_KEYDOWN: {
@@ -34,20 +35,13 @@ auto wWinMain(HINSTANCE /* hinstance */,
                                 case 'N': {
                                     if (pane::input::is_key_down(VK_LCONTROL)
                                         || pane::input::is_key_down(VK_RCONTROL)) {
-                                        pane::window_message {
-                                            app.window_handle(), +message::NEW_WINDOW, 0, 0
-                                        }
-                                            .send();
+                                        new_window.send();
                                     }
                                 } break;
                                 case 'W': {
                                     if (pane::input::is_key_down(VK_LCONTROL)
                                         || pane::input::is_key_down(VK_RCONTROL)) {
-                                        pane::window_message { app.window_handle(),
-                                                               +message::CLOSE_WINDOW,
-                                                               0,
-                                                               (LPARAM)window.window_handle() }
-                                            .send();
+                                        close_window.send();
                                     }
                                 } break;
                             }
@@ -59,7 +53,7 @@ auto wWinMain(HINSTANCE /* hinstance */,
             } break;
 
             case +message::CLOSE_WINDOW: {
-                window_manager.remove((HWND)window_message.lparam);
+                window_manager.remove(window_message.lparam);
 
                 return 0;
             } break;
@@ -68,7 +62,7 @@ auto wWinMain(HINSTANCE /* hinstance */,
         return app.default_procedure(window_message);
     } };
 
-    pane::window_message { app.window_handle(), +message::NEW_WINDOW, 0, 0 }.send();
+    pane::make_window_message(app.window_handle(), +message::NEW_WINDOW, 0, 0).send();
 
     return pane::system::message_loop();
 }
