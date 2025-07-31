@@ -27,10 +27,10 @@ auto wWinMain(HINSTANCE /* hinstance */,
                         } break;
 
                         case WM_CLOSE: {
-                            pane::window_message { app.window_handle(),
-                                                   +message::CLOSE_WINDOW,
-                                                   0,
-                                                   (LPARAM)window.window_handle() }
+                            return pane::window_message { app.window_handle(),
+                                                          +message::CLOSE_WINDOW,
+                                                          0,
+                                                          (LPARAM)window.window_handle() }
                                 .send();
                         } break;
 
@@ -65,6 +65,8 @@ auto wWinMain(HINSTANCE /* hinstance */,
 
             case +message::CLOSE_WINDOW: {
                 window_manager.remove((HWND)window_message.lparam);
+
+                return 0;
             } break;
         }
 
