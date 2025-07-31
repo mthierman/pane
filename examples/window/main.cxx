@@ -2,50 +2,12 @@
 #include <memory>
 #include <vector>
 
-enum struct message : int {
-    NEW_WINDOW = WM_APP,
-};
+enum struct message : int { NEW_WINDOW = WM_APP, CLOSE_WINDOW };
 
 template <typename T> struct window_manager final {
     using Self = window_manager;
 
-    auto add(this Self& self) -> void {
-        auto window { std::make_unique<T>(
-            pane::window_config { u8"window",
-                                  pane::color { 0, 0, 0, 255 },
-                                  pane::color { 255, 255, 255, 255 },
-                                  true,
-                                  nullptr },
-            [&](const pane::window_message& window_message, T& window) -> LRESULT {
-            switch (window_message.msg) {
-                case WM_CREATE: {
-                } break;
-
-                case WM_CLOSE: {
-                    self.remove(window.window_handle());
-                } break;
-
-                case WM_KEYDOWN: {
-                    switch (window_message.wparam) {
-                        case 'N': {
-                            if (pane::input::is_key_down(VK_LCONTROL)
-                                || pane::input::is_key_down(VK_RCONTROL)) {
-                                self.add();
-                            }
-                        } break;
-                        case 'W': {
-                            if (pane::input::is_key_down(VK_LCONTROL)
-                                || pane::input::is_key_down(VK_RCONTROL)) {
-                                self.remove(window.window_handle());
-                            }
-                        } break;
-                    }
-                } break;
-            }
-
-            return window.default_procedure(window_message);
-        }) };
-
+    auto add(this Self& self, std::unique_ptr<T> window) -> void {
         self.windows.push_back(std::move(window));
     }
 
@@ -72,7 +34,56 @@ auto wWinMain(HINSTANCE /* hinstance */,
     pane::message_window app { [&](const pane::window_message& window_message,
                                    pane::message_window& app) -> LRESULT {
         if (window_message.msg == +message::NEW_WINDOW) {
-            window_manager.add();
+            window_manager.add(std::make_unique<pane::window>(
+                pane::window_config { u8"window",
+                                      pane::color { 0, 0, 0, 255 },
+                                      pane::color { 255, 255, 255, 255 },
+                                      true,
+                                      nullptr },
+                [&](const pane::window_message& window_message, pane::window& window) -> LRESULT {
+                switch (window_message.msg) {
+                    case WM_CREATE: {
+                    } break;
+
+                    case WM_CLOSE: {
+                        pane::window_message { app.window_handle(),
+                                               +message::CLOSE_WINDOW,
+                                               0,
+                                               (LPARAM)window.window_handle() }
+                            .send();
+                    } break;
+
+                    case WM_KEYDOWN: {
+                        switch (window_message.wparam) {
+                            case 'N': {
+                                if (pane::input::is_key_down(VK_LCONTROL)
+                                    || pane::input::is_key_down(VK_RCONTROL)) {
+                                    pane::window_message {
+                                        app.window_handle(), +message::NEW_WINDOW, 0, 0
+                                    }
+                                        .send();
+                                }
+                            } break;
+                            case 'W': {
+                                if (pane::input::is_key_down(VK_LCONTROL)
+                                    || pane::input::is_key_down(VK_RCONTROL)) {
+                                    pane::window_message { app.window_handle(),
+                                                           +message::CLOSE_WINDOW,
+                                                           0,
+                                                           (LPARAM)window.window_handle() }
+                                        .send();
+                                }
+                            } break;
+                        }
+                    } break;
+                }
+
+                return window.default_procedure(window_message);
+            }));
+        }
+
+        if (window_message.msg == +message::CLOSE_WINDOW) {
+            window_manager.remove((HWND)window_message.lparam);
         }
 
         return app.default_procedure(window_message);
