@@ -17,6 +17,27 @@ namespace pane {
 struct window_message final {
     using Self = window_message;
 
+    template <typename T, typename W = WPARAM, typename L = LPARAM>
+    static auto send(HWND hwnd, T msg, W wparam = 0, L lparam = 0) -> void {
+        auto wp { []<typename U>(U value) -> WPARAM {
+            if constexpr (std::is_pointer_v<U>) {
+                return reinterpret_cast<WPARAM>(value);
+            } else {
+                return static_cast<WPARAM>(value);
+            }
+        }(wparam) };
+
+        auto lp { []<typename U>(U value) -> LPARAM {
+            if constexpr (std::is_pointer_v<U>) {
+                return reinterpret_cast<LPARAM>(value);
+            } else {
+                return static_cast<LPARAM>(value);
+            }
+        }(lparam) };
+
+        SendMessageW(hwnd, std::to_underlying(msg), wp, lp);
+    }
+
     auto default_procedure(this const Self& self) -> LRESULT;
 
     HWND hwnd { nullptr };
@@ -211,27 +232,6 @@ struct window_handle final {
     auto border_color(this const Self& self, const pane::color& color) -> HRESULT;
     auto caption_color(this const Self& self, const pane::color& color) -> HRESULT;
     auto text_color(this const Self& self, const pane::color& color) -> HRESULT;
-
-    template <typename T, typename W = WPARAM, typename L = LPARAM>
-    auto message_self(this const Self& self, T msg, W wparam = 0, L lparam = 0) -> void {
-        auto wp { []<typename U>(U value) -> WPARAM {
-            if constexpr (std::is_pointer_v<U>) {
-                return reinterpret_cast<WPARAM>(value);
-            } else {
-                return static_cast<WPARAM>(value);
-            }
-        }(wparam) };
-
-        auto lp { []<typename U>(U value) -> LPARAM {
-            if constexpr (std::is_pointer_v<U>) {
-                return reinterpret_cast<LPARAM>(value);
-            } else {
-                return static_cast<LPARAM>(value);
-            }
-        }(lparam) };
-
-        SendMessageW(self.hwnd, std::to_underlying(msg), wp, lp);
-    }
 
     auto operator()(this const Self& self) -> HWND;
     auto operator()(this Self& self, HWND hwnd) -> void;

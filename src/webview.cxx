@@ -245,8 +245,10 @@ webview::webview(pane::window_config&& window_config,
                                     self.favicon_status
                                         = Gdiplus::Bitmap { icon_stream }.GetHICON(&self.favicon());
 
-                                    self.window_handle.message_self(
-                                        message::FAVICON_CHANGED, 0, self.favicon());
+                                    window_message::send(self.window_handle(),
+                                                         message::FAVICON_CHANGED,
+                                                         0,
+                                                         self.favicon());
 
                                     return S_OK;
                                 }).Get());
@@ -265,7 +267,8 @@ webview::webview(pane::window_config&& window_config,
                                 self.core->get_DocumentTitle(&title);
                                 self.current_title = pane::to_utf8(title.get());
 
-                                self.window_handle.message_self(message::NAVIGATION_COMPLETED);
+                                window_message::send(
+                                    self.window_handle(), message::NAVIGATION_COMPLETED, 0, 0);
 
                                 return S_OK;
                             }).Get(),
@@ -273,7 +276,8 @@ webview::webview(pane::window_config&& window_config,
 
                             self.navigate(self.webview_config.home_page);
 
-                            self.window_handle.message_self(message::WEBVIEW_CREATE);
+                            window_message::send(
+                                self.window_handle(), message::WEBVIEW_CREATE, 0, 0);
                         }
                     }
 
