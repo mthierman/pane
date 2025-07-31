@@ -1,7 +1,6 @@
 #include <pane/window.hxx>
 #include <pane/text.hxx>
 #include <dwmapi.h>
-#include <wil/wrl.h>
 
 namespace pane {
 auto window_message::send(this const Self& self, HWND hwnd) -> LRESULT {
