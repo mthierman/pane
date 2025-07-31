@@ -1,6 +1,5 @@
 #pragma once
 #include <Windows.h>
-#include <functional>
 #include <string>
 #include <pane/text.hxx>
 #include <pane/system.hxx>
