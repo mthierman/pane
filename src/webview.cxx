@@ -8,7 +8,7 @@ auto webview_token::operator()(this Self& self) -> EventRegistrationToken* { ret
 
 webview::webview(struct window_config&& window_config,
                  struct webview_config&& webview_config,
-                 std::function<LRESULT(const window_message&, Self*)>&& window_procedure)
+                 std::function<LRESULT(const window_message&, Self&)>&& window_procedure)
     : window_config { std::move(window_config) },
       webview_config { std::move(webview_config) },
       window_procedure { std::move(window_procedure) } {

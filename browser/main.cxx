@@ -23,9 +23,7 @@ auto wWinMain(HINSTANCE /* hinstance */,
           true,
           nullptr },
         { home_page.value_or(u8"about:blank") },
-        [&](const pane::window_message& window_message, pane::webview* webview) -> LRESULT {
-        auto& self = *webview;
-
+        [&](const pane::window_message& window_message, pane::webview& browser) -> LRESULT {
         switch (window_message.msg) {
             using enum pane::webview::message;
 
@@ -36,15 +34,15 @@ auto wWinMain(HINSTANCE /* hinstance */,
             } break;
 
             case +FAVICON_CHANGED: {
-                self.window_handle.icon(self.favicon());
+                browser.window_handle.icon(browser.favicon());
             } break;
 
             case +NAVIGATION_COMPLETED: {
-                self.window_handle.title(self.current_title);
+                browser.window_handle.title(browser.current_title);
             } break;
         }
 
-        return self.default_procedure(window_message);
+        return browser.default_procedure(window_message);
     } } };
 
     return pane::system::message_loop();

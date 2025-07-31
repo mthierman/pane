@@ -10,26 +10,24 @@ auto wWinMain(HINSTANCE /* hinstance */,
     auto url { pane::webview {
         { u8"url", pane::color { 0, 0, 0, 0 }, pane::color { 255, 255, 255, 0 }, true, nullptr },
         { u8"about:blank" },
-        [&](const pane::window_message& window_message, pane::webview* webview) -> LRESULT {
-        auto& self = *webview;
-
+        [&](const pane::window_message& window_message, pane::webview& url) -> LRESULT {
         switch (window_message.msg) {
             using enum pane::webview::message;
 
             case WM_CREATE: {
-                window_manager.insert(self.window_handle);
+                window_manager.insert(url.window_handle);
             } break;
 
             case WM_DESTROY: {
-                window_manager.erase(self.window_handle);
+                window_manager.erase(url.window_handle);
             } break;
 
             case +WEBVIEW_CREATE: {
-                self.navigate(u8"https://learn.microsoft.com/windows/apps/winui/winui3/");
+                url.navigate(u8"https://learn.microsoft.com/windows/apps/winui/winui3/");
             } break;
         }
 
-        return self.default_procedure(window_message);
+        return url.default_procedure(window_message);
     } } };
 
     auto virtual_host { pane::webview {
@@ -41,51 +39,47 @@ auto wWinMain(HINSTANCE /* hinstance */,
         { u8"about:blank",
           std::make_pair(u8"pane.internal",
                          std::filesystem::path(u8"D:/mthierman/pane/pane/data")) },
-        [&](const pane::window_message& window_message, pane::webview* webview) -> LRESULT {
-        auto& self = *webview;
-
+        [&](const pane::window_message& window_message, pane::webview& virtual_host) -> LRESULT {
         switch (window_message.msg) {
             using enum pane::webview::message;
 
             case WM_CREATE: {
-                window_manager.insert(self.window_handle);
+                window_manager.insert(virtual_host.window_handle);
             } break;
 
             case WM_DESTROY: {
-                window_manager.erase(self.window_handle);
+                window_manager.erase(virtual_host.window_handle);
             } break;
 
             case +WEBVIEW_CREATE: {
-                self.navigate(u8"https://pane.internal/index.html");
+                virtual_host.navigate(u8"https://pane.internal/index.html");
             } break;
         }
 
-        return self.default_procedure(window_message);
+        return virtual_host.default_procedure(window_message);
     } } };
 
     auto file { pane::webview {
         { u8"file", pane::color { 0, 0, 0, 0 }, pane::color { 255, 255, 255, 0 }, true, nullptr },
         { u8"about:blank" },
-        [&](const pane::window_message& window_message, pane::webview* webview) -> LRESULT {
-        auto& self = *webview;
-
+        [&](const pane::window_message& window_message, pane::webview& file) -> LRESULT {
         switch (window_message.msg) {
             using enum pane::webview::message;
 
             case WM_CREATE: {
-                window_manager.insert(self.window_handle);
+                window_manager.insert(file.window_handle);
             } break;
 
             case WM_DESTROY: {
-                window_manager.erase(self.window_handle);
+                window_manager.erase(file.window_handle);
             } break;
 
             case +WEBVIEW_CREATE: {
-                self.navigate(std::u8string(u8"file:///D:/mthierman/pane/pane/data/index.html"));
+                file.navigate(std::u8string(u8"file:///D:/mthierman/pane/pane/data/index.html"));
             } break;
         }
 
-        return self.default_procedure(window_message);
+        return file.default_procedure(window_message);
     } } };
 
     auto navigate_to_string { pane::webview {
@@ -97,27 +91,26 @@ auto wWinMain(HINSTANCE /* hinstance */,
         { u8"about:blank",
           std::make_pair(u8"pane.internal",
                          std::filesystem::path(u8"D:/mthierman/pane/pane/data")) },
-        [&](const pane::window_message& window_message, pane::webview* webview) -> LRESULT {
-        auto& self = *webview;
-
+        [&](const pane::window_message& window_message,
+            pane::webview& navigate_to_string) -> LRESULT {
         switch (window_message.msg) {
             using enum pane::webview::message;
 
             case WM_CREATE: {
-                window_manager.insert(self.window_handle);
+                window_manager.insert(navigate_to_string.window_handle);
             } break;
 
             case WM_DESTROY: {
-                window_manager.erase(self.window_handle);
+                window_manager.erase(navigate_to_string.window_handle);
             } break;
 
             case +WEBVIEW_CREATE: {
-                self.navigate_to_string(
+                navigate_to_string.navigate_to_string(
                     u8R"(<html><body style="background-color: black; color: white;">navigate_to_string</body></html>)");
             } break;
         }
 
-        return self.default_procedure(window_message);
+        return navigate_to_string.default_procedure(window_message);
     } } };
 
     return pane::system::message_loop();
