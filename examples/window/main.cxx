@@ -10,15 +10,16 @@ auto wWinMain(HINSTANCE /* hinstance */,
               PWSTR /* pcmdline */,
               int /* ncmdshow */) -> int {
     pane::window_manager window_manager;
-    pane::message_window message_window {
-        [&](const pane::window_message& window_message) -> LRESULT {
+    pane::message_window message_window { [&](const pane::window_message& window_message,
+                                              pane::message_window* message_window) -> LRESULT {
+        auto& self = *message_window;
+
         if (window_message.msg == +message::NOTIFY) {
             pane::debug("message::NOTIFY");
         }
 
-        return message_window.default_procedure(window_message);
-    }
-    };
+        return self.default_procedure(window_message);
+    } };
 
     auto window { pane::window {
         { u8"window",
