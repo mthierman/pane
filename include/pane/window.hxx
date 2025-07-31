@@ -213,7 +213,7 @@ struct window_handle final {
     auto text_color(this const Self& self, const pane::color& color) -> HRESULT;
 
     template <typename T, typename W = WPARAM, typename L = LPARAM>
-    auto message_self(this const Self& self, T message, W wparam = 0, L lparam = 0) -> void {
+    auto message_self(this const Self& self, T msg, W wparam = 0, L lparam = 0) -> void {
         auto wp { []<typename U>(U value) -> WPARAM {
             if constexpr (std::is_pointer_v<U>) {
                 return reinterpret_cast<WPARAM>(value);
@@ -230,7 +230,7 @@ struct window_handle final {
             }
         }(lparam) };
 
-        SendMessageW(self.hwnd, std::to_underlying(message), wp, lp);
+        SendMessageW(self.hwnd, std::to_underlying(msg), wp, lp);
     }
 
     auto operator()(this const Self& self) -> HWND;
