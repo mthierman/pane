@@ -17,10 +17,12 @@ namespace pane {
 struct window_message final {
     using Self = window_message;
 
-    template <typename M = UINT, typename W = WPARAM, typename L = LPARAM>
+private:
+    template <typename Fn, typename M = UINT, typename W = WPARAM, typename L = LPARAM>
         requires std::is_enum_v<M> || std::is_integral_v<M>
-    static auto send(HWND hwnd, M msg, W wparam = 0, L lparam = 0) -> LRESULT {
-        return SendMessageW(hwnd, []<typename U>(U value) -> UINT {
+    static auto dispatch_message(Fn&& func, HWND hwnd, M msg, W wparam = 0, L lparam = 0)
+        -> decltype(auto) {
+        return func(hwnd, []<typename U>(U value) -> UINT {
             if constexpr (std::is_enum_v<U>) {
                 return static_cast<UINT>(std::to_underlying(value));
             } else {
@@ -39,6 +41,17 @@ struct window_message final {
                 return static_cast<LPARAM>(value);
             }
         }(lparam));
+    }
+
+public:
+    template <typename M = UINT, typename W = WPARAM, typename L = LPARAM>
+    static auto send(HWND hwnd, M msg, W wparam = 0, L lparam = 0) -> LRESULT {
+        return dispatch_message(SendMessageW, hwnd, msg, wparam, lparam);
+    }
+
+    template <typename M = UINT, typename W = WPARAM, typename L = LPARAM>
+    auto post(HWND hwnd, M msg, W wparam = 0, L lparam = 0) -> BOOL {
+        return dispatch_message(PostMessageW, hwnd, msg, wparam, lparam);
     }
 
     auto default_procedure(this const Self& self) -> LRESULT;
