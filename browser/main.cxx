@@ -23,7 +23,7 @@ auto wWinMain(HINSTANCE /* hinstance */,
                               nullptr },
                             { home_page.value_or(u8"about:blank") },
                             [&](pane::window_message window_message) -> LRESULT {
-        switch (window_message.event) {
+        switch (window_message.msg) {
             using enum pane::webview::message;
 
             case WM_DESTROY: {

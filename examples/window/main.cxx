@@ -13,7 +13,7 @@ auto wWinMain(HINSTANCE /* hinstance */,
                             true,
                             nullptr },
                           [&](const pane::window_message& window_message) -> LRESULT {
-        switch (window_message.event) {
+        switch (window_message.msg) {
             case WM_CREATE: {
                 window_manager.insert(window.window_handle);
             } break;

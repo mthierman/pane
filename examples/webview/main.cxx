@@ -11,7 +11,7 @@ auto wWinMain(HINSTANCE /* hinstance */,
         { u8"url", pane::color { 0, 0, 0, 0 }, pane::color { 255, 255, 255, 0 }, true, nullptr },
         { u8"about:blank" },
         [&](pane::window_message window_message) -> LRESULT {
-        switch (window_message.event) {
+        switch (window_message.msg) {
             using enum pane::webview::message;
 
             case WM_CREATE: {
@@ -41,7 +41,7 @@ auto wWinMain(HINSTANCE /* hinstance */,
                                        u8"pane.internal",
                                        std::filesystem::path(u8"D:/mthierman/pane/pane/data")) },
                                  [&](pane::window_message window_message) -> LRESULT {
-        switch (window_message.event) {
+        switch (window_message.msg) {
             using enum pane::webview::message;
 
             case WM_CREATE: {
@@ -64,7 +64,7 @@ auto wWinMain(HINSTANCE /* hinstance */,
         { u8"file", pane::color { 0, 0, 0, 0 }, pane::color { 255, 255, 255, 0 }, true, nullptr },
         { u8"about:blank" },
         [&](pane::window_message window_message) -> LRESULT {
-        switch (window_message.event) {
+        switch (window_message.msg) {
             using enum pane::webview::message;
 
             case WM_CREATE: {
@@ -94,7 +94,7 @@ auto wWinMain(HINSTANCE /* hinstance */,
           std::make_pair(u8"pane.internal",
                          std::filesystem::path(u8"D:/mthierman/pane/pane/data")) },
         [&](pane::window_message window_message) -> LRESULT {
-        switch (window_message.event) {
+        switch (window_message.msg) {
             using enum pane::webview::message;
 
             case WM_CREATE: {

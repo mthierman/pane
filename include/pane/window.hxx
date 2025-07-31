@@ -17,49 +17,39 @@ template <typename T> constexpr auto msg(T msg) -> UINT { return std::to_underly
 struct window_message final {
     using Self = window_message;
 
-    template <typename M = UINT, typename W = WPARAM, typename L = LPARAM>
-    static auto send(HWND hwnd, M msg, W wparam = 0, L lparam = 0) -> LRESULT {
-        return dispatch_message(SendMessageW, hwnd, msg, wparam, lparam);
-    }
-
-    template <typename M = UINT, typename W = WPARAM, typename L = LPARAM>
-    static auto post(HWND hwnd, M msg, W wparam = 0, L lparam = 0) -> BOOL {
-        return dispatch_message(PostMessageW, hwnd, msg, wparam, lparam);
-    }
-
+    auto send(this const Self& self, HWND hwnd = nullptr) -> LRESULT;
+    auto post(this const Self& self, HWND hwnd = nullptr) -> BOOL;
     auto default_procedure(this const Self& self) -> LRESULT;
 
     HWND hwnd { nullptr };
-    UINT event { 0 };
+    UINT msg { 0 };
     WPARAM wparam { 0 };
     LPARAM lparam { 0 };
-
-private:
-    template <typename Fn, typename M = UINT, typename W = WPARAM, typename L = LPARAM>
-        requires std::is_enum_v<M> || std::is_integral_v<M>
-    static auto dispatch_message(Fn&& func, HWND hwnd, M msg, W wparam = 0, L lparam = 0)
-        -> decltype(auto) {
-        return func(hwnd, []<typename U>(U value) -> UINT {
-            if constexpr (std::is_enum_v<U>) {
-                return static_cast<UINT>(std::to_underlying(value));
-            } else {
-                return static_cast<UINT>(value);
-            }
-        }(msg), []<typename U>(U value) -> WPARAM {
-            if constexpr (std::is_pointer_v<U>) {
-                return reinterpret_cast<WPARAM>(value);
-            } else {
-                return static_cast<WPARAM>(value);
-            }
-        }(wparam), []<typename U>(U value) -> LPARAM {
-            if constexpr (std::is_pointer_v<U>) {
-                return reinterpret_cast<LPARAM>(value);
-            } else {
-                return static_cast<LPARAM>(value);
-            }
-        }(lparam));
-    }
 };
+
+template <typename M = UINT, typename W = WPARAM, typename L = LPARAM>
+    requires std::is_enum_v<M> || std::is_integral_v<M>
+constexpr auto make_window_message(HWND hwnd, M msg, W wparam, L lparam) -> window_message {
+    return { hwnd, []<typename U>(U value) -> UINT {
+        if constexpr (std::is_enum_v<U>) {
+            return static_cast<UINT>(std::to_underlying(value));
+        } else {
+            return static_cast<UINT>(value);
+        }
+    }(msg), []<typename U>(U value) -> WPARAM {
+        if constexpr (std::is_pointer_v<U>) {
+            return reinterpret_cast<WPARAM>(value);
+        } else {
+            return static_cast<WPARAM>(value);
+        }
+    }(wparam), []<typename U>(U value) -> LPARAM {
+        if constexpr (std::is_pointer_v<U>) {
+            return reinterpret_cast<LPARAM>(value);
+        } else {
+            return static_cast<LPARAM>(value);
+        }
+    }(lparam) };
+}
 
 template <typename T> struct window_class final {
     using Self = window_class;
@@ -122,7 +112,7 @@ private:
                     self.window_handle.position.scale_factor
                         = static_cast<float>(self.window_handle.position.dpi)
                         / static_cast<float>(USER_DEFAULT_SCREEN_DPI);
-                    SendMessageW(hwnd, WM_SETTINGCHANGE, 0, 0);
+                    SendMessageW(window_message.hwnd, WM_SETTINGCHANGE, 0, 0);
                 }
             }
         }
@@ -130,7 +120,7 @@ private:
         if (auto instance { GetWindowLongPtrW(hwnd, 0) }) {
             auto& self { *(reinterpret_cast<T*>(instance)) };
 
-            switch (msg) {
+            switch (window_message.msg) {
                     // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-ncdestroy
                 case WM_NCDESTROY: {
                     self.window_handle(nullptr);
@@ -151,7 +141,7 @@ private:
 
                     if (auto style { GetWindowLongPtrW(window_message.hwnd, GWL_STYLE) };
                         style & WS_OVERLAPPEDWINDOW) {
-                        GetWindowPlacement(self.window_handle(),
+                        GetWindowPlacement(window_message.hwnd,
                                            &self.window_handle.position.window_placement);
                     }
 

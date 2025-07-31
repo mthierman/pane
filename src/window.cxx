@@ -5,8 +5,16 @@
 #include <wil/wrl.h>
 
 namespace pane {
+auto window_message::send(this const Self& self, HWND hwnd) -> LRESULT {
+    return SendMessageW(hwnd ? hwnd : self.hwnd, self.msg, self.wparam, self.lparam);
+}
+
+auto window_message::post(this const Self& self, HWND hwnd) -> BOOL {
+    return PostMessageW(hwnd ? hwnd : self.hwnd, self.msg, self.wparam, self.lparam);
+}
+
 auto window_message::default_procedure(this const Self& self) -> LRESULT {
-    return DefWindowProcW(self.hwnd, self.event, self.wparam, self.lparam);
+    return DefWindowProcW(self.hwnd, self.msg, self.wparam, self.lparam);
 }
 
 window_handle::window_handle(HWND hwnd)
@@ -230,7 +238,7 @@ window::window(pane::window_config&& window_config,
 
 auto window::default_procedure(this Self& self, const pane::window_message& window_message)
     -> LRESULT {
-    switch (window_message.event) {
+    switch (window_message.msg) {
             // https://learn.microsoft.com/en-us/windows/win32/hidpi/wm-dpichanged
         case WM_DPICHANGED: {
             auto const suggested_rect { reinterpret_cast<RECT*>(window_message.lparam) };

@@ -245,10 +245,11 @@ webview::webview(pane::window_config&& window_config,
                                     self.favicon_status
                                         = Gdiplus::Bitmap { icon_stream }.GetHICON(&self.favicon());
 
-                                    window_message::send(self.window_handle(),
-                                                         message::FAVICON_CHANGED,
-                                                         0,
-                                                         self.favicon());
+                                    pane::make_window_message(self.window_handle(),
+                                                              message::FAVICON_CHANGED,
+                                                              0,
+                                                              self.favicon())
+                                        .send();
 
                                     return S_OK;
                                 }).Get());
@@ -267,8 +268,9 @@ webview::webview(pane::window_config&& window_config,
                                 self.core->get_DocumentTitle(&title);
                                 self.current_title = pane::to_utf8(title.get());
 
-                                window_message::send(
-                                    self.window_handle(), message::NAVIGATION_COMPLETED, 0, 0);
+                                pane::make_window_message(
+                                    self.window_handle(), message::NAVIGATION_COMPLETED, 0, 0)
+                                    .send();
 
                                 return S_OK;
                             }).Get(),
@@ -276,8 +278,9 @@ webview::webview(pane::window_config&& window_config,
 
                             self.navigate(self.webview_config.home_page);
 
-                            window_message::send(
-                                self.window_handle(), message::WEBVIEW_CREATE, 0, 0);
+                            pane::make_window_message(
+                                self.window_handle(), message::WEBVIEW_CREATE, 0, self.favicon())
+                                .send();
                         }
                     }
 
@@ -291,7 +294,7 @@ webview::webview(pane::window_config&& window_config,
 
 auto webview::default_procedure(this Self& self, const pane::window_message& window_message)
     -> LRESULT {
-    switch (window_message.event) {
+    switch (window_message.msg) {
         case WM_CLOSE: {
             if (self.webview_config.virtual_host_name_map) {
                 self.core->ClearVirtualHostNameToFolderMapping(reinterpret_cast<const wchar_t*>(
