@@ -3,6 +3,7 @@
 #include <wrl.h>
 #include <functional>
 #include <set>
+#include <type_traits>
 #include <pane/color.hxx>
 #include <pane/math.hxx>
 #include <pane/system.hxx>
@@ -12,7 +13,11 @@
 #include <ada.h>
 
 namespace pane {
-template <typename T> constexpr auto msg(T msg) -> UINT { return std::to_underlying(msg); }
+template <typename E>
+    requires std::is_enum_v<E>
+constexpr auto operator+(E e) noexcept {
+    return std::to_underlying(e);
+}
 
 struct window_message final {
     using Self = window_message;
@@ -29,8 +34,8 @@ struct window_message final {
 
 template <typename M = UINT, typename W = WPARAM, typename L = LPARAM>
     requires std::is_enum_v<M> || std::is_integral_v<M>
-constexpr auto make_window_message(HWND hwnd, M msg, W wparam, L lparam) -> window_message {
-    return { hwnd, []<typename U>(U value) -> UINT {
+constexpr auto make_window_message(HWND hwnd, M msg, W wparam, L lparam) {
+    return window_message { hwnd, []<typename U>(U value) -> UINT {
         if constexpr (std::is_enum_v<U>) {
             return static_cast<UINT>(std::to_underlying(value));
         } else {

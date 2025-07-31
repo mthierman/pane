@@ -93,6 +93,10 @@ struct webview final {
         NAVIGATION_COMPLETED
     };
 
+    // constexpr std::underlying_type_t<message> operator+(message msg) noexcept {
+    //     return static_cast<std::underlying_type_t<message>>(msg);
+    // }
+
     friend struct window_class<Self>;
 
     webview(pane::window_config&& window_config = {},
@@ -140,4 +144,6 @@ struct webview final {
     wil::com_ptr<ICoreWebView2Controller4> controller;
     wil::com_ptr<ICoreWebView2_27> core;
 };
+
+// constexpr auto operator+(webview::message msg) noexcept { return std::to_underlying(msg); }
 } // namespace pane
