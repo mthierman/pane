@@ -50,10 +50,12 @@ struct window_manager final {
     }
 
     auto remove(this Self& self, HWND hwnd) -> void {
-        std::erase_if(self.windows, [&](auto& ptr) { return ptr && ptr->window_handle() == hwnd; });
+        std::erase_if(self.windows, [&](const auto& window) {
+            return window && window->window_handle() == hwnd;
+        });
 
         if (self.windows.empty()) {
-            PostQuitMessage(0);
+            pane::system::quit();
         }
     }
 
