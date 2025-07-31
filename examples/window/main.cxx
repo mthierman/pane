@@ -4,32 +4,12 @@
 
 enum struct message : int { NEW_WINDOW = WM_APP, CLOSE_WINDOW };
 
-template <typename T> struct window_manager final {
-    using Self = window_manager;
-
-    template <typename... Args> auto add(this Self& self, Args&&... args) -> void {
-        self.windows.push_back(std::move(std::make_unique<T>(std::forward<Args>(args)...)));
-    }
-
-    auto remove(this Self& self, HWND hwnd) -> void {
-        std::erase_if(self.windows, [&](const auto& window) {
-            return window && window->window_handle() == hwnd;
-        });
-
-        if (self.windows.empty()) {
-            pane::system::quit();
-        }
-    }
-
-    std::vector<std::unique_ptr<T>> windows;
-};
-
 // https://learn.microsoft.com/en-us/windows/win32/learnwin32/winmain--the-application-entry-point
 auto wWinMain(HINSTANCE /* hinstance */,
               HINSTANCE /* hprevinstance */,
               PWSTR /* pcmdline */,
               int /* ncmdshow */) -> int {
-    window_manager<pane::window> window_manager;
+    pane::window_manager<pane::window> window_manager;
 
     pane::message_window app { [&](const pane::window_message& window_message,
                                    pane::message_window& app) -> LRESULT {

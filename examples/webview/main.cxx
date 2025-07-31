@@ -5,7 +5,7 @@ auto wWinMain(HINSTANCE /* hinstance */,
               HINSTANCE /* hprevinstance */,
               PWSTR /* pcmdline */,
               int /* ncmdshow */) -> int {
-    pane::window_manager window_manager;
+    // pane::window_manager window_manager;
 
     auto url { pane::webview {
         { u8"url", pane::color { 0, 0, 0, 0 }, pane::color { 255, 255, 255, 0 }, true, nullptr },
@@ -15,11 +15,11 @@ auto wWinMain(HINSTANCE /* hinstance */,
             using enum pane::webview::message;
 
             case WM_CREATE: {
-                window_manager.insert(url.window_handle);
+                // window_manager.insert(url.window_handle);
             } break;
 
             case WM_DESTROY: {
-                window_manager.erase(url.window_handle);
+                // window_manager.erase(url.window_handle);
             } break;
 
             case +WEBVIEW_CREATE: {
@@ -44,11 +44,11 @@ auto wWinMain(HINSTANCE /* hinstance */,
             using enum pane::webview::message;
 
             case WM_CREATE: {
-                window_manager.insert(virtual_host.window_handle);
+                // window_manager.insert(virtual_host.window_handle);
             } break;
 
             case WM_DESTROY: {
-                window_manager.erase(virtual_host.window_handle);
+                // window_manager.erase(virtual_host.window_handle);
             } break;
 
             case +WEBVIEW_CREATE: {
@@ -67,11 +67,11 @@ auto wWinMain(HINSTANCE /* hinstance */,
             using enum pane::webview::message;
 
             case WM_CREATE: {
-                window_manager.insert(file.window_handle);
+                // window_manager.insert(file.window_handle);
             } break;
 
             case WM_DESTROY: {
-                window_manager.erase(file.window_handle);
+                // window_manager.erase(file.window_handle);
             } break;
 
             case +WEBVIEW_CREATE: {
@@ -97,11 +97,11 @@ auto wWinMain(HINSTANCE /* hinstance */,
             using enum pane::webview::message;
 
             case WM_CREATE: {
-                window_manager.insert(navigate_to_string.window_handle);
+                // window_manager.insert(navigate_to_string.window_handle);
             } break;
 
             case WM_DESTROY: {
-                window_manager.erase(navigate_to_string.window_handle);
+                // window_manager.erase(navigate_to_string.window_handle);
             } break;
 
             case +WEBVIEW_CREATE: {
