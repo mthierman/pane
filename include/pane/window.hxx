@@ -56,7 +56,7 @@ template <typename T> struct window_class final {
     using Self = window_class;
 
     window_class(std::u8string_view name)
-        : name { pane::to_utf16(name) },
+        : name { to_utf16(name) },
           data { WNDCLASSEXW { { sizeof(WNDCLASSEXW) },
                                { 0 },
                                { class_window_procedure },
@@ -89,9 +89,9 @@ template <typename T> struct window_class final {
 
 private:
     std::u16string name;
-    HINSTANCE instance { pane::system::module_handle().value_or(nullptr) };
-    HICON icon { pane::system::resource_icon().value_or(pane::system::application_icon()) };
-    HCURSOR cursor { pane::system::arrow_cursor() };
+    HINSTANCE instance { system::module_handle().value_or(nullptr) };
+    HICON icon { system::resource_icon().value_or(system::application_icon()) };
+    HCURSOR cursor { system::arrow_cursor() };
 
 public:
     WNDCLASSEXW data;
@@ -99,7 +99,7 @@ public:
 private:
     static auto class_window_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
         -> LRESULT {
-        pane::window_message window_message { hwnd, msg, wparam, lparam };
+        window_message window_message { hwnd, msg, wparam, lparam };
 
         // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-nccreate
         if (msg == WM_NCCREATE) {
@@ -158,7 +158,7 @@ private:
 
                     // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-settingchange
                 case WM_SETTINGCHANGE: {
-                    auto dark_mode { pane::system::dark_mode() };
+                    auto dark_mode { system::dark_mode() };
                     self.window_background(dark_mode ? self.window_config.bg_dark
                                                      : self.window_config.bg_light);
                     self.window_handle.immersive_dark_mode(dark_mode);
@@ -191,7 +191,7 @@ enum struct window_backdrop { automatic, mica, mica_alt, acrylic, none };
 struct window_background final {
     using Self = window_background;
 
-    explicit window_background(const pane::color& color);
+    explicit window_background(const color& color);
     ~window_background();
 
     window_background(const Self&) = delete;
@@ -201,7 +201,7 @@ struct window_background final {
     auto operator=(Self&&) noexcept -> Self& = delete;
 
     auto operator()(this const Self& self) -> HBRUSH;
-    auto operator()(this Self& self, const pane::color& color) -> void;
+    auto operator()(this Self& self, const color& color) -> void;
 
 private:
     HBRUSH hbrush { nullptr };
@@ -234,16 +234,16 @@ struct window_handle final {
 
     auto immersive_dark_mode(this const Self& self, bool enable) -> HRESULT;
     auto cloak(this const Self& self, bool enable) -> HRESULT;
-    auto backdrop(this const Self& self, pane::window_backdrop window_backdrop) -> HRESULT;
-    auto border_color(this const Self& self, const pane::color& color) -> HRESULT;
-    auto caption_color(this const Self& self, const pane::color& color) -> HRESULT;
-    auto text_color(this const Self& self, const pane::color& color) -> HRESULT;
+    auto backdrop(this const Self& self, window_backdrop window_backdrop) -> HRESULT;
+    auto border_color(this const Self& self, const color& color) -> HRESULT;
+    auto caption_color(this const Self& self, const color& color) -> HRESULT;
+    auto text_color(this const Self& self, const color& color) -> HRESULT;
 
     auto operator()(this const Self& self) -> HWND;
     auto operator()(this Self& self, HWND hwnd) -> void;
 
-    pane::window_position position;
-    uintptr_t id { pane::random_number<uintptr_t>() };
+    window_position position;
+    uintptr_t id { random_number<uintptr_t>() };
 
 private:
     HWND hwnd { nullptr };
@@ -271,8 +271,8 @@ private:
 
 struct window_config final {
     std::u8string title;
-    pane::color bg_dark;
-    pane::color bg_light;
+    color bg_dark;
+    color bg_light;
     bool visible { true };
     HWND parent_hwnd { nullptr };
 };
@@ -282,8 +282,8 @@ struct window final {
 
     friend struct window_class<Self>;
 
-    window(pane::window_config&& window_config = {},
-           std::function<LRESULT(const pane::window_message&)>&& window_procedure = {});
+    window(window_config&& window_config = {},
+           std::function<LRESULT(const window_message&)>&& window_procedure = {});
     ~window() = default;
 
     window(const Self&) = delete;
@@ -292,21 +292,20 @@ struct window final {
     window(Self&&) noexcept = delete;
     auto operator=(Self&&) noexcept -> Self& = delete;
 
-    auto default_procedure(this Self& self, const pane::window_message& window_message) -> LRESULT;
+    auto default_procedure(this Self& self, const window_message& window_message) -> LRESULT;
 
-    pane::window_config window_config;
-    pane::window_background window_background { pane::system::dark_mode()
-                                                    ? window_config.bg_dark
-                                                    : window_config.bg_light };
-    pane::window_handle window_handle;
-    std::function<LRESULT(const pane::window_message&)> window_procedure;
+    window_config window_config;
+    window_background window_background { system::dark_mode() ? window_config.bg_dark
+                                                              : window_config.bg_light };
+    window_handle window_handle;
+    std::function<LRESULT(const window_message&)> window_procedure;
 };
 
 struct window_manager final {
     using Self = window_manager;
 
-    auto insert(this Self& self, const pane::window_handle& window_handle) -> void;
-    auto erase(this Self& self, const pane::window_handle& window_handle) -> void;
+    auto insert(this Self& self, const window_handle& window_handle) -> void;
+    auto erase(this Self& self, const window_handle& window_handle) -> void;
     auto clear(this Self& self) -> void;
     auto size(this const Self& self) -> uint64_t;
     auto contains(this const Self& self, HWND hwnd) -> bool;

@@ -31,8 +31,7 @@ auto window_handle::show(this const Self& self) -> bool { return ShowWindow(self
 auto window_handle::hide(this const Self& self) -> bool { return ShowWindow(self.hwnd, SW_HIDE); }
 
 auto window_handle::title(this const Self& self, std::u8string_view title) -> bool {
-    return SetWindowTextW(self.hwnd,
-                          reinterpret_cast<const wchar_t*>(pane::to_utf16(title).data()));
+    return SetWindowTextW(self.hwnd, reinterpret_cast<const wchar_t*>(to_utf16(title).data()));
 }
 
 auto window_handle::icon(this const Self& self, HICON icon) -> void {
@@ -112,35 +111,34 @@ auto window_handle::cloak(this const Self& self, bool cloak) -> HRESULT {
         self.hwnd, DWMWINDOWATTRIBUTE::DWMWA_CLOAK, &attribute, sizeof(attribute));
 }
 
-auto window_handle::backdrop(this const Self& self, pane::window_backdrop window_backdrop)
-    -> HRESULT {
+auto window_handle::backdrop(this const Self& self, window_backdrop window_backdrop) -> HRESULT {
     auto backdrop { DWM_SYSTEMBACKDROP_TYPE::DWMSBT_AUTO };
 
     MARGINS margins { -1, -1, -1, -1 };
     DwmExtendFrameIntoClientArea(self.hwnd, &margins);
 
     switch (window_backdrop) {
-        case pane::window_backdrop::automatic: {
+        case window_backdrop::automatic: {
             backdrop = DWM_SYSTEMBACKDROP_TYPE::DWMSBT_AUTO;
             MARGINS margins { 0, 0, 0, 0 };
             DwmExtendFrameIntoClientArea(self.hwnd, &margins);
         } break;
-        case pane::window_backdrop::mica: {
+        case window_backdrop::mica: {
             backdrop = DWM_SYSTEMBACKDROP_TYPE::DWMSBT_MAINWINDOW;
             MARGINS margins { -1, -1, -1, -1 };
             DwmExtendFrameIntoClientArea(self.hwnd, &margins);
         } break;
-        case pane::window_backdrop::mica_alt: {
+        case window_backdrop::mica_alt: {
             backdrop = DWM_SYSTEMBACKDROP_TYPE::DWMSBT_TABBEDWINDOW;
             MARGINS margins { -1, -1, -1, -1 };
             DwmExtendFrameIntoClientArea(self.hwnd, &margins);
         } break;
-        case pane::window_backdrop::acrylic: {
+        case window_backdrop::acrylic: {
             backdrop = DWM_SYSTEMBACKDROP_TYPE::DWMSBT_TRANSIENTWINDOW;
             MARGINS margins { -1, -1, -1, -1 };
             DwmExtendFrameIntoClientArea(self.hwnd, &margins);
         } break;
-        case pane::window_backdrop::none: {
+        case window_backdrop::none: {
             backdrop = DWM_SYSTEMBACKDROP_TYPE::DWMSBT_NONE;
             MARGINS margins { 0, 0, 0, 0 };
             DwmExtendFrameIntoClientArea(self.hwnd, &margins);
@@ -150,21 +148,21 @@ auto window_handle::backdrop(this const Self& self, pane::window_backdrop window
     return DwmSetWindowAttribute(self.hwnd, backdrop, &backdrop, sizeof(backdrop));
 }
 
-auto window_handle::border_color(this const Self& self, const pane::color& color) -> HRESULT {
+auto window_handle::border_color(this const Self& self, const color& color) -> HRESULT {
     auto caption_color { color.to_colorref() };
 
     return DwmSetWindowAttribute(
         self.hwnd, DWMWINDOWATTRIBUTE::DWMWA_BORDER_COLOR, &caption_color, sizeof(caption_color));
 }
 
-auto window_handle::caption_color(this const Self& self, const pane::color& color) -> HRESULT {
+auto window_handle::caption_color(this const Self& self, const color& color) -> HRESULT {
     auto caption_color { color.to_colorref() };
 
     return DwmSetWindowAttribute(
         self.hwnd, DWMWINDOWATTRIBUTE::DWMWA_CAPTION_COLOR, &caption_color, sizeof(caption_color));
 }
 
-auto window_handle::text_color(this const Self& self, const pane::color& color) -> HRESULT {
+auto window_handle::text_color(this const Self& self, const color& color) -> HRESULT {
     auto text_color { color.to_colorref() };
 
     return DwmSetWindowAttribute(
@@ -179,14 +177,14 @@ auto window_handle::operator()(this Self& self, HWND hwnd) -> void {
     }
 }
 
-window_background::window_background(const pane::color& color)
+window_background::window_background(const color& color)
     : hbrush { color.to_hbrush() } { }
 
 window_background::~window_background() { DeleteObject(this->hbrush); }
 
 auto window_background::operator()(this const Self& self) -> HBRUSH { return self.hbrush; }
 
-auto window_background::operator()(this Self& self, const pane::color& color) -> void {
+auto window_background::operator()(this Self& self, const color& color) -> void {
     if (!self.hbrush) {
         self.hbrush = color.to_hbrush();
     } else {
@@ -211,33 +209,32 @@ auto window_icon::operator()(this Self& self, HICON hicon) -> void {
     }
 }
 
-window::window(pane::window_config&& window_config,
-               std::function<LRESULT(const pane::window_message&)>&& window_procedure)
+window::window(struct window_config&& window_config,
+               std::function<LRESULT(const window_message&)>&& window_procedure)
     : window_config { std::move(window_config) },
       window_procedure { std::move(window_procedure) } {
     auto& self = *this;
 
-    pane::window_class<Self> window_class { u8"pane_window" };
+    window_class<Self> window_class { u8"pane_window" };
 
-    CreateWindowExW(
-        0,
-        window_class.data.lpszClassName,
-        reinterpret_cast<const wchar_t*>(pane::to_utf16(self.window_config.title).data()),
-        self.window_config.parent_hwnd
-            ? WS_CHILDWINDOW
-            : WS_OVERLAPPEDWINDOW | (self.window_config.visible ? WS_VISIBLE : 0),
-        CW_USEDEFAULT,
-        CW_USEDEFAULT,
-        CW_USEDEFAULT,
-        CW_USEDEFAULT,
-        self.window_config.parent_hwnd,
-        self.window_config.parent_hwnd ? reinterpret_cast<HMENU>(self.window_handle.id) : nullptr,
-        window_class.data.hInstance,
-        &self);
+    CreateWindowExW(0,
+                    window_class.data.lpszClassName,
+                    reinterpret_cast<const wchar_t*>(to_utf16(self.window_config.title).data()),
+                    self.window_config.parent_hwnd
+                        ? WS_CHILDWINDOW
+                        : WS_OVERLAPPEDWINDOW | (self.window_config.visible ? WS_VISIBLE : 0),
+                    CW_USEDEFAULT,
+                    CW_USEDEFAULT,
+                    CW_USEDEFAULT,
+                    CW_USEDEFAULT,
+                    self.window_config.parent_hwnd,
+                    self.window_config.parent_hwnd ? reinterpret_cast<HMENU>(self.window_handle.id)
+                                                   : nullptr,
+                    window_class.data.hInstance,
+                    &self);
 }
 
-auto window::default_procedure(this Self& self, const pane::window_message& window_message)
-    -> LRESULT {
+auto window::default_procedure(this Self& self, const window_message& window_message) -> LRESULT {
     switch (window_message.msg) {
             // https://learn.microsoft.com/en-us/windows/win32/hidpi/wm-dpichanged
         case WM_DPICHANGED: {
@@ -279,11 +276,11 @@ auto window::default_procedure(this Self& self, const pane::window_message& wind
     return window_message.default_procedure();
 }
 
-auto window_manager::insert(this Self& self, const pane::window_handle& window_handle) -> void {
+auto window_manager::insert(this Self& self, const window_handle& window_handle) -> void {
     self.set.insert(window_handle());
 }
 
-auto window_manager::erase(this Self& self, const pane::window_handle& window_handle) -> void {
+auto window_manager::erase(this Self& self, const window_handle& window_handle) -> void {
     self.set.erase(window_handle());
 
     if (self.set.empty()) {
