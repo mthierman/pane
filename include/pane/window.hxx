@@ -278,13 +278,15 @@ struct window_config final {
     HWND parent_hwnd { nullptr };
 };
 
+template <typename T> using window_procedure_fn = std::function<LRESULT(const window_message&, T&)>;
+
 struct window final {
     using Self = window;
+    using procedure_fn = window_procedure_fn<Self>;
 
     friend struct window_class<Self>;
 
-    window(window_config&& window_config = {},
-           std::function<LRESULT(const window_message&, Self&)>&& window_procedure = {});
+    window(window_config&& window_config = {}, procedure_fn&& window_procedure = {});
     ~window() = default;
 
     window(const Self&) = delete;
@@ -299,7 +301,7 @@ struct window final {
     window_background window_background { system::dark_mode() ? window_config.bg_dark
                                                               : window_config.bg_light };
     window_handle window_handle;
-    std::function<LRESULT(const window_message&, Self&)> window_procedure;
+    procedure_fn window_procedure;
 };
 
 struct window_manager final {

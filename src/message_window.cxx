@@ -1,8 +1,7 @@
 #include <pane/message_window.hxx>
 
 namespace pane {
-message_window::message_window(
-    std::function<LRESULT(const window_message&, Self&)>&& window_procedure)
+message_window::message_window(procedure_fn&& window_procedure)
     : window_procedure { std::move(window_procedure) } {
     auto& self = *this;
 

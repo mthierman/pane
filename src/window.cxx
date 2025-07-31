@@ -206,8 +206,7 @@ auto window_icon::operator()(this Self& self, HICON hicon) -> void {
     }
 }
 
-window::window(struct window_config&& window_config,
-               std::function<LRESULT(const window_message&, Self&)>&& window_procedure)
+window::window(struct window_config&& window_config, procedure_fn&& window_procedure)
     : window_config { std::move(window_config) },
       window_procedure { std::move(window_procedure) } {
     auto& self = *this;
