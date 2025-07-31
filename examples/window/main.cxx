@@ -7,8 +7,8 @@ enum struct message : int { NEW_WINDOW = WM_APP, CLOSE_WINDOW };
 template <typename T> struct window_manager final {
     using Self = window_manager;
 
-    auto add(this Self& self, std::unique_ptr<T> window) -> void {
-        self.windows.push_back(std::move(window));
+    template <typename... Args> auto add(this Self& self, Args&&... args) -> void {
+        self.windows.push_back(std::move(std::make_unique<T>(std::forward<Args>(args)...)));
     }
 
     auto remove(this Self& self, HWND hwnd) -> void {
@@ -34,8 +34,8 @@ auto wWinMain(HINSTANCE /* hinstance */,
     pane::message_window app { [&](const pane::window_message& window_message,
                                    pane::message_window& app) -> LRESULT {
         if (window_message.msg == +message::NEW_WINDOW) {
-            window_manager.add(std::make_unique<pane::window>(
-                pane::window_config { u8"window",
+            window_manager.add(
+                pane::window_config { u8"windows",
                                       pane::color { 0, 0, 0, 255 },
                                       pane::color { 255, 255, 255, 255 },
                                       true,
@@ -79,7 +79,7 @@ auto wWinMain(HINSTANCE /* hinstance */,
                 }
 
                 return window.default_procedure(window_message);
-            }));
+            });
         }
 
         if (window_message.msg == +message::CLOSE_WINDOW) {
