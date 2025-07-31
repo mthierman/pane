@@ -1,6 +1,4 @@
 #include <pane/pane.hxx>
-#include <memory>
-#include <vector>
 
 enum struct message : int { NEW_WINDOW = WM_APP, CLOSE_WINDOW };
 
@@ -23,9 +21,6 @@ auto wWinMain(HINSTANCE /* hinstance */,
                                    [&](const pane::window_message& window_message,
                                        pane::window& window) -> LRESULT {
                     switch (window_message.msg) {
-                        case WM_CREATE: {
-                        } break;
-
                         case WM_CLOSE: {
                             return pane::window_message { app.window_handle(),
                                                           +message::CLOSE_WINDOW,
