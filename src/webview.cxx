@@ -245,10 +245,8 @@ webview::webview(pane::window_config&& window_config,
                                     self.favicon_status
                                         = Gdiplus::Bitmap { icon_stream }.GetHICON(&self.favicon());
 
-                                    SendMessageW(self.window_handle(),
-                                                 std::to_underlying(message::FAVICON_CHANGED),
-                                                 0,
-                                                 0);
+                                    self.window_handle.message_self(
+                                        message::FAVICON_CHANGED, 0, self.favicon());
 
                                     return S_OK;
                                 }).Get());
