@@ -17,6 +17,23 @@ template <typename T> constexpr auto msg(T msg) -> UINT { return std::to_underly
 struct window_message final {
     using Self = window_message;
 
+    template <typename M = UINT, typename W = WPARAM, typename L = LPARAM>
+    static auto send(HWND hwnd, M msg, W wparam = 0, L lparam = 0) -> LRESULT {
+        return dispatch_message(SendMessageW, hwnd, msg, wparam, lparam);
+    }
+
+    template <typename M = UINT, typename W = WPARAM, typename L = LPARAM>
+    static auto post(HWND hwnd, M msg, W wparam = 0, L lparam = 0) -> BOOL {
+        return dispatch_message(PostMessageW, hwnd, msg, wparam, lparam);
+    }
+
+    auto default_procedure(this const Self& self) -> LRESULT;
+
+    HWND hwnd { nullptr };
+    UINT event { 0 };
+    WPARAM wparam { 0 };
+    LPARAM lparam { 0 };
+
 private:
     template <typename Fn, typename M = UINT, typename W = WPARAM, typename L = LPARAM>
         requires std::is_enum_v<M> || std::is_integral_v<M>
@@ -42,24 +59,6 @@ private:
             }
         }(lparam));
     }
-
-public:
-    template <typename M = UINT, typename W = WPARAM, typename L = LPARAM>
-    static auto send(HWND hwnd, M msg, W wparam = 0, L lparam = 0) -> LRESULT {
-        return dispatch_message(SendMessageW, hwnd, msg, wparam, lparam);
-    }
-
-    template <typename M = UINT, typename W = WPARAM, typename L = LPARAM>
-    static auto post(HWND hwnd, M msg, W wparam = 0, L lparam = 0) -> BOOL {
-        return dispatch_message(PostMessageW, hwnd, msg, wparam, lparam);
-    }
-
-    auto default_procedure(this const Self& self) -> LRESULT;
-
-    HWND hwnd { nullptr };
-    UINT event { 0 };
-    WPARAM wparam { 0 };
-    LPARAM lparam { 0 };
 };
 
 template <typename T> struct window_class final {
