@@ -1,10 +1,12 @@
 #pragma once
 #include <Windows.h>
+#include <functional>
 #include <string>
 #include <pane/text.hxx>
 #include <pane/system.hxx>
 #include <pane/window.hxx>
 
+namespace pane {
 template <typename T> struct message_window_class final {
     using Self = message_window_class;
 
@@ -83,3 +85,24 @@ private:
         return window_message.default_procedure();
     }
 };
+
+struct message_window final {
+    using Self = message_window;
+
+    friend struct message_window_class<Self>;
+
+    message_window(std::function<LRESULT(const window_message&)>&& window_procedure = {});
+    ~message_window() = default;
+
+    message_window(const Self&) = delete;
+    auto operator=(const Self&) -> Self& = delete;
+
+    message_window(Self&&) noexcept = delete;
+    auto operator=(Self&&) noexcept -> Self& = delete;
+
+    auto default_procedure(this Self& self, const window_message& window_message) -> LRESULT;
+
+    window_handle window_handle;
+    std::function<LRESULT(const window_message&)> window_procedure;
+};
+} // namespace pane
