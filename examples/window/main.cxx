@@ -11,21 +11,19 @@ struct window_manager final {
     using Self = window_manager;
 
     auto add(this Self& self) -> void {
-        self.windows.emplace(
-            std::chrono::steady_clock::now(),
-            std::make_unique<pane::window>(
-                pane::window_config { u8"window",
-                                      pane::color { 0, 0, 0, 255 },
-                                      pane::color { 255, 255, 255, 255 },
-                                      true,
-                                      nullptr },
-                [&](const pane::window_message& window_message, pane::window& window) -> LRESULT {
+        auto window { std::make_unique<pane::window>(
+            pane::window_config { u8"window",
+                                  pane::color { 0, 0, 0, 255 },
+                                  pane::color { 255, 255, 255, 255 },
+                                  true,
+                                  nullptr },
+            [&](const pane::window_message& window_message, pane::window& window) -> LRESULT {
             switch (window_message.msg) {
                 case WM_CREATE: {
                 } break;
 
                 case WM_CLOSE: {
-                    // self.remove(window);
+                    self.remove(window.window_handle());
                 } break;
 
                 case WM_KEYDOWN: {
@@ -41,14 +39,20 @@ struct window_manager final {
             }
 
             return window.default_procedure(window_message);
-        }));
+        }) };
+
+        self.windows.emplace(window->window_handle(), std::move(window));
     }
 
-    // auto remove(this Self& self, const pane::window& window) -> void {
-    //     self.windows.erase(window.window_handle());
-    // }
+    auto remove(this Self& self, HWND hwnd) -> void {
+        self.windows.erase(hwnd);
 
-    std::map<std::chrono::steady_clock::time_point, std::unique_ptr<pane::window>> windows;
+        if (self.windows.empty()) {
+            PostQuitMessage(0);
+        }
+    }
+
+    std::map<HWND, std::unique_ptr<pane::window>> windows;
 };
 
 // https://learn.microsoft.com/en-us/windows/win32/learnwin32/winmain--the-application-entry-point
