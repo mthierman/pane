@@ -14,7 +14,7 @@ auto wWinMain(HINSTANCE /* hinstance */,
         [&](const pane::window_message& window_message, pane::window& window) -> LRESULT {
         switch (window_message.msg) {
             case WM_CLOSE: {
-                window_manager.remove(window.window_handle());
+                window_manager.destroy(window.window_handle());
             } break;
 
             case WM_KEYDOWN: {
@@ -22,7 +22,7 @@ auto wWinMain(HINSTANCE /* hinstance */,
                     case 'N': {
                         if (pane::input::is_key_down(VK_LCONTROL)
                             || pane::input::is_key_down(VK_RCONTROL)) {
-                            window_manager.add();
+                            window_manager.create();
                         }
                     } break;
                     case 'W': {

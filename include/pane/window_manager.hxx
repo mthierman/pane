@@ -11,7 +11,7 @@ template <typename T> struct window_manager final {
                    window::procedure_fn window_procedure = {})
         : window_config { window_config },
           window_procedure { window_procedure } {
-        this->add();
+        this->create();
     }
     window_manager(struct window_config window_config = {},
                    struct webview_config webview_config = {},
@@ -19,7 +19,7 @@ template <typename T> struct window_manager final {
         : window_config { window_config },
           webview_config { webview_config },
           window_procedure { window_procedure } {
-        this->add();
+        this->create();
     }
     ~window_manager() = default;
 
@@ -29,7 +29,7 @@ template <typename T> struct window_manager final {
     window_manager(Self&&) noexcept = delete;
     auto operator=(Self&&) noexcept -> Self& = delete;
 
-    auto add(this Self& self) -> void {
+    auto create(this Self& self) -> void {
         if constexpr (std::is_same_v<T, pane::window>) {
             self.windows.push_back(std::make_unique<T>(self.window_config, self.window_procedure));
         }
@@ -39,7 +39,7 @@ template <typename T> struct window_manager final {
         }
     }
 
-    template <typename U> auto remove(this Self& self, U hwnd) -> void {
+    template <typename U> auto destroy(this Self& self, U hwnd) -> void {
         std::erase_if(self.windows, [&](const auto& window) {
             return window && window->window_handle() == reinterpret_cast<HWND>(hwnd);
         });
