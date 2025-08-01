@@ -6,9 +6,9 @@
 namespace pane {
 auto webview_token::operator()(this Self& self) -> EventRegistrationToken* { return &self.token; }
 
-webview::webview(struct window_config&& window_config,
-                 struct webview_config&& webview_config,
-                 procedure_fn&& window_procedure)
+webview::webview(struct window_config window_config,
+                 struct webview_config webview_config,
+                 procedure_fn window_procedure)
     : window_config { std::move(window_config) },
       webview_config { std::move(webview_config) },
       window_procedure { std::move(window_procedure) } {

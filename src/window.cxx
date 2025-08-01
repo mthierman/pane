@@ -206,9 +206,9 @@ auto window_icon::operator()(this Self& self, HICON hicon) -> void {
     }
 }
 
-window::window(const struct window_config& window_config, const procedure_fn& window_procedure)
-    : window_config { window_config },
-      window_procedure { window_procedure } {
+window::window(struct window_config window_config, procedure_fn window_procedure)
+    : window_config { std::move(window_config) },
+      window_procedure { std::move(window_procedure) } {
     auto& self = *this;
 
     window_class<Self> window_class { u8"pane_window" };

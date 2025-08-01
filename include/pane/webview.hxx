@@ -96,9 +96,9 @@ struct webview final {
 
     friend struct window_class<Self>;
 
-    webview(window_config&& window_config = {},
-            webview_config&& webview_config = {},
-            procedure_fn&& window_procedure = {});
+    webview(struct window_config window_config = {},
+            struct webview_config webview_config = {},
+            procedure_fn window_procedure = {});
     ~webview() = default;
 
     webview(const Self&) = delete;
