@@ -292,10 +292,11 @@ webview::webview(struct window_config window_config,
 auto webview::default_procedure(this Self& self, const window_message& window_message) -> LRESULT {
     switch (window_message.msg) {
         case WM_CLOSE: {
-            if (self.webview_config.virtual_host_name_map) {
-                self.core->ClearVirtualHostNameToFolderMapping(reinterpret_cast<const wchar_t*>(
-                    to_utf16((*self.webview_config.virtual_host_name_map).first).data()));
-            }
+            // TODO: FIX CRASHING HERE CALLING TO_UTF16 (string length/resize problem)
+            // if (self.webview_config.virtual_host_name_map) {
+            //     self.core->ClearVirtualHostNameToFolderMapping(reinterpret_cast<const wchar_t*>(
+            //         to_utf16((*self.webview_config.virtual_host_name_map).first).data()));
+            // }
 
             self.controller->remove_AcceleratorKeyPressed(*self.token.accelerator_key_pressed());
             self.core->remove_FaviconChanged(*self.token.favicon_changed());

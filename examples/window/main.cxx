@@ -6,7 +6,7 @@ auto wWinMain(HINSTANCE /* hinstance */,
               PWSTR /* pcmdline */,
               int /* ncmdshow */) -> int {
     pane::window_manager<pane::window> window_manager {
-        { u8"windows",
+        { u8"window",
           pane::color { 0, 0, 0, 255 },
           pane::color { 255, 255, 255, 255 },
           true,
