@@ -31,12 +31,11 @@ template <typename T> struct window_manager final {
 
     auto add(this Self& self) -> void {
         if constexpr (std::is_same_v<T, pane::window>) {
-            self.windows.push_back(
-                std::move(std::make_unique<T>(self.window_config, self.window_procedure)));
+            self.windows.push_back(std::make_unique<T>(self.window_config, self.window_procedure));
         }
         if constexpr (std::is_same_v<T, pane::webview>) {
-            self.windows.push_back(std::move(std::make_unique<T>(
-                self.window_config, self.webview_config, self.window_procedure)));
+            self.windows.push_back(std::make_unique<T>(
+                self.window_config, self.webview_config, self.window_procedure));
         }
     }
 
