@@ -325,6 +325,20 @@ struct window final {
 template <typename T> struct window_manager final {
     using Self = window_manager;
 
+    window_manager(struct window_config window_config = {},
+                   window::procedure_fn window_procedure = {})
+        : window_config { window_config },
+          window_procedure { window_procedure } {
+        this->add(this->window_config, this->window_procedure);
+    }
+    ~window_manager() = default;
+
+    window_manager(const Self&) = delete;
+    auto operator=(const Self&) -> Self& = delete;
+
+    window_manager(Self&&) noexcept = delete;
+    auto operator=(Self&&) noexcept -> Self& = delete;
+
     template <typename... Args> auto add(this Self& self, Args&&... args) -> void {
         self.windows.push_back(std::move(std::make_unique<T>(std::forward<Args>(args)...)));
     }
@@ -340,5 +354,7 @@ template <typename T> struct window_manager final {
     }
 
     std::vector<std::unique_ptr<T>> windows;
+    window_config window_config;
+    window::procedure_fn window_procedure;
 };
 } // namespace pane
