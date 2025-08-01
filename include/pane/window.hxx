@@ -288,7 +288,7 @@ struct window final {
 
     friend struct window_class<Self>;
 
-    window(window_config&& window_config = {}, procedure_fn&& window_procedure = {});
+    window(const window_config& window_config = {}, const procedure_fn& window_procedure = {});
     ~window() = default;
 
     window(const Self&) = delete;
