@@ -26,7 +26,7 @@ auto wWinMain(HINSTANCE /* hinstance */,
                         if (pane::input::is_key_down(VK_LCONTROL)
                             || pane::input::is_key_down(VK_RCONTROL)) {
                             //
-                            window_manager.add(std::move(config), std::move(procedure));
+                            window_manager.add(config, procedure);
                         }
                     } break;
                     case 'W': {
