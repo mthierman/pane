@@ -11,7 +11,7 @@ template <typename T> struct window_manager final {
                    window::procedure_fn window_procedure = {})
         : window_config { window_config },
           window_procedure { window_procedure } {
-        this->add(this->window_config, this->window_procedure);
+        this->add();
     }
     window_manager(struct window_config window_config = {},
                    struct webview_config webview_config = {},
@@ -19,7 +19,7 @@ template <typename T> struct window_manager final {
         : window_config { window_config },
           webview_config { webview_config },
           window_procedure { window_procedure } {
-        this->add(this->window_config, this->webview_config, this->window_procedure);
+        this->add();
     }
     ~window_manager() = default;
 
@@ -29,8 +29,15 @@ template <typename T> struct window_manager final {
     window_manager(Self&&) noexcept = delete;
     auto operator=(Self&&) noexcept -> Self& = delete;
 
-    template <typename... Args> auto add(this Self& self, Args&&... args) -> void {
-        self.windows.push_back(std::move(std::make_unique<T>(std::forward<Args>(args)...)));
+    auto add(this Self& self) -> void {
+        if constexpr (std::is_same_v<T, pane::window>) {
+            self.windows.push_back(
+                std::move(std::make_unique<T>(self.window_config, self.window_procedure)));
+        }
+        if constexpr (std::is_same_v<T, pane::webview>) {
+            self.windows.push_back(std::move(std::make_unique<T>(
+                self.window_config, self.webview_config, self.window_procedure)));
+        }
     }
 
     template <typename U> auto remove(this Self& self, U hwnd) -> void {
@@ -43,6 +50,7 @@ template <typename T> struct window_manager final {
         }
     }
 
+private:
     std::vector<std::unique_ptr<T>> windows;
     window_config window_config;
     webview_config webview_config;

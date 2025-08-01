@@ -22,8 +22,7 @@ auto wWinMain(HINSTANCE /* hinstance */,
                     case 'N': {
                         if (pane::input::is_key_down(VK_LCONTROL)
                             || pane::input::is_key_down(VK_RCONTROL)) {
-                            window_manager.add(window_manager.window_config,
-                                               window_manager.window_procedure);
+                            window_manager.add();
                         }
                     } break;
                     case 'W': {
