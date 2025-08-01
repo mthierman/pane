@@ -293,14 +293,17 @@ auto webview::default_procedure(this Self& self, const window_message& window_me
     switch (window_message.msg) {
         case WM_CLOSE: {
             // TODO: FIX CRASHING HERE CALLING TO_UTF16 (string length/resize problem)
+            // TODO UPDATE: THIS IS ALL CRASHING BECAUSE WE ARE DESTROYING WINDOW FIRST IN CALLBACK
+            // PROCEDURE!
+            //
             // if (self.webview_config.virtual_host_name_map) {
             //     self.core->ClearVirtualHostNameToFolderMapping(reinterpret_cast<const wchar_t*>(
             //         to_utf16((*self.webview_config.virtual_host_name_map).first).data()));
             // }
 
-            self.controller->remove_AcceleratorKeyPressed(*self.token.accelerator_key_pressed());
-            self.core->remove_FaviconChanged(*self.token.favicon_changed());
-            self.core->remove_NavigationCompleted(*self.token.navigation_completed());
+            // self.controller->remove_AcceleratorKeyPressed(*self.token.accelerator_key_pressed());
+            // self.core->remove_FaviconChanged(*self.token.favicon_changed());
+            // self.core->remove_NavigationCompleted(*self.token.navigation_completed());
         } break;
 
         // https://learn.microsoft.com/en-us/windows/win32/hidpi/wm-dpichanged
