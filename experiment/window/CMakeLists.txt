@@ -5,6 +5,7 @@ add_executable(
 target_sources(
     experiment_window
     PRIVATE "main.cxx"
+            "window.cxx"
             "../../data/app.manifest"
     )
 target_link_libraries(
