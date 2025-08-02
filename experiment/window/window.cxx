@@ -1,5 +1,6 @@
 #include "window.hxx"
 
+namespace pane {
 auto module_handle() -> std::expected<HMODULE, HRESULT> {
     HMODULE hmodule;
 
@@ -15,25 +16,21 @@ auto module_handle() -> std::expected<HMODULE, HRESULT> {
     return hmodule;
 }
 
-auto window_message::default_procedure(this const Self& self) -> LRESULT {
-    return DefWindowProcW(self.hwnd, self.msg, self.wparam, self.lparam);
+auto message::default_procedure() const -> LRESULT {
+    return DefWindowProcW(this->hwnd, this->msg, this->wparam, this->lparam);
 }
 
-auto window_message::send(this const Self& self, HWND hwnd) -> LRESULT {
-    return SendMessageW(hwnd ? hwnd : self.hwnd, self.msg, self.wparam, self.lparam);
+auto message::send(HWND hwnd) const -> LRESULT {
+    return SendMessageW(hwnd ? hwnd : this->hwnd, this->msg, this->wparam, this->lparam);
 }
 
-auto window_message::post(this const Self& self, HWND hwnd) -> BOOL {
-    return PostMessageW(hwnd ? hwnd : self.hwnd, self.msg, self.wparam, self.lparam);
+auto message::post(HWND hwnd) const -> BOOL {
+    return PostMessageW(hwnd ? hwnd : this->hwnd, this->msg, this->wparam, this->lparam);
 }
 
 message_window::message_window() {
-    auto& self = *this;
-
-    message_window_class<Self> window_class;
-
     CreateWindowExW(0,
-                    window_class.data.lpszClassName,
+                    this->window_class.data().lpszClassName,
                     nullptr,
                     0,
                     0,
@@ -42,11 +39,11 @@ message_window::message_window() {
                     0,
                     HWND_MESSAGE,
                     nullptr,
-                    window_class.data.hInstance,
-                    &self);
+                    this->window_class.data().hInstance,
+                    this);
 }
 
-auto message_window::default_procedure(this Self& self, const window_message& window_message)
-    -> LRESULT {
-    return window_message.default_procedure();
+auto message_window::default_procedure(const message& message) -> LRESULT {
+    return message.default_procedure();
 }
+} // namespace pane
