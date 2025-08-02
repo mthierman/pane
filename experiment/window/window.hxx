@@ -116,9 +116,5 @@ struct window final {
 
     auto default_procedure(this Self& self, const window_message& window_message) -> LRESULT;
 
-    window_config window_config;
-    window_background window_background { system::dark_mode() ? window_config.bg_dark
-                                                              : window_config.bg_light };
-    window_handle window_handle;
-    procedure_fn window_procedure;
+    wil::unique_hwnd hwnd;
 };
