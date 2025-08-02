@@ -1,6 +1,7 @@
 #pragma once
 #include <Windows.h>
 #include <expected>
+#include <string>
 #include <wil/resource.h>
 
 namespace pane {
@@ -18,8 +19,9 @@ struct message final {
 };
 
 template <typename T> struct window_class final {
-    window_class()
-        : wndclass { WNDCLASSEXW { { sizeof(WNDCLASSEXW) },
+    window_class(std::wstring name)
+        : name { name },
+          wndclass { WNDCLASSEXW { { sizeof(WNDCLASSEXW) },
                                    { 0 },
                                    { procedure },
                                    { 0 },
@@ -29,7 +31,7 @@ template <typename T> struct window_class final {
                                    { nullptr },
                                    { nullptr },
                                    { nullptr },
-                                   { L"windowclass" },
+                                   { name.data() },
                                    { nullptr } } } {
         if (GetClassInfoExW(this->data().hInstance, this->data().lpszClassName, &this->data())
             == 0) {
@@ -67,9 +69,14 @@ private:
             } break;
         }
 
+        if (auto instance { static_cast<T*>(GetWindowLongPtrW(message.hwnd, 0)) }) {
+            instance->procedure(message);
+        }
+
         return message.default_procedure();
     }
 
+    std::wstring name;
     WNDCLASSEXW wndclass;
 };
 
@@ -83,14 +90,14 @@ struct message_window final {
     message_window(message_window&&) noexcept = delete;
     auto operator=(message_window&&) noexcept -> message_window& = delete;
 
-    auto default_procedure(const message& message) -> LRESULT;
+    auto procedure(const message& message) -> LRESULT;
 
-    window_class<message_window> window_class;
+    window_class<message_window> window_class { L"message_window" };
     wil::unique_hwnd hwnd;
 };
 
 struct window final {
-    window();
+    window(std::wstring name = {});
     ~window() = default;
 
     window(const window&) = delete;
@@ -99,9 +106,12 @@ struct window final {
     window(window&&) noexcept = delete;
     auto operator=(window&&) noexcept -> window& = delete;
 
-    auto default_procedure(const message& message) -> LRESULT;
+    auto procedure(const message& message) -> LRESULT;
 
-    window_class<window> window_class;
+    window_class<window> window_class { L"window" };
     wil::unique_hwnd hwnd;
+
+private:
+    std::wstring name;
 };
 } // namespace pane

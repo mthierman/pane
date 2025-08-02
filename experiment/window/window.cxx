@@ -43,7 +43,25 @@ message_window::message_window() {
                     this);
 }
 
-auto message_window::default_procedure(const message& message) -> LRESULT {
+auto message_window::procedure(const message& message) -> LRESULT {
     return message.default_procedure();
 }
+
+window::window(std::wstring name)
+    : name { name } {
+    CreateWindowExW(0,
+                    this->window_class.data().lpszClassName,
+                    name.data(),
+                    WS_OVERLAPPEDWINDOW,
+                    CW_USEDEFAULT,
+                    CW_USEDEFAULT,
+                    CW_USEDEFAULT,
+                    CW_USEDEFAULT,
+                    nullptr,
+                    nullptr,
+                    this->window_class.data().hInstance,
+                    this);
+}
+
+auto window::procedure(const message& message) -> LRESULT { return message.default_procedure(); }
 } // namespace pane
