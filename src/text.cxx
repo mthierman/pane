@@ -53,4 +53,12 @@ auto to_u8string(std::string_view string) -> std::u8string {
 auto to_u16string(std::wstring_view string) -> std::u16string {
     return { string.begin(), string.end() };
 }
+
+auto to_string(std::u8string_view string) -> std::string {
+    return { string.begin(), string.end() };
+}
+
+auto to_wstring(std::u16string_view string) -> std::wstring {
+    return { string.begin(), string.end() };
+}
 } // namespace pane
