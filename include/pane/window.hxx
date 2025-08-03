@@ -2,7 +2,6 @@
 #include <Windows.h>
 #include <wrl.h>
 #include <chrono>
-#include <functional>
 #include <string>
 #include <type_traits>
 #include <pane/color.hxx>
@@ -86,72 +85,76 @@ private:
     static auto procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) -> LRESULT {
         window_message window_message { hwnd, msg, wparam, lparam };
 
-        // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-nccreate
-        if (msg == WM_NCCREATE) {
-            if (auto create_struct { reinterpret_cast<CREATESTRUCTW*>(window_message.lparam) }) {
-                if (auto create_params { create_struct->lpCreateParams }) {
-                    auto& self { *(static_cast<T*>(create_params)) };
-
-                    SetWindowLongPtrW(window_message.hwnd, 0, reinterpret_cast<LONG_PTR>(&self));
-                    self.window_handle(window_message.hwnd);
-                    self.window_handle.position.dpi = GetDpiForWindow(window_message.hwnd);
-                    self.window_handle.position.scale_factor
-                        = static_cast<float>(self.window_handle.position.dpi)
-                        / static_cast<float>(USER_DEFAULT_SCREEN_DPI);
-                    SendMessageW(window_message.hwnd, WM_SETTINGCHANGE, 0, 0);
+        switch (window_message.msg) {
+                // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-nccreate
+            case WM_NCCREATE: {
+                if (auto create_struct {
+                        reinterpret_cast<CREATESTRUCTW*>(window_message.lparam) }) {
+                    if (auto window { static_cast<T*>(create_struct->lpCreateParams) }) {
+                        SetWindowLongPtrW(
+                            window_message.hwnd, 0, reinterpret_cast<LONG_PTR>(&window));
+                        window->window_handle(window_message.hwnd);
+                        // self.window_handle.position.dpi = GetDpiForWindow(window_message.hwnd);
+                        // self.window_handle.position.scale_factor
+                        //     = static_cast<float>(self.window_handle.position.dpi)
+                        //     / static_cast<float>(USER_DEFAULT_SCREEN_DPI);
+                        // SendMessageW(window_message.hwnd, WM_SETTINGCHANGE, 0, 0);
+                    }
                 }
-            }
+            } break;
+
+                // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-ncdestroy
+            case WM_NCDESTROY: {
+                SetWindowLongPtrW(window_message.hwnd, 0, reinterpret_cast<LONG_PTR>(nullptr));
+            } break;
         }
 
-        if (auto instance { GetWindowLongPtrW(hwnd, 0) }) {
-            auto& self { *(reinterpret_cast<T*>(instance)) };
-
+        if (auto window { reinterpret_cast<T*>(GetWindowLongPtrW(hwnd, 0)) }) {
             switch (window_message.msg) {
-                    // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-ncdestroy
-                case WM_NCDESTROY: {
-                    self.window_handle(nullptr);
-                    SetWindowLongPtrW(window_message.hwnd, 0, reinterpret_cast<LONG_PTR>(nullptr));
-                } break;
+                //     // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-ncdestroy
+                // case WM_NCDESTROY: {
+                //     self.window_handle(nullptr);
+                //     SetWindowLongPtrW(window_message.hwnd, 0,
+                //     reinterpret_cast<LONG_PTR>(nullptr));
+                // } break;
 
-                    // https://learn.microsoft.com/en-us/windows/win32/hidpi/wm-dpichanged
-                case WM_DPICHANGED: {
-                    self.window_handle.position.dpi = HIWORD(window_message.wparam);
-                    self.window_handle.position.scale_factor
-                        = static_cast<float>(self.window_handle.position.dpi)
-                        / static_cast<float>(USER_DEFAULT_SCREEN_DPI);
-                } break;
+                //     // https://learn.microsoft.com/en-us/windows/win32/hidpi/wm-dpichanged
+                // case WM_DPICHANGED: {
+                //     self.window_handle.position.dpi = HIWORD(window_message.wparam);
+                //     self.window_handle.position.scale_factor
+                //         = static_cast<float>(self.window_handle.position.dpi)
+                //         / static_cast<float>(USER_DEFAULT_SCREEN_DPI);
+                // } break;
 
-                    // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-windowposchanged
-                case WM_WINDOWPOSCHANGED: {
-                    GetClientRect(window_message.hwnd, &self.window_handle.position.client_rect);
+                //     // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-windowposchanged
+                // case WM_WINDOWPOSCHANGED: {
+                //     GetClientRect(window_message.hwnd, &self.window_handle.position.client_rect);
 
-                    if (auto style { GetWindowLongPtrW(window_message.hwnd, GWL_STYLE) };
-                        style & WS_OVERLAPPEDWINDOW) {
-                        GetWindowPlacement(window_message.hwnd,
-                                           &self.window_handle.position.window_placement);
-                    }
+                //     if (auto style { GetWindowLongPtrW(window_message.hwnd, GWL_STYLE) };
+                //         style & WS_OVERLAPPEDWINDOW) {
+                //         GetWindowPlacement(window_message.hwnd,
+                //                            &self.window_handle.position.window_placement);
+                //     }
 
-                    WINDOWPLACEMENT window_placement { sizeof(WINDOWPLACEMENT) };
-                    GetWindowPlacement(window_message.hwnd, &window_placement);
+                //     WINDOWPLACEMENT window_placement { sizeof(WINDOWPLACEMENT) };
+                //     GetWindowPlacement(window_message.hwnd, &window_placement);
 
-                    self.window_handle.position.maximized
-                        = window_placement.showCmd == SW_SHOWMAXIMIZED;
+                //     self.window_handle.position.maximized
+                //         = window_placement.showCmd == SW_SHOWMAXIMIZED;
 
-                    self.window_handle.position.minimized
-                        = window_placement.showCmd == SW_SHOWMINIMIZED;
-                } break;
+                //     self.window_handle.position.minimized
+                //         = window_placement.showCmd == SW_SHOWMINIMIZED;
+                // } break;
 
-                    // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-settingchange
-                case WM_SETTINGCHANGE: {
-                    auto dark_mode { system::dark_mode() };
-                    self.window_background(dark_mode ? self.window_config.bg_dark
-                                                     : self.window_config.bg_light);
-                    self.window_handle.immersive_dark_mode(dark_mode);
-                } break;
-            }
+                //     // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-settingchange
+                // case WM_SETTINGCHANGE: {
+                //     auto dark_mode { system::dark_mode() };
+                //     self.window_background(dark_mode ? self.window_config.bg_dark
+                //                                      : self.window_config.bg_light);
+                //     self.window_handle.immersive_dark_mode(dark_mode);
+                // } break;
 
-            if (self.window_procedure) {
-                return self.window_procedure(window_message, self);
+                return window->procedure(window_message);
             }
         }
 
@@ -272,15 +275,30 @@ struct window_config final {
     HWND parent_hwnd { nullptr };
 };
 
-template <typename T> using window_procedure_fn = std::function<LRESULT(const window_message&, T&)>;
-
-struct window final {
+template <typename T> struct window {
     using Self = window;
-    using procedure_fn = window_procedure_fn<Self>;
 
-    friend struct window_class<Self>;
+    // friend struct window_class<Self>;
 
-    window(struct window_config window_config = {}, procedure_fn window_procedure = {});
+    window(struct window_config window_config)
+        : window_config { std::move(window_config) } {
+        CreateWindowExW(
+            0,
+            this->window_class.data.lpszClassName,
+            reinterpret_cast<const wchar_t*>(to_utf16(this->window_config.title).data()),
+            this->window_config.parent_hwnd
+                ? WS_CHILDWINDOW
+                : WS_OVERLAPPEDWINDOW | (this->window_config.visible ? WS_VISIBLE : 0),
+            CW_USEDEFAULT,
+            CW_USEDEFAULT,
+            CW_USEDEFAULT,
+            CW_USEDEFAULT,
+            this->window_config.parent_hwnd,
+            this->window_config.parent_hwnd ? reinterpret_cast<HMENU>(this->window_handle.id)
+                                            : nullptr,
+            this->window_class.data.hInstance,
+            this);
+    }
     ~window() = default;
 
     window(const Self&) = delete;
@@ -289,13 +307,54 @@ struct window final {
     window(Self&&) noexcept = delete;
     auto operator=(Self&&) noexcept -> Self& = delete;
 
-    auto default_procedure(this Self& self, const window_message& window_message) -> LRESULT;
+    // auto procedure(this Self& self, const window_message& window_message) -> LRESULT;
+    auto procedure(this T& self, const window_message& window_message) -> LRESULT {
+        // switch (window_message.msg) {
+        //         // https://learn.microsoft.com/en-us/windows/win32/hidpi/wm-dpichanged
+        //     case WM_DPICHANGED: {
+        //         auto const suggested_rect { reinterpret_cast<RECT*>(window_message.lparam) };
+        //         SetWindowPos(window_message.hwnd,
+        //                      nullptr,
+        //                      suggested_rect->left,
+        //                      suggested_rect->top,
+        //                      suggested_rect->right - suggested_rect->left,
+        //                      suggested_rect->bottom - suggested_rect->top,
+        //                      SWP_NOZORDER | SWP_NOACTIVATE);
 
+        //         return 0;
+        //     } break;
+
+        //         // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-erasebkgnd
+        //     case WM_ERASEBKGND: {
+        //         GetClientRect(window_message.hwnd, &self.window_handle.position.client_rect);
+
+        //         FillRect(reinterpret_cast<HDC>(window_message.wparam),
+        //                  &self.window_handle.position.client_rect,
+        //                  self.window_background());
+
+        //         return 1;
+        //     } break;
+
+        //         // https://learn.microsoft.com/en-us/windows/win32/inputdev/wm-keydown
+        //     case WM_KEYDOWN: {
+        //         switch (window_message.wparam) {
+        //             case VK_F11: {
+        //                 self.window_handle.toggle_fullscreen();
+
+        //                 return 0;
+        //             } break;
+        //         }
+        //     } break;
+        // }
+
+        return self.message_handler(window_message);
+    }
+
+    window_class<T> window_class { u8"pane_window" };
     window_config window_config;
     window_background window_background { system::dark_mode() ? window_config.bg_dark
                                                               : window_config.bg_light };
     window_handle window_handle;
-    procedure_fn window_procedure;
 };
 
 // struct window_manager final {
