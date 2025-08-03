@@ -60,7 +60,7 @@ template <typename T> struct window_class final {
         : name { to_utf16(name) },
           data { WNDCLASSEXW { { sizeof(WNDCLASSEXW) },
                                { 0 },
-                               { class_window_procedure },
+                               { procedure },
                                { 0 },
                                { sizeof(T*) },
                                { this->instance },
@@ -70,17 +70,11 @@ template <typename T> struct window_class final {
                                { nullptr },
                                { reinterpret_cast<const wchar_t*>(this->name.data()) },
                                { this->icon } } } {
-        auto& self = *this;
-
-        if (GetClassInfoExW(self.data.hInstance, self.data.lpszClassName, &self.data) == 0) {
-            RegisterClassExW(&self.data);
+        if (GetClassInfoExW(this->data.hInstance, this->data.lpszClassName, &this->data) == 0) {
+            RegisterClassExW(&this->data);
         };
     }
-    ~window_class() {
-        auto& self = *this;
-
-        UnregisterClassW(self.data.lpszClassName, self.data.hInstance);
-    }
+    ~window_class() { UnregisterClassW(this->data.lpszClassName, this->data.hInstance); }
 
     window_class(const Self&) = delete;
     auto operator=(const Self&) -> Self& = delete;
@@ -89,17 +83,7 @@ template <typename T> struct window_class final {
     auto operator=(Self&&) noexcept -> Self& = delete;
 
 private:
-    std::u16string name;
-    HINSTANCE instance { system::module_handle().value_or(nullptr) };
-    HICON icon { system::resource_icon().value_or(system::application_icon()) };
-    HCURSOR cursor { system::arrow_cursor() };
-
-public:
-    WNDCLASSEXW data;
-
-private:
-    static auto class_window_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
-        -> LRESULT {
+    static auto procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) -> LRESULT {
         window_message window_message { hwnd, msg, wparam, lparam };
 
         // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-nccreate
@@ -173,6 +157,15 @@ private:
 
         return window_message.default_procedure();
     }
+
+public:
+    WNDCLASSEXW data;
+
+private:
+    std::u16string name;
+    HINSTANCE instance { system::module_handle().value_or(nullptr) };
+    HICON icon { system::resource_icon().value_or(system::application_icon()) };
+    HCURSOR cursor { system::arrow_cursor() };
 };
 
 struct window_position final {
