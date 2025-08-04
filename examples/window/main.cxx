@@ -5,6 +5,7 @@ struct test_window : pane::window<test_window> {
         switch (window_message.msg) {
             case WM_CLOSE: {
                 // window_manager.destroy(window.window_handle());
+                PostQuitMessage(0);
             } break;
 
             case WM_KEYDOWN: {
