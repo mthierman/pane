@@ -4,7 +4,7 @@ struct test_window : pane::window<test_window> {
     using base = pane::window<test_window>;
     using base::base;
 
-    auto message_handler(const pane::window_message& window_message) -> LRESULT {
+    auto handle_message(const pane::window_message& window_message) -> LRESULT {
         switch (window_message.msg) {
             case WM_CLOSE: {
                 // window_manager.destroy(window.window_handle());

@@ -346,7 +346,7 @@ template <typename T> struct window {
         //     } break;
         // }
 
-        return self.message_handler(window_message);
+        return self.handle_message(window_message);
     }
 
     window_class<T> window_class { u8"pane_window" };
