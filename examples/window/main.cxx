@@ -4,8 +4,7 @@ struct test_window : pane::window<test_window> {
     using pane::window<test_window>::window;
     using Self = test_window;
 
-    auto handle_message(this const Self& self, const pane::window_message& window_message)
-        -> LRESULT {
+    auto handle_message(const pane::window_message& window_message) -> LRESULT {
         switch (window_message.msg) {
             case WM_CREATE: {
                 pane::debug("test_window: WM_CREATE");

@@ -64,7 +64,9 @@ auto color::to_hex(this const Self& self) -> std::u8string {
 auto color::to_colorref(this const Self& self) -> COLORREF { return RGB(self.r, self.g, self.b); }
 
 auto color::to_hbrush(this const Self& self) -> HBRUSH {
-    return CreateSolidBrush(self.to_colorref());
+    auto brush = CreateSolidBrush(self.to_colorref());
+    assert(brush);
+    return brush;
 }
 
 auto color::to_winrt_color(this const Self& self) -> winrt::Windows::UI::Color {

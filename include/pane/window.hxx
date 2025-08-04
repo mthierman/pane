@@ -298,7 +298,7 @@ struct window_config final {
 template <typename T> struct window {
     using Self = window;
 
-    friend struct window_class<Self>;
+    // friend struct window_class<Self>;
 
     window(struct window_config window_config)
         : window_config { std::move(window_config) } {
@@ -327,7 +327,7 @@ template <typename T> struct window {
     window(Self&&) noexcept = delete;
     auto operator=(Self&&) noexcept -> Self& = delete;
 
-    auto procedure(this T& self, const window_message& window_message) -> LRESULT {
+    auto procedure(const window_message& window_message) -> LRESULT {
         switch (window_message.msg) {
             case WM_CREATE: {
                 pane::debug("window: WM_CREATE");
@@ -335,12 +335,11 @@ template <typename T> struct window {
 
             case WM_ERASEBKGND: {
                 // pane::debug("window: WM_ERASEBKGND");
-                RECT rect;
-                GetClientRect(window_message.hwnd, &rect);
-                // auto brush { CreateSolidBrush(RGB(0, 0, 0)) };
-                self.window_background(pane::color { 0, 0, 0 });
-                FillRect(
-                    reinterpret_cast<HDC>(window_message.wparam), &rect, self.window_background());
+                GetClientRect(static_cast<T*>(this)->window_handle(),
+                              &static_cast<T*>(this)->window_handle.position.client_rect);
+                FillRect(reinterpret_cast<HDC>(window_message.wparam),
+                         &static_cast<T*>(this)->window_handle.position.client_rect,
+                         static_cast<T*>(this)->bg.get());
 
                 return 1;
             } break;
@@ -384,14 +383,15 @@ template <typename T> struct window {
         //     } break;
         // }
 
-        return self.handle_message(window_message);
+        return static_cast<T*>(this)->handle_message(window_message);
     }
 
     window_class<T> window_class { u8"pane_window" };
     window_config window_config;
-    window_background window_background { system::dark_mode() ? window_config.bg_dark
-                                                              : window_config.bg_light };
+    window_background window_background { pane::color { 0, 0, 0, 255 } };
     window_handle window_handle;
+
+    wil::unique_hbrush bg { CreateSolidBrush(RGB(255, 255, 0)) };
 };
 
 // struct window_manager final {
