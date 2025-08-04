@@ -48,13 +48,13 @@ target_sources(
             "src/input.cxx"
             "src/math.cxx"
             "src/message_box.cxx"
-            "src/message_window.cxx"
+            # "src/message_window.cxx"
             "src/process.cxx"
             "src/string.cxx"
             "src/system.cxx"
             "src/text.cxx"
             "src/url.cxx"
-            "src/webview.cxx"
+            # "src/webview.cxx"
             "src/window.cxx"
     )
 target_link_libraries(
@@ -74,5 +74,5 @@ target_link_libraries(
 if(PROJECT_IS_TOP_LEVEL)
     add_subdirectory("examples")
     add_subdirectory("task")
-    add_subdirectory("browser")
+    # add_subdirectory("browser")
 endif()

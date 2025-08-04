@@ -161,14 +161,14 @@ private:
         return window_message.default_procedure();
     }
 
-public:
-    WNDCLASSEXW data;
-
 private:
     std::u16string name;
     HINSTANCE instance { system::module_handle().value_or(nullptr) };
     HICON icon { system::resource_icon().value_or(system::application_icon()) };
     HCURSOR cursor { system::arrow_cursor() };
+
+public:
+    WNDCLASSEXW data;
 };
 
 struct window_position final {
