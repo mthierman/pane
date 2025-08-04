@@ -14,6 +14,8 @@
 #include <WebView2EnvironmentOptions.h>
 #include <ada.h>
 
+#include <pane/debug.hxx>
+
 namespace pane {
 struct window_message final {
     using Self = window_message;
@@ -110,6 +112,12 @@ private:
         }
 
         if (auto window { reinterpret_cast<T*>(GetWindowLongPtrW(hwnd, 0)) }) {
+            switch (window_message.msg) {
+                case WM_CREATE: {
+                    pane::debug("window_class: WM_CREATE");
+                } break;
+            }
+
             // switch (window_message.msg) {
             //         // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-ncdestroy
             //     case WM_NCDESTROY: {
@@ -308,6 +316,12 @@ template <typename T> struct window {
     auto operator=(Self&&) noexcept -> Self& = delete;
 
     auto procedure(this T& self, const window_message& window_message) -> LRESULT {
+        switch (window_message.msg) {
+            case WM_CREATE: {
+                pane::debug("window: WM_CREATE");
+            } break;
+        }
+
         // switch (window_message.msg) {
         //         // https://learn.microsoft.com/en-us/windows/win32/hidpi/wm-dpichanged
         //     case WM_DPICHANGED: {
