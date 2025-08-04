@@ -1,6 +1,9 @@
 #include <pane/pane.hxx>
 
 struct test_window : pane::window<test_window> {
+    using base = pane::window<test_window>;
+    using base::base;
+
     auto message_handler(const pane::window_message& window_message) -> LRESULT {
         switch (window_message.msg) {
             case WM_CLOSE: {
@@ -35,11 +38,11 @@ auto wWinMain(HINSTANCE /* hinstance */,
               HINSTANCE /* hprevinstance */,
               PWSTR /* pcmdline */,
               int /* ncmdshow */) -> int {
-    test_window window { pane::window_config { u8"window",
-                                               pane::color { 0, 0, 0, 255 },
-                                               pane::color { 255, 255, 255, 255 },
-                                               true,
-                                               nullptr } };
+    test_window window { { u8"window",
+                           pane::color { 0, 0, 0, 255 },
+                           pane::color { 255, 255, 255, 255 },
+                           true,
+                           nullptr } };
 
     return pane::system::message_loop();
 }
