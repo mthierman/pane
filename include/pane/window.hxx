@@ -90,9 +90,12 @@ private:
         switch (window_message.msg) {
                 // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-nccreate
             case WM_NCCREATE: {
+                pane::debug("window_class: WM_NCCREATE");
                 if (auto create_struct {
                         reinterpret_cast<CREATESTRUCTW*>(window_message.lparam) }) {
+                    pane::debug("window_class: create_struct exists");
                     if (auto window { static_cast<T*>(create_struct->lpCreateParams) }) {
+                        pane::debug("window_class: window* exists");
                         SetWindowLongPtrW(
                             window_message.hwnd, 0, reinterpret_cast<LONG_PTR>(&window));
                         window->window_handle(window_message.hwnd);
@@ -115,7 +118,16 @@ private:
             switch (window_message.msg) {
                 case WM_CREATE: {
                     pane::debug("window_class: WM_CREATE");
+                    // SendMessageW(window_message.hwnd, WM_SETTINGCHANGE, 0, 0);
                 } break;
+
+                    // case WM_SETTINGCHANGE: {
+                    //     pane::debug("window_class: WM_SETTINGCHANGE");
+                    //     auto dark_mode { system::dark_mode() };
+                    //     window->window_background(dark_mode ? window->window_config.bg_dark
+                    //                                         : window->window_config.bg_light);
+                    //     window->window_handle.immersive_dark_mode(dark_mode);
+                    // } break;
             }
 
             // switch (window_message.msg) {
@@ -208,7 +220,7 @@ struct window_background final {
     auto operator()(this const Self& self) -> HBRUSH;
     auto operator()(this Self& self, const color& color) -> void;
 
-private:
+    // private:
     HBRUSH hbrush { nullptr };
 };
 
@@ -286,7 +298,7 @@ struct window_config final {
 template <typename T> struct window {
     using Self = window;
 
-    // friend struct window_class<Self>;
+    friend struct window_class<Self>;
 
     window(struct window_config window_config)
         : window_config { std::move(window_config) } {
@@ -319,6 +331,18 @@ template <typename T> struct window {
         switch (window_message.msg) {
             case WM_CREATE: {
                 pane::debug("window: WM_CREATE");
+            } break;
+
+            case WM_ERASEBKGND: {
+                // pane::debug("window: WM_ERASEBKGND");
+                RECT rect;
+                GetClientRect(window_message.hwnd, &rect);
+                // auto brush { CreateSolidBrush(RGB(0, 0, 0)) };
+                self.window_background(pane::color { 0, 0, 0 });
+                FillRect(
+                    reinterpret_cast<HDC>(window_message.wparam), &rect, self.window_background());
+
+                return 1;
             } break;
         }
 

@@ -43,8 +43,8 @@ auto wWinMain(HINSTANCE /* hinstance */,
               PWSTR /* pcmdline */,
               int /* ncmdshow */) -> int {
     test_window window { { u8"window",
-                           pane::color { 0, 0, 0, 255 },
-                           pane::color { 255, 255, 255, 255 },
+                           pane::color { 0, 255, 0, 255 },
+                           pane::color { 255, 0, 0, 255 },
                            true,
                            nullptr } };
 
