@@ -87,11 +87,10 @@ private:
 
 struct message_window final {
     using Self = message_window;
-    using procedure_fn = window_procedure_fn<Self>;
 
     friend struct message_window_class<Self>;
 
-    message_window(procedure_fn&& window_procedure = {});
+    message_window();
     ~message_window() = default;
 
     message_window(const Self&) = delete;
@@ -103,6 +102,5 @@ struct message_window final {
     auto default_procedure(this Self& self, const window_message& window_message) -> LRESULT;
 
     window_handle window_handle;
-    procedure_fn window_procedure;
 };
 } // namespace pane

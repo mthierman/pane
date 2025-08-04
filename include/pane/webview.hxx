@@ -85,7 +85,6 @@ private:
 
 struct webview final {
     using Self = webview;
-    using procedure_fn = window_procedure_fn<Self>;
 
     enum struct message : int {
         WEBVIEW_CREATE = WM_USER,
@@ -96,9 +95,7 @@ struct webview final {
 
     friend struct window_class<Self>;
 
-    webview(struct window_config window_config = {},
-            struct webview_config webview_config = {},
-            procedure_fn window_procedure = {});
+    webview(struct window_config window_config = {}, struct webview_config webview_config = {});
     ~webview() = default;
 
     webview(const Self&) = delete;
@@ -118,7 +115,6 @@ struct webview final {
     window_background window_background { system::dark_mode() ? window_config.bg_dark
                                                               : window_config.bg_light };
     window_handle window_handle;
-    procedure_fn window_procedure;
 
     struct event_token {
         webview_token accelerator_key_pressed;

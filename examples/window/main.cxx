@@ -1,20 +1,10 @@
 #include <pane/pane.hxx>
 
-// https://learn.microsoft.com/en-us/windows/win32/learnwin32/winmain--the-application-entry-point
-auto wWinMain(HINSTANCE /* hinstance */,
-              HINSTANCE /* hprevinstance */,
-              PWSTR /* pcmdline */,
-              int /* ncmdshow */) -> int {
-    pane::window_manager<pane::window> window_manager {
-        { u8"window",
-          pane::color { 0, 0, 0, 255 },
-          pane::color { 255, 255, 255, 255 },
-          true,
-          nullptr },
-        [&](const pane::window_message& window_message, pane::window& window) -> LRESULT {
+struct test_window : pane::window<test_window> {
+    auto message_handler(const pane::window_message& window_message) -> LRESULT {
         switch (window_message.msg) {
             case WM_CLOSE: {
-                window_manager.destroy(window.window_handle());
+                // window_manager.destroy(window.window_handle());
             } break;
 
             case WM_KEYDOWN: {
@@ -22,22 +12,33 @@ auto wWinMain(HINSTANCE /* hinstance */,
                     case 'N': {
                         if (pane::input::is_key_down(VK_LCONTROL)
                             || pane::input::is_key_down(VK_RCONTROL)) {
-                            window_manager.create();
+                            // window_manager.create();
                         }
                     } break;
                     case 'W': {
                         if (pane::input::is_key_down(VK_LCONTROL)
                             || pane::input::is_key_down(VK_RCONTROL)) {
-                            SendMessageW(window.window_handle(), WM_CLOSE, 0, 0);
+                            // SendMessageW(window.window_handle(), WM_CLOSE, 0, 0);
                         }
                     } break;
                 }
             } break;
         }
 
-        return window.default_procedure(window_message);
+        return window_message.default_procedure();
     }
-    };
+};
+
+// https://learn.microsoft.com/en-us/windows/win32/learnwin32/winmain--the-application-entry-point
+auto wWinMain(HINSTANCE /* hinstance */,
+              HINSTANCE /* hprevinstance */,
+              PWSTR /* pcmdline */,
+              int /* ncmdshow */) -> int {
+    test_window window { pane::window_config { u8"window",
+                                               pane::color { 0, 0, 0, 255 },
+                                               pane::color { 255, 255, 255, 255 },
+                                               true,
+                                               nullptr } };
 
     return pane::system::message_loop();
 }
