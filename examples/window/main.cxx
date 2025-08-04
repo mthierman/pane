@@ -1,14 +1,12 @@
 #include <pane/pane.hxx>
 
 struct test_window : pane::window<test_window> {
-    using base = pane::window<test_window>;
-    using base::base;
+    using pane::window<test_window>::window;
 
     auto handle_message(const pane::window_message& window_message) -> LRESULT {
         switch (window_message.msg) {
             case WM_CLOSE: {
-                // window_manager.destroy(window.window_handle());
-                PostQuitMessage(0);
+                pane::system::quit();
             } break;
 
             case WM_KEYDOWN: {
