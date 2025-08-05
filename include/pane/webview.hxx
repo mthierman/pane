@@ -112,9 +112,7 @@ template <typename T> struct webview {
             this->window_class.data.hInstance,
             this);
 
-        if (this->window_config.visible) {
-            this->window_handle.activate();
-        }
+        this->window_handle.activate(this->window_config.visible);
 
         if (this->environment_options) {
             if (!this->webview_config.environment_options.AdditionalBrowserArguments.empty()) {

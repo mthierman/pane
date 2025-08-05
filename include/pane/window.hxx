@@ -118,7 +118,7 @@ struct window_handle final {
     window_handle(Self&&) noexcept = delete;
     auto operator=(Self&&) noexcept -> Self& = delete;
 
-    auto activate(this const Self& self) -> bool;
+    auto activate(this const Self& self, bool visible) -> bool;
     auto show(this const Self& self) -> bool;
     auto hide(this const Self& self) -> bool;
 
@@ -307,9 +307,7 @@ template <typename T> struct window {
             this->window_class.data.hInstance,
             this);
 
-        if (this->window_config.visible) {
-            this->window_handle.activate();
-        }
+        this->window_handle.activate(this->window_config.visible);
     }
     ~window() = default;
 

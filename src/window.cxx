@@ -51,12 +51,21 @@ window_handle::window_handle(HWND hwnd)
 
 window_handle::~window_handle() { DestroyWindow(this->hwnd); }
 
-auto window_handle::activate(this const Self& self) -> bool {
+auto window_handle::activate(this const Self& self, bool visible) -> bool {
+    bool activated;
+
     self.cloak(true);
-    auto activate { ShowWindow(self.hwnd, SW_NORMAL) };
+
+    if (visible) {
+        activated = ShowWindow(self.hwnd, SW_NORMAL);
+    } else {
+        activated = ShowWindow(self.hwnd, SW_NORMAL);
+        ShowWindow(self.hwnd, SW_HIDE);
+    }
+
     self.cloak(false);
 
-    return activate;
+    return activated;
 }
 
 auto window_handle::show(this const Self& self) -> bool { return ShowWindow(self.hwnd, SW_SHOW); }
