@@ -101,9 +101,7 @@ template <typename T> struct webview {
             0,
             this->window_class.data.lpszClassName,
             reinterpret_cast<const wchar_t*>(to_utf16(this->window_config.title).data()),
-            this->window_config.parent_hwnd
-                ? WS_CHILDWINDOW
-                : WS_OVERLAPPEDWINDOW | (this->window_config.visible ? WS_VISIBLE : 0),
+            this->window_config.parent_hwnd ? WS_CHILDWINDOW : WS_OVERLAPPEDWINDOW,
             CW_USEDEFAULT,
             CW_USEDEFAULT,
             CW_USEDEFAULT,
@@ -113,6 +111,10 @@ template <typename T> struct webview {
                                             : nullptr,
             this->window_class.data.hInstance,
             this);
+
+        if (this->window_config.visible) {
+            this->window_handle.activate();
+        }
 
         if (this->environment_options) {
             if (!this->webview_config.environment_options.AdditionalBrowserArguments.empty()) {
