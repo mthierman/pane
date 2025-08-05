@@ -14,6 +14,38 @@ auto window_message::default_procedure(this const Self& self) -> LRESULT {
     return DefWindowProcW(self.hwnd, self.msg, self.wparam, self.lparam);
 }
 
+window_background::window_background(const color& color)
+    : hbrush { color.to_hbrush() } { }
+
+window_background::~window_background() { DeleteObject(this->hbrush); }
+
+auto window_background::operator()(this const Self& self) -> HBRUSH { return self.hbrush; }
+
+auto window_background::operator()(this Self& self, const color& color) -> void {
+    if (!self.hbrush) {
+        self.hbrush = color.to_hbrush();
+    } else {
+        DeleteObject(self.hbrush);
+        self.hbrush = color.to_hbrush();
+    }
+}
+
+window_icon::window_icon(HICON hicon)
+    : hicon { hicon } { }
+
+window_icon::~window_icon() { DestroyIcon(this->hicon); }
+
+auto window_icon::operator()(this Self& self) -> HICON& { return self.hicon; }
+
+auto window_icon::operator()(this Self& self, HICON hicon) -> void {
+    if (!self.hicon) {
+        self.hicon = hicon;
+    } else {
+        DestroyIcon(self.hicon);
+        self.hicon = hicon;
+    }
+}
+
 window_handle::window_handle(HWND hwnd)
     : hwnd { hwnd } { }
 
@@ -171,38 +203,6 @@ auto window_handle::operator()(this const Self& self) -> HWND { return self.hwnd
 auto window_handle::operator()(this Self& self, HWND hwnd) -> void {
     if (!self.hwnd) {
         self.hwnd = hwnd;
-    }
-}
-
-window_background::window_background(const color& color)
-    : hbrush { color.to_hbrush() } { }
-
-window_background::~window_background() { DeleteObject(this->hbrush); }
-
-auto window_background::operator()(this const Self& self) -> HBRUSH { return self.hbrush; }
-
-auto window_background::operator()(this Self& self, const color& color) -> void {
-    if (!self.hbrush) {
-        self.hbrush = color.to_hbrush();
-    } else {
-        DeleteObject(self.hbrush);
-        self.hbrush = color.to_hbrush();
-    }
-}
-
-window_icon::window_icon(HICON hicon)
-    : hicon { hicon } { }
-
-window_icon::~window_icon() { DestroyIcon(this->hicon); }
-
-auto window_icon::operator()(this Self& self) -> HICON& { return self.hicon; }
-
-auto window_icon::operator()(this Self& self, HICON hicon) -> void {
-    if (!self.hicon) {
-        self.hicon = hicon;
-    } else {
-        DestroyIcon(self.hicon);
-        self.hicon = hicon;
     }
 }
 

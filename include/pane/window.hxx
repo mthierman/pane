@@ -28,6 +28,30 @@ struct window_message final {
     LPARAM lparam { 0 };
 };
 
+template <typename M = UINT, typename W = WPARAM, typename L = LPARAM>
+    requires std::is_enum_v<M> || std::is_integral_v<M>
+constexpr auto make_window_message(HWND hwnd, M msg, W wparam, L lparam) {
+    return window_message { hwnd, []<typename U>(U value) -> UINT {
+        if constexpr (std::is_enum_v<U>) {
+            return static_cast<UINT>(std::to_underlying(value));
+        } else {
+            return static_cast<UINT>(value);
+        }
+    }(msg), []<typename U>(U value) -> WPARAM {
+        if constexpr (std::is_pointer_v<U>) {
+            return reinterpret_cast<WPARAM>(value);
+        } else {
+            return static_cast<WPARAM>(value);
+        }
+    }(wparam), []<typename U>(U value) -> LPARAM {
+        if constexpr (std::is_pointer_v<U>) {
+            return reinterpret_cast<LPARAM>(value);
+        } else {
+            return static_cast<LPARAM>(value);
+        }
+    }(lparam) };
+}
+
 struct window_position final {
     using Self = window_position;
 
@@ -59,6 +83,26 @@ struct window_background final {
 
 private:
     HBRUSH hbrush { nullptr };
+};
+
+struct window_icon final {
+    using Self = window_icon;
+
+    window_icon() = default;
+    explicit window_icon(HICON hicon);
+    ~window_icon();
+
+    window_icon(const Self&) = delete;
+    auto operator=(const Self&) -> Self& = delete;
+
+    window_icon(Self&&) noexcept = delete;
+    auto operator=(Self&&) noexcept -> Self& = delete;
+
+    auto operator()(this Self& self) -> HICON&;
+    auto operator()(this Self& self, HICON hicon) -> void;
+
+private:
+    HICON hicon { nullptr };
 };
 
 struct window_handle final {
@@ -103,50 +147,6 @@ struct window_handle final {
 private:
     HWND hwnd { nullptr };
 };
-
-struct window_icon final {
-    using Self = window_icon;
-
-    window_icon() = default;
-    explicit window_icon(HICON hicon);
-    ~window_icon();
-
-    window_icon(const Self&) = delete;
-    auto operator=(const Self&) -> Self& = delete;
-
-    window_icon(Self&&) noexcept = delete;
-    auto operator=(Self&&) noexcept -> Self& = delete;
-
-    auto operator()(this Self& self) -> HICON&;
-    auto operator()(this Self& self, HICON hicon) -> void;
-
-private:
-    HICON hicon { nullptr };
-};
-
-template <typename M = UINT, typename W = WPARAM, typename L = LPARAM>
-    requires std::is_enum_v<M> || std::is_integral_v<M>
-constexpr auto make_window_message(HWND hwnd, M msg, W wparam, L lparam) {
-    return window_message { hwnd, []<typename U>(U value) -> UINT {
-        if constexpr (std::is_enum_v<U>) {
-            return static_cast<UINT>(std::to_underlying(value));
-        } else {
-            return static_cast<UINT>(value);
-        }
-    }(msg), []<typename U>(U value) -> WPARAM {
-        if constexpr (std::is_pointer_v<U>) {
-            return reinterpret_cast<WPARAM>(value);
-        } else {
-            return static_cast<WPARAM>(value);
-        }
-    }(wparam), []<typename U>(U value) -> LPARAM {
-        if constexpr (std::is_pointer_v<U>) {
-            return reinterpret_cast<LPARAM>(value);
-        } else {
-            return static_cast<LPARAM>(value);
-        }
-    }(lparam) };
-}
 
 template <typename T> struct window_class final {
     using Self = window_class;
@@ -324,10 +324,11 @@ template <typename T> struct window {
     auto default_procedure(this T& self, const window_message& window_message) -> LRESULT {
         switch (window_message.msg) {
             case WM_ERASEBKGND: {
-                RECT rect;
-                GetClientRect(window_message.hwnd, &rect);
-                FillRect(
-                    reinterpret_cast<HDC>(window_message.wparam), &rect, self.window_background());
+                RECT client_rect;
+                GetClientRect(window_message.hwnd, &client_rect);
+                FillRect(reinterpret_cast<HDC>(window_message.wparam),
+                         &client_rect,
+                         self.window_background());
 
                 return 1;
             } break;

@@ -431,10 +431,11 @@ template <typename T> struct webview {
 
                 // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-erasebkgnd
             case WM_ERASEBKGND: {
-                RECT rect;
-                GetClientRect(window_message.hwnd, &rect);
-                FillRect(
-                    reinterpret_cast<HDC>(window_message.wparam), &rect, self.window_background());
+                RECT client_rect;
+                GetClientRect(window_message.hwnd, &client_rect);
+                FillRect(reinterpret_cast<HDC>(window_message.wparam),
+                         &client_rect,
+                         self.window_background());
 
                 return 1;
             } break;
