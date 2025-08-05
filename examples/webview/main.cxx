@@ -37,12 +37,12 @@ auto wWinMain(HINSTANCE /* hinstance */,
               HINSTANCE /* hprevinstance */,
               PWSTR /* pcmdline */,
               int /* ncmdshow */) -> int {
-    webview window { { u8"window",
+    webview window { { u8"webview",
                        pane::color { 0, 0, 0, 255 },
                        pane::color { 255, 255, 255, 255 },
                        true,
                        nullptr },
-                     { u8"about:blank" } };
+                     { u8"https://www.google.com/" } };
 
     return pane::system::message_loop();
 }
