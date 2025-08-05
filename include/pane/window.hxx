@@ -14,8 +14,6 @@
 #include <WebView2EnvironmentOptions.h>
 #include <ada.h>
 
-#include <pane/debug.hxx>
-
 namespace pane {
 struct window_message final {
     using Self = window_message;
@@ -90,14 +88,11 @@ private:
         switch (window_message.msg) {
                 // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-nccreate
             case WM_NCCREATE: {
-                pane::debug("window_class: WM_NCCREATE");
                 if (auto create_struct {
                         reinterpret_cast<CREATESTRUCTW*>(window_message.lparam) }) {
-                    pane::debug("window_class: create_struct exists");
                     if (auto window { static_cast<T*>(create_struct->lpCreateParams) }) {
-                        pane::debug("window_class: window* exists");
                         SetWindowLongPtrW(
-                            window_message.hwnd, 0, reinterpret_cast<LONG_PTR>(&window));
+                            window_message.hwnd, 0, reinterpret_cast<LONG_PTR>(window));
                         window->window_handle(window_message.hwnd);
                         // self.window_handle.position.dpi = GetDpiForWindow(window_message.hwnd);
                         // self.window_handle.position.scale_factor
@@ -116,18 +111,12 @@ private:
 
         if (auto window { reinterpret_cast<T*>(GetWindowLongPtrW(hwnd, 0)) }) {
             switch (window_message.msg) {
-                case WM_CREATE: {
-                    pane::debug("window_class: WM_CREATE");
-                    // SendMessageW(window_message.hwnd, WM_SETTINGCHANGE, 0, 0);
-                } break;
-
-                    // case WM_SETTINGCHANGE: {
-                    //     pane::debug("window_class: WM_SETTINGCHANGE");
-                    //     auto dark_mode { system::dark_mode() };
-                    //     window->window_background(dark_mode ? window->window_config.bg_dark
-                    //                                         : window->window_config.bg_light);
-                    //     window->window_handle.immersive_dark_mode(dark_mode);
-                    // } break;
+                // case WM_SETTINGCHANGE: {
+                //     auto dark_mode { system::dark_mode() };
+                //     window->window_background(dark_mode ? window->window_config.bg_dark
+                //                                         : window->window_config.bg_light);
+                //     window->window_handle.immersive_dark_mode(dark_mode);
+                // } break;
             }
 
             // switch (window_message.msg) {
@@ -220,7 +209,7 @@ struct window_background final {
     auto operator()(this const Self& self) -> HBRUSH;
     auto operator()(this Self& self, const color& color) -> void;
 
-    // private:
+private:
     HBRUSH hbrush { nullptr };
 };
 
@@ -298,8 +287,6 @@ struct window_config final {
 template <typename T> struct window {
     using Self = window;
 
-    // friend struct window_class<Self>;
-
     window(struct window_config window_config)
         : window_config { std::move(window_config) } {
         CreateWindowExW(
@@ -327,19 +314,13 @@ template <typename T> struct window {
     window(Self&&) noexcept = delete;
     auto operator=(Self&&) noexcept -> Self& = delete;
 
-    auto procedure(const window_message& window_message) -> LRESULT {
+    auto procedure(this T& self, const window_message& window_message) -> LRESULT {
         switch (window_message.msg) {
-            case WM_CREATE: {
-                pane::debug("window: WM_CREATE");
-            } break;
-
             case WM_ERASEBKGND: {
-                // pane::debug("window: WM_ERASEBKGND");
-                GetClientRect(static_cast<T*>(this)->window_handle(),
-                              &static_cast<T*>(this)->window_handle.position.client_rect);
-                FillRect(reinterpret_cast<HDC>(window_message.wparam),
-                         &static_cast<T*>(this)->window_handle.position.client_rect,
-                         static_cast<T*>(this)->bg.get());
+                RECT rect;
+                GetClientRect(window_message.hwnd, &rect);
+                FillRect(
+                    reinterpret_cast<HDC>(window_message.wparam), &rect, self.window_background());
 
                 return 1;
             } break;
@@ -383,15 +364,14 @@ template <typename T> struct window {
         //     } break;
         // }
 
-        return static_cast<T*>(this)->handle_message(window_message);
+        return self.message_handler(window_message);
     }
 
     window_class<T> window_class { u8"pane_window" };
     window_config window_config;
-    window_background window_background { pane::color { 0, 0, 0, 255 } };
+    window_background window_background { pane::system::dark_mode() ? window_config.bg_dark
+                                                                    : window_config.bg_light };
     window_handle window_handle;
-
-    wil::unique_hbrush bg { CreateSolidBrush(RGB(255, 255, 0)) };
 };
 
 // struct window_manager final {
