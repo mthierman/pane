@@ -1,6 +1,33 @@
 #include <pane/pane.hxx>
 #include <optional>
 
+struct webview : pane::webview<webview> {
+    using Self = webview;
+    using pane::webview<webview>::webview;
+
+    auto message_handler(this Self& self, const pane::window_message& window_message) -> LRESULT {
+        switch (window_message.msg) {
+            using enum pane::webview_messages;
+
+            case WM_DESTROY: {
+                pane::system::quit();
+
+                return 0;
+            } break;
+
+            case +favicon_changed: {
+                self.window_handle.icon(self.favicon());
+            } break;
+
+            case +navigation_completed: {
+                self.window_handle.title(self.current_title);
+            } break;
+        }
+
+        return self.default_procedure(window_message);
+    }
+};
+
 auto wWinMain(HINSTANCE /* hinstance */,
               HINSTANCE /* hprevinstance */,
               PWSTR /* pcmdline */,
@@ -16,34 +43,10 @@ auto wWinMain(HINSTANCE /* hinstance */,
         }
     }
 
-    auto browser { pane::webview {
-        { u8"Browser",
-          pane::color { 0, 0, 0, 255 },
-          pane::color { 255, 255, 255, 255 },
-          true,
-          nullptr },
+    auto browser { webview {
+        { u8"", pane::color { 0, 0, 0, 255 }, pane::color { 255, 255, 255, 255 }, true, nullptr },
         { home_page.value_or(u8"about:blank") },
-        [&](const pane::window_message& window_message, pane::webview& browser) -> LRESULT {
-        switch (window_message.msg) {
-            using enum pane::webview::message;
-
-            case WM_DESTROY: {
-                pane::system::quit();
-
-                return 0;
-            } break;
-
-            case +FAVICON_CHANGED: {
-                browser.window_handle.icon(browser.favicon());
-            } break;
-
-            case +NAVIGATION_COMPLETED: {
-                browser.window_handle.title(browser.current_title);
-            } break;
-        }
-
-        return browser.default_procedure(window_message);
-    } } };
+    } };
 
     return pane::system::message_loop();
 }

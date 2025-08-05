@@ -84,15 +84,10 @@ private:
     EventRegistrationToken token { 0 };
 };
 
+enum struct webview_messages : int { create = WM_USER, destroy, favicon_changed, navigation_completed };
+
 template <typename T> struct webview {
     using Self = webview;
-
-    enum struct message : int {
-        WEBVIEW_CREATE = WM_USER,
-        WEBVIEW_DESTROY,
-        FAVICON_CHANGED,
-        NAVIGATION_COMPLETED
-    };
 
     webview(struct window_config window_config = {}, struct webview_config webview_config = {})
         : window_config { std::move(window_config) },

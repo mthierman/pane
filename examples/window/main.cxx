@@ -6,8 +6,10 @@ struct window : pane::window<window> {
 
     auto message_handler(this Self& self, const pane::window_message& window_message) -> LRESULT {
         switch (window_message.msg) {
-            case WM_CLOSE: {
+            case WM_DESTROY: {
                 pane::system::quit();
+
+                return 0;
             } break;
 
             case WM_KEYDOWN: {
