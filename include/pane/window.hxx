@@ -98,7 +98,7 @@ private:
                         window->window_handle.position.scale_factor
                             = static_cast<float>(window->window_handle.position.dpi)
                             / static_cast<float>(USER_DEFAULT_SCREEN_DPI);
-                        // SendMessageW(window_message.hwnd, WM_SETTINGCHANGE, 0, 0);
+                        window->window_handle.immersive_dark_mode(pane::system::dark_mode());
                     }
                 }
             } break;
@@ -119,52 +119,53 @@ private:
                     RedrawWindow(
                         window_message.hwnd, nullptr, nullptr, RDW_INVALIDATE | RDW_ERASENOW);
                 } break;
+
+                    // https://learn.microsoft.com/en-us/windows/win32/hidpi/wm-dpichanged
+                case WM_DPICHANGED: {
+                    window->window_handle.position.dpi = HIWORD(window_message.wparam);
+                    window->window_handle.position.scale_factor
+                        = static_cast<float>(window->window_handle.position.dpi)
+                        / static_cast<float>(USER_DEFAULT_SCREEN_DPI);
+
+                    auto const suggested_rect { reinterpret_cast<RECT*>(window_message.lparam) };
+                    SetWindowPos(window_message.hwnd,
+                                 nullptr,
+                                 suggested_rect->left,
+                                 suggested_rect->top,
+                                 suggested_rect->right - suggested_rect->left,
+                                 suggested_rect->bottom - suggested_rect->top,
+                                 SWP_NOZORDER | SWP_NOACTIVATE);
+                } break;
+
+                    // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-windowposchanged
+                case WM_WINDOWPOSCHANGED: {
+                    GetClientRect(window_message.hwnd, &window->window_handle.position.client_rect);
+
+                    if (auto style { GetWindowLongPtrW(window_message.hwnd, GWL_STYLE) };
+                        style & WS_OVERLAPPEDWINDOW) {
+                        GetWindowPlacement(window_message.hwnd,
+                                           &window->window_handle.position.window_placement);
+                    }
+
+                    auto window_placement { WINDOWPLACEMENT { sizeof(WINDOWPLACEMENT) } };
+                    GetWindowPlacement(window_message.hwnd, &window_placement);
+
+                    window->window_handle.position.maximized
+                        = window_placement.showCmd == SW_SHOWMAXIMIZED;
+
+                    window->window_handle.position.minimized
+                        = window_placement.showCmd == SW_SHOWMINIMIZED;
+                } break;
+
+                    // https://learn.microsoft.com/en-us/windows/win32/inputdev/wm-keydown
+                case WM_KEYDOWN: {
+                    switch (window_message.wparam) {
+                        case VK_F11: {
+                            window->window_handle.toggle_fullscreen();
+                        } break;
+                    }
+                } break;
             }
-
-            // switch (window_message.msg) {
-            //         // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-ncdestroy
-            //     case WM_NCDESTROY: {
-            //         self.window_handle(nullptr);
-            //         SetWindowLongPtrW(window_message.hwnd, 0,
-            //         reinterpret_cast<LONG_PTR>(nullptr));
-            //     } break;
-
-            //         // https://learn.microsoft.com/en-us/windows/win32/hidpi/wm-dpichanged
-            //     case WM_DPICHANGED: {
-            //         self.window_handle.position.dpi = HIWORD(window_message.wparam);
-            //         self.window_handle.position.scale_factor
-            //             = static_cast<float>(self.window_handle.position.dpi)
-            //             / static_cast<float>(USER_DEFAULT_SCREEN_DPI);
-            //     } break;
-
-            //         // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-windowposchanged
-            //     case WM_WINDOWPOSCHANGED: {
-            //         GetClientRect(window_message.hwnd, &self.window_handle.position.client_rect);
-
-            //         if (auto style { GetWindowLongPtrW(window_message.hwnd, GWL_STYLE) };
-            //             style & WS_OVERLAPPEDWINDOW) {
-            //             GetWindowPlacement(window_message.hwnd,
-            //                                &self.window_handle.position.window_placement);
-            //         }
-
-            //         WINDOWPLACEMENT window_placement { sizeof(WINDOWPLACEMENT) };
-            //         GetWindowPlacement(window_message.hwnd, &window_placement);
-
-            //         self.window_handle.position.maximized
-            //             = window_placement.showCmd == SW_SHOWMAXIMIZED;
-
-            //         self.window_handle.position.minimized
-            //             = window_placement.showCmd == SW_SHOWMINIMIZED;
-            //     } break;
-
-            //         // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-settingchange
-            //     case WM_SETTINGCHANGE: {
-            //         auto dark_mode { system::dark_mode() };
-            //         self.window_background(dark_mode ? self.window_config.bg_dark
-            //                                          : self.window_config.bg_light);
-            //         self.window_handle.immersive_dark_mode(dark_mode);
-            //     } break;
-            // }
 
             return window->procedure(window_message);
         }
@@ -327,44 +328,6 @@ template <typename T> struct window {
                 return 1;
             } break;
         }
-
-        // switch (window_message.msg) {
-        //         // https://learn.microsoft.com/en-us/windows/win32/hidpi/wm-dpichanged
-        //     case WM_DPICHANGED: {
-        //         auto const suggested_rect { reinterpret_cast<RECT*>(window_message.lparam) };
-        //         SetWindowPos(window_message.hwnd,
-        //                      nullptr,
-        //                      suggested_rect->left,
-        //                      suggested_rect->top,
-        //                      suggested_rect->right - suggested_rect->left,
-        //                      suggested_rect->bottom - suggested_rect->top,
-        //                      SWP_NOZORDER | SWP_NOACTIVATE);
-
-        //         return 0;
-        //     } break;
-
-        //         // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-erasebkgnd
-        //     case WM_ERASEBKGND: {
-        //         GetClientRect(window_message.hwnd, &self.window_handle.position.client_rect);
-
-        //         FillRect(reinterpret_cast<HDC>(window_message.wparam),
-        //                  &self.window_handle.position.client_rect,
-        //                  self.window_background());
-
-        //         return 1;
-        //     } break;
-
-        //         // https://learn.microsoft.com/en-us/windows/win32/inputdev/wm-keydown
-        //     case WM_KEYDOWN: {
-        //         switch (window_message.wparam) {
-        //             case VK_F11: {
-        //                 self.window_handle.toggle_fullscreen();
-
-        //                 return 0;
-        //             } break;
-        //         }
-        //     } break;
-        // }
 
         return self.message_handler(window_message);
     }
