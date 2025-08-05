@@ -54,7 +54,7 @@ target_sources(
             "src/system.cxx"
             "src/text.cxx"
             "src/url.cxx"
-            # "src/webview.cxx"
+            "src/webview.cxx"
             "src/window.cxx"
     )
 target_link_libraries(
