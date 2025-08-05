@@ -318,6 +318,10 @@ template <typename T> struct window {
     auto operator=(Self&&) noexcept -> Self& = delete;
 
     auto procedure(this T& self, const window_message& window_message) -> LRESULT {
+        return self.message_handler(window_message);
+    }
+
+    auto default_procedure(this T& self, const window_message& window_message) -> LRESULT {
         switch (window_message.msg) {
             case WM_ERASEBKGND: {
                 RECT rect;
@@ -329,7 +333,7 @@ template <typename T> struct window {
             } break;
         }
 
-        return self.message_handler(window_message);
+        return window_message.default_procedure();
     }
 
     window_class<T> window_class { u8"pane_window" };
