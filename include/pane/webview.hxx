@@ -84,7 +84,7 @@ private:
     EventRegistrationToken token { 0 };
 };
 
-template <typename T> struct webview final {
+template <typename T> struct webview {
     using Self = webview;
 
     enum struct message : int {

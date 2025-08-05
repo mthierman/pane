@@ -1,21 +1,13 @@
 #include <pane/pane.hxx>
 
-// https://learn.microsoft.com/en-us/windows/win32/learnwin32/winmain--the-application-entry-point
-auto wWinMain(HINSTANCE /* hinstance */,
-              HINSTANCE /* hprevinstance */,
-              PWSTR /* pcmdline */,
-              int /* ncmdshow */) -> int {
-    pane::window_manager<pane::webview> window_manager {
-        { u8"webview",
-          pane::color { 0, 0, 0, 255 },
-          pane::color { 255, 255, 255, 255 },
-          true,
-          nullptr },
-        { u8"about:blank" },
-        [&](const pane::window_message& window_message, pane::webview& webview) -> LRESULT {
+struct webview : pane::webview<webview> {
+    using Self = webview;
+    using pane::webview<webview>::webview;
+
+    auto message_handler(this Self& self, const pane::window_message& window_message) -> LRESULT {
         switch (window_message.msg) {
             case WM_CLOSE: {
-                window_manager.destroy(webview.window_handle());
+                pane::system::quit();
             } break;
 
             case WM_KEYDOWN: {
@@ -23,22 +15,34 @@ auto wWinMain(HINSTANCE /* hinstance */,
                     case 'N': {
                         if (pane::input::is_key_down(VK_LCONTROL)
                             || pane::input::is_key_down(VK_RCONTROL)) {
-                            window_manager.create();
+                            // window_manager.create();
                         }
                     } break;
                     case 'W': {
                         if (pane::input::is_key_down(VK_LCONTROL)
                             || pane::input::is_key_down(VK_RCONTROL)) {
-                            SendMessageW(webview.window_handle(), WM_CLOSE, 0, 0);
+                            SendMessageW(window_message.hwnd, WM_CLOSE, 0, 0);
                         }
                     } break;
                 }
             } break;
         }
 
-        return webview.default_procedure(window_message);
+        return self.default_procedure(window_message);
     }
-    };
+};
+
+// https://learn.microsoft.com/en-us/windows/win32/learnwin32/winmain--the-application-entry-point
+auto wWinMain(HINSTANCE /* hinstance */,
+              HINSTANCE /* hprevinstance */,
+              PWSTR /* pcmdline */,
+              int /* ncmdshow */) -> int {
+    webview window { { u8"window",
+                       pane::color { 0, 0, 0, 255 },
+                       pane::color { 255, 255, 255, 255 },
+                       true,
+                       nullptr },
+                     { u8"about:blank" } };
 
     return pane::system::message_loop();
 }
