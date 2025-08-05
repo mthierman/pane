@@ -84,7 +84,12 @@ private:
     EventRegistrationToken token { 0 };
 };
 
-enum struct webview_messages : int { create = WM_USER, destroy, favicon_changed, navigation_completed };
+enum struct webview_messages : int {
+    create = WM_USER,
+    destroy,
+    favicon_changed,
+    navigation_completed
+};
 
 template <typename T> struct webview {
     using Self = webview;
@@ -333,7 +338,7 @@ template <typename T> struct webview {
                                                 &this->favicon());
 
                                         make_window_message(this->window_handle(),
-                                                            message::FAVICON_CHANGED,
+                                                            webview_messages::favicon_changed,
                                                             0,
                                                             this->favicon())
                                             .send();
@@ -355,8 +360,10 @@ template <typename T> struct webview {
                                     this->core->get_DocumentTitle(&title);
                                     this->current_title = to_utf8(title.get());
 
-                                    make_window_message(
-                                        this->window_handle(), message::NAVIGATION_COMPLETED, 0, 0)
+                                    make_window_message(this->window_handle(),
+                                                        webview_messages::navigation_completed,
+                                                        0,
+                                                        0)
                                         .send();
 
                                     return S_OK;
@@ -366,7 +373,7 @@ template <typename T> struct webview {
                                 this->navigate(this->webview_config.home_page);
 
                                 make_window_message(this->window_handle(),
-                                                    message::WEBVIEW_CREATE,
+                                                    webview_messages::create,
                                                     0,
                                                     this->favicon())
                                     .send();
