@@ -111,12 +111,14 @@ private:
 
         if (auto window { reinterpret_cast<T*>(GetWindowLongPtrW(hwnd, 0)) }) {
             switch (window_message.msg) {
-                // case WM_SETTINGCHANGE: {
-                //     auto dark_mode { system::dark_mode() };
-                //     window->window_background(dark_mode ? window->window_config.bg_dark
-                //                                         : window->window_config.bg_light);
-                //     window->window_handle.immersive_dark_mode(dark_mode);
-                // } break;
+                case WM_SETTINGCHANGE: {
+                    auto dark_mode { system::dark_mode() };
+                    window->window_background(dark_mode ? window->window_config.bg_dark
+                                                        : window->window_config.bg_light);
+                    window->window_handle.immersive_dark_mode(dark_mode);
+                    RedrawWindow(
+                        window_message.hwnd, nullptr, nullptr, RDW_INVALIDATE | RDW_ERASENOW);
+                } break;
             }
 
             // switch (window_message.msg) {
