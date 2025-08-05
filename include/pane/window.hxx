@@ -290,7 +290,7 @@ struct window_config final {
 template <typename T> struct window {
     using Self = window;
 
-    window(struct window_config window_config)
+    window(struct window_config window_config = {})
         : window_config { std::move(window_config) } {
         CreateWindowExW(
             0,
