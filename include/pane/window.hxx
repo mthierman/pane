@@ -28,6 +28,102 @@ struct window_message final {
     LPARAM lparam { 0 };
 };
 
+struct window_position final {
+    using Self = window_position;
+
+    bool fullscreen { false };
+    bool maximized { false };
+    bool minimized { false };
+    RECT client_rect { 0, 0, 0, 0 };
+    WINDOWPLACEMENT window_placement { .length { sizeof(WINDOWPLACEMENT) } };
+    UINT dpi { 0 };
+    float scale_factor { 0.0f };
+};
+
+enum struct window_backdrop { automatic, mica, mica_alt, acrylic, none };
+
+struct window_background final {
+    using Self = window_background;
+
+    explicit window_background(const color& color);
+    ~window_background();
+
+    window_background(const Self&) = delete;
+    auto operator=(const Self&) -> Self& = delete;
+
+    window_background(Self&&) noexcept = delete;
+    auto operator=(Self&&) noexcept -> Self& = delete;
+
+    auto operator()(this const Self& self) -> HBRUSH;
+    auto operator()(this Self& self, const color& color) -> void;
+
+private:
+    HBRUSH hbrush { nullptr };
+};
+
+struct window_handle final {
+    using Self = window_handle;
+
+    window_handle() = default;
+    explicit window_handle(HWND hwnd);
+    ~window_handle();
+
+    window_handle(const Self&) = delete;
+    auto operator=(const Self&) -> Self& = delete;
+
+    window_handle(Self&&) noexcept = delete;
+    auto operator=(Self&&) noexcept -> Self& = delete;
+
+    auto activate(this const Self& self) -> bool;
+    auto show(this const Self& self) -> bool;
+    auto hide(this const Self& self) -> bool;
+
+    auto title(this const Self& self, std::u8string_view title) -> bool;
+    auto icon(this const Self& self, HICON icon) -> void;
+
+    auto maximize(this const Self& self) -> bool;
+    auto minimize(this const Self& self) -> bool;
+    auto restore(this const Self& self) -> bool;
+    auto toggle_fullscreen(this Self& self) -> bool;
+
+    auto immersive_dark_mode(this const Self& self, bool enable) -> HRESULT;
+    auto cloak(this const Self& self, bool enable) -> HRESULT;
+    auto backdrop(this const Self& self, window_backdrop window_backdrop) -> HRESULT;
+    auto border_color(this const Self& self, const color& color) -> HRESULT;
+    auto caption_color(this const Self& self, const color& color) -> HRESULT;
+    auto text_color(this const Self& self, const color& color) -> HRESULT;
+
+    auto operator()(this const Self& self) -> HWND;
+    auto operator()(this Self& self, HWND hwnd) -> void;
+
+    window_position position;
+    uintptr_t id { random_number<uintptr_t>() };
+    std::chrono::steady_clock::time_point creation_time { std::chrono::steady_clock::now() };
+
+private:
+    HWND hwnd { nullptr };
+};
+
+struct window_icon final {
+    using Self = window_icon;
+
+    window_icon() = default;
+    explicit window_icon(HICON hicon);
+    ~window_icon();
+
+    window_icon(const Self&) = delete;
+    auto operator=(const Self&) -> Self& = delete;
+
+    window_icon(Self&&) noexcept = delete;
+    auto operator=(Self&&) noexcept -> Self& = delete;
+
+    auto operator()(this Self& self) -> HICON&;
+    auto operator()(this Self& self, HICON hicon) -> void;
+
+private:
+    HICON hicon { nullptr };
+};
+
 template <typename M = UINT, typename W = WPARAM, typename L = LPARAM>
     requires std::is_enum_v<M> || std::is_integral_v<M>
 constexpr auto make_window_message(HWND hwnd, M msg, W wparam, L lparam) {
@@ -181,102 +277,6 @@ private:
 
 public:
     WNDCLASSEXW data;
-};
-
-struct window_position final {
-    using Self = window_position;
-
-    bool fullscreen { false };
-    bool maximized { false };
-    bool minimized { false };
-    RECT client_rect { 0, 0, 0, 0 };
-    WINDOWPLACEMENT window_placement { .length { sizeof(WINDOWPLACEMENT) } };
-    UINT dpi { 0 };
-    float scale_factor { 0.0f };
-};
-
-enum struct window_backdrop { automatic, mica, mica_alt, acrylic, none };
-
-struct window_background final {
-    using Self = window_background;
-
-    explicit window_background(const color& color);
-    ~window_background();
-
-    window_background(const Self&) = delete;
-    auto operator=(const Self&) -> Self& = delete;
-
-    window_background(Self&&) noexcept = delete;
-    auto operator=(Self&&) noexcept -> Self& = delete;
-
-    auto operator()(this const Self& self) -> HBRUSH;
-    auto operator()(this Self& self, const color& color) -> void;
-
-private:
-    HBRUSH hbrush { nullptr };
-};
-
-struct window_handle final {
-    using Self = window_handle;
-
-    window_handle() = default;
-    explicit window_handle(HWND hwnd);
-    ~window_handle();
-
-    window_handle(const Self&) = delete;
-    auto operator=(const Self&) -> Self& = delete;
-
-    window_handle(Self&&) noexcept = delete;
-    auto operator=(Self&&) noexcept -> Self& = delete;
-
-    auto activate(this const Self& self) -> bool;
-    auto show(this const Self& self) -> bool;
-    auto hide(this const Self& self) -> bool;
-
-    auto title(this const Self& self, std::u8string_view title) -> bool;
-    auto icon(this const Self& self, HICON icon) -> void;
-
-    auto maximize(this const Self& self) -> bool;
-    auto minimize(this const Self& self) -> bool;
-    auto restore(this const Self& self) -> bool;
-    auto toggle_fullscreen(this Self& self) -> bool;
-
-    auto immersive_dark_mode(this const Self& self, bool enable) -> HRESULT;
-    auto cloak(this const Self& self, bool enable) -> HRESULT;
-    auto backdrop(this const Self& self, window_backdrop window_backdrop) -> HRESULT;
-    auto border_color(this const Self& self, const color& color) -> HRESULT;
-    auto caption_color(this const Self& self, const color& color) -> HRESULT;
-    auto text_color(this const Self& self, const color& color) -> HRESULT;
-
-    auto operator()(this const Self& self) -> HWND;
-    auto operator()(this Self& self, HWND hwnd) -> void;
-
-    window_position position;
-    uintptr_t id { random_number<uintptr_t>() };
-    std::chrono::steady_clock::time_point creation_time { std::chrono::steady_clock::now() };
-
-private:
-    HWND hwnd { nullptr };
-};
-
-struct window_icon final {
-    using Self = window_icon;
-
-    window_icon() = default;
-    explicit window_icon(HICON hicon);
-    ~window_icon();
-
-    window_icon(const Self&) = delete;
-    auto operator=(const Self&) -> Self& = delete;
-
-    window_icon(Self&&) noexcept = delete;
-    auto operator=(Self&&) noexcept -> Self& = delete;
-
-    auto operator()(this Self& self) -> HICON&;
-    auto operator()(this Self& self, HICON hicon) -> void;
-
-private:
-    HICON hicon { nullptr };
 };
 
 struct window_config final {
