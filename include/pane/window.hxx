@@ -325,21 +325,6 @@ template <typename T> struct window {
 
     auto default_procedure(this T& self, const window_message& window_message) -> LRESULT {
         switch (window_message.msg) {
-                // case WM_PAINT: {
-
-                //     HBRUSH brush { nullptr };
-                //     if (!brush) {
-                //         brush = CreateSolidBrush(RGB(0, 0, 0));
-                //     }
-
-                //     PAINTSTRUCT ps;
-                //     auto hdc { BeginPaint(window_message.hwnd, &ps) };
-                //     FillRect(hdc, &ps.rcPaint, brush);
-                //     EndPaint(window_message.hwnd, &ps);
-
-                //     return 0;
-                // } break;
-
             case WM_ERASEBKGND: {
                 RECT client_rect;
                 GetClientRect(window_message.hwnd, &client_rect);
