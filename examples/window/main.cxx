@@ -1,8 +1,8 @@
 #include <pane/pane.hxx>
 
-struct test_window : pane::window<test_window> {
-    using Self = test_window;
-    using pane::window<test_window>::window;
+struct window : pane::window<window> {
+    using Self = window;
+    using pane::window<window>::window;
 
     auto message_handler(this Self& self, const pane::window_message& window_message) -> LRESULT {
         switch (window_message.msg) {
@@ -37,11 +37,11 @@ auto wWinMain(HINSTANCE /* hinstance */,
               HINSTANCE /* hprevinstance */,
               PWSTR /* pcmdline */,
               int /* ncmdshow */) -> int {
-    test_window window { { u8"window",
-                           pane::color { 0, 255, 0, 255 },
-                           pane::color { 255, 0, 0, 255 },
-                           true,
-                           nullptr } };
+    window window { { u8"window",
+                      pane::color { 0, 0, 0, 255 },
+                      pane::color { 255, 255, 255, 255 },
+                      true,
+                      nullptr } };
 
     return pane::system::message_loop();
 }
