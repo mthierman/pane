@@ -6,6 +6,8 @@ struct webview : pane::webview<webview> {
 
     auto message_handler(this Self& self, const pane::window_message& window_message) -> LRESULT {
         switch (window_message.msg) {
+            using enum webview::message;
+
             case WM_CLOSE: {
                 pane::system::quit();
             } break;
@@ -25,6 +27,14 @@ struct webview : pane::webview<webview> {
                         }
                     } break;
                 }
+            } break;
+
+            case +NAVIGATION_COMPLETED: {
+                self.window_handle.title(self.current_title);
+            } break;
+
+            case +FAVICON_CHANGED: {
+                self.window_handle.icon(self.favicon());
             } break;
         }
 
