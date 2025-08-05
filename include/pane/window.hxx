@@ -296,7 +296,8 @@ template <typename T> struct window {
             0,
             this->window_class.data.lpszClassName,
             reinterpret_cast<const wchar_t*>(to_utf16(this->window_config.title).data()),
-            this->window_config.parent_hwnd ? WS_CHILDWINDOW : WS_OVERLAPPEDWINDOW,
+            this->window_config.parent_hwnd ? WS_CHILDWINDOW | WS_CLIPSIBLINGS
+                                            : WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN,
             CW_USEDEFAULT,
             CW_USEDEFAULT,
             CW_USEDEFAULT,
