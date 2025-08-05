@@ -21,7 +21,7 @@ struct test_window : pane::window<test_window> {
                     case 'W': {
                         if (pane::input::is_key_down(VK_LCONTROL)
                             || pane::input::is_key_down(VK_RCONTROL)) {
-                            // SendMessageW(window.window_handle(), WM_CLOSE, 0, 0);
+                            SendMessageW(window_message.hwnd, WM_CLOSE, 0, 0);
                         }
                     } break;
                 }
