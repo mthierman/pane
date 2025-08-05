@@ -153,18 +153,18 @@ template <typename T> struct window_class final {
 
     window_class(std::u8string_view name)
         : name { to_utf16(name) },
-          data { { sizeof(WNDCLASSEXW) },
-                 { 0 },
-                 { procedure },
-                 { 0 },
-                 { sizeof(T*) },
-                 { this->instance },
-                 { this->icon },
-                 { this->cursor },
-                 { nullptr },
-                 { nullptr },
-                 { reinterpret_cast<const wchar_t*>(this->name.data()) },
-                 { this->icon } } {
+          data { sizeof(WNDCLASSEXW),
+                 0,
+                 procedure,
+                 0,
+                 sizeof(T*),
+                 this->instance,
+                 this->icon,
+                 this->cursor,
+                 nullptr,
+                 nullptr,
+                 reinterpret_cast<const wchar_t*>(this->name.data()),
+                 this->icon } {
         if (GetClassInfoExW(this->data.hInstance, this->data.lpszClassName, &this->data) == 0) {
             RegisterClassExW(&this->data);
         };
@@ -296,9 +296,7 @@ template <typename T> struct window {
             0,
             this->window_class.data.lpszClassName,
             reinterpret_cast<const wchar_t*>(to_utf16(this->window_config.title).data()),
-            this->window_config.parent_hwnd
-                ? WS_CHILDWINDOW
-                : WS_OVERLAPPEDWINDOW | (this->window_config.visible ? WS_VISIBLE : 0),
+            this->window_config.parent_hwnd ? WS_CHILDWINDOW : WS_OVERLAPPEDWINDOW,
             CW_USEDEFAULT,
             CW_USEDEFAULT,
             CW_USEDEFAULT,
@@ -308,6 +306,10 @@ template <typename T> struct window {
                                             : nullptr,
             this->window_class.data.hInstance,
             this);
+
+        if (this->window_config.visible) {
+            this->window_handle.activate();
+        }
     }
     ~window() = default;
 
@@ -323,6 +325,21 @@ template <typename T> struct window {
 
     auto default_procedure(this T& self, const window_message& window_message) -> LRESULT {
         switch (window_message.msg) {
+                // case WM_PAINT: {
+
+                //     HBRUSH brush { nullptr };
+                //     if (!brush) {
+                //         brush = CreateSolidBrush(RGB(0, 0, 0));
+                //     }
+
+                //     PAINTSTRUCT ps;
+                //     auto hdc { BeginPaint(window_message.hwnd, &ps) };
+                //     FillRect(hdc, &ps.rcPaint, brush);
+                //     EndPaint(window_message.hwnd, &ps);
+
+                //     return 0;
+                // } break;
+
             case WM_ERASEBKGND: {
                 RECT client_rect;
                 GetClientRect(window_message.hwnd, &client_rect);
