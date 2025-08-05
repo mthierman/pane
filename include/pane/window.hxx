@@ -94,10 +94,10 @@ private:
                         SetWindowLongPtrW(
                             window_message.hwnd, 0, reinterpret_cast<LONG_PTR>(window));
                         window->window_handle(window_message.hwnd);
-                        // self.window_handle.position.dpi = GetDpiForWindow(window_message.hwnd);
-                        // self.window_handle.position.scale_factor
-                        //     = static_cast<float>(self.window_handle.position.dpi)
-                        //     / static_cast<float>(USER_DEFAULT_SCREEN_DPI);
+                        window->window_handle.position.dpi = GetDpiForWindow(window_message.hwnd);
+                        window->window_handle.position.scale_factor
+                            = static_cast<float>(window->window_handle.position.dpi)
+                            / static_cast<float>(USER_DEFAULT_SCREEN_DPI);
                         // SendMessageW(window_message.hwnd, WM_SETTINGCHANGE, 0, 0);
                     }
                 }
