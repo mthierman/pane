@@ -6,7 +6,7 @@ if (-not (Test-Path $packages))
 }
 Set-Location $packages
 gh release -R ada-url/ada download -p 'singleheader.zip' --skip-existing | Out-Null
-7z x .\singleheader.zip -oada-url | Out-Null
+7z x .\singleheader.zip -oada-url/ada | Out-Null
 gh release -R stephenberry/glaze download -A zip --skip-existing | Out-Null
 7z x .\glaze*.zip -ostephenberry | Out-Null
 nuget install Microsoft.Web.WebView2 -DirectDownload -x -OutputDirectory nuget -Verbosity quiet | Out-Null
