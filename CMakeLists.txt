@@ -48,7 +48,6 @@ target_sources(
             "src/input.cxx"
             "src/math.cxx"
             "src/message_box.cxx"
-            # "src/message_window.cxx"
             "src/process.cxx"
             "src/string.cxx"
             "src/system.cxx"

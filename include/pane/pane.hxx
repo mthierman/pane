@@ -13,7 +13,7 @@
 #include <pane/input.hxx>
 #include <pane/math.hxx>
 #include <pane/message_box.hxx>
-// #include <pane/message_window.hxx>
+#include <pane/message_window.hxx>
 #include <pane/process.hxx>
 // #include <pane/string.hxx>
 #include <pane/system.hxx>
