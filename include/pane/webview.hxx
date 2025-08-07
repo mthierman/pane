@@ -404,6 +404,22 @@ template <typename T> struct webview {
     auto operator=(Self&&) noexcept -> Self& = delete;
 
     auto procedure(this T& self, const window_message& window_message) -> LRESULT {
+        switch (window_message.msg) {
+                // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-showwindow
+            case WM_SHOWWINDOW: {
+                if (self.controller) {
+                    self.controller->put_IsVisible(window_message.wparam);
+                }
+            } break;
+
+                // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-windowposchanged
+            case WM_WINDOWPOSCHANGED: {
+                if (self.controller) {
+                    self.controller->put_Bounds(self.window_handle.position.client_rect);
+                }
+            } break;
+        }
+
         return self.handle_message(window_message);
     }
 
@@ -462,20 +478,6 @@ template <typename T> struct webview {
                     case VK_F11: {
                         self.window_handle.toggle_fullscreen();
                     } break;
-                }
-            } break;
-
-                // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-showwindow
-            case WM_SHOWWINDOW: {
-                if (self.controller) {
-                    self.controller->put_IsVisible(window_message.wparam);
-                }
-            } break;
-
-                // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-windowposchanged
-            case WM_WINDOWPOSCHANGED: {
-                if (self.controller) {
-                    self.controller->put_Bounds(self.window_handle.position.client_rect);
                 }
             } break;
         }
