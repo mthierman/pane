@@ -85,8 +85,10 @@ private:
 };
 
 enum struct webview_messages : int {
-    create = WM_USER,
-    destroy,
+    environment_created = WM_USER,
+    controller_created,
+    core_created,
+    settings_created,
     favicon_changed,
     navigation_completed
 };
@@ -201,6 +203,12 @@ template <typename T> struct webview {
                 }
 
                 if (this->environment) {
+                    make_window_message(this->window_handle(),
+                                        webview_messages::environment_created,
+                                        0,
+                                        this->favicon())
+                        .send();
+
                     wil::com_ptr<ICoreWebView2ControllerOptions> controller_options;
                     this->environment->CreateCoreWebView2ControllerOptions(
                         controller_options.put());
@@ -230,6 +238,12 @@ template <typename T> struct webview {
                         }
 
                         if (this->controller) {
+                            make_window_message(this->window_handle(),
+                                                webview_messages::controller_created,
+                                                0,
+                                                this->favicon())
+                                .send();
+
                             RECT client_rect { 0, 0, 0, 0 };
                             GetClientRect(this->window_handle(), &client_rect);
                             this->controller->put_Bounds(client_rect);
@@ -266,6 +280,12 @@ template <typename T> struct webview {
                             }
 
                             if (this->core) {
+                                make_window_message(this->window_handle(),
+                                                    webview_messages::core_created,
+                                                    0,
+                                                    this->favicon())
+                                    .send();
+
                                 wil::com_ptr<ICoreWebView2Settings> created_settings;
                                 this->core->get_Settings(created_settings.put());
 
@@ -274,6 +294,12 @@ template <typename T> struct webview {
                                         = created_settings.try_query<ICoreWebView2Settings9>();
 
                                     if (this->settings) {
+                                        make_window_message(this->window_handle(),
+                                                            webview_messages::settings_created,
+                                                            0,
+                                                            this->favicon())
+                                            .send();
+
                                         this->settings->put_AreBrowserAcceleratorKeysEnabled(
                                             this->webview_config.settings
                                                 .AreBrowserAcceleratorKeysEnabled);
@@ -380,12 +406,6 @@ template <typename T> struct webview {
                                     this->token.navigation_completed());
 
                                 this->navigate(this->webview_config.home_page);
-
-                                make_window_message(this->window_handle(),
-                                                    webview_messages::create,
-                                                    0,
-                                                    this->favicon())
-                                    .send();
                             }
                         }
 
