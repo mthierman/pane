@@ -471,15 +471,6 @@ template <typename T> struct webview {
 
                 return 0;
             } break;
-
-                // https://learn.microsoft.com/en-us/windows/win32/inputdev/wm-keydown
-            case WM_KEYDOWN: {
-                switch (window_message.wparam) {
-                    case VK_F11: {
-                        self.window_handle.toggle_fullscreen();
-                    } break;
-                }
-            } break;
         }
 
         return window_message.default_procedure();
