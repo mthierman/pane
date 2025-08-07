@@ -416,7 +416,14 @@ template <typename T> struct webview {
             }).Get());
         }
     }
-    ~webview() = default;
+    ~webview() {
+        this->settings = nullptr;
+        this->core = nullptr;
+        this->controller = nullptr;
+        this->controller_options = nullptr;
+        this->environment = nullptr;
+        this->environment_options = nullptr;
+    }
 
     webview(const Self&) = delete;
     auto operator=(const Self&) -> Self& = delete;

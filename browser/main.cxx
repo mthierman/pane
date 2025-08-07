@@ -46,7 +46,7 @@ auto wWinMain(HINSTANCE /* hinstance */,
               HINSTANCE /* hprevinstance */,
               PWSTR /* pcmdline */,
               int /* ncmdshow */) -> int {
-    webview browser;
+    pane::window_manager<webview> browser;
 
     return pane::system::message_loop();
 }
