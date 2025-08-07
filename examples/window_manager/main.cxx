@@ -6,11 +6,11 @@ struct window : pane::window<window> {
 
     auto message_handler(this Self& self, const pane::window_message& window_message) -> LRESULT {
         switch (window_message.msg) {
-            case WM_DESTROY: {
-                pane::system::quit();
+                // case WM_DESTROY: {
+                //     pane::system::quit();
 
-                return 0;
-            } break;
+                //     return 0;
+                // } break;
 
             case WM_KEYDOWN: {
                 switch (window_message.wparam) {
@@ -39,11 +39,14 @@ auto wWinMain(HINSTANCE /* hinstance */,
               HINSTANCE /* hprevinstance */,
               PWSTR /* pcmdline */,
               int /* ncmdshow */) -> int {
-    window window { { u8"window",
-                      pane::color { 0, 0, 0, 255 },
-                      pane::color { 255, 255, 255, 255 },
-                      true,
-                      nullptr } };
+    // window window { { u8"window",
+    //                   pane::color { 0, 0, 0, 255 },
+    //                   pane::color { 255, 255, 255, 255 },
+    //                   true,
+    //                   nullptr } };
+
+    pane::window_manager<window> window_manager;
+    window_manager.create();
 
     return pane::system::message_loop();
 }
