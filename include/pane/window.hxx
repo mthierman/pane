@@ -290,8 +290,8 @@ struct window_config final {
 template <typename T> struct window {
     using Self = window;
 
-    window(struct window_config window_config = {})
-        : window_config { std::move(window_config) } {
+    window()
+        : window_config { std::move(T::make_window_config()) } {
         CreateWindowExW(
             0,
             this->window_class.data.lpszClassName,
@@ -319,7 +319,7 @@ template <typename T> struct window {
     auto operator=(Self&&) noexcept -> Self& = delete;
 
     auto procedure(this T& self, const window_message& window_message) -> LRESULT {
-        return self.message_handler(window_message);
+        return self.handle_message(window_message);
     }
 
     auto default_procedure(this T& self, const window_message& window_message) -> LRESULT {
