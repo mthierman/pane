@@ -319,9 +319,14 @@ struct window_config final {
 template <typename T> struct window {
     using Self = window;
 
+    struct config {
+        window_config window;
+    };
+
     window(struct window_manager<T>* window_manager = nullptr)
-        : window_config { std::move(T::make_window_config()) },
-          window_manager { window_manager } {
+        : window_manager { window_manager } {
+        this->window_config = T::config().window;
+
         CreateWindowExW(
             0,
             this->window_class.data.lpszClassName,

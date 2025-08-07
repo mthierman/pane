@@ -4,14 +4,13 @@ struct webview : pane::webview<webview> {
     using Self = webview;
     using pane::webview<webview>::webview;
 
-    static auto make_window_config() -> pane::window_config {
-        return {
-            u8"webview", pane::color { 0, 0, 0, 255 }, pane::color { 0, 0, 0, 255 }, true, nullptr
-        };
-    }
-
-    static auto make_webview_config() -> pane::webview_config {
-        return { u8"https://www.google.com/" };
+    static auto config() -> config {
+        return { { u8"webview",
+                   pane::color { 0, 0, 0, 255 },
+                   pane::color { 0, 0, 0, 255 },
+                   true,
+                   nullptr },
+                 { u8"https://www.google.com/" } };
     }
 
     auto handle_message(this Self& self, const pane::window_message& window_message) -> LRESULT {

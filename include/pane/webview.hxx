@@ -94,9 +94,16 @@ enum struct webview_messages : int {
 template <typename T> struct webview {
     using Self = webview;
 
-    webview(struct window_manager<T>* window_manager = nullptr)
-        : window_config { std::move(T::make_window_config()) },
-          webview_config { std::move(T::make_webview_config()) } {
+    struct config {
+        window_config window;
+        webview_config webview;
+    };
+
+    webview(struct window_manager<T>* window_manager = nullptr) {
+        auto config { T::config() };
+        this->window_config = config.window;
+        this->webview_config = config.webview;
+
         CreateWindowExW(
             0,
             this->window_class.data.lpszClassName,

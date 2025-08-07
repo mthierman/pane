@@ -4,7 +4,7 @@ struct window : pane::window<window> {
     using Self = window;
     using pane::window<window>::window;
 
-    static auto make_window_config() -> pane::window_config {
+    static auto config() -> config {
         return { u8"window_manager",
                  pane::color { 0, 0, 0, 0 },
                  pane::color { 0, 0, 0, 0 },
