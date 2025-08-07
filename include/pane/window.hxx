@@ -286,22 +286,30 @@ private:
 
                     // https://learn.microsoft.com/en-us/windows/win32/inputdev/wm-keydown
                 case WM_KEYDOWN: {
+                    BOOL was_key_down = (HIWORD(window_message.lparam) & KF_REPEAT) == KF_REPEAT;
+
                     switch (window_message.wparam) {
                         case VK_F11: {
-                            window->window_handle.toggle_fullscreen();
+                            if (!(was_key_down)) {
+                                window->window_handle.toggle_fullscreen();
+                            }
                         } break;
                         case 'N': {
                             if (pane::input::is_key_down(VK_LCONTROL)
                                 || pane::input::is_key_down(VK_RCONTROL)) {
                                 if (window->window_manager) {
-                                    window->window_manager->create();
+                                    if (!(was_key_down)) {
+                                        window->window_manager->create();
+                                    }
                                 }
                             }
                         } break;
                         case 'W': {
                             if (pane::input::is_key_down(VK_LCONTROL)
                                 || pane::input::is_key_down(VK_RCONTROL)) {
-                                SendMessageW(window_message.hwnd, WM_CLOSE, 0, 0);
+                                if (!(was_key_down)) {
+                                    SendMessageW(window_message.hwnd, WM_CLOSE, 0, 0);
+                                }
                             }
                         } break;
                     }
