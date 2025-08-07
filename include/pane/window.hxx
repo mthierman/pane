@@ -370,16 +370,22 @@ template <typename T> struct window {
                 return 1;
             } break;
 
+                // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-close
             case WM_CLOSE: {
                 if (self.window_manager) {
                     self.window_manager->destroy(self);
                 }
+
+                return 0;
             } break;
 
+                // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-destroy
             case WM_DESTROY: {
                 if (!self.window_manager) {
                     system::quit();
                 }
+
+                return 0;
             } break;
 
             case WM_KEYDOWN: {

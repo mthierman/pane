@@ -408,35 +408,21 @@ template <typename T> struct webview {
 
     auto default_procedure(this T& self, const window_message& window_message) -> LRESULT {
         switch (window_message.msg) {
-            // case WM_CLOSE: {
-            //     TODO: FIX CRASHING HERE CALLING TO_UTF16 (string length/resize problem)
-            //     TODO UPDATE: THIS IS ALL CRASHING BECAUSE WE ARE DESTROYING WINDOW FIRST IN
-            //     CALLBACK PROCEDURE!
+                // case WM_CLOSE: {
+                //     TODO: FIX CRASHING HERE CALLING TO_UTF16 (string length/resize problem)
+                //     TODO UPDATE: THIS IS ALL CRASHING BECAUSE WE ARE DESTROYING WINDOW FIRST IN
+                //     CALLBACK PROCEDURE!
 
-            //     if (self.webview_config.virtual_host_name_map) {
-            //         self.core->ClearVirtualHostNameToFolderMapping(reinterpret_cast<const
-            //         wchar_t*>(
-            //             to_utf16((*self.webview_config.virtual_host_name_map).first).data()));
-            //     }
+                //     if (self.webview_config.virtual_host_name_map) {
+                //         self.core->ClearVirtualHostNameToFolderMapping(reinterpret_cast<const
+                //         wchar_t*>(
+                //             to_utf16((*self.webview_config.virtual_host_name_map).first).data()));
+                //     }
 
-            //     self.controller->remove_AcceleratorKeyPressed(*self.token.accelerator_key_pressed());
-            //     self.core->remove_FaviconChanged(*self.token.favicon_changed());
-            //     self.core->remove_NavigationCompleted(*self.token.navigation_completed());
-            // } break;
-
-            // https://learn.microsoft.com/en-us/windows/win32/hidpi/wm-dpichanged
-            case WM_DPICHANGED: {
-                auto const suggested_rect { reinterpret_cast<RECT*>(window_message.lparam) };
-                SetWindowPos(window_message.hwnd,
-                             nullptr,
-                             suggested_rect->left,
-                             suggested_rect->top,
-                             suggested_rect->right - suggested_rect->left,
-                             suggested_rect->bottom - suggested_rect->top,
-                             SWP_NOZORDER | SWP_NOACTIVATE);
-
-                return 0;
-            } break;
+                //     self.controller->remove_AcceleratorKeyPressed(*self.token.accelerator_key_pressed());
+                //     self.core->remove_FaviconChanged(*self.token.favicon_changed());
+                //     self.core->remove_NavigationCompleted(*self.token.navigation_completed());
+                // } break;
 
                 // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-erasebkgnd
             case WM_ERASEBKGND: {
@@ -449,16 +435,22 @@ template <typename T> struct webview {
                 return 1;
             } break;
 
+                // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-close
             case WM_CLOSE: {
                 if (self.window_manager) {
                     self.window_manager->destroy(self);
                 }
+
+                return 0;
             } break;
 
+                // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-destroy
             case WM_DESTROY: {
                 if (!self.window_manager) {
                     system::quit();
                 }
+
+                return 0;
             } break;
 
                 // https://learn.microsoft.com/en-us/windows/win32/inputdev/wm-keydown
@@ -466,8 +458,6 @@ template <typename T> struct webview {
                 switch (window_message.wparam) {
                     case VK_F11: {
                         self.window_handle.toggle_fullscreen();
-
-                        return 0;
                     } break;
                 }
             } break;
@@ -477,8 +467,6 @@ template <typename T> struct webview {
                 if (self.controller) {
                     self.controller->put_IsVisible(window_message.wparam);
                 }
-
-                return 0;
             } break;
 
                 // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-windowposchanged
