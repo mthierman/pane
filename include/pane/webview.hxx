@@ -417,6 +417,15 @@ template <typename T> struct webview {
         }
     }
     ~webview() {
+        if (this->webview_config.virtual_host_name_map) {
+            this->core->ClearVirtualHostNameToFolderMapping(reinterpret_cast<const wchar_t*>(
+                to_utf16((*this->webview_config.virtual_host_name_map).first).data()));
+        }
+
+        this->controller->remove_AcceleratorKeyPressed(*this->token.accelerator_key_pressed());
+        this->core->remove_FaviconChanged(*this->token.favicon_changed());
+        this->core->remove_NavigationCompleted(*this->token.navigation_completed());
+
         this->settings = nullptr;
         this->core = nullptr;
         this->controller = nullptr;
@@ -453,22 +462,6 @@ template <typename T> struct webview {
 
     auto default_procedure(this T& self, const window_message& window_message) -> LRESULT {
         switch (window_message.msg) {
-                // case WM_CLOSE: {
-                //     TODO: FIX CRASHING HERE CALLING TO_UTF16 (string length/resize problem)
-                //     TODO UPDATE: THIS IS ALL CRASHING BECAUSE WE ARE DESTROYING WINDOW FIRST IN
-                //     CALLBACK PROCEDURE!
-
-                //     if (self.webview_config.virtual_host_name_map) {
-                //         self.core->ClearVirtualHostNameToFolderMapping(reinterpret_cast<const
-                //         wchar_t*>(
-                //             to_utf16((*self.webview_config.virtual_host_name_map).first).data()));
-                //     }
-
-                //     self.controller->remove_AcceleratorKeyPressed(*self.token.accelerator_key_pressed());
-                //     self.core->remove_FaviconChanged(*self.token.favicon_changed());
-                //     self.core->remove_NavigationCompleted(*self.token.navigation_completed());
-                // } break;
-
                 // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-erasebkgnd
             case WM_ERASEBKGND: {
                 RECT client_rect;
