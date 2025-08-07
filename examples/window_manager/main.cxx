@@ -14,12 +14,15 @@ struct window : pane::window<window> {
 
     auto handle_message(this Self& self, const pane::window_message& window_message) -> LRESULT {
         switch (window_message.msg) {
+                // case WM_CLOSE: {
+                // } break;
+
             case WM_KEYDOWN: {
                 switch (window_message.wparam) {
                     case 'N': {
                         if (pane::input::is_key_down(VK_LCONTROL)
                             || pane::input::is_key_down(VK_RCONTROL)) {
-                            // window_manager.create();
+                            self.window_manager->create();
                         }
                     } break;
                     case 'W': {
@@ -42,8 +45,6 @@ auto wWinMain(HINSTANCE /* hinstance */,
               PWSTR /* pcmdline */,
               int /* ncmdshow */) -> int {
     pane::window_manager<window> window_manager;
-
-    window_manager.create();
 
     return pane::system::message_loop();
 }

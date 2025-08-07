@@ -21,5 +21,4 @@
 #include <pane/url.hxx>
 #include <pane/utility.hxx>
 #include <pane/webview.hxx>
-#include <pane/window_manager.hxx>
 #include <pane/window.hxx>

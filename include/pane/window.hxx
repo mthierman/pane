@@ -4,6 +4,7 @@
 #include <chrono>
 #include <string>
 #include <type_traits>
+#include <vector>
 #include <pane/color.hxx>
 #include <pane/math.hxx>
 #include <pane/system.hxx>
@@ -148,6 +149,34 @@ private:
     HWND hwnd { nullptr };
 };
 
+template <typename T> struct window_manager final {
+    using Self = window_manager;
+
+    window_manager() { this->create(); }
+    ~window_manager() = default;
+
+    window_manager(const Self&) = delete;
+    auto operator=(const Self&) -> Self& = delete;
+
+    window_manager(Self&&) noexcept = delete;
+    auto operator=(Self&&) noexcept -> Self& = delete;
+
+    auto create(this Self& self) -> void { self.windows.push_back(std::make_unique<T>(&self)); }
+
+    // template <typename U> auto destroy(this Self& self, U hwnd) -> void {
+    //     std::erase_if(self.windows, [&](const auto& window) {
+    //         return window && window->window_handle() == reinterpret_cast<HWND>(hwnd);
+    //     });
+
+    //     if (self.windows.empty()) {
+    //         pane::system::quit();
+    //     }
+    // }
+
+private:
+    std::vector<std::unique_ptr<T>> windows;
+};
+
 template <typename T> struct window_class final {
     using Self = window_class;
 
@@ -290,8 +319,9 @@ struct window_config final {
 template <typename T> struct window {
     using Self = window;
 
-    window()
-        : window_config { std::move(T::make_window_config()) } {
+    window(struct window_manager<T>* window_manager = nullptr)
+        : window_config { std::move(T::make_window_config()) },
+          window_manager { window_manager } {
         CreateWindowExW(
             0,
             this->window_class.data.lpszClassName,
@@ -343,6 +373,7 @@ template <typename T> struct window {
     window_background window_background { pane::system::dark_mode() ? window_config.bg_dark
                                                                     : window_config.bg_light };
     window_handle window_handle;
+    window_manager<T>* window_manager;
 };
 
 // struct window_manager final {
