@@ -163,15 +163,15 @@ template <typename T> struct window_manager final {
 
     auto create(this Self& self) -> void { self.windows.push_back(std::make_unique<T>(&self)); }
 
-    // template <typename U> auto destroy(this Self& self, U hwnd) -> void {
-    //     std::erase_if(self.windows, [&](const auto& window) {
-    //         return window && window->window_handle() == reinterpret_cast<HWND>(hwnd);
-    //     });
+    template <typename U> auto destroy(this Self& self, U& window) -> void {
+        std::erase_if(self.windows, [&](const auto& w) {
+            return w && w->window_handle() == window.window_handle();
+        });
 
-    //     if (self.windows.empty()) {
-    //         pane::system::quit();
-    //     }
-    // }
+        if (self.windows.empty()) {
+            pane::system::quit();
+        }
+    }
 
 private:
     std::vector<std::unique_ptr<T>> windows;

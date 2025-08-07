@@ -14,8 +14,9 @@ struct window : pane::window<window> {
 
     auto handle_message(this Self& self, const pane::window_message& window_message) -> LRESULT {
         switch (window_message.msg) {
-                // case WM_CLOSE: {
-                // } break;
+            case WM_CLOSE: {
+                self.window_manager->destroy(self);
+            } break;
 
             case WM_KEYDOWN: {
                 switch (window_message.wparam) {
