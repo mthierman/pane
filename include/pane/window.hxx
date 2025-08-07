@@ -174,6 +174,22 @@ template <typename T> struct window_manager final {
         }
     }
 
+    auto clear(this Self& self) -> void {
+        self.windows.clear();
+
+        if (self.windows.empty()) {
+            pane::system::quit();
+        }
+    }
+
+    auto size(this const Self& self) -> uint64_t { return self.windows.size(); }
+
+    auto empty(this const Self& self) -> bool { return self.windows.empty(); }
+
+    auto first(this const Self& self) -> T* { return self.windows.front(); }
+
+    auto last(this const Self& self) -> T* { return self.windows.back(); }
+
 private:
     std::vector<std::unique_ptr<T>> windows;
 };
@@ -425,20 +441,4 @@ template <typename T> struct window {
     window_handle window_handle;
     window_manager<T>* window_manager { nullptr };
 };
-
-// struct window_manager final {
-//     using Self = window_manager;
-
-//     auto insert(this Self& self, const window_handle& window_handle) -> void;
-//     auto erase(this Self& self, const window_handle& window_handle) -> void;
-//     auto clear(this Self& self) -> void;
-//     auto size(this const Self& self) -> uint64_t;
-//     auto contains(this const Self& self, HWND hwnd) -> bool;
-//     auto empty(this const Self& self) -> bool;
-//     auto first(this const Self& self) -> HWND;
-//     auto last(this const Self& self) -> HWND;
-
-// private:
-//     std::set<HWND> set;
-// };
 } // namespace pane
