@@ -29,12 +29,6 @@ struct webview : pane::webview<webview> {
         switch (window_message.msg) {
             using enum pane::webview_messages;
 
-            case WM_DESTROY: {
-                pane::system::quit();
-
-                return 0;
-            } break;
-
             case +favicon_changed: {
                 self.window_handle.icon(self.favicon());
             } break;
