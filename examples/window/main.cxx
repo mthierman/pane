@@ -17,23 +17,6 @@ struct window : pane::window<window> {
 
                 return 0;
             } break;
-
-            case WM_KEYDOWN: {
-                switch (window_message.wparam) {
-                    case 'N': {
-                        if (pane::input::is_key_down(VK_LCONTROL)
-                            || pane::input::is_key_down(VK_RCONTROL)) {
-                            // window_manager.create();
-                        }
-                    } break;
-                    case 'W': {
-                        if (pane::input::is_key_down(VK_LCONTROL)
-                            || pane::input::is_key_down(VK_RCONTROL)) {
-                            SendMessageW(window_message.hwnd, WM_CLOSE, 0, 0);
-                        }
-                    } break;
-                }
-            } break;
         }
 
         return self.default_procedure(window_message);

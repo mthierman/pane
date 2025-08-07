@@ -6,6 +6,7 @@
 #include <type_traits>
 #include <vector>
 #include <pane/color.hxx>
+#include <pane/input.hxx>
 #include <pane/math.hxx>
 #include <pane/system.hxx>
 #include <pane/text.hxx>
@@ -367,6 +368,31 @@ template <typename T> struct window {
                          self.window_background());
 
                 return 1;
+            } break;
+
+            case WM_CLOSE: {
+                if (self.window_manager) {
+                    self.window_manager->destroy(self);
+                }
+            } break;
+
+            case WM_KEYDOWN: {
+                switch (window_message.wparam) {
+                    case 'N': {
+                        if (pane::input::is_key_down(VK_LCONTROL)
+                            || pane::input::is_key_down(VK_RCONTROL)) {
+                            if (self.window_manager) {
+                                self.window_manager->create();
+                            }
+                        }
+                    } break;
+                    case 'W': {
+                        if (pane::input::is_key_down(VK_LCONTROL)
+                            || pane::input::is_key_down(VK_RCONTROL)) {
+                            SendMessageW(window_message.hwnd, WM_CLOSE, 0, 0);
+                        }
+                    } break;
+                }
             } break;
         }
 

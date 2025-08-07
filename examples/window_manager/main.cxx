@@ -13,29 +13,6 @@ struct window : pane::window<window> {
     }
 
     auto handle_message(this Self& self, const pane::window_message& window_message) -> LRESULT {
-        switch (window_message.msg) {
-            case WM_CLOSE: {
-                self.window_manager->destroy(self);
-            } break;
-
-            case WM_KEYDOWN: {
-                switch (window_message.wparam) {
-                    case 'N': {
-                        if (pane::input::is_key_down(VK_LCONTROL)
-                            || pane::input::is_key_down(VK_RCONTROL)) {
-                            self.window_manager->create();
-                        }
-                    } break;
-                    case 'W': {
-                        if (pane::input::is_key_down(VK_LCONTROL)
-                            || pane::input::is_key_down(VK_RCONTROL)) {
-                            SendMessageW(window_message.hwnd, WM_CLOSE, 0, 0);
-                        }
-                    } break;
-                }
-            } break;
-        }
-
         return self.default_procedure(window_message);
     }
 };
