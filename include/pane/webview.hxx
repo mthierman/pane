@@ -99,7 +99,8 @@ template <typename T> struct webview {
         webview_config webview;
     };
 
-    webview(struct window_manager<T>* window_manager = nullptr) {
+    webview(struct window_manager<T>* window_manager = nullptr)
+        : window_manager { window_manager } {
         auto config { T::config() };
         this->window_config = config.window;
         this->webview_config = config.webview;
