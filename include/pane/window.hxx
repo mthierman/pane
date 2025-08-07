@@ -374,6 +374,8 @@ template <typename T> struct window {
             case WM_CLOSE: {
                 if (self.window_manager) {
                     self.window_manager->destroy(self);
+                } else {
+                    DestroyWindow(window_message.hwnd);
                 }
 
                 return 0;
