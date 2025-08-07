@@ -237,6 +237,7 @@ private:
 
         if (auto window { reinterpret_cast<T*>(GetWindowLongPtrW(hwnd, 0)) }) {
             switch (window_message.msg) {
+                    // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-settingchange
                 case WM_SETTINGCHANGE: {
                     auto dark_mode { system::dark_mode() };
                     window->window_background(dark_mode ? window->window_config.bg_dark
@@ -288,6 +289,20 @@ private:
                     switch (window_message.wparam) {
                         case VK_F11: {
                             window->window_handle.toggle_fullscreen();
+                        } break;
+                        case 'N': {
+                            if (pane::input::is_key_down(VK_LCONTROL)
+                                || pane::input::is_key_down(VK_RCONTROL)) {
+                                if (window->window_manager) {
+                                    window->window_manager->create();
+                                }
+                            }
+                        } break;
+                        case 'W': {
+                            if (pane::input::is_key_down(VK_LCONTROL)
+                                || pane::input::is_key_down(VK_RCONTROL)) {
+                                SendMessageW(window_message.hwnd, WM_CLOSE, 0, 0);
+                            }
                         } break;
                     }
                 } break;
@@ -360,6 +375,7 @@ template <typename T> struct window {
 
     auto default_procedure(this T& self, const window_message& window_message) -> LRESULT {
         switch (window_message.msg) {
+                // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-erasebkgnd
             case WM_ERASEBKGND: {
                 RECT client_rect;
                 GetClientRect(window_message.hwnd, &client_rect);
@@ -388,25 +404,6 @@ template <typename T> struct window {
                 }
 
                 return 0;
-            } break;
-
-            case WM_KEYDOWN: {
-                switch (window_message.wparam) {
-                    case 'N': {
-                        if (pane::input::is_key_down(VK_LCONTROL)
-                            || pane::input::is_key_down(VK_RCONTROL)) {
-                            if (self.window_manager) {
-                                self.window_manager->create();
-                            }
-                        }
-                    } break;
-                    case 'W': {
-                        if (pane::input::is_key_down(VK_LCONTROL)
-                            || pane::input::is_key_down(VK_RCONTROL)) {
-                            SendMessageW(window_message.hwnd, WM_CLOSE, 0, 0);
-                        }
-                    } break;
-                }
             } break;
         }
 
