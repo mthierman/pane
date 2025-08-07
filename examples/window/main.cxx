@@ -11,14 +11,6 @@ struct window : pane::window<window> {
     }
 
     auto handle_message(this Self& self, const pane::window_message& window_message) -> LRESULT {
-        switch (window_message.msg) {
-            case WM_DESTROY: {
-                pane::system::quit();
-
-                return 0;
-            } break;
-        }
-
         return self.default_procedure(window_message);
     }
 };
