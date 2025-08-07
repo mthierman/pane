@@ -6,7 +6,7 @@ struct window : pane::window<window> {
 
     static auto make_window_config() -> pane::window_config {
         return {
-            u8"window", pane::color { 0, 0, 0, 0 }, pane::color { 0, 0, 0, 0 }, true, nullptr
+            u8"window", pane::color { 0, 0, 0, 255 }, pane::color { 0, 0, 0, 255 }, true, nullptr
         };
     }
 

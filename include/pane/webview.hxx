@@ -94,7 +94,9 @@ enum struct webview_messages : int {
 template <typename T> struct webview {
     using Self = webview;
 
-    webview() {
+    webview(struct window_manager<T>* window_manager = nullptr)
+        : window_config { std::move(T::make_window_config()) },
+          webview_config { std::move(T::make_webview_config()) } {
         CreateWindowExW(
             0,
             this->window_class.data.lpszClassName,
@@ -394,7 +396,7 @@ template <typename T> struct webview {
     auto operator=(Self&&) noexcept -> Self& = delete;
 
     auto procedure(this T& self, const window_message& window_message) -> LRESULT {
-        return self.message_handler(window_message);
+        return self.handle_message(window_message);
     }
 
     auto default_procedure(this T& self, const window_message& window_message) -> LRESULT {
@@ -517,6 +519,7 @@ template <typename T> struct webview {
     window_background window_background { system::dark_mode() ? window_config.bg_dark
                                                               : window_config.bg_light };
     window_handle window_handle;
+    window_manager<T>* window_manager;
 
     struct event_token {
         webview_token accelerator_key_pressed;

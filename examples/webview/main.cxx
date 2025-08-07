@@ -4,7 +4,17 @@ struct webview : pane::webview<webview> {
     using Self = webview;
     using pane::webview<webview>::webview;
 
-    auto message_handler(this Self& self, const pane::window_message& window_message) -> LRESULT {
+    static auto make_window_config() -> pane::window_config {
+        return {
+            u8"webview", pane::color { 0, 0, 0, 255 }, pane::color { 0, 0, 0, 255 }, true, nullptr
+        };
+    }
+
+    static auto make_webview_config() -> pane::webview_config {
+        return { u8"https://www.google.com/" };
+    }
+
+    auto handle_message(this Self& self, const pane::window_message& window_message) -> LRESULT {
         switch (window_message.msg) {
             using enum pane::webview_messages;
 
@@ -49,12 +59,7 @@ auto wWinMain(HINSTANCE /* hinstance */,
               HINSTANCE /* hprevinstance */,
               PWSTR /* pcmdline */,
               int /* ncmdshow */) -> int {
-    webview window { { u8"webview",
-                       pane::color { 0, 0, 0, 255 },
-                       pane::color { 255, 255, 255, 255 },
-                       true,
-                       nullptr },
-                     { u8"https://www.google.com/" } };
+    webview webview;
 
     return pane::system::message_loop();
 }
