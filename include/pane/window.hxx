@@ -418,7 +418,7 @@ template <typename T> struct window {
     window_background window_background { pane::system::dark_mode() ? window_config.bg_dark
                                                                     : window_config.bg_light };
     window_handle window_handle;
-    window_manager<T>* window_manager;
+    window_manager<T>* window_manager { nullptr };
 };
 
 // struct window_manager final {

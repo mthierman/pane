@@ -528,7 +528,7 @@ template <typename T> struct webview {
     window_background window_background { system::dark_mode() ? window_config.bg_dark
                                                               : window_config.bg_light };
     window_handle window_handle;
-    window_manager<T>* window_manager;
+    window_manager<T>* window_manager { nullptr };
 
     struct event_token {
         webview_token accelerator_key_pressed;
