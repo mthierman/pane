@@ -377,9 +377,6 @@ template <typename T> struct window {
             } break;
 
             case WM_DESTROY: {
-                // if (self.window_manager) {
-                //     self.window_manager->destroy(self);
-                // }
                 if (!self.window_manager) {
                     system::quit();
                 }

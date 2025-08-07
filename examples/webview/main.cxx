@@ -17,29 +17,6 @@ struct webview : pane::webview<webview> {
         switch (window_message.msg) {
             using enum pane::webview_messages;
 
-            case WM_DESTROY: {
-                pane::system::quit();
-
-                return 0;
-            } break;
-
-            case WM_KEYDOWN: {
-                switch (window_message.wparam) {
-                    case 'N': {
-                        if (pane::input::is_key_down(VK_LCONTROL)
-                            || pane::input::is_key_down(VK_RCONTROL)) {
-                            // window_manager.create();
-                        }
-                    } break;
-                    case 'W': {
-                        if (pane::input::is_key_down(VK_LCONTROL)
-                            || pane::input::is_key_down(VK_RCONTROL)) {
-                            SendMessageW(window_message.hwnd, WM_CLOSE, 0, 0);
-                        }
-                    } break;
-                }
-            } break;
-
             case +favicon_changed: {
                 self.window_handle.icon(self.favicon());
             } break;
