@@ -249,6 +249,7 @@ template <typename T> struct webview {
 
                                 if (key == VK_F11) {
                                     if (!key_status.WasKeyDown) {
+                                        args->put_Handled(TRUE);
                                         this->window_handle.toggle_fullscreen();
                                     }
                                 }
