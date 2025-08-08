@@ -24,6 +24,15 @@ struct webview : pane::webview<webview> {
 
             case +navigation_completed: {
                 self.window_handle.title(self.current_title);
+                self.post_json(u8R"({
+    "type": "greeting",
+    "message": "Hello from native C++!",
+    "timestamp": 1723058842,
+    "data": {
+        "id": 123,
+        "active": true
+    }
+})");
             } break;
         }
 
