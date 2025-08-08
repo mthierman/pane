@@ -2,7 +2,7 @@
 #include <Windows.h>
 #include <wrl.h>
 #include <filesystem>
-#include <utility>
+#include <string>
 #include <pane/color.hxx>
 #include <pane/gdi_plus.hxx>
 #include <pane/math.hxx>
@@ -16,6 +16,11 @@
 #include <ada.h>
 
 namespace pane {
+struct virtual_host {
+    std::u8string name;
+    std::filesystem::path path;
+};
+
 struct webview_config final {
     struct environment_options final {
         std::u8string AdditionalBrowserArguments;
@@ -57,9 +62,7 @@ struct webview_config final {
     };
 
     std::u8string home_page { u8"about:blank" };
-    std::optional<std::pair<std::u8string, std::filesystem::path>> virtual_host_name_map {
-        std::nullopt
-    };
+    std::optional<virtual_host> virtual_host { std::nullopt };
     std::filesystem::path browser_executable_folder;
     std::filesystem::path user_data_folder;
     environment_options environment_options;
@@ -367,14 +370,13 @@ template <typename T> struct webview {
                                     }
                                 }
 
-                                if (this->webview_config.virtual_host_name_map) {
+                                if (this->webview_config.virtual_host) {
                                     const auto host_name { to_utf16(
-                                        (*this->webview_config.virtual_host_name_map).first) };
+                                        (*this->webview_config.virtual_host).name) };
 
                                     this->core->SetVirtualHostNameToFolderMapping(
                                         reinterpret_cast<const wchar_t*>(host_name.data()),
-                                        (*this->webview_config.virtual_host_name_map)
-                                            .second.c_str(),
+                                        (*this->webview_config.virtual_host).path.c_str(),
                                         COREWEBVIEW2_HOST_RESOURCE_ACCESS_KIND::
                                             COREWEBVIEW2_HOST_RESOURCE_ACCESS_KIND_ALLOW);
                                 }
@@ -440,9 +442,9 @@ template <typename T> struct webview {
         }
     }
     ~webview() {
-        if (this->webview_config.virtual_host_name_map) {
+        if (this->webview_config.virtual_host) {
             this->core->ClearVirtualHostNameToFolderMapping(reinterpret_cast<const wchar_t*>(
-                to_utf16((*this->webview_config.virtual_host_name_map).first).data()));
+                to_utf16((*this->webview_config.virtual_host).name).data()));
         }
 
         this->controller->remove_AcceleratorKeyPressed(*this->token.accelerator_key_pressed());
@@ -557,6 +559,14 @@ template <typename T> struct webview {
 
         if (self.core) {
             self.core->NavigateToString(reinterpret_cast<const wchar_t*>(u16string.c_str()));
+        }
+    }
+
+    auto post_json(this Self& self, std::u8string_view message) -> void {
+        //
+        auto conv { to_utf16(message) };
+        if (self.core) {
+            self.core->PostWebMessageAsJson(reinterpret_cast<wchar_t*>(conv.data()));
         }
     }
 

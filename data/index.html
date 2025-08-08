@@ -4,6 +4,11 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title></title>
+        <script>
+            chrome.webview.addEventListener("message", (arg) => {
+                console.log(arg.data);
+            });
+        </script>
     </head>
     <body style="background-color: black; color: white">
         test

@@ -10,7 +10,8 @@ struct webview : pane::webview<webview> {
                    pane::color { 0, 0, 0, 255 },
                    true,
                    nullptr },
-                 { u8"https://www.google.com/" } };
+                 { u8"https://pane.internal/index.html",
+                   pane::virtual_host { u8"pane.internal", u8"D:/mthierman/pane/data" } } };
     }
 
     auto handle_message(this Self& self, const pane::window_message& window_message) -> LRESULT {
