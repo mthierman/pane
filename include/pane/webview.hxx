@@ -194,7 +194,8 @@ template <typename T> struct webview {
                 this->webview_config.browser_executable_folder.c_str(),
                 this->webview_config.user_data_folder.c_str(),
                 this->environment_options.get(),
-                wil::MakeAgileCallback<ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler>(
+                Microsoft::WRL::Callback<
+                    ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler>(
                     [&](HRESULT /* error_code */,
                         ICoreWebView2Environment* created_environment) -> HRESULT {
                 if (created_environment) {
@@ -227,7 +228,7 @@ template <typename T> struct webview {
                     this->environment->CreateCoreWebView2ControllerWithOptions(
                         this->window_handle(),
                         this->controller_options.get(),
-                        wil::MakeAgileCallback<
+                        Microsoft::WRL::Callback<
                             ICoreWebView2CreateCoreWebView2ControllerCompletedHandler>(
                             [this](HRESULT /* error_code */,
                                    ICoreWebView2Controller* created_controller) -> HRESULT {
