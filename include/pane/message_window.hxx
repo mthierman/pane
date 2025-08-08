@@ -44,12 +44,10 @@ private:
             case WM_NCCREATE: {
                 if (auto create_struct {
                         reinterpret_cast<CREATESTRUCTW*>(window_message.lparam) }) {
-                    if (auto create_params { create_struct->lpCreateParams }) {
-                        auto& self { *(static_cast<T*>(create_params)) };
-
+                    if (auto window { static_cast<T*>(create_struct->lpCreateParams) }) {
                         SetWindowLongPtrW(
-                            window_message.hwnd, 0, reinterpret_cast<LONG_PTR>(&self));
-                        self.window_handle(window_message.hwnd);
+                            window_message.hwnd, 0, reinterpret_cast<LONG_PTR>(window));
+                        window->window_handle(window_message.hwnd);
                     }
                 }
             } break;
@@ -101,7 +99,7 @@ template <typename T> struct message_window {
     auto operator=(Self&&) noexcept -> Self& = delete;
 
     auto procedure(this T& self, const window_message& window_message) -> LRESULT {
-        return self.message_handler(window_message);
+        return self.handle_message(window_message);
     }
 
     message_window_class<T> window_class { u8"pane_message_window" };
