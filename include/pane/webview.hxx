@@ -262,11 +262,33 @@ template <typename T> struct webview {
                                 COREWEBVIEW2_PHYSICAL_KEY_STATUS key_status;
                                 args->get_PhysicalKeyStatus(&key_status);
 
-                                if (key == VK_F11) {
-                                    if (!key_status.WasKeyDown) {
-                                        args->put_Handled(TRUE);
-                                        this->window_handle.toggle_fullscreen();
-                                    }
+                                switch (key) {
+                                    case VK_F11: {
+                                        if (!key_status.WasKeyDown) {
+                                            args->put_Handled(TRUE);
+                                            this->window_handle.toggle_fullscreen();
+                                        }
+                                    } break;
+                                    case 'N': {
+                                        if (pane::input::is_key_down(VK_LCONTROL)
+                                            || pane::input::is_key_down(VK_RCONTROL)) {
+                                            if (!key_status.WasKeyDown) {
+                                                args->put_Handled(TRUE);
+                                                if (this->window_manager) {
+                                                    this->window_manager->create();
+                                                }
+                                            }
+                                        }
+                                    } break;
+                                    case 'W': {
+                                        if (pane::input::is_key_down(VK_LCONTROL)
+                                            || pane::input::is_key_down(VK_RCONTROL)) {
+                                            if (!key_status.WasKeyDown) {
+                                                args->put_Handled(TRUE);
+                                                SendMessageW(this->window_handle(), WM_CLOSE, 0, 0);
+                                            }
+                                        }
+                                    } break;
                                 }
 
                                 return S_OK;
