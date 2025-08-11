@@ -1,5 +1,24 @@
 #include <pane/pane.hxx>
 
+struct init_data {
+    using Self = init_data;
+
+    std::u8string name { u8"Abbie Mays" };
+    uint64_t age { 18 };
+
+    auto schema() -> void {
+        auto schema { glz::write_json_schema<init_data>().value_or("error") };
+        pane::debug("{}", schema);
+    }
+
+    auto json(this Self& self) -> void {
+        std::u8string buffer;
+        if (!glz::write_json(self, buffer)) {
+            pane::debug("{}", buffer);
+        }
+    }
+};
+
 struct webview : pane::webview<webview> {
     using Self = webview;
     using pane::webview<webview>::webview;
@@ -31,15 +50,6 @@ struct webview : pane::webview<webview> {
 
             case +navigation_completed: {
                 self.window_handle.title(self.current_title);
-                self.post_json(u8R"({
-    "type": "greeting",
-    "message": "Hello from native C++!",
-    "timestamp": 1723058842,
-    "data": {
-        "id": 123,
-        "active": true
-    }
-})");
             } break;
         }
 

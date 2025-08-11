@@ -9,18 +9,19 @@ const root = document.getElementById("root") as HTMLDivElement;
 
 window.chrome.webview.addEventListener<WebViewMessage>("message", (event) => {
     const data = event.data;
-    switch (data.type) {
-        case "init":
-            {
-                console.log(data.payload.age);
-                root.innerHTML = data.payload.name;
-            }
-            break;
-        case "test":
-            {
-                console.log(data.payload.test_number);
-                root.innerHTML = data.payload.test_number.toString();
-            }
-            break;
-    }
+    console.log(event.data);
+    // switch (data.type) {
+    //     case "init":
+    //         {
+    //             console.log(data.payload.age);
+    //             root.innerHTML = data.payload.name;
+    //         }
+    //         break;
+    //     case "test":
+    //         {
+    //             console.log(data.payload.test_number);
+    //             root.innerHTML = data.payload.test_number.toString();
+    //         }
+    //         break;
+    // }
 });
