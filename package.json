@@ -11,13 +11,13 @@
         "preview": "tsc -b && vite build && vite preview"
     },
     "devDependencies": {
-        "@tailwindcss/vite": "latest",
-        "@types/node": "latest",
-        "globals": "latest",
-        "prettier-plugin-tailwindcss": "latest",
-        "prettier": "latest",
-        "tailwindcss": "latest",
-        "typescript": "latest",
-        "vite": "latest"
+        "@tailwindcss/vite": "^4.1.11",
+        "@types/node": "^24.2.1",
+        "globals": "^16.3.0",
+        "prettier": "^3.6.2",
+        "prettier-plugin-tailwindcss": "^0.6.14",
+        "tailwindcss": "^4.1.11",
+        "typescript": "^5.9.2",
+        "vite": "^7.1.1"
     }
 }
