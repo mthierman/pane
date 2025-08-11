@@ -79,7 +79,7 @@ export interface WebViewEventMap {
 }
 
 export interface WebViewMessageEvent extends MessageEvent {
-    additionalObjects: ArrayLike<FileSystemHandle | FileSystemDirectoryHandle | null>;
+    additionalObjects: ArrayLike<FileSystemFileHandle | FileSystemDirectoryHandle | null>;
     source: WebView & MessageEventSource;
 }
 
