@@ -24,4 +24,14 @@ auto debug(const std::u16string& string) -> void {
     OutputDebugStringW(reinterpret_cast<const wchar_t*>(string.data()));
     OutputDebugStringW(L"\n");
 }
+
+auto debug_mode() -> bool {
+#ifdef DEBUG_MODE
+    constexpr bool debug_mode { true };
+#else
+    constexpr bool debug_mode { false };
+#endif
+
+    return debug_mode;
+}
 } // namespace pane

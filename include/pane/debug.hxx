@@ -10,6 +10,8 @@ auto debug(const std::u8string& string) -> void;
 auto debug(const std::wstring& string) -> void;
 auto debug(const std::u16string& string) -> void;
 
+auto debug_mode() -> bool;
+
 template <typename... Args>
 auto debug(std::format_string<Args...> format_string, Args&&... args) -> void {
     const auto u16string { pane::to_utf16(
