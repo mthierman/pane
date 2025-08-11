@@ -1,3 +1,8 @@
+#ifdef DEBUG_MODE
+constexpr bool debug_mode { true };
+#else
+constexpr bool debug_mode { false };
+#endif
 #include <pane/pane.hxx>
 
 struct webview : pane::webview<webview> {
@@ -5,13 +10,20 @@ struct webview : pane::webview<webview> {
     using pane::webview<webview>::webview;
 
     static auto config() -> config {
-        return { { u8"webview",
-                   pane::color { 0, 0, 0, 255 },
-                   pane::color { 0, 0, 0, 255 },
-                   true,
-                   nullptr },
-                 { u8"https://pane.internal/index.html",
-                   pane::virtual_host { u8"pane.internal", u8"D:/mthierman/pane/data" } } };
+        pane::window_config window_config {
+            u8"webview", pane::color { 0, 0, 0, 255 }, pane::color { 0, 0, 0, 255 }, true, nullptr
+        };
+
+        pane::webview_config webview_config;
+
+        if constexpr (debug_mode) {
+            return { window_config, pane::webview_config { u8"https://localhost:5173/" } };
+        } else {
+            return { window_config,
+                     pane::webview_config {
+                         u8"https://pane.internal/index.html",
+                         pane::virtual_host { u8"pane.internal", u8"D:/mthierman/pane/data" } } };
+        }
     }
 
     auto handle_message(this Self& self, const pane::window_message& window_message) -> LRESULT {

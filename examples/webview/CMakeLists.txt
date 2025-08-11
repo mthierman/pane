@@ -12,3 +12,4 @@ target_link_libraries(
     PRIVATE pane::pane
             pane::config
     )
+target_compile_definitions(webview PRIVATE $<$<CONFIG:Debug>:DEBUG_MODE>)
