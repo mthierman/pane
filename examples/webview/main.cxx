@@ -3,7 +3,7 @@
 template <typename T> auto to_json(const T& value) -> std::u8string {
     std::u8string buffer;
 
-    [[maybe_unused]] auto ec { glz::write_json(value, buffer) };
+    [[maybe_unused]] auto ec { glz::write<glz::opts { .prettify { true } }>(value, buffer) };
 
     return buffer;
 }
@@ -60,7 +60,8 @@ struct webview : pane::webview<webview> {
             case +navigation_completed: {
                 self.window_handle.title(self.current_title);
                 init_data data;
-                // self.post_json(to_json(data));
+                self.post_json(to_json(data));
+                self.post_json(to_schema(data));
                 pane::debug("{}", to_json(data));
                 pane::debug("{}", to_schema(data));
             } break;
