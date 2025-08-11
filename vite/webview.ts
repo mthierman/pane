@@ -49,18 +49,18 @@ export interface SharedBufferReceivedEvent extends Event {
 export interface WebView extends EventTarget {
     hostObjects: HostObjectsAsyncRoot;
     addEventListener(
-        type: string,
-        listener: EventListenerOrEventListenerObject,
-        options?: boolean | AddEventListenerOptions,
-    ): void;
-    addEventListener(
-        type: string,
+        type: "message",
         listener: (event: WebViewMessageEvent) => void,
         options?: boolean | AddEventListenerOptions,
     ): void;
     addEventListener(
-        type: string,
+        type: "sharedbufferreceived",
         listener: (event: SharedBufferReceivedEvent) => void,
+        options?: boolean | AddEventListenerOptions,
+    ): void;
+    addEventListener(
+        type: string,
+        listener: EventListenerOrEventListenerObject,
         options?: boolean | AddEventListenerOptions,
     ): void;
     postMessage(message: unknown): void;
