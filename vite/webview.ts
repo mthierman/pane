@@ -53,6 +53,11 @@ export interface WebView extends EventTarget {
         listener: EventListenerOrEventListenerObject,
         options?: boolean | AddEventListenerOptions,
     ): void;
+    addEventListener(
+        type: string,
+        listener: (event: WebViewMessageEvent) => void,
+        options?: boolean | AddEventListenerOptions,
+    ): void;
     postMessage(message: unknown): void;
     postMessageWithAdditionalObjects(message: unknown, additionalObjects: ArrayLike<unknown>): void;
     releaseBuffer(buffer: ArrayBuffer): void;
