@@ -78,7 +78,7 @@ export interface WebViewEventMap {
     sharedbufferreceived: SharedBufferReceivedEvent;
 }
 
-export interface WebViewMessageEvent extends MessageEvent {
+export interface WebViewMessageEvent<T = unknown> extends MessageEvent<T> {
     additionalObjects: ArrayLike<FileSystemFileHandle | FileSystemDirectoryHandle | null>;
     source: WebView & MessageEventSource;
 }
