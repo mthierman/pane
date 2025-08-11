@@ -1,5 +1,21 @@
 #include <pane/pane.hxx>
 
+template <typename T> auto to_json(const T& value) -> std::u8string {
+    std::u8string buffer;
+
+    [[maybe_unused]] auto ec { glz::write_json(value, buffer) };
+
+    return buffer;
+}
+
+template <typename T> auto to_schema(const T& value) -> std::u8string {
+    std::u8string buffer;
+
+    [[maybe_unused]] auto ec { glz::write_json_schema<T>(buffer) };
+
+    return buffer;
+}
+
 struct init_data {
     using Self = init_data;
 
@@ -9,13 +25,6 @@ struct init_data {
     auto schema() -> void {
         auto schema { glz::write_json_schema<init_data>().value_or("error") };
         pane::debug("{}", schema);
-    }
-
-    auto json(this Self& self) -> void {
-        std::u8string buffer;
-        if (!glz::write_json(self, buffer)) {
-            pane::debug("{}", buffer);
-        }
     }
 };
 
@@ -50,6 +59,10 @@ struct webview : pane::webview<webview> {
 
             case +navigation_completed: {
                 self.window_handle.title(self.current_title);
+                init_data data;
+                // self.post_json(to_json(data));
+                pane::debug("{}", to_json(data));
+                pane::debug("{}", to_schema(data));
             } break;
         }
 
