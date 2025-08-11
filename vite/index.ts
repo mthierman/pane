@@ -1,6 +1,7 @@
 import "./styles/index.css";
-import "./webview";
+import type { WebViewMessageEvent } from "./webview";
 
 window.chrome.webview.addEventListener("message", (arg) => {
-    console.log(arg.data);
+    const webview_message_event = arg as WebViewMessageEvent;
+    console.log(webview_message_event.data);
 });

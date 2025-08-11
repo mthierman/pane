@@ -1,10 +1,10 @@
 // https://learn.microsoft.com/en-us/microsoft-edge/webview2/reference/javascript/
 
-interface HostObjectAsyncProxy extends HostObjectAsyncProxyBase {
+export interface HostObjectAsyncProxy extends HostObjectAsyncProxyBase {
     sync(): Promise<HostObjectSyncProxy>;
 }
 
-interface HostObjectAsyncProxyBase extends CallableFunction {
+export interface HostObjectAsyncProxyBase extends CallableFunction {
     applyHostFunction(argArray?: unknown): Promise<unknown>;
     getHostProperty(propertyName: string): Promise<unknown>;
     getLocalProperty(propertyName: string): unknown;
@@ -12,7 +12,7 @@ interface HostObjectAsyncProxyBase extends CallableFunction {
     setLocalProperty(propertyName: string, propertyValue: unknown): unknown;
 }
 
-interface HostObjectSyncProxy {
+export interface HostObjectSyncProxy {
     applyHostFunction(argArray?: unknown): unknown;
     async(): HostObjectAsyncProxy;
     getHostProperty(propertyName: string): unknown;
@@ -21,30 +21,32 @@ interface HostObjectSyncProxy {
     setLocalProperty(propertyName: string, propertyValue: unknown): unknown;
 }
 
-interface HostObjectsAsyncRoot extends HostObjectAsyncProxyBase {
+export interface HostObjectsAsyncRoot extends HostObjectAsyncProxyBase {
     options: HostObjectsOptions;
     sync: HostObjectsSyncRoot;
+    cancelPromise(promise: Promise<HostObjectAsyncProxy>): void;
     cleanupSome(): void;
 }
 
-interface HostObjectsOptions {
+export interface HostObjectsOptions {
     defaultSyncProxy: boolean;
     forceAsyncMethodMatches: RegExp[];
     forceLocalProperties: string[];
     ignoreMemberNotFoundError: boolean;
     log: (...data: unknown[]) => void;
+    shouldPassTypedArraysAsArrays: boolean;
     shouldSerializeDates: boolean;
 }
 
-interface HostObjectsSyncRoot extends HostObjectSyncProxy {}
+export interface HostObjectsSyncRoot extends HostObjectSyncProxy {}
 
-interface SharedBufferReceivedEvent extends Event {
+export interface SharedBufferReceivedEvent extends Event {
     additionalData: unknown;
     source: WebView;
     getBuffer(): ArrayBuffer;
 }
 
-interface WebView extends EventTarget {
+export interface WebView extends EventTarget {
     hostObjects: HostObjectsAsyncRoot;
     addEventListener(
         type: string,
@@ -61,6 +63,16 @@ interface WebView extends EventTarget {
     ): void;
 }
 
+export interface WebViewEventMap {
+    message: WebViewMessageEvent;
+    sharedbufferreceived: SharedBufferReceivedEvent;
+}
+
+export interface WebViewMessageEvent extends MessageEvent {
+    additionalObjects: ArrayLike<unknown>;
+    source: WebView & MessageEventSource;
+}
+
 declare global {
     interface Window {
         chrome: {
@@ -68,14 +80,3 @@ declare global {
         };
     }
 }
-
-export type {
-    HostObjectAsyncProxy,
-    HostObjectAsyncProxyBase,
-    HostObjectsAsyncRoot,
-    HostObjectsOptions,
-    HostObjectsSyncRoot,
-    HostObjectSyncProxy,
-    SharedBufferReceivedEvent,
-    WebView,
-};
