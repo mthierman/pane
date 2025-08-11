@@ -40,22 +40,33 @@ export interface HostObjectSyncProxy {
     setLocalProperty(propertyName: string, propertyValue: unknown): unknown;
 }
 
-export interface SharedBufferReceivedEvent extends Event {
-    additionalData: unknown;
+export interface WebViewMessageEvent<T = unknown> extends MessageEvent<T> {
+    additionalObjects: ArrayLike<FileSystemFileHandle | FileSystemDirectoryHandle | null>;
+    source: WebView & MessageEventSource;
+}
+
+export interface SharedBufferReceivedEvent<T = unknown, U = unknown> extends Event {
+    data: T;
+    additionalData: U;
     source: WebView;
     getBuffer(): ArrayBuffer;
 }
 
+export interface WebViewEventMap {
+    message: WebViewMessageEvent;
+    sharedbufferreceived: SharedBufferReceivedEvent;
+}
+
 export interface WebView extends EventTarget {
     hostObjects: HostObjectsAsyncRoot;
-    addEventListener(
+    addEventListener<T = unknown>(
         type: "message",
-        listener: (event: WebViewMessageEvent) => void,
+        listener: (event: WebViewMessageEvent<T>) => void,
         options?: boolean | AddEventListenerOptions,
     ): void;
-    addEventListener(
+    addEventListener<T = unknown, U = unknown>(
         type: "sharedbufferreceived",
-        listener: (event: SharedBufferReceivedEvent) => void,
+        listener: (event: SharedBufferReceivedEvent<T, U>) => void,
         options?: boolean | AddEventListenerOptions,
     ): void;
     addEventListener(
@@ -71,16 +82,6 @@ export interface WebView extends EventTarget {
         listener: EventListenerOrEventListenerObject,
         options?: boolean | EventListenerOptions,
     ): void;
-}
-
-export interface WebViewEventMap {
-    message: WebViewMessageEvent;
-    sharedbufferreceived: SharedBufferReceivedEvent;
-}
-
-export interface WebViewMessageEvent<T = unknown> extends MessageEvent<T> {
-    additionalObjects: ArrayLike<FileSystemFileHandle | FileSystemDirectoryHandle | null>;
-    source: WebView & MessageEventSource;
 }
 
 declare global {
