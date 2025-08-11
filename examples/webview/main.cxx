@@ -1,8 +1,3 @@
-#ifdef DEBUG_MODE
-constexpr bool debug_mode { true };
-#else
-constexpr bool debug_mode { false };
-#endif
 #include <pane/pane.hxx>
 
 struct webview : pane::webview<webview> {
@@ -16,7 +11,7 @@ struct webview : pane::webview<webview> {
 
         pane::webview_config webview_config;
 
-        if constexpr (debug_mode) {
+        if constexpr (pane::debug_mode) {
             return { window_config, pane::webview_config { u8"https://localhost:5173/" } };
         } else {
             return { window_config,
