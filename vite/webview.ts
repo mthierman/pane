@@ -12,15 +12,6 @@ export interface HostObjectAsyncProxyBase extends CallableFunction {
     setLocalProperty(propertyName: string, propertyValue: unknown): unknown;
 }
 
-export interface HostObjectSyncProxy {
-    applyHostFunction(argArray?: unknown): unknown;
-    async(): HostObjectAsyncProxy;
-    getHostProperty(propertyName: string): unknown;
-    getLocalProperty(propertyName: string): unknown;
-    setHostProperty(propertyName: string, propertyValue: unknown): unknown;
-    setLocalProperty(propertyName: string, propertyValue: unknown): unknown;
-}
-
 export interface HostObjectsAsyncRoot extends HostObjectAsyncProxyBase {
     options: HostObjectsOptions;
     sync: HostObjectsSyncRoot;
@@ -39,6 +30,15 @@ export interface HostObjectsOptions {
 }
 
 export interface HostObjectsSyncRoot extends HostObjectSyncProxy {}
+
+export interface HostObjectSyncProxy {
+    applyHostFunction(argArray?: unknown): unknown;
+    async(): HostObjectAsyncProxy;
+    getHostProperty(propertyName: string): unknown;
+    getLocalProperty(propertyName: string): unknown;
+    setHostProperty(propertyName: string, propertyValue: unknown): unknown;
+    setLocalProperty(propertyName: string, propertyValue: unknown): unknown;
+}
 
 export interface SharedBufferReceivedEvent extends Event {
     additionalData: unknown;
