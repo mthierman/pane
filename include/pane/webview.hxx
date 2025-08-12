@@ -563,10 +563,16 @@ template <typename T> struct webview {
     }
 
     auto post_json(this Self& self, std::u8string_view message) -> void {
-        //
         auto conv { to_utf16(message) };
+
         if (self.core) {
             self.core->PostWebMessageAsJson(reinterpret_cast<wchar_t*>(conv.data()));
+        }
+    }
+
+    auto devtools(this Self& self) -> void {
+        if (self.core) {
+            self.core->OpenDevToolsWindow();
         }
     }
 

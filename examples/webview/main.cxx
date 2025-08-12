@@ -57,6 +57,12 @@ struct webview : pane::webview<webview> {
                 self.window_handle.icon(self.favicon());
             } break;
 
+            case +core_created: {
+                if (pane::debug_mode) {
+                    self.devtools();
+                }
+            } break;
+
             case +navigation_completed: {
                 self.window_handle.title(self.current_title);
                 init_data data;
