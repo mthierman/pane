@@ -1,3 +1,7 @@
+import "./styles/index.css";
+
+// SHADOW DOM:
+
 // class MyButton extends HTMLElement {
 //     constructor() {
 //         super();
@@ -13,10 +17,26 @@
 
 // customElements.define("my-button", MyButton);
 
+// NO SHADOW DOM
+
+// class MyButton extends HTMLElement {
+//     connectedCallback() {
+//         this.innerHTML = `<button>Click me</button>`;
+//         this.querySelector("button")!.onclick = () => console.log("Button clicked!");
+//     }
+// }
+
+// customElements.define("my-button", MyButton);
+
+// NO SHADOW DOM, NO TEMPLATE LITERALS
+
 class MyButton extends HTMLElement {
     connectedCallback() {
-        this.innerHTML = `<button>Click me</button>`;
-        this.querySelector("button")!.onclick = () => console.log("Button clicked!");
+        const button = document.createElement("button");
+        // button.classList.add("bg-red-800");
+        button.textContent = "Click me";
+        button.onclick = () => console.log("Button clicked!");
+        this.appendChild(button);
     }
 }
 
