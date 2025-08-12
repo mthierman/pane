@@ -312,6 +312,14 @@ template <typename T> struct webview {
                                                     this->favicon())
                                     .send();
 
+                                wil::com_ptr<ICoreWebView2Profile> created_profile;
+                                this->core->get_Profile(&created_profile);
+
+                                if (created_profile) {
+                                    this->profile
+                                        = created_profile.try_query<ICoreWebView2Profile8>();
+                                }
+
                                 wil::com_ptr<ICoreWebView2Settings> created_settings;
                                 this->core->get_Settings(created_settings.put());
 
@@ -562,7 +570,7 @@ template <typename T> struct webview {
         }
     }
 
-    auto post_json(this Self& self, std::u8string_view message) -> void {
+    auto post_json(this const Self& self, std::u8string_view message) -> void {
         auto conv { to_utf16(message) };
 
         if (self.core) {
@@ -570,9 +578,19 @@ template <typename T> struct webview {
         }
     }
 
-    auto devtools(this Self& self) -> void {
+    auto devtools(this const Self& self) -> void {
         if (self.core) {
             self.core->OpenDevToolsWindow();
+        }
+    }
+
+    auto clear_browsing_data(this Self& self) -> void {
+        if (self.profile) {
+            self.profile->ClearBrowsingDataAll(
+                Microsoft::WRL::Callback<ICoreWebView2ClearBrowsingDataCompletedHandler>(
+                    [](HRESULT /* error_code */) -> HRESULT {
+                return S_OK;
+            }).Get());
         }
     }
 
@@ -603,5 +621,6 @@ template <typename T> struct webview {
     wil::com_ptr<ICoreWebView2ControllerOptions4> controller_options;
     wil::com_ptr<ICoreWebView2Controller4> controller;
     wil::com_ptr<ICoreWebView2_27> core;
+    wil::com_ptr<ICoreWebView2Profile8> profile;
 };
 } // namespace pane
