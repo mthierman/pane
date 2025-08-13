@@ -67,10 +67,10 @@ struct webview : pane::webview<webview> {
                 self.window_handle.title(self.current_title);
                 init_data data;
                 self.post_json(data);
-                // self.post_json(to_json(data));
-                // self.post_json(to_schema(data));
-                // pane::debug("{}", to_json(data));
-                // pane::debug("{}", to_schema(data));
+            } break;
+
+            case +web_message_received: {
+                self.window_handle.title(self.current_message);
             } break;
         }
 

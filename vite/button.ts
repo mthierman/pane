@@ -7,7 +7,10 @@ export class Button extends HTMLButtonElement {
 
     connectedCallback() {
         // this.button.textContent = "Click me";
-        this.onclick = () => console.log("Button clicked!");
+        // this.onclick = () => console.log("Button clicked!");
+        this.onclick = () => {
+            window.chrome.webview.postMessage("messagasdasde");
+        };
         // this.appendChild(this.button);
     }
 }
