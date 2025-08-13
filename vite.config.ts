@@ -1,8 +1,10 @@
 import { resolve } from "path";
 import { type CommonServerOptions, type UserConfig, defineConfig } from "vite";
+import oxlintPlugin from "vite-plugin-oxlint";
 
 const userConfig: UserConfig = {
     base: "./",
+    plugins: [oxlintPlugin()],
 };
 
 const commonServerOptions: CommonServerOptions = {
