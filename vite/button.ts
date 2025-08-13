@@ -1,9 +1,14 @@
 export class Button extends HTMLElement {
+    button = document.createElement("button");
+
+    constructor() {
+        super();
+    }
+
     connectedCallback() {
-        const button = document.createElement("button");
-        button.textContent = "Click me";
-        button.onclick = () => console.log("Button clicked!");
-        this.appendChild(button);
+        this.button.textContent = "Click me";
+        this.button.onclick = () => console.log("Button clicked!");
+        this.appendChild(this.button);
     }
 }
 
