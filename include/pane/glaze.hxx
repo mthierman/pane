@@ -8,6 +8,13 @@
 // };
 
 namespace glz {
+template <> struct from<JSON, std::u8string> {
+    template <auto Opts>
+    static void op(const std::u8string& value, is_context auto&& ctx, auto&& it, auto&& end) {
+        parse<JSON>::op<Opts>(std::u8string { value.begin(), value.end() }, ctx, it, end);
+    }
+};
+
 template <> struct to<JSON, std::u8string> {
     template <auto Opts>
     static void
