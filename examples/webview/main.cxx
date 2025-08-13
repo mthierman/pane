@@ -6,16 +6,25 @@ struct peek_message_type {
     message_type type;
 };
 
+template <typename T> struct webview_message {
+    using Self = webview_message;
+
+    message_type type;
+    T payload;
+};
+
 template <> struct glz::meta<message_type> {
     using enum message_type;
     static constexpr auto value = glz::enumerate(init_data);
 };
 
 auto peek_type(const std::u8string& message) -> message_type {
-    peek_message_type peek;
-    [[maybe_unused]] auto ec { glz::read_json(peek, message) };
+    using enum message_type;
 
-    return peek.type;
+    webview_message<glz::json_t> webview_message { init_data };
+    [[maybe_unused]] auto ec { glz::read_json(webview_message, message) };
+
+    return webview_message.type;
 }
 
 struct init_data {
