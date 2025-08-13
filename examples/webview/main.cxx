@@ -1,31 +1,29 @@
 #include <pane/pane.hxx>
 
-enum struct message_type { init_data };
+enum struct webview_message_type { init_data };
 
-template <> struct glz::meta<message_type> {
-    using enum message_type;
+template <> struct glz::meta<webview_message_type> {
+    using enum webview_message_type;
     static constexpr auto value = glz::enumerate(init_data);
 };
 
-template <typename T, typename U> struct webview_message {
+template <typename T = glz::json_t> struct webview_message {
     using Self = webview_message;
 
-    T type;
-    U payload;
+    webview_message_type type;
+    T payload;
 };
 
-auto peek_type(const std::u8string& message) -> message_type {
-    using enum message_type;
+auto peek_type(const std::u8string& message) -> webview_message_type {
+    using enum webview_message_type;
 
-    webview_message<message_type, glz::json_t> webview_message;
+    webview_message webview_message;
     [[maybe_unused]] auto ec { glz::read_json(webview_message, message) };
 
     return webview_message.type;
 }
 
 struct init_data {
-    using Self = init_data;
-
     std::u8string name;
     uint64_t age { 0 };
 };
@@ -67,8 +65,8 @@ struct webview : pane::webview<webview> {
 
             case +navigation_completed: {
                 self.window_handle.title(self.current_title);
-                webview_message<message_type, init_data> data { message_type::init_data,
-                                                                { u8"Abby Simpson", 18 } };
+                webview_message<init_data> data { webview_message_type::init_data,
+                                                  { u8"Abby Simpson", 18 } };
                 self.post_json(data);
             } break;
 
@@ -79,7 +77,7 @@ struct webview : pane::webview<webview> {
                 // pane::debug("{}", peek_type);
 
                 switch (peek_type(self.current_message)) {
-                    using enum message_type;
+                    using enum webview_message_type;
 
                     case init_data: {
                         pane::debug("init_type");
