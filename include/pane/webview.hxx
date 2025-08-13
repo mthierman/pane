@@ -437,7 +437,7 @@ template <typename T> struct webview {
                                     args->get_Source(&source);
 
                                     wil::unique_cotaskmem_string message;
-                                    args->TryGetWebMessageAsString(&message);
+                                    args->get_WebMessageAsJson(&message);
                                     this->current_message = to_utf8(message.get());
 
                                     make_window_message(this->window_handle(),
