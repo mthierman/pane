@@ -1,14 +1,14 @@
-export class Button extends HTMLElement {
-    button = document.createElement("button");
+export class Button extends HTMLButtonElement {
+    // button = document.createElement("button");
 
     static define(tag = "pane-button") {
-        customElements.define(tag, this);
+        customElements.define(tag, this, { extends: "button" });
     }
 
     connectedCallback() {
-        this.button.textContent = "Click me";
-        this.button.onclick = () => console.log("Button clicked!");
-        this.appendChild(this.button);
+        // this.button.textContent = "Click me";
+        this.onclick = () => console.log("Button clicked!");
+        // this.appendChild(this.button);
     }
 }
 

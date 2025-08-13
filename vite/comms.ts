@@ -13,7 +13,7 @@ window.chrome.webview.addEventListener<WebViewMessage>("message", (event) => {
         case "init_data":
             {
                 console.log(data.payload.age);
-                button.button.textContent = data.payload.name;
+                button.textContent = data.payload.name;
             }
             break;
     }
