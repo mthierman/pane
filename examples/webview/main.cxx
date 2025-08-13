@@ -2,15 +2,11 @@
 
 enum struct message_type { init_data };
 
-struct peek_message_type {
-    message_type type;
-};
-
-template <typename T> struct webview_message {
+template <typename T, typename U> struct webview_message {
     using Self = webview_message;
 
-    message_type type;
-    T payload;
+    T type;
+    U payload;
 };
 
 template <> struct glz::meta<message_type> {
@@ -21,7 +17,7 @@ template <> struct glz::meta<message_type> {
 auto peek_type(const std::u8string& message) -> message_type {
     using enum message_type;
 
-    webview_message<glz::json_t> webview_message { init_data };
+    webview_message<message_type, glz::json_t> webview_message { init_data };
     [[maybe_unused]] auto ec { glz::read_json(webview_message, message) };
 
     return webview_message.type;
@@ -30,14 +26,8 @@ auto peek_type(const std::u8string& message) -> message_type {
 struct init_data {
     using Self = init_data;
 
-    struct payload {
-        std::u8string name;
-        uint64_t age { 0 };
-    };
-
-    // std::u8string type { u8"init_data" };
-    message_type type { message_type::init_data };
-    payload payload { u8"Abbie Mays", 18 };
+    std::u8string name;
+    uint64_t age { 0 };
 };
 
 struct webview : pane::webview<webview> {
@@ -77,7 +67,8 @@ struct webview : pane::webview<webview> {
 
             case +navigation_completed: {
                 self.window_handle.title(self.current_title);
-                init_data data;
+                webview_message<message_type, init_data> data { message_type::init_data,
+                                                                { u8"Abby Simpson", 18 } };
                 self.post_json(data);
             } break;
 
