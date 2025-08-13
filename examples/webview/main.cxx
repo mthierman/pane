@@ -1,17 +1,17 @@
 #include <pane/pane.hxx>
 
-enum struct webview_message_type { init_data };
+enum struct webview_message_type { init };
 
 template <> struct glz::meta<webview_message_type> {
     using enum webview_message_type;
-    static constexpr auto value = glz::enumerate(init_data);
+    static constexpr auto value = glz::enumerate(init);
 };
 
 template <typename T = glz::json_t> struct webview_message {
     using Self = webview_message;
 
     webview_message_type type;
-    T payload;
+    T data;
 };
 
 auto peek_type(const std::u8string& message) -> webview_message_type {
@@ -23,14 +23,16 @@ auto peek_type(const std::u8string& message) -> webview_message_type {
     return webview_message.type;
 }
 
-struct init_data {
-    std::u8string name;
-    uint64_t age { 0 };
-};
-
 struct webview : pane::webview<webview> {
     using Self = webview;
     using pane::webview<webview>::webview;
+
+    struct payload {
+        struct init {
+            std::u8string name;
+            uint64_t age { 0 };
+        };
+    };
 
     static auto config() -> config {
         pane::window_config window_config {
@@ -65,22 +67,18 @@ struct webview : pane::webview<webview> {
 
             case +navigation_completed: {
                 self.window_handle.title(self.current_title);
-                webview_message<init_data> data { webview_message_type::init_data,
-                                                  { u8"Abby Simpson", 18 } };
+                webview_message<payload::init> data { webview_message_type::init,
+                                                      { u8"Abby Simpson", 18 } };
                 self.post_json(data);
             } break;
 
             case +web_message_received: {
-                // glz::json_t json;
-                // [[maybe_unused]] auto ec { glz::read_json(json, self.current_message) };
-                // auto peek_type { json["type"].get<std::u8string>() };
-                // pane::debug("{}", peek_type);
-
                 switch (peek_type(self.current_message)) {
                     using enum webview_message_type;
 
-                    case init_data: {
-                        pane::debug("init_type");
+                    case init: {
+                        // pane::debug("init_type");
+                        webview_message<payload::init> asdasd;
                     } break;
                 }
 
