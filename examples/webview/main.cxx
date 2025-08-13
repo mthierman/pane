@@ -16,6 +16,26 @@ template <typename T> auto to_schema(const T& value) -> std::u8string {
     return buffer;
 }
 
+// auto peek_type(const std::u8string& message) -> std::u8string {
+//     glz::json_t json;
+//     [[maybe_unused]] auto ec { glz::read_json(json, message) };
+//     auto peek_type { json["type"].get<std::string>() };
+
+//     return { peek_type.begin(), peek_type.end() };
+// }
+
+enum struct message_type { init_data };
+
+template <> struct glz::meta<message_type> {
+    static constexpr auto value = enumerate("init_data", message_type::init_data);
+};
+
+auto peek_type(const std::u8string& message) -> message_type {
+    glz::json_t json;
+    [[maybe_unused]] auto ec { glz::read_json(json, message) };
+    return json["type"].get<message_type>();
+}
+
 struct init_data {
     using Self = init_data;
 
@@ -24,7 +44,8 @@ struct init_data {
         uint64_t age { 0 };
     };
 
-    std::u8string type { u8"init_data" };
+    // std::u8string type { u8"init_data" };
+    message_type type { message_type::init_data };
     payload payload { u8"Abbie Mays", 18 };
 };
 
@@ -70,8 +91,18 @@ struct webview : pane::webview<webview> {
             } break;
 
             case +web_message_received: {
-                glz::json_t json;
-                [[maybe_unused]] auto ec { glz::read_json(json, self.current_message) };
+                // glz::json_t json;
+                // [[maybe_unused]] auto ec { glz::read_json(json, self.current_message) };
+                // auto peek_type { json["type"].get<std::u8string>() };
+                // pane::debug("{}", peek_type);
+
+                switch (peek_type(self.current_message)) {
+                    using enum message_type;
+
+                    case init_data: {
+                        pane::debug("init_type");
+                    } break;
+                }
 
                 self.window_handle.title(self.current_message);
             } break;
