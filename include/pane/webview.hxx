@@ -14,6 +14,7 @@
 #include <WebView2.h>
 #include <WebView2EnvironmentOptions.h>
 #include <ada.h>
+#include <glaze/glaze.hpp>
 
 namespace pane {
 struct virtual_host {
@@ -570,12 +571,26 @@ template <typename T> struct webview {
         }
     }
 
-    auto post_json(this const Self& self, std::u8string_view message) -> void {
-        auto conv { to_utf16(message) };
+    // auto post_json(this const Self& self, std::u8string_view message) -> void {
+    //     auto conv { to_utf16(message) };
+
+    //     if (self.core) {
+    //         self.core->PostWebMessageAsJson(reinterpret_cast<wchar_t*>(conv.data()));
+    //     }
+    // }
+
+    template <typename U> auto post_json(this const Self& self, U& value) -> void {
+        std::u8string buffer;
+
+        [[maybe_unused]] auto ec { glz::write_json(value, buffer) };
+
+        auto conv { to_utf16(buffer) };
 
         if (self.core) {
             self.core->PostWebMessageAsJson(reinterpret_cast<wchar_t*>(conv.data()));
         }
+
+        // self.post_json(buffer);
     }
 
     auto post_string(this const Self& self, std::u8string_view message) -> void {

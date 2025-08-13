@@ -19,13 +19,13 @@ template <typename T> auto to_schema(const T& value) -> std::u8string {
 struct init_data {
     using Self = init_data;
 
-    std::u8string name { u8"Abbie Mays" };
-    uint64_t age { 18 };
+    struct payload {
+        std::u8string name;
+        uint64_t age { 0 };
+    };
 
-    auto schema() -> void {
-        auto schema { glz::write_json_schema<init_data>().value_or("error") };
-        pane::debug("{}", schema);
-    }
+    std::u8string type { u8"init_data" };
+    payload payload { u8"Abbie Mays", 18 };
 };
 
 struct webview : pane::webview<webview> {
@@ -66,10 +66,11 @@ struct webview : pane::webview<webview> {
             case +navigation_completed: {
                 self.window_handle.title(self.current_title);
                 init_data data;
-                self.post_json(to_json(data));
-                self.post_json(to_schema(data));
-                pane::debug("{}", to_json(data));
-                pane::debug("{}", to_schema(data));
+                self.post_json(data);
+                // self.post_json(to_json(data));
+                // self.post_json(to_schema(data));
+                // pane::debug("{}", to_json(data));
+                // pane::debug("{}", to_schema(data));
             } break;
         }
 

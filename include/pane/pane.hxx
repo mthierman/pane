@@ -8,6 +8,7 @@
 #include <pane/file_picker.hxx>
 #include <pane/filesystem.hxx>
 #include <pane/gdi_plus.hxx>
+#include <pane/glaze.hxx>
 #include <pane/guid.hxx>
 // #include <pane/hstring.hxx>
 #include <pane/input.hxx>

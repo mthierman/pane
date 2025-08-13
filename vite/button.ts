@@ -1,6 +1,4 @@
-import "./styles/index.css";
-
-class Button extends HTMLElement {
+export class Button extends HTMLElement {
     connectedCallback() {
         const button = document.createElement("button");
         button.textContent = "Click me";
