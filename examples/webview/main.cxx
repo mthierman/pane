@@ -2,6 +2,11 @@
 
 enum struct message_type { init_data };
 
+template <> struct glz::meta<message_type> {
+    using enum message_type;
+    static constexpr auto value = glz::enumerate(init_data);
+};
+
 template <typename T, typename U> struct webview_message {
     using Self = webview_message;
 
@@ -9,15 +14,10 @@ template <typename T, typename U> struct webview_message {
     U payload;
 };
 
-template <> struct glz::meta<message_type> {
-    using enum message_type;
-    static constexpr auto value = glz::enumerate(init_data);
-};
-
 auto peek_type(const std::u8string& message) -> message_type {
     using enum message_type;
 
-    webview_message<message_type, glz::json_t> webview_message { init_data };
+    webview_message<message_type, glz::json_t> webview_message;
     [[maybe_unused]] auto ec { glz::read_json(webview_message, message) };
 
     return webview_message.type;
