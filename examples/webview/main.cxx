@@ -1,39 +1,21 @@
 #include <pane/pane.hxx>
 
-template <typename T> auto to_json(const T& value) -> std::u8string {
-    std::u8string buffer;
-
-    [[maybe_unused]] auto ec { glz::write<glz::opts { .prettify { true } }>(value, buffer) };
-
-    return buffer;
-}
-
-template <typename T> auto to_schema(const T& value) -> std::u8string {
-    std::u8string buffer;
-
-    [[maybe_unused]] auto ec { glz::write_json_schema<T>(buffer) };
-
-    return buffer;
-}
-
-// auto peek_type(const std::u8string& message) -> std::u8string {
-//     glz::json_t json;
-//     [[maybe_unused]] auto ec { glz::read_json(json, message) };
-//     auto peek_type { json["type"].get<std::string>() };
-
-//     return { peek_type.begin(), peek_type.end() };
-// }
-
 enum struct message_type { init_data };
 
+struct peek_message_type {
+    message_type type;
+};
+
 template <> struct glz::meta<message_type> {
-    static constexpr auto value = enumerate("init_data", message_type::init_data);
+    using enum message_type;
+    static constexpr auto value = glz::enumerate(init_data);
 };
 
 auto peek_type(const std::u8string& message) -> message_type {
-    glz::json_t json;
-    [[maybe_unused]] auto ec { glz::read_json(json, message) };
-    return json["type"].get<message_type>();
+    peek_message_type peek;
+    [[maybe_unused]] auto ec { glz::read_json(peek, message) };
+
+    return peek.type;
 }
 
 struct init_data {
