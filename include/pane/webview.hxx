@@ -92,9 +92,9 @@ enum struct webview_messages : int {
     environment_created = WM_USER,
     controller_created,
     core_created,
-    settings_created,
     favicon_changed,
-    navigation_completed
+    navigation_completed,
+    web_message_received
 };
 
 template <typename T> struct webview {
@@ -208,10 +208,8 @@ template <typename T> struct webview {
                 }
 
                 if (this->environment) {
-                    make_window_message(this->window_handle(),
-                                        webview_messages::environment_created,
-                                        0,
-                                        this->favicon())
+                    make_window_message(
+                        this->window_handle(), webview_messages::environment_created, 0, 0)
                         .send();
 
                     wil::com_ptr<ICoreWebView2ControllerOptions> controller_options;
@@ -243,10 +241,8 @@ template <typename T> struct webview {
                         }
 
                         if (this->controller) {
-                            make_window_message(this->window_handle(),
-                                                webview_messages::controller_created,
-                                                0,
-                                                this->favicon())
+                            make_window_message(
+                                this->window_handle(), webview_messages::controller_created, 0, 0)
                                 .send();
 
                             RECT client_rect { 0, 0, 0, 0 };
@@ -307,10 +303,8 @@ template <typename T> struct webview {
                             }
 
                             if (this->core) {
-                                make_window_message(this->window_handle(),
-                                                    webview_messages::core_created,
-                                                    0,
-                                                    this->favicon())
+                                make_window_message(
+                                    this->window_handle(), webview_messages::core_created, 0, 0)
                                     .send();
 
                                 wil::com_ptr<ICoreWebView2Profile> created_profile;
@@ -329,12 +323,6 @@ template <typename T> struct webview {
                                         = created_settings.try_query<ICoreWebView2Settings9>();
 
                                     if (this->settings) {
-                                        make_window_message(this->window_handle(),
-                                                            webview_messages::settings_created,
-                                                            0,
-                                                            this->favicon())
-                                            .send();
-
                                         this->settings->put_AreBrowserAcceleratorKeysEnabled(
                                             this->webview_config.settings
                                                 .AreBrowserAcceleratorKeysEnabled);
@@ -439,6 +427,29 @@ template <typename T> struct webview {
                                 }).Get(),
                                     this->token.navigation_completed());
 
+                                this->core->add_WebMessageReceived(
+                                    Microsoft::WRL::Callback<
+                                        ICoreWebView2WebMessageReceivedEventHandler>(
+                                        [&](ICoreWebView2* /* sender */,
+                                            ICoreWebView2WebMessageReceivedEventArgs* args)
+                                            -> HRESULT {
+                                    wil::unique_cotaskmem_string source;
+                                    args->get_Source(&source);
+
+                                    wil::unique_cotaskmem_string message;
+                                    args->TryGetWebMessageAsString(&message);
+                                    this->current_message = to_utf8(message.get());
+
+                                    make_window_message(this->window_handle(),
+                                                        webview_messages::web_message_received,
+                                                        0,
+                                                        0)
+                                        .send();
+
+                                    return S_OK;
+                                }).Get(),
+                                    this->token.web_message_received());
+
                                 this->navigate(this->webview_config.home_page);
                             }
                         }
@@ -459,6 +470,7 @@ template <typename T> struct webview {
         this->controller->remove_AcceleratorKeyPressed(*this->token.accelerator_key_pressed());
         this->core->remove_FaviconChanged(*this->token.favicon_changed());
         this->core->remove_NavigationCompleted(*this->token.navigation_completed());
+        this->core->remove_WebMessageReceived(*this->token.web_message_received());
 
         this->settings = nullptr;
         this->core = nullptr;
@@ -629,13 +641,16 @@ template <typename T> struct webview {
         webview_token accelerator_key_pressed;
         webview_token favicon_changed;
         webview_token navigation_completed;
+        webview_token web_message_received;
     };
+
     event_token token;
     gdi_plus gdi_plus;
     window_icon favicon;
     Gdiplus::Status favicon_status;
     ada::url current_url;
     std::u8string current_title;
+    std::u8string current_message;
     wil::com_ptr<ICoreWebView2Settings9> settings;
     wil::com_ptr<ICoreWebView2EnvironmentOptions> environment_options {
         Microsoft::WRL::Make<CoreWebView2EnvironmentOptions>()
