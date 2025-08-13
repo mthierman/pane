@@ -435,10 +435,11 @@ template <typename T> struct webview {
                                             -> HRESULT {
                                     wil::unique_cotaskmem_string source;
                                     args->get_Source(&source);
+                                    this->current_message_source = to_utf8(source.get());
 
-                                    wil::unique_cotaskmem_string message;
-                                    args->get_WebMessageAsJson(&message);
-                                    this->current_message = to_utf8(message.get());
+                                    wil::unique_cotaskmem_string buffer;
+                                    args->get_WebMessageAsJson(&buffer);
+                                    this->current_message = to_utf8(buffer.get());
 
                                     make_window_message(this->window_handle(),
                                                         webview_messages::web_message_received,
@@ -651,6 +652,7 @@ template <typename T> struct webview {
     ada::url current_url;
     std::u8string current_title;
     std::u8string current_message;
+    std::u8string current_message_source;
     wil::com_ptr<ICoreWebView2Settings9> settings;
     wil::com_ptr<ICoreWebView2EnvironmentOptions> environment_options {
         Microsoft::WRL::Make<CoreWebView2EnvironmentOptions>()

@@ -70,6 +70,9 @@ struct webview : pane::webview<webview> {
             } break;
 
             case +web_message_received: {
+                glz::json_t json;
+                [[maybe_unused]] auto ec { glz::read_json(json, self.current_message) };
+
                 self.window_handle.title(self.current_message);
             } break;
         }

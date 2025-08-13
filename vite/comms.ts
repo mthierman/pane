@@ -1,6 +1,6 @@
 import { type Button } from "./button";
 
-type init_data = { type: "init_data"; payload: { name: string; age: number } };
+export type init_data = { type: "init_data"; payload: { name: string; age: number } };
 
 type WebViewMessage = init_data;
 

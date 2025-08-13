@@ -1,3 +1,5 @@
+import { type init_data } from "./comms";
+
 export class Button extends HTMLButtonElement {
     // button = document.createElement("button");
 
@@ -9,7 +11,11 @@ export class Button extends HTMLButtonElement {
         // this.button.textContent = "Click me";
         // this.onclick = () => console.log("Button clicked!");
         this.onclick = () => {
-            window.chrome.webview.postMessage("messagasdasde");
+            const init_data: init_data = {
+                type: "init_data",
+                payload: { name: "Jackson Mays", age: 24 },
+            };
+            window.chrome.webview.postMessage(init_data);
         };
         // this.appendChild(this.button);
     }
