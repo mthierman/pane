@@ -1,23 +1,19 @@
-import { type init_data } from "./comms";
+import { type init } from "./comms";
 
 export class Button extends HTMLButtonElement {
-    // button = document.createElement("button");
-
     static define(tag = "pane-button") {
         customElements.define(tag, this, { extends: "button" });
     }
 
     connectedCallback() {
-        // this.button.textContent = "Click me";
-        // this.onclick = () => console.log("Button clicked!");
         this.onclick = () => {
-            const init_data: init_data = {
-                type: "init_data",
+            const init: init = {
+                type: "init",
                 payload: { name: "Jackson Mays", age: 24 },
             };
-            window.chrome.webview.postMessage(init_data);
+
+            window.chrome.webview.postMessage(init);
         };
-        // this.appendChild(this.button);
     }
 }
 

@@ -77,7 +77,6 @@ struct webview : pane::webview<webview> {
                     using enum webview_message_type;
 
                     case init: {
-                        // pane::debug("init_type");
                         webview_message<payload::init> asdasd;
                     } break;
                 }
