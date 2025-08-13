@@ -2,7 +2,7 @@
 #include <format>
 #include <string>
 #include <pane/system.hxx>
-#include <glaze/glaze.hpp>
+#include <pane/glaze.hxx>
 #include <icu.h>
 
 namespace pane {

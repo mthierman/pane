@@ -1,9 +1,9 @@
 #pragma once
-#include <glaze/glaze.hpp>
 #include <expected>
 #include <filesystem>
 #include <system_error>
 #include <pane/filesystem.hxx>
+#include <pane/glaze.hxx>
 
 namespace pane {
 template <typename T> struct config final {

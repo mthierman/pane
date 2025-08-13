@@ -5,6 +5,7 @@
 #include <string>
 #include <pane/color.hxx>
 #include <pane/gdi_plus.hxx>
+#include <pane/glaze.hxx>
 #include <pane/math.hxx>
 #include <pane/system.hxx>
 #include <pane/utility.hxx>
@@ -14,7 +15,6 @@
 #include <WebView2.h>
 #include <WebView2EnvironmentOptions.h>
 #include <ada.h>
-#include <glaze/glaze.hpp>
 
 namespace pane {
 struct virtual_host {
