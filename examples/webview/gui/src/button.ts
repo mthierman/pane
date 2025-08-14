@@ -12,7 +12,7 @@ export class Button extends HTMLButtonElement {
             const init: webview_message = {
                 type: "init",
                 payload: {
-                    name: "",
+                    name: "Cindy Thompson",
                     age: 18,
                 },
             };

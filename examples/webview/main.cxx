@@ -25,15 +25,17 @@ template <typename T = glz::json_t> struct event {
     T payload;
 };
 
-auto peek_type(std::u8string_view message) -> event_type {
+auto peek_event_type(std::u8string_view message) -> event_type {
     event event;
     [[maybe_unused]] auto ec { glz::read_json(event, message) };
 
     return event.type;
 }
 
-template <typename T> auto make_webview_event(std::u8string_view message) -> event<T> {
+template <typename T>
+auto make_webview_event(event_type type, std::u8string_view message) -> event<T> {
     event<T> event;
+    event.type = type;
     [[maybe_unused]] auto ec { glz::read_json(event, message) };
 
     return event;
@@ -83,17 +85,21 @@ struct webview : pane::webview<webview> {
             } break;
 
             case +web_message_received: {
-                switch (peek_type(self.current_message)) {
+                switch (peek_event_type(self.current_message)) {
                     using enum event_type;
 
                     case init: {
-                        // webview_event<webview_event_payload::init> init_message;
-                        // pane::debug("init_message.payload.name: {}", init_message.payload.name);
+                        auto event { make_webview_event<event_payload::init>(
+                            init, self.current_message) };
+
+                        pane::debug("init_message.payload.name: {}", event.payload.name);
                     } break;
 
                     case test: {
-                        // webview_message<payload::test> test_message;
-                        // pane::debug("test_message.payload.one: {}", test_message.payload.one);
+                        auto event { make_webview_event<event_payload::test>(
+                            test, self.current_message) };
+
+                        pane::debug("init_message.payload.name: {}", event.payload.one);
                     } break;
                 }
             } break;
