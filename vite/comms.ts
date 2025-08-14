@@ -7,13 +7,13 @@ export type payload = {
     test: { one: number; two: number };
 };
 
-export type webview_message = {
-    [K in keyof payload]: { webview_message_type: K; payload: payload[K] };
-}[keyof payload];
+export type webview_message<T = unknown> = {
+    [K in keyof T]: { webview_message_type: K; payload: T[K] };
+}[keyof T];
 
 const button = document.getElementById("button") as Button;
 
-window.chrome.webview.addEventListener<webview_message>("message", (event) => {
+window.chrome.webview.addEventListener<webview_message<payload>>("message", (event) => {
     const data = event.data;
     console.log(data);
     switch (data.webview_message_type) {
@@ -24,7 +24,7 @@ window.chrome.webview.addEventListener<webview_message>("message", (event) => {
             break;
         case "test":
             {
-                console.log(data.payload.one);
+                console.log(data.payload.two);
             }
             break;
     }
