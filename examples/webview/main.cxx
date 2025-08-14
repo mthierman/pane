@@ -15,8 +15,6 @@ template <typename T = glz::json_t> struct webview_message {
 };
 
 auto peek_type(const std::u8string& message) -> webview_message_type {
-    using enum webview_message_type;
-
     webview_message webview_message;
     [[maybe_unused]] auto ec { glz::read_json(webview_message, message) };
 

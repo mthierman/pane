@@ -84,10 +84,6 @@ export interface WebView extends EventTarget {
     ): void;
 }
 
-export type WebViewMessage<T = unknown> = {
-    [K in keyof T]: { type: K; payload: T[K] };
-}[keyof T];
-
 declare global {
     interface Window {
         chrome: {
