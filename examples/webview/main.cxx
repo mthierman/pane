@@ -2,6 +2,17 @@
 
 enum struct webview_message_type { init, test };
 
+struct webview_message_payload {
+    struct init {
+        std::u8string name;
+        uint64_t age { 0 };
+    };
+    struct test {
+        uint64_t one { 0 };
+        uint64_t two { 0 };
+    };
+};
+
 template <> struct glz::meta<webview_message_type> {
     using enum webview_message_type;
     static constexpr auto value = glz::enumerate(init, test);
@@ -24,17 +35,6 @@ auto peek_type(const std::u8string& message) -> webview_message_type {
 struct webview : pane::webview<webview> {
     using Self = webview;
     using pane::webview<webview>::webview;
-
-    struct payload {
-        struct init {
-            std::u8string name;
-            uint64_t age { 0 };
-        };
-        struct test {
-            uint64_t one { 0 };
-            uint64_t two { 0 };
-        };
-    };
 
     static auto config() -> config {
         pane::window_config window_config {
