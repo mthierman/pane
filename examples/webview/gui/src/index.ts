@@ -1,27 +1,34 @@
-import "./styles/index.css";
+import "../styles/index.css";
 
-type DataOne = { type: "init"; payload: { name: string; age: number } };
-type DataTwo = { type: "test"; payload: { test_msg: string; test_number: number } };
+export type webview_message_type = "init" | "test";
 
-type WebViewMessage = DataOne | DataTwo;
+export type webview_message_payload = {
+    init: { name: string; age: number };
+    test: { one: number; two: number };
+};
 
-const root = document.getElementById("root") as HTMLDivElement;
+export type webview_message<T = unknown> = {
+    [K in keyof T]: { type: K; payload: T[K] };
+}[keyof T];
 
-window.chrome.webview.addEventListener<WebViewMessage>("message", (event) => {
-    const data = event.data;
-    console.log(data);
-    switch (data.type) {
-        case "init":
-            {
-                console.log(data.payload.age);
-                root.innerHTML = data.payload.name;
-            }
-            break;
-        case "test":
-            {
-                console.log(data.payload.test_number);
-                root.innerHTML = data.payload.test_number.toString();
-            }
-            break;
-    }
-});
+// const button = document.getElementById("button") as Button;
+
+window.chrome.webview.addEventListener<webview_message<webview_message_payload>>(
+    "message",
+    (event) => {
+        const data = event.data;
+        console.log(data);
+        switch (data.type) {
+            case "init":
+                {
+                    console.log(data.payload.name);
+                }
+                break;
+            case "test":
+                {
+                    console.log(data.payload.two);
+                }
+                break;
+        }
+    },
+);
