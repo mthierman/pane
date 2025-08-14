@@ -8,16 +8,16 @@ const button = document.getElementById("button") as Button;
 
 window.chrome.webview.addEventListener<webview_message>("message", (event) => {
     const data = event.data;
-    console.log(data);
+
     switch (data.type) {
         case "init":
             {
-                console.log(data.payload.name);
+                console.log(data);
             }
             break;
         case "test":
             {
-                console.log(data.payload.two);
+                console.log(data);
             }
             break;
     }

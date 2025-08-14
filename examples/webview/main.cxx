@@ -2,7 +2,7 @@
 
 enum struct webview_message_type { init, test };
 
-struct webview_message_payload {
+struct payload {
     struct init {
         std::u8string name;
         uint64_t age { 0 };
@@ -70,8 +70,8 @@ struct webview : pane::webview<webview> {
 
             case +navigation_completed: {
                 self.window_handle.title(self.current_title);
-                webview_message<webview_message_payload::init> data { webview_message_type::init,
-                                                                      { u8"Abby Simpson", 18 } };
+                webview_message<payload::init> data { webview_message_type::init,
+                                                      { u8"Abby Simpson", 18 } };
                 self.post_json(data);
             } break;
 
@@ -80,10 +80,13 @@ struct webview : pane::webview<webview> {
                     using enum webview_message_type;
 
                     case init: {
-                        webview_message<webview_message_payload::init> asdasd;
+                        webview_message<payload::init> init_message;
+                        pane::debug("init_message.payload.name: {}", init_message.payload.name);
                     } break;
 
                     case test: {
+                        webview_message<payload::test> test_message;
+                        pane::debug("test_message.payload.one: {}", test_message.payload.one);
                     } break;
                 }
 
