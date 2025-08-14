@@ -1,4 +1,4 @@
-// import { type webview_message_payload } from "./comms";
+import type { webview_message_payload } from "./webview_message";
 
 export class Button extends HTMLButtonElement {
     static define(tag = "pane-button") {
@@ -16,5 +16,3 @@ export class Button extends HTMLButtonElement {
         };
     }
 }
-
-Button.define();
