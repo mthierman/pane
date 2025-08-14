@@ -385,7 +385,7 @@ template <typename T> struct window {
 
         this->window_handle.activate(this->window_config.visible);
     }
-    virtual ~window() = default;
+    ~window() = default;
 
     window(const Self&) = delete;
     auto operator=(const Self&) -> Self& = delete;

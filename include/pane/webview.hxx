@@ -462,7 +462,7 @@ template <typename T> struct webview {
             }).Get());
         }
     }
-    virtual ~webview() {
+    ~webview() {
         if (this->webview_config.virtual_host) {
             this->core->ClearVirtualHostNameToFolderMapping(reinterpret_cast<const wchar_t*>(
                 to_utf16((*this->webview_config.virtual_host).name).data()));
