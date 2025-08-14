@@ -1,19 +1,30 @@
 import { type Button } from "./button";
 
-export type init = { type: "init"; payload: { name: string; age: number } };
+export type webview_message_type = "init" | "test";
 
-type WebViewMessage = init;
+export type payload = {
+    init: { name: string; age: number };
+    test: { one: number; two: number };
+};
+
+export type webview_message = {
+    [K in keyof payload]: { webview_message_type: K; payload: payload[K] };
+}[keyof payload];
 
 const button = document.getElementById("button") as Button;
 
-window.chrome.webview.addEventListener<WebViewMessage>("message", (event) => {
+window.chrome.webview.addEventListener<webview_message>("message", (event) => {
     const data = event.data;
     console.log(data);
-    switch (data.type) {
+    switch (data.webview_message_type) {
         case "init":
             {
-                console.log(data.payload.age);
-                button.textContent = data.payload.name;
+                console.log(data.payload.name);
+            }
+            break;
+        case "test":
+            {
+                console.log(data.payload.one);
             }
             break;
     }

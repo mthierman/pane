@@ -1,17 +1,17 @@
 #include <pane/pane.hxx>
 
-enum struct webview_message_type { init };
+enum struct webview_message_type { init, test };
 
 template <> struct glz::meta<webview_message_type> {
     using enum webview_message_type;
-    static constexpr auto value = glz::enumerate(init);
+    static constexpr auto value = glz::enumerate(init, test);
 };
 
 template <typename T = glz::json_t> struct webview_message {
     using Self = webview_message;
 
     webview_message_type type;
-    T data;
+    T payload;
 };
 
 auto peek_type(const std::u8string& message) -> webview_message_type {
@@ -31,6 +31,10 @@ struct webview : pane::webview<webview> {
         struct init {
             std::u8string name;
             uint64_t age { 0 };
+        };
+        struct test {
+            uint64_t one { 0 };
+            uint64_t two { 0 };
         };
     };
 
@@ -78,6 +82,9 @@ struct webview : pane::webview<webview> {
 
                     case init: {
                         webview_message<payload::init> asdasd;
+                    } break;
+
+                    case test: {
                     } break;
                 }
 
