@@ -1,4 +1,4 @@
-import "../styles/index.css";
+import "./index.css";
 
 export type webview_message_type = "init" | "test";
 
