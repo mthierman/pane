@@ -44,7 +44,7 @@ struct webview : pane::webview<webview> {
         pane::webview_config webview_config;
 
         if constexpr (pane::debug_mode) {
-            return { window_config, pane::webview_config { u8"https://localhost:5173/" } };
+            return { window_config, pane::webview_config { u8"http://localhost:5173/" } };
         } else {
             return { window_config,
                      pane::webview_config {
