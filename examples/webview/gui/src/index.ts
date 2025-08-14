@@ -7,17 +7,15 @@ Button.define();
 const button = document.getElementById("button") as Button;
 
 window.chrome.webview.addEventListener<webview_message>("message", (event) => {
-    const data = event.data;
-
-    switch (data.type) {
+    switch (event.data.type) {
         case "init":
             {
-                console.log(data);
+                console.log(event.data);
             }
             break;
         case "test":
             {
-                console.log(data);
+                console.log(event.data);
             }
             break;
     }
