@@ -1,4 +1,4 @@
-import { type Button } from "./button";
+// import { type Button } from "./button";
 
 export type webview_message_type = "init" | "test";
 
@@ -11,7 +11,7 @@ export type webview_message<T = unknown> = {
     [K in keyof T]: { type: K; payload: T[K] };
 }[keyof T];
 
-const button = document.getElementById("button") as Button;
+// const button = document.getElementById("button") as Button;
 
 window.chrome.webview.addEventListener<webview_message<webview_message_payload>>(
     "message",
