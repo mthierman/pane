@@ -1,8 +1,8 @@
 #include <pane/pane.hxx>
 
-enum struct webview_message_type { init, test };
+enum struct event_type { init, test };
 
-struct payload {
+struct event_payload {
     struct init {
         std::u8string name;
         uint64_t age { 0 };
@@ -13,23 +13,30 @@ struct payload {
     };
 };
 
-template <> struct glz::meta<webview_message_type> {
-    using enum webview_message_type;
+template <> struct glz::meta<event_type> {
+    using enum event_type;
     static constexpr auto value = glz::enumerate(init, test);
 };
 
-template <typename T = glz::json_t> struct webview_message {
-    using Self = webview_message;
+template <typename T = glz::json_t> struct event {
+    using Self = event;
 
-    webview_message_type type;
+    event_type type;
     T payload;
 };
 
-auto peek_type(const std::u8string& message) -> webview_message_type {
-    webview_message webview_message;
-    [[maybe_unused]] auto ec { glz::read_json(webview_message, message) };
+auto peek_type(std::u8string_view message) -> event_type {
+    event event;
+    [[maybe_unused]] auto ec { glz::read_json(event, message) };
 
-    return webview_message.type;
+    return event.type;
+}
+
+template <typename T> auto make_webview_event(std::u8string_view message) -> event<T> {
+    event<T> event;
+    [[maybe_unused]] auto ec { glz::read_json(event, message) };
+
+    return event;
 }
 
 struct webview : pane::webview<webview> {
@@ -70,27 +77,25 @@ struct webview : pane::webview<webview> {
 
             case +navigation_completed: {
                 self.window_handle.title(self.current_title);
-                webview_message<payload::init> data { webview_message_type::init,
-                                                      { u8"Abby Simpson", 18 } };
-                self.post_json(data);
+
+                self.post_event<event<event_payload::init>>(
+                    { event_type::init, { u8"Abby Simpson", 18 } });
             } break;
 
             case +web_message_received: {
                 switch (peek_type(self.current_message)) {
-                    using enum webview_message_type;
+                    using enum event_type;
 
                     case init: {
-                        webview_message<payload::init> init_message;
-                        pane::debug("init_message.payload.name: {}", init_message.payload.name);
+                        // webview_event<webview_event_payload::init> init_message;
+                        // pane::debug("init_message.payload.name: {}", init_message.payload.name);
                     } break;
 
                     case test: {
-                        webview_message<payload::test> test_message;
-                        pane::debug("test_message.payload.one: {}", test_message.payload.one);
+                        // webview_message<payload::test> test_message;
+                        // pane::debug("test_message.payload.one: {}", test_message.payload.one);
                     } break;
                 }
-
-                self.window_handle.title(self.current_message);
             } break;
         }
 

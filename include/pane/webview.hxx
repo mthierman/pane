@@ -592,18 +592,16 @@ template <typename T> struct webview {
     //     }
     // }
 
-    template <typename U> auto post_json(this const Self& self, U& value) -> void {
+    template <typename U> auto post_event(this const Self& self, U&& event) -> void {
         std::u8string buffer;
 
-        [[maybe_unused]] auto ec { glz::write_json(value, buffer) };
+        [[maybe_unused]] auto ec { glz::write_json(event, buffer) };
 
         auto conv { to_utf16(buffer) };
 
         if (self.core) {
             self.core->PostWebMessageAsJson(reinterpret_cast<wchar_t*>(conv.data()));
         }
-
-        // self.post_json(buffer);
     }
 
     auto post_string(this const Self& self, std::u8string_view message) -> void {
