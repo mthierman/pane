@@ -69,8 +69,8 @@ struct webview : pane::webview<webview> {
 
             case +navigation_completed: {
                 self.window_handle.title(self.current_title);
-                webview_message<payload::init> data { webview_message_type::init,
-                                                      { u8"Abby Simpson", 18 } };
+                webview_message<webview_message_payload::init> data { webview_message_type::init,
+                                                                      { u8"Abby Simpson", 18 } };
                 self.post_json(data);
             } break;
 
@@ -79,7 +79,7 @@ struct webview : pane::webview<webview> {
                     using enum webview_message_type;
 
                     case init: {
-                        webview_message<payload::init> asdasd;
+                        webview_message<webview_message_payload::init> asdasd;
                     } break;
 
                     case test: {
