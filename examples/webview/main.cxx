@@ -49,7 +49,8 @@ struct webview : pane::webview<webview> {
             return { window_config,
                      pane::webview_config {
                          u8"https://pane.internal/index.html",
-                         pane::virtual_host { u8"pane.internal", u8"D:/mthierman/pane/data" } } };
+                         pane::virtual_host { u8"pane.internal",
+                                              u8"D:/mthierman/pane/examples/webview/gui/dist" } } };
         }
     }
 
