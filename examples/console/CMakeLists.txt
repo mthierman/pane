@@ -1,7 +1,7 @@
 add_executable(console)
 target_sources(
     console
-    PRIVATE "main.cxx"
+    PRIVATE "main.cpp"
             "../../data/app.manifest"
     )
 target_link_libraries(

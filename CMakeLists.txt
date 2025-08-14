@@ -7,19 +7,14 @@ list(
     CMAKE_MODULE_PATH
     "${CMAKE_CURRENT_SOURCE_DIR}/cmake"
     )
-list(
-    APPEND
-    CMAKE_MODULE_PATH
-    "${CMAKE_CURRENT_SOURCE_DIR}/libs"
-    )
 
 include(FetchContent)
-include(config)
-include(webview2)
-include(wil)
-include(cppwinrt)
-include(ada)
-include(glaze)
+include(libs/config)
+include(libs/webview2)
+include(libs/wil)
+include(libs/cppwinrt)
+include(libs/ada)
+include(libs/glaze)
 
 add_library(pane)
 add_library(
@@ -33,28 +28,28 @@ target_sources(
            HEADERS
            BASE_DIRS
            "include"
-    PRIVATE "src/co_init.cxx"
-            "src/color.cxx"
-            "src/config.cxx"
-            "src/console.cxx"
-            "src/debug.cxx"
-            "src/error.cxx"
-            "src/file_picker.cxx"
-            "src/filesystem.cxx"
-            "src/gdi_plus.cxx"
-            "src/guid.cxx"
-            "src/hstring.cxx"
-            "src/icu.cxx"
-            "src/input.cxx"
-            "src/math.cxx"
-            "src/message_box.cxx"
-            "src/process.cxx"
-            "src/string.cxx"
-            "src/system.cxx"
-            "src/text.cxx"
-            "src/url.cxx"
-            "src/webview.cxx"
-            "src/window.cxx"
+    PRIVATE "src/co_init.cpp"
+            "src/color.cpp"
+            "src/config.cpp"
+            "src/console.cpp"
+            "src/debug.cpp"
+            "src/error.cpp"
+            "src/file_picker.cpp"
+            "src/filesystem.cpp"
+            "src/gdi_plus.cpp"
+            "src/guid.cpp"
+            "src/hstring.cpp"
+            "src/icu.cpp"
+            "src/input.cpp"
+            "src/math.cpp"
+            "src/message_box.cpp"
+            "src/process.cpp"
+            "src/string.cpp"
+            "src/system.cpp"
+            "src/text.cpp"
+            "src/url.cpp"
+            "src/webview.cpp"
+            "src/window.cpp"
     )
 target_link_libraries(
     pane

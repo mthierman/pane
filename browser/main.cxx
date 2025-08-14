@@ -1,4 +1,4 @@
-#include <pane/pane.hxx>
+#include <pane/pane.hpp>
 #include <optional>
 
 struct webview : pane::webview<webview> {
