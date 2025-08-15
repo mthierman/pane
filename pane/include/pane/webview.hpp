@@ -599,6 +599,13 @@ template <typename T> struct webview {
     //     }
     // }
 
+    template <typename U> auto peek_event(std::u8string_view message) -> U {
+        pane::webview_event<U> event;
+        [[maybe_unused]] auto ec { glz::read_json(event, message) };
+
+        return event.type;
+    }
+
     template <typename U> auto post_event(this const Self& self, U&& event) -> void {
         std::u8string buffer;
 
