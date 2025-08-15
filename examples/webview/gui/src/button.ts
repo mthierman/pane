@@ -6,13 +6,7 @@ export class Button extends HTMLButtonElement {
     }
 
     static getElementById(elementId: string) {
-        let element = document.getElementById(elementId);
-
-        if (element === null) {
-            return null;
-        }
-
-        return element as Button;
+        return document.getElementById(elementId) as Button | null;
     }
 
     connectedCallback() {
