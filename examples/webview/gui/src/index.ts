@@ -6,8 +6,8 @@ import { getElementById } from "./utility";
 
 export function getElements() {
     return {
-        button: getElementById<Button>("button"),
         address_bar: getElementById<AddressBar>("address-bar"),
+        button: getElementById<Button>("submit-button"),
     };
 }
 
@@ -39,3 +39,25 @@ window.chrome.webview.addEventListener<payload>("message", (event) => {
             break;
     }
 });
+
+// function testMessages() {
+//     const init: WebViewMessageEventData<payload> = {
+//         type: "init",
+//         payload: {
+//             name: "Cindy Thompson",
+//             age: 18,
+//         },
+//     };
+
+//     window.chrome.webview.postMessage(init);
+
+//     const test: WebViewMessageEventData<payload> = {
+//         type: "test",
+//         payload: {
+//             one: 23,
+//             two: 162,
+//         },
+//     };
+
+//     window.chrome.webview.postMessage(test);
+// }

@@ -1,4 +1,4 @@
-import type { payload } from "./index";
+// import type { payload } from "./index";
 
 export class Button extends HTMLButtonElement {
     static define(tag = "pane-button") {
@@ -6,27 +6,7 @@ export class Button extends HTMLButtonElement {
     }
 
     connectedCallback() {
-        this.addEventListener("click", () => {
-            const init: WebViewMessageEventData<payload> = {
-                type: "init",
-                payload: {
-                    name: "Cindy Thompson",
-                    age: 18,
-                },
-            };
-
-            window.chrome.webview.postMessage(init);
-
-            const test: WebViewMessageEventData<payload> = {
-                type: "test",
-                payload: {
-                    one: 23,
-                    two: 162,
-                },
-            };
-
-            window.chrome.webview.postMessage(test);
-        });
+        this.addEventListener("click", () => {});
     }
 }
 

@@ -3,7 +3,7 @@ body {
     font-size: 1rem;
 }
 
-button {
+/* button {
     all: unset;
     display: inline-block;
     border-radius: 8px;
@@ -13,4 +13,4 @@ button {
 
 button:hover {
     background-color: red;
-}
+} */
