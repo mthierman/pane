@@ -10,6 +10,7 @@ export class Button extends HTMLButtonElement {
 
         if (!(element instanceof Button)) {
             console.error(`Button element with ID "${elementId}" not found: ${element}`);
+            return null;
         }
 
         return element;
