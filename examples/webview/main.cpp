@@ -66,10 +66,6 @@ struct webview : pane::webview<webview> {
         switch (window_message.msg) {
             using enum pane::webview_messages;
 
-            case +favicon_changed: {
-                self.window_handle.icon(self.favicon());
-            } break;
-
             case +core_created: {
                 if (pane::debug_mode) {
                     self.devtools();

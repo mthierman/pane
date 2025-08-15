@@ -2,7 +2,7 @@ import { Button } from "./button";
 import "./index.css";
 
 Button.define();
-// const button = Button.getElementById("button");
+const button = Button.getElementById("buttons");
 
 export type payload = {
     init: { name: string; age: number };
@@ -14,6 +14,10 @@ window.chrome.webview.addEventListener<payload>("message", (event) => {
         case "init":
             {
                 console.log(event.data);
+
+                if (button) {
+                    button.innerText = event.data.payload.name;
+                }
             }
             break;
         case "test":
