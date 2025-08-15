@@ -7,7 +7,12 @@ export class Button extends HTMLButtonElement {
 
     static getElementById(elementId: string) {
         const element = document.getElementById(elementId);
-        return element instanceof Button ? element : null;
+
+        if (!(element instanceof Button)) {
+            console.error(`Button element with ID "${elementId}" not found: ${element}`);
+        }
+
+        return element;
     }
 
     connectedCallback() {
