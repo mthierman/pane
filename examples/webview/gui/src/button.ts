@@ -5,6 +5,10 @@ export class Button extends HTMLButtonElement {
         customElements.define(tag, this, { extends: "button" });
     }
 
+    static getElementById(elementId: string) {
+        return document.getElementById(id) as Button;
+    }
+
     connectedCallback() {
         this.onclick = () => {
             console.log("click");
