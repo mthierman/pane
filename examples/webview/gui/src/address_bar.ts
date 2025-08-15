@@ -1,4 +1,4 @@
-// import type { payload } from "./payload";
+// import type { payload } from "./index";
 
 export class AddressBar extends HTMLInputElement {
     static define(tag = "pane-address-bar") {

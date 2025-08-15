@@ -2,16 +2,23 @@ import "./index.css";
 
 import type { AddressBar } from "./address_bar";
 import type { Button } from "./button";
-import type { payload } from "./payload";
 import { getElementById } from "./utility";
 
-const element = {
-    button: getElementById<Button>("button"),
-    address_bar: getElementById<AddressBar>("address-bar"),
+export function getElements() {
+    return {
+        button: getElementById<Button>("button"),
+        address_bar: getElementById<AddressBar>("address-bar"),
+    };
+}
+
+export type payload = {
+    init: { name: string; age: number };
+    test: { one: number; two: number };
 };
 
 window.chrome.webview.addEventListener<payload>("message", (event) => {
     console.log(event.data);
+    const element = getElements();
 
     switch (event.data.type) {
         case "init":
