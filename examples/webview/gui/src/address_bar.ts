@@ -1,5 +1,5 @@
-export class Input extends HTMLInputElement {
-    static define(tag = "pane-input") {
+export class AddressBar extends HTMLInputElement {
+    static define(tag = "pane-address-bar") {
         customElements.define(tag, this, { extends: "input" });
     }
 
@@ -12,3 +12,5 @@ export class Input extends HTMLInputElement {
         });
     }
 }
+
+AddressBar.define();

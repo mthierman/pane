@@ -1,12 +1,11 @@
-import { Button } from "./button";
-import { Input } from "./url";
-import { getElementById } from "./utility";
-
 import "./index.css";
 
-Button.define();
-Input.define();
+import type { AddressBar } from "./address_bar";
+import type { Button } from "./button";
+import { getElementById } from "./utility";
+
 const button = getElementById<Button>("button");
+const address_bar = getElementById<AddressBar>("address-bar");
 
 export type payload = {
     init: { name: string; age: number };
@@ -21,6 +20,10 @@ window.chrome.webview.addEventListener<payload>("message", (event) => {
 
                 if (button) {
                     button.innerText = event.data.payload.name;
+                }
+
+                if (address_bar) {
+                    address_bar.value = event.data.payload.name;
                 }
             }
             break;

@@ -29,3 +29,5 @@ export class Button extends HTMLButtonElement {
         });
     }
 }
+
+Button.define();
