@@ -61,7 +61,7 @@ export interface WebView extends EventTarget {
     hostObjects: HostObjectsAsyncRoot;
     addEventListener<T = unknown>(
         type: "message",
-        listener: (event: WebViewMessageEvent<T>) => void,
+        listener: (event: WebViewMessageEvent<WebViewMessageEventData<T>>) => void,
         options?: boolean | AddEventListenerOptions,
     ): void;
     addEventListener<T = unknown, U = unknown>(
@@ -85,6 +85,10 @@ export interface WebView extends EventTarget {
 }
 
 declare global {
+    type WebViewMessageEventData<T> = {
+        [K in keyof T]: { type: K; payload: T[K] };
+    }[keyof T];
+
     interface Window {
         chrome: {
             webview: WebView;

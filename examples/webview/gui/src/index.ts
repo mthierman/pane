@@ -1,11 +1,15 @@
 import { Button } from "./button";
-import type { event } from "./event";
 import "./index.css";
 
 Button.define();
 const button = document.getElementById("button") as Button;
 
-window.chrome.webview.addEventListener<event>("message", (event) => {
+export type payload = {
+    init: { name: string; age: number };
+    test: { one: number; two: number };
+};
+
+window.chrome.webview.addEventListener<payload>("message", (event) => {
     switch (event.data.type) {
         case "init":
             {
