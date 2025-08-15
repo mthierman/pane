@@ -1,4 +1,4 @@
-import type { webview_message } from "./event";
+import type { event } from "./event";
 
 export class Button extends HTMLButtonElement {
     static define(tag = "pane-button") {
@@ -9,7 +9,7 @@ export class Button extends HTMLButtonElement {
         this.onclick = () => {
             console.log("click");
 
-            const init: webview_message = {
+            const init: event = {
                 type: "init",
                 payload: {
                     name: "Cindy Thompson",
@@ -19,7 +19,7 @@ export class Button extends HTMLButtonElement {
 
             window.chrome.webview.postMessage(init);
 
-            const test: webview_message = {
+            const test: event = {
                 type: "test",
                 payload: {
                     one: 23,
