@@ -92,6 +92,9 @@ enum struct webview_messages : int {
     environment_created = WM_USER,
     controller_created,
     core_created,
+    created,
+    destroyed,
+    dom_content_loaded,
     favicon_changed,
     navigation_completed,
     web_message_received
@@ -385,6 +388,22 @@ template <typename T> struct webview {
                                             COREWEBVIEW2_HOST_RESOURCE_ACCESS_KIND_ALLOW);
                                 }
 
+                                this->core->add_DOMContentLoaded(
+                                    Microsoft::WRL::Callback<
+                                        ICoreWebView2DOMContentLoadedEventHandler>(
+                                        [&](ICoreWebView2* /* sender */,
+                                            ICoreWebView2DOMContentLoadedEventArgs* /* args */)
+                                            -> HRESULT {
+                                    make_window_message(this->window_handle(),
+                                                        webview_messages::dom_content_loaded,
+                                                        0,
+                                                        0)
+                                        .send();
+
+                                    return S_OK;
+                                }).Get(),
+                                    this->token.dom_content_loaded());
+
                                 this->core->add_FaviconChanged(
                                     Microsoft::WRL::Callback<
                                         ICoreWebView2FaviconChangedEventHandler>(
@@ -459,6 +478,10 @@ template <typename T> struct webview {
                                     this->token.web_message_received());
 
                                 this->navigate(this->webview_config.home_page);
+
+                                make_window_message(
+                                    this->window_handle(), webview_messages::created, 0, 0)
+                                    .send();
                             }
                         }
 
@@ -475,10 +498,11 @@ template <typename T> struct webview {
                 to_utf16((*this->webview_config.virtual_host).name).data()));
         }
 
-        this->controller->remove_AcceleratorKeyPressed(*this->token.accelerator_key_pressed());
-        this->core->remove_FaviconChanged(*this->token.favicon_changed());
-        this->core->remove_NavigationCompleted(*this->token.navigation_completed());
         this->core->remove_WebMessageReceived(*this->token.web_message_received());
+        this->core->remove_NavigationCompleted(*this->token.navigation_completed());
+        this->core->remove_FaviconChanged(*this->token.favicon_changed());
+        this->core->remove_DOMContentLoaded(*this->token.dom_content_loaded());
+        this->controller->remove_AcceleratorKeyPressed(*this->token.accelerator_key_pressed());
 
         this->settings = nullptr;
         this->core = nullptr;
@@ -661,6 +685,7 @@ template <typename T> struct webview {
 
     struct event_token {
         webview_token accelerator_key_pressed;
+        webview_token dom_content_loaded;
         webview_token favicon_changed;
         webview_token navigation_completed;
         webview_token web_message_received;

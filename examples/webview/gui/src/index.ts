@@ -12,24 +12,23 @@ export function getElements() {
 }
 
 export type payload = {
-    init: { name: string; age: number };
+    init: { url: string };
     test: { one: number; two: number };
 };
 
 window.chrome.webview.addEventListener<payload>("message", (event) => {
     console.log(event.data);
-    const element = getElements();
+    // const element = getElements();
 
     switch (event.data.type) {
         case "init":
             {
-                if (element.button) {
-                    element.button.innerText = event.data.payload.name;
-                }
-
-                if (element.address_bar) {
-                    element.address_bar.value = event.data.payload.name;
-                }
+                // if (element.button) {
+                //     element.button.innerText = event.data.payload.name;
+                // }
+                // if (element.address_bar) {
+                //     element.address_bar.value = event.data.payload.name;
+                // }
             }
             break;
         case "test":

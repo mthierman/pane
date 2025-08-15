@@ -9,8 +9,7 @@ template <> struct glz::meta<event_type> {
 
 struct event_payload {
     struct init {
-        std::u8string name;
-        uint64_t age {};
+        std::u8string url;
     };
     struct test {
         uint64_t one {};
@@ -44,7 +43,7 @@ struct webview : pane::webview<webview> {
         switch (window_message.msg) {
             using enum pane::webview_messages;
 
-            case +core_created: {
+            case +created: {
                 if (pane::debug_mode) {
                     self.devtools();
                 }
@@ -54,27 +53,27 @@ struct webview : pane::webview<webview> {
                 self.window_handle.title(self.current_title);
 
                 self.post_event<pane::webview_event<event_type, event_payload::init>>(
-                    { event_type::init, { u8"Abby Simpson", 18 } });
+                    { event_type::init, { self.webview_config.home_page } });
             } break;
 
             case +web_message_received: {
-                switch (self.peek_event<event_type>(self.current_message)) {
-                    using enum event_type;
+                // switch (self.peek_event<event_type>(self.current_message)) {
+                //     using enum event_type;
 
-                    case init: {
-                        auto event { self.make_event<event_type, event_payload::init>(
-                            init, self.current_message) };
+                //     case init: {
+                //         auto event { self.make_event<event_type, event_payload::init>(
+                //             init, self.current_message) };
 
-                        pane::debug("init_message.payload.name: {}", event.payload.name);
-                    } break;
+                //         pane::debug("init_message.payload.name: {}", event.payload.name);
+                //     } break;
 
-                    case test: {
-                        auto event { self.make_event<event_type, event_payload::test>(
-                            test, self.current_message) };
+                //     case test: {
+                //         auto event { self.make_event<event_type, event_payload::test>(
+                //             test, self.current_message) };
 
-                        pane::debug("init_message.payload.name: {}", event.payload.one);
-                    } break;
-                }
+                //         pane::debug("init_message.payload.name: {}", event.payload.one);
+                //     } break;
+                // }
             } break;
         }
 
