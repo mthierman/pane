@@ -1,9 +1,11 @@
 import { Button } from "./button";
+import { Input } from "./url";
 import { getElementById } from "./utility";
 
 import "./index.css";
 
 Button.define();
+Input.define();
 const button = getElementById<Button>("button");
 
 export type payload = {

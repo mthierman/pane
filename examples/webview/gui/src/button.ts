@@ -6,9 +6,7 @@ export class Button extends HTMLButtonElement {
     }
 
     connectedCallback() {
-        this.onclick = () => {
-            console.log("click");
-
+        this.addEventListener("click", () => {
             const init: WebViewMessageEventData<payload> = {
                 type: "init",
                 payload: {
@@ -28,6 +26,6 @@ export class Button extends HTMLButtonElement {
             };
 
             window.chrome.webview.postMessage(test);
-        };
+        });
     }
 }
