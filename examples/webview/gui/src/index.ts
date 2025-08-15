@@ -1,8 +1,9 @@
-import { Button } from "./button";
+import { Button, getElementById } from "./button";
 import "./index.css";
 
 Button.define();
-const button = Button.getElementById("buttons");
+// const button = Button.getElementById("buttons");
+const button = getElementById<Button>("button");
 
 export type payload = {
     init: { name: string; age: number };

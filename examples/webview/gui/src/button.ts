@@ -1,5 +1,9 @@
 import type { payload } from "./index";
 
+export function getElementById<T = HTMLElement>(elementId: string) {
+    return document.getElementById(elementId) as T | null;
+}
+
 export class Button extends HTMLButtonElement {
     static define(tag = "pane-button") {
         customElements.define(tag, this, { extends: "button" });
