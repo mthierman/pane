@@ -18,23 +18,16 @@ struct event_payload {
     };
 };
 
-template <typename T, typename U = glz::json_t> struct event {
-    using Self = event;
-
-    T type;
-    U payload;
-};
-
 auto peek_event_type(std::u8string_view message) -> event_type {
-    event<event_type> event;
+    pane::webview_event<event_type> event;
     [[maybe_unused]] auto ec { glz::read_json(event, message) };
 
     return event.type;
 }
 
 template <typename T>
-auto make_event(event_type type, std::u8string_view message) -> event<event_type, T> {
-    event<event_type, T> event;
+auto make_event(event_type type, std::u8string_view message) -> pane::webview_event<event_type, T> {
+    pane::webview_event<event_type, T> event;
     event.type = type;
     [[maybe_unused]] auto ec { glz::read_json(event, message) };
 
@@ -76,7 +69,7 @@ struct webview : pane::webview<webview> {
             case +navigation_completed: {
                 self.window_handle.title(self.current_title);
 
-                self.post_event<event<event_type, event_payload::init>>(
+                self.post_event<pane::webview_event<event_type, event_payload::init>>(
                     { event_type::init, { u8"Abby Simpson", 18 } });
             } break;
 
