@@ -1,3 +1,5 @@
+// import type { payload } from "./payload";
+
 export class AddressBar extends HTMLInputElement {
     static define(tag = "pane-address-bar") {
         customElements.define(tag, this, { extends: "input" });

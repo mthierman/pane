@@ -1,4 +1,4 @@
-import type { payload } from "./index";
+import type { payload } from "./payload";
 
 export class Button extends HTMLButtonElement {
     static define(tag = "pane-button") {

@@ -2,14 +2,12 @@ import "./index.css";
 
 import type { AddressBar } from "./address_bar";
 import type { Button } from "./button";
+import type { payload } from "./payload";
 import { getElementById } from "./utility";
 
-const button = getElementById<Button>("button");
-const address_bar = getElementById<AddressBar>("address-bar");
-
-export type payload = {
-    init: { name: string; age: number };
-    test: { one: number; two: number };
+const element = {
+    button: getElementById<Button>("button"),
+    address_bar: getElementById<AddressBar>("address-bar"),
 };
 
 window.chrome.webview.addEventListener<payload>("message", (event) => {
@@ -18,12 +16,12 @@ window.chrome.webview.addEventListener<payload>("message", (event) => {
             {
                 console.log(event.data);
 
-                if (button) {
-                    button.innerText = event.data.payload.name;
+                if (element.button) {
+                    element.button.innerText = event.data.payload.name;
                 }
 
-                if (address_bar) {
-                    address_bar.value = event.data.payload.name;
+                if (element.address_bar) {
+                    element.address_bar.value = event.data.payload.name;
                 }
             }
             break;
