@@ -18,22 +18,6 @@ struct event_payload {
     };
 };
 
-// auto peek_event_type(std::u8string_view message) -> event_type {
-//     pane::webview_event<event_type> event;
-//     [[maybe_unused]] auto ec { glz::read_json(event, message) };
-
-//     return event.type;
-// }
-
-template <typename T>
-auto make_event(event_type type, std::u8string_view message) -> pane::webview_event<event_type, T> {
-    pane::webview_event<event_type, T> event;
-    event.type = type;
-    [[maybe_unused]] auto ec { glz::read_json(event, message) };
-
-    return event;
-}
-
 struct webview : pane::webview<webview> {
     using Self = webview;
     using pane::webview<webview>::webview;
@@ -78,13 +62,15 @@ struct webview : pane::webview<webview> {
                     using enum event_type;
 
                     case init: {
-                        auto event { make_event<event_payload::init>(init, self.current_message) };
+                        auto event { self.make_event<event_type, event_payload::init>(
+                            init, self.current_message) };
 
                         pane::debug("init_message.payload.name: {}", event.payload.name);
                     } break;
 
                     case test: {
-                        auto event { make_event<event_payload::test>(test, self.current_message) };
+                        auto event { self.make_event<event_type, event_payload::test>(
+                            test, self.current_message) };
 
                         pane::debug("init_message.payload.name: {}", event.payload.one);
                     } break;
