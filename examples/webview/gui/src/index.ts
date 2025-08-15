@@ -11,11 +11,11 @@ const element = {
 };
 
 window.chrome.webview.addEventListener<payload>("message", (event) => {
+    console.log(event.data);
+
     switch (event.data.type) {
         case "init":
             {
-                console.log(event.data);
-
                 if (element.button) {
                     element.button.innerText = event.data.payload.name;
                 }
