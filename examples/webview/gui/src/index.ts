@@ -1,4 +1,6 @@
-import { Button, getElementById } from "./button";
+import { Button } from "./button";
+import { getElementById } from "./utility";
+
 import "./index.css";
 
 Button.define();
