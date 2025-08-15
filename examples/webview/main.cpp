@@ -2,20 +2,20 @@
 
 enum struct event_type { init, test };
 
-struct event_payload {
-    struct init {
-        std::u8string name;
-        uint64_t age { 0 };
-    };
-    struct test {
-        uint64_t one { 0 };
-        uint64_t two { 0 };
-    };
-};
-
 template <> struct glz::meta<event_type> {
     using enum event_type;
     static constexpr auto value = glz::enumerate(init, test);
+};
+
+struct event_payload {
+    struct init {
+        std::u8string name;
+        uint64_t age {};
+    };
+    struct test {
+        uint64_t one {};
+        uint64_t two {};
+    };
 };
 
 template <typename T = glz::json_t> struct event {
