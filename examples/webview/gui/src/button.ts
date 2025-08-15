@@ -6,7 +6,8 @@ export class Button extends HTMLButtonElement {
     }
 
     static getElementById(elementId: string) {
-        return document.getElementById(elementId) as Button | null;
+        const element = document.getElementById(elementId);
+        return element instanceof Button ? element : null;
     }
 
     connectedCallback() {
