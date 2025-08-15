@@ -4,6 +4,7 @@ export class Input extends HTMLInputElement {
     }
 
     connectedCallback() {
+        this.addEventListener("input", () => {
             if (!this.value.startsWith("http")) {
                 const url = new URL(`https://${this.value}`);
                 console.log(url);
