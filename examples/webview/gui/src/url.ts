@@ -4,8 +4,10 @@ export class Input extends HTMLInputElement {
     }
 
     connectedCallback() {
-        this.addEventListener("input", () => {
-            console.log(this.value);
+            if (!this.value.startsWith("http")) {
+                const url = new URL(`https://${this.value}`);
+                console.log(url);
+            }
         });
     }
 }
