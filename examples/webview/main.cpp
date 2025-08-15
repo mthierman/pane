@@ -49,11 +49,13 @@ struct webview : pane::webview<webview> {
                 }
             } break;
 
-            case +navigation_completed: {
-                self.window_handle.title(self.current_title);
-
+            case +dom_content_loaded: {
                 self.post_event<pane::webview_event<event_type, event_payload::init>>(
                     { event_type::init, { self.webview_config.home_page } });
+            } break;
+
+            case +navigation_completed: {
+                self.window_handle.title(self.current_title);
             } break;
 
             case +web_message_received: {
