@@ -1,6 +1,6 @@
 import { Button } from "./button";
+import type { event } from "./event";
 import "./index.css";
-import type { event } from "./webview_message";
 
 Button.define();
 const button = document.getElementById("button") as Button;

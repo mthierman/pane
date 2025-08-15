@@ -1,4 +1,4 @@
-import type { webview_message } from "./webview_message";
+import type { webview_message } from "./event";
 
 export class Button extends HTMLButtonElement {
     static define(tag = "pane-button") {
