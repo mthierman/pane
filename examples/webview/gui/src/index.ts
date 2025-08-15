@@ -2,7 +2,7 @@ import { Button } from "./button";
 import "./index.css";
 
 Button.define();
-const button = Button.getElementById("button");
+// const button = Button.getElementById("button");
 
 export type payload = {
     init: { name: string; age: number };
