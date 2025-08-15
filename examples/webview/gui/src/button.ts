@@ -9,17 +9,6 @@ export class Button extends HTMLButtonElement {
         customElements.define(tag, this, { extends: "button" });
     }
 
-    static getElementById(elementId: string) {
-        const element = document.getElementById(elementId);
-
-        if (!(element instanceof Button)) {
-            console.error(`Button element with ID "${elementId}" not found: ${element}`);
-            return null;
-        }
-
-        return element;
-    }
-
     connectedCallback() {
         this.onclick = () => {
             console.log("click");
