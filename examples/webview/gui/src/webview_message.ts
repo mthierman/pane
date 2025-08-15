@@ -1,4 +1,4 @@
-export type event_payload = {
+type event_payload = {
     init: { name: string; age: number };
     test: { one: number; two: number };
 };
