@@ -1,5 +1,5 @@
 import { AddressBar } from "./component/address_bar";
 import { Button } from "./component/button";
-import { body } from "./component/component";
+import { body, getElementById, html } from "./component/component";
 
-export { AddressBar, body, Button };
+export { AddressBar, body, Button, getElementById, html };
