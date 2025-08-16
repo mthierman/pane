@@ -13,10 +13,6 @@ declare global {
     interface HTMLElementEventMap extends ComponentEventMap<payload> {}
 }
 
-// function createEvent<K extends keyof payload>(type: K, detail: payload[K]) {
-//     return new CustomEvent(type, { detail });
-// }
-
 let address_bar = AddressBar.new();
 
 window.chrome.webview.addEventListener<payload>("message", (event) => {
