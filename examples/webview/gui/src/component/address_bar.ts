@@ -1,3 +1,5 @@
+import { App } from "../app";
+
 declare global {
     interface HTMLElementTagNameMap {
         [AddressBar.tag]: AddressBar;
@@ -14,7 +16,10 @@ export class AddressBar extends HTMLInputElement {
     }
 
     static new() {
-        return document.createElement("input", { is: AddressBar.tag }) as AddressBar;
+        AddressBar.define();
+        let element = document.createElement("input", { is: AddressBar.tag }) as AddressBar;
+        App.addElement(element);
+        return element;
     }
 
     url = new URL("about:blank");

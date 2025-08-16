@@ -1,10 +1,9 @@
-import { App } from "./app";
+// import { App } from "./app";
 import { AddressBar } from "./component";
 import "./style/index.css";
 
-const app = App.new();
+// const app = App.new();
 let address_bar = AddressBar.new();
-app.addElement(address_bar);
 
 export type payload = {
     init: { url: string };
