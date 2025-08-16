@@ -19,6 +19,10 @@ export class AddressBar extends Component {
         return element;
     }
 
+    get() {
+        return this.#input;
+    }
+
     get url(): URL {
         return this.#url;
     }

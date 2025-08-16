@@ -1,3 +1,5 @@
+export const body = document.body as HTMLBodyElement;
+
 export class Component extends HTMLElement {
     static define(name: string, constructor: CustomElementConstructor) {
         if (!customElements.get(name)) {
@@ -6,7 +8,6 @@ export class Component extends HTMLElement {
     }
 
     attach<T extends Node>(element: T) {
-        const body = document.body as HTMLBodyElement;
         return body.appendChild(element);
     }
 
