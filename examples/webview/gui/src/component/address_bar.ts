@@ -6,8 +6,13 @@ declare global {
 
 export class AddressBar extends HTMLInputElement {
     static tag = "pane-address-bar";
+
     static define() {
         customElements.define(AddressBar.tag, this, { extends: "input" });
+    }
+
+    static new() {
+        return document.createElement("input", { is: AddressBar.tag }) as AddressBar;
     }
 
     url = new URL("about:blank");

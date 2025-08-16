@@ -8,13 +8,17 @@ import { getBody, getElementById } from "./utility";
 //     button: getElementById<Button>("submit-button"),
 // };
 
-// let address_bar = new AddressBar();
-// let body = getBody();
-// let address_bar = document.createElement(AddressBar.tag);
+let body = getBody();
+let address_bar = AddressBar.new();
 
-// if (body) {
-//     body.appendChild(address_bar);
-// }
+if (body) {
+    console.log(body);
+
+    if (address_bar) {
+        console.log(address_bar);
+        body.appendChild(address_bar);
+    }
+}
 
 export type payload = {
     init: { url: string };
