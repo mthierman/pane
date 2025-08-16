@@ -1,22 +1,13 @@
 import "./style/index.css";
 
-import { AddressBar, Button } from "./component";
-import { getBody, getElementById } from "./utility";
+import { AddressBar, Body } from "./component";
 
-// export let element = {
-//     address_bar: getElementById<AddressBar>("address-bar"),
-//     button: getElementById<Button>("submit-button"),
-// };
-
-let body = getBody();
+let body = Body.new();
 let address_bar = AddressBar.new();
 
 if (body) {
-    console.log(body);
-
     if (address_bar) {
-        console.log(address_bar);
-        body.appendChild(address_bar);
+        body.addElement(address_bar);
     }
 }
 
