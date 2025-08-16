@@ -1,6 +1,6 @@
-import { appendToBody, createElement } from "./component/component";
+import { appendToBody, createElement } from "pane";
 
-import "./style/index.css";
+import "./index.css";
 
 export type payload = {
     init: { url: string };
