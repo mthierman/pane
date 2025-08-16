@@ -15,9 +15,12 @@ export class Button extends Component {
         return this.#button;
     }
 
-    static new() {
+    static new(id?: string) {
         Button.define(Button.tag, this);
         let element = document.createElement(Button.tag) as Button;
+        if (id) {
+            element.id = id;
+        }
         element.attach(element);
         return element;
     }

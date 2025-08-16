@@ -12,9 +12,12 @@ export class AddressBar extends Component {
     #url = new URL("about:blank");
     #input = document.createElement("input") as HTMLInputElement;
 
-    static new() {
+    static new(id?: string) {
         AddressBar.define(AddressBar.tag, this);
         let element = document.createElement(AddressBar.tag) as AddressBar;
+        if (id) {
+            element.id = id;
+        }
         element.attach(element);
         return element;
     }
