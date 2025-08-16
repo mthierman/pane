@@ -1,7 +1,7 @@
 import "./index.css";
 
-import type { AddressBar } from "./address_bar";
-import type { Button } from "./button";
+import { AddressBar } from "./address_bar";
+import { Button } from "./button";
 import { getElementById } from "./utility";
 
 export function getElements() {
@@ -17,23 +17,24 @@ export type payload = {
 };
 
 window.chrome.webview.addEventListener<payload>("message", (event) => {
-    console.log(event.data);
-    // const element = getElements();
+    // console.log(event.data);
+    const element = getElements();
 
     switch (event.data.type) {
         case "init":
             {
-                // if (element.button) {
-                //     element.button.innerText = event.data.payload.name;
-                // }
-                // if (element.address_bar) {
-                //     element.address_bar.value = event.data.payload.name;
-                // }
+                if (element.address_bar) {
+                    // console.log(event.data.payload.url);
+                    element.address_bar.dispatchEvent(
+                        new CustomEvent("initialize", { detail: event.data.payload.url }),
+                    );
+                }
+                // console.log(element.address_bar!.url);
             }
             break;
         case "test":
             {
-                console.log(event.data);
+                // console.log(event.data);
             }
             break;
     }
