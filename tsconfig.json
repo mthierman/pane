@@ -1,4 +1,7 @@
 {
     "files": [],
-    "references": [{ "path": "./pane/src-typescript" }, { "path": "./tsconfig.vite.json" }]
+    "references": [
+        { "path": "./pane/src-typescript" },
+        { "path": "./examples/webview/gui/tsconfig.vite.json" }
+    ]
 }
