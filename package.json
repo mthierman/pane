@@ -4,14 +4,14 @@
     "type": "module",
     "scripts": {
         "check": "tsc -b",
-        "example": "vite examples/webview/gui",
-        "example:host": "vite examples/webview/gui --host",
-        "example:build": "tsc -b && vite build examples/webview/gui",
-        "example:watch": "vite build examples/webview/gui --watch",
-        "example:preview": "tsc -b && vite build examples/webview/gui && vite preview examples/webview/gui"
+        "webview": "vite examples/webview/gui",
+        "webview:host": "vite examples/webview/gui --host",
+        "webview:build": "tsc -b && vite build examples/webview/gui",
+        "webview:watch": "vite build examples/webview/gui --watch",
+        "webview:preview": "tsc -b && vite build examples/webview/gui && vite preview examples/webview/gui"
     },
     "devDependencies": {
-        "@types/node": "^24.3.0",
+        "@types/node": "24.3.0",
         "prettier": "^3.6.2",
         "typescript": "^5.9.2",
         "vite": "^7.1.2"
