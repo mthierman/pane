@@ -3,8 +3,6 @@ import type { ComponentEventMap } from "./app";
 import { AddressBar } from "./component";
 import "./style/index.css";
 
-let address_bar = AddressBar.new();
-
 export type payload = {
     init: { url: string };
     test: { one: number; two: number };
@@ -13,6 +11,8 @@ export type payload = {
 declare global {
     interface HTMLElementEventMap extends ComponentEventMap<payload> {}
 }
+
+let address_bar = AddressBar.new();
 
 window.chrome.webview.addEventListener<payload>("message", (event) => {
     switch (event.data.type) {
