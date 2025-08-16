@@ -1,4 +1,5 @@
 import { Utility } from "../utility";
+import { Component } from "./component";
 
 declare global {
     interface HTMLElementTagNameMap {
@@ -6,7 +7,7 @@ declare global {
     }
 }
 
-export class AddressBar extends HTMLElement {
+export class AddressBar extends Component {
     static tag = "pane-address-bar";
 
     static define() {
