@@ -7,11 +7,6 @@ declare global {
         };
     }
 
-    interface WebViewEventMap {
-        message: WebViewMessageEvent;
-        sharedbufferreceived: SharedBufferReceivedEvent;
-    }
-
     interface WebView extends EventTarget {
         hostObjects: HostObjectsAsyncRoot;
         addEventListener<T = unknown>(
@@ -61,6 +56,11 @@ declare global {
         additionalData: U;
         source: WebView;
         getBuffer(): ArrayBuffer;
+    }
+
+    interface WebViewEventMap {
+        message: WebViewMessageEvent;
+        sharedbufferreceived: SharedBufferReceivedEvent;
     }
 
     interface HostObjectAsyncProxy extends HostObjectAsyncProxyBase {
