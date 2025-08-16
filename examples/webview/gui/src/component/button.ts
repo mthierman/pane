@@ -11,6 +11,10 @@ export class Button extends Component {
 
     #button = document.createElement("button") as HTMLButtonElement;
 
+    get() {
+        return this.#button;
+    }
+
     static new() {
         Button.define(Button.tag, this);
         let element = document.createElement(Button.tag) as Button;

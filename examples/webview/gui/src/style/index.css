@@ -1,16 +1,97 @@
-body {
-    font-family: sans-serif;
-    font-size: 1rem;
+:root {
+    --bg-color: rgb(25, 25, 25);
+    --bg-hover: rgb(45, 45, 45);
 }
 
-/* button {
-    all: unset;
-    display: inline-block;
-    border-radius: 8px;
-    border: 2px solid white;
-    padding: 2px;
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+* {
+    margin: 0;
+}
+
+body {
+    isolation: isolate;
+    font-family: sans-serif;
+    font-size: 1rem;
+    line-height: 1.5;
+    background-color: black;
+    display: flex;
+}
+
+img,
+picture,
+video,
+canvas,
+svg {
+    display: block;
+    max-width: 100%;
+}
+
+input,
+button,
+textarea,
+select {
+    font: inherit
+}
+
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    overflow-wrap: break-word;
+}
+
+p {
+    text-wrap: pretty;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    text-wrap: balance;
+}
+
+pane-address-bar {
+    display: flex;
+    flex: auto;
+}
+
+pane-address-bar input {
+    background-color: var(--bg-color);
+    border: 0;
+    outline: 0;
+    flex: auto;
+    padding: 0.2rem;
+}
+
+pane-address-bar input:focus {
+    box-shadow: 0 1px 0 0 blue;
+}
+
+pane-address-bar input:hover {
+    background-color: var(--bg-hover);
+}
+
+pane-button {
+    flex: 0 0 auto;
+}
+
+pane-button button {
+    background-color: var(--bg-color);
+    border: 0;
+    padding: 0.2rem;
 }
 
 button:hover {
-    background-color: red;
-} */
+    background-color: var(--bg-hover);
+}
