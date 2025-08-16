@@ -31,7 +31,6 @@ export class AddressBar extends HTMLInputElement {
 
     connectedCallback() {
         this.type = "text";
-        // this.setAttribute("is", "pane-address-bar");
         this.addEventListener("init", (event) => {
             this.set(event.detail.url);
         });

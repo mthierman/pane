@@ -24,9 +24,7 @@ window.chrome.webview.addEventListener<payload>("message", (event) => {
         case "init":
             {
                 if (address_bar) {
-                    address_bar.dispatchEvent(
-                        Event.new<payload>("init", { url: event.data.payload.url }),
-                    );
+                    address_bar.dispatchEvent(Event.new<payload>("init", event.data.payload));
                 }
             }
             break;
