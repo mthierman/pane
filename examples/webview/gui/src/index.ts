@@ -1,15 +1,9 @@
+import { AddressBar, App } from "./component";
 import "./style/index.css";
 
-import { AddressBar, Body } from "./component";
-
-let body = Body.new();
+const app = App.new();
 let address_bar = AddressBar.new();
-
-if (body) {
-    if (address_bar) {
-        body.addElement(address_bar);
-    }
-}
+app.addElement(address_bar);
 
 export type payload = {
     init: { url: string };

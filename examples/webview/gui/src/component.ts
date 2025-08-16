@@ -1,8 +1,21 @@
 import { AddressBar } from "./component/address_bar";
-import { Body } from "./component/body";
 import { Button } from "./component/button";
 
-Button.define();
-AddressBar.define();
+export class App {
+    body = document.body as HTMLBodyElement;
 
-export { AddressBar, Body, Button };
+    constructor() {
+        Button.define();
+        AddressBar.define();
+    }
+
+    static new() {
+        return new App();
+    }
+
+    addElement<T extends Node>(element: T) {
+        return this.body.appendChild(element);
+    }
+}
+
+export { AddressBar, Button };
