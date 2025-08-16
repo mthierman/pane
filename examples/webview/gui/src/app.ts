@@ -1,4 +1,4 @@
-export type AppEventMap<T extends Record<string, any>> = {
+export type AppEvents<T extends Record<string, any>> = {
     [K in keyof T]: CustomEvent<T[K]>;
 };
 

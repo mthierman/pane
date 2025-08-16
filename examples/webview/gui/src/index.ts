@@ -1,4 +1,4 @@
-import type { AppEventMap } from "./app";
+import type { AppEvents } from "./app";
 import { AddressBar } from "./component";
 
 import "./style/index.css";
@@ -9,7 +9,7 @@ export type payload = {
 };
 
 declare global {
-    interface HTMLElementEventMap extends AppEventMap<payload> {}
+    interface HTMLElementEventMap extends AppEvents<payload> {}
 }
 
 let address_bar = AddressBar.new();
