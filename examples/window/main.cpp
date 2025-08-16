@@ -5,9 +5,11 @@ struct window : pane::window<window> {
     using pane::window<window>::window;
 
     static auto config() -> config {
-        return {
-            u8"window", pane::color { 0, 0, 0, 255 }, pane::color { 0, 0, 0, 255 }, true, nullptr
-        };
+        return { u8"window",
+                 pane::color { 0, 0, 0, 255 },
+                 pane::color { 255, 255, 255, 255 },
+                 true,
+                 nullptr };
     }
 
     auto handle_message(this Self& self, const pane::window_message& window_message) -> LRESULT {
