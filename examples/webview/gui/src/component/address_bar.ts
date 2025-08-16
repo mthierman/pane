@@ -54,8 +54,10 @@ export class AddressBar extends Component {
             }
         });
     }
-}
 
-if (!customElements.get("pane-address-bar")) {
-    customElements.define("pane-address-bar", AddressBar);
+    static {
+        if (!customElements.get("pane-address-bar")) {
+            customElements.define("pane-address-bar", AddressBar);
+        }
+    }
 }

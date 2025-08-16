@@ -18,8 +18,10 @@ export class Button extends Component {
 
         this.addEventListener("click", () => {});
     }
-}
 
-if (!customElements.get("pane-button")) {
-    customElements.define("pane-button", Button);
+    static {
+        if (!customElements.get("pane-button")) {
+            customElements.define("pane-button", Button);
+        }
+    }
 }

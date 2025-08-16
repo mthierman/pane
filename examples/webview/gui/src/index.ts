@@ -1,5 +1,5 @@
 // import { AddressBar, Button, elementTag } from "./component/component";
-import { appendToBody, createElement } from "./component/component";
+import { appendToBody, createElement } from "./component/index";
 
 import "./style/index.css";
 
@@ -16,14 +16,18 @@ declare global {
 // let button = Button.new();
 // button.get().innerText = "↵";
 
-let address_bar = createElement("pane-button");
+let address_bar = createElement("pane-address-bar");
+let button = createElement("pane-button");
+button.get().innerText = "↵";
+
 appendToBody(address_bar);
+appendToBody(button);
 
 window.chrome.webview.addEventListener<payload>("message", (event) => {
     switch (event.data.type) {
         case "init":
             {
-                // address_bar.dispatch(event);
+                address_bar.dispatch(event);
             }
             break;
         case "test":
