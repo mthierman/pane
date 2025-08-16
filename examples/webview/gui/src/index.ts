@@ -1,6 +1,7 @@
 import { appendToBody, createElement } from "pane";
 
 import "./index.css";
+import "./reset.css";
 
 export type payload = {
     init: { url: string };
