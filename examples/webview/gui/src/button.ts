@@ -1,5 +1,11 @@
 // import type { payload } from "./index";
 
+declare global {
+    interface HTMLElementTagNameMap {
+        "pane-button": Button;
+    }
+}
+
 export class Button extends HTMLButtonElement {
     static define(tag = "pane-button") {
         customElements.define(tag, this, { extends: "button" });

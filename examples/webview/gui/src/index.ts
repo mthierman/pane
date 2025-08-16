@@ -16,6 +16,12 @@ export type payload = {
     test: { one: number; two: number };
 };
 
+declare global {
+    interface HTMLElementEventMap {
+        initialize: CustomEvent<payload["init"]>;
+    }
+}
+
 window.chrome.webview.addEventListener<payload>("message", (event) => {
     // console.log(event.data);
     const element = getElements();

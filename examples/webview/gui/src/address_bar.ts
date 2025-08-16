@@ -1,12 +1,6 @@
-import type { payload } from "./index";
-
 declare global {
     interface HTMLElementTagNameMap {
         "pane-address-bar": AddressBar;
-    }
-
-    interface HTMLElementEventMap {
-        initialize: CustomEvent<payload["init"]>;
     }
 }
 
@@ -17,48 +11,19 @@ export class AddressBar extends HTMLInputElement {
 
     url = new URL("about:blank");
 
-    constructor() {
-        super();
-        // console.log(this.url.href);
-    }
-
-    // addEventListener(
-    //     type: "initialize",
-    //     listener: (event: unknown) => void,
-    //     options?: boolean | AddEventListenerOptions,
-    // ): void;
-    // addEventListener(
-    //     type: string,
-    //     listener: EventListenerOrEventListenerObject,
-    //     options?: boolean | AddEventListenerOptions,
-    // ): void;
-
-    // addEventListener(
-    //     type: string,
-    //     listener: EventListenerOrEventListenerObject,
-    //     options?: boolean | AddEventListenerOptions,
-    // ): void {
-    //     super.addEventListener(type, listener, options);
-    // }
-
     connectedCallback() {
         this.addEventListener("initialize", (event) => {
-            console.log(event.detail);
-
             this.url.href = event.detail.url;
-            console.log(this.url.href);
-            // console.log(this.url.toString());
+            this.value = this.url.href;
         });
-        this.addEventListener("change", () => {
-            // console.log(this.value);
-        });
+
         this.addEventListener("input", () => {
-            // if (!this.value.startsWith("http")) {
-            //     this.url = new URL(`https://${this.value}`);
-            // } else {
-            //     this.value = this.url.toString();
-            // }
-            // console.log(this.url);
+            if (!this.value.startsWith("http")) {
+                this.url = new URL(`https://${this.value}`);
+            } else {
+                this.value = this.url.toString();
+            }
+            console.log(this.url);
         });
     }
 }
