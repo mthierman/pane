@@ -11,7 +11,7 @@ export class AddressBar extends Component {
     static tag = "pane-address-bar";
 
     #url = new URL("about:blank");
-    input = document.createElement("input") as HTMLInputElement;
+    #input = document.createElement("input") as HTMLInputElement;
 
     static new() {
         AddressBar.define(AddressBar.tag, this);
@@ -26,11 +26,11 @@ export class AddressBar extends Component {
 
     set url(href: string) {
         this.#url.href = href;
-        this.input.value = this.#url.href;
+        this.#input.value = this.#url.href;
     }
 
     connectedCallback() {
-        this.appendChild(this.input);
+        this.appendChild(this.#input);
 
         this.addEventListener("init", (event) => {
             console.log("init");
@@ -52,11 +52,11 @@ export class AddressBar extends Component {
         });
 
         this.addEventListener("submit", () => {
-            if (!this.input.value.startsWith("http")) {
-                this.url = `https://${this.input.value}`;
+            if (!this.#input.value.startsWith("http")) {
+                this.url = `https://${this.#input.value}`;
                 console.log(this.url);
             } else {
-                this.input.value = this.url.toString();
+                this.#input.value = this.url.toString();
             }
         });
     }

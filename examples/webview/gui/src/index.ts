@@ -1,4 +1,4 @@
-import { AddressBar } from "./component";
+import { AddressBar, Button } from "./component";
 import { Utility } from "./utility";
 
 import "./style/index.css";
@@ -13,6 +13,8 @@ declare global {
 }
 
 let address_bar = AddressBar.new();
+let button = Button.new();
+
 
 window.chrome.webview.addEventListener<payload>("message", (event) => {
     switch (event.data.type) {
