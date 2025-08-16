@@ -40,23 +40,6 @@ export interface HostObjectSyncProxy {
     setLocalProperty(propertyName: string, propertyValue: unknown): unknown;
 }
 
-export interface WebViewMessageEvent<T = unknown> extends MessageEvent<T> {
-    additionalObjects: ArrayLike<FileSystemFileHandle | FileSystemDirectoryHandle | null>;
-    source: WebView & MessageEventSource;
-}
-
-export interface SharedBufferReceivedEvent<T = unknown, U = unknown> extends Event {
-    data: T;
-    additionalData: U;
-    source: WebView;
-    getBuffer(): ArrayBuffer;
-}
-
-export interface WebViewEventMap {
-    message: WebViewMessageEvent;
-    sharedbufferreceived: SharedBufferReceivedEvent;
-}
-
 export interface WebView extends EventTarget {
     hostObjects: HostObjectsAsyncRoot;
     addEventListener<T = unknown>(
@@ -85,9 +68,26 @@ export interface WebView extends EventTarget {
 }
 
 declare global {
+    interface WebViewMessageEvent<T = unknown> extends MessageEvent<T> {
+        additionalObjects: ArrayLike<FileSystemFileHandle | FileSystemDirectoryHandle | null>;
+        source: WebView & MessageEventSource;
+    }
+
     type WebViewMessageEventData<T> = {
         [K in keyof T]: { type: K; payload: T[K] };
     }[keyof T];
+
+    interface SharedBufferReceivedEvent<T = unknown, U = unknown> extends Event {
+        data: T;
+        additionalData: U;
+        source: WebView;
+        getBuffer(): ArrayBuffer;
+    }
+
+    export interface WebViewEventMap {
+        message: WebViewMessageEvent;
+        sharedbufferreceived: SharedBufferReceivedEvent;
+    }
 
     interface Window {
         chrome: {
