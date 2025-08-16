@@ -47,16 +47,16 @@ declare global {
         source: WebView & MessageEventSource;
     }
 
-    type WebViewMessageEventMap<T> = {
-        [K in keyof T]: CustomEvent<T[K]>;
-    };
-
     interface SharedBufferReceivedEvent<T = unknown, U = unknown> extends Event {
         data: T;
         additionalData: U;
         source: WebView;
         getBuffer(): ArrayBuffer;
     }
+
+    type WebViewMessageEventMap<T> = {
+        [K in keyof T]: CustomEvent<T[K]>;
+    };
 
     interface WebViewEventMap {
         message: WebViewMessageEvent;
