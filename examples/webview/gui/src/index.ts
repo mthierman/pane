@@ -1,7 +1,6 @@
-// import { App } from "./app";
 import type { ComponentEventMap } from "./app";
 import { AddressBar } from "./component";
-import { Event } from "./event";
+
 import "./style/index.css";
 
 export type payload = {
@@ -19,14 +18,7 @@ window.chrome.webview.addEventListener<payload>("message", (event) => {
     switch (event.data.type) {
         case "init":
             {
-                // if (address_bar) {
-                //     address_bar.dispatchEvent(
-                //         new CustomEvent(event.data.type, { detail: event.data.payload }),
-                //     );
-                // }
-                if (address_bar) {
-                    address_bar.dispatchEvent(event);
-                }
+                address_bar.dispatchEvent(event);
             }
             break;
         case "test":
