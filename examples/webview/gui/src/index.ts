@@ -26,7 +26,7 @@ window.chrome.webview.addEventListener<payload>("message", (event) => {
                 if (element.address_bar) {
                     // console.log(event.data.payload.url);
                     element.address_bar.dispatchEvent(
-                        new CustomEvent("initialize", { detail: event.data.payload.url }),
+                        new CustomEvent("initialize", { detail: event.data.payload }),
                     );
                 }
                 // console.log(element.address_bar!.url);

@@ -1,4 +1,4 @@
-// import type { payload } from "./index";
+import type { payload } from "./index";
 
 declare global {
     interface HTMLElementTagNameMap {
@@ -6,7 +6,7 @@ declare global {
     }
 
     interface HTMLElementEventMap {
-        initialize: CustomEvent<string>;
+        initialize: CustomEvent<payload["init"]>;
     }
 }
 
@@ -45,7 +45,7 @@ export class AddressBar extends HTMLInputElement {
         this.addEventListener("initialize", (event) => {
             console.log(event.detail);
 
-            this.url.href = event.detail;
+            this.url.href = event.detail.url;
             console.log(this.url.href);
             // console.log(this.url.toString());
         });
