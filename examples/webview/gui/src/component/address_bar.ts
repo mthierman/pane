@@ -1,4 +1,4 @@
-import { App } from "../app";
+import { Utility } from "../utility";
 
 declare global {
     interface HTMLElementTagNameMap {
@@ -21,7 +21,7 @@ export class AddressBar extends HTMLElement {
     static new() {
         AddressBar.define();
         let element = document.createElement(AddressBar.tag) as AddressBar;
-        App.addElement(element);
+        Utility.addElement(element);
         return element;
     }
 

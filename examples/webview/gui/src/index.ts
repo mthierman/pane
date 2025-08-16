@@ -1,5 +1,5 @@
-import { App } from "./app";
 import { AddressBar } from "./component";
+import { Utility } from "./utility";
 
 import "./style/index.css";
 
@@ -18,9 +18,7 @@ window.chrome.webview.addEventListener<payload>("message", (event) => {
     switch (event.data.type) {
         case "init":
             {
-                // address_bar.dispatchEvent(event);
-                // address_bar.dispatchEvent(new CustomEvent("init", { detail: event.data.payload }));
-                address_bar.dispatchEvent(App.customEvent(event));
+                address_bar.dispatchEvent(Utility.customEvent(event));
             }
             break;
         case "test":
@@ -30,25 +28,3 @@ window.chrome.webview.addEventListener<payload>("message", (event) => {
             break;
     }
 });
-
-// function testMessages() {
-//     const init: WebViewMessageEventData<payload> = {
-//         type: "init",
-//         payload: {
-//             name: "Cindy Thompson",
-//             age: 18,
-//         },
-//     };
-
-//     window.chrome.webview.postMessage(init);
-
-//     const test: WebViewMessageEventData<payload> = {
-//         type: "test",
-//         payload: {
-//             one: 23,
-//             two: 162,
-//         },
-//     };
-
-//     window.chrome.webview.postMessage(test);
-// }

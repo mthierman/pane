@@ -1,4 +1,4 @@
-import { App } from "../app";
+import { Utility } from "../utility";
 
 declare global {
     interface HTMLElementTagNameMap {
@@ -18,7 +18,7 @@ export class Button extends HTMLButtonElement {
     static new() {
         Button.define();
         let element = document.createElement("button", { is: Button.tag }) as Button;
-        App.addElement(element);
+        Utility.addElement(element);
         return element;
     }
 

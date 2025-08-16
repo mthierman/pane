@@ -1,6 +1,4 @@
-
-
-export const App = {
+export const Utility = {
     html: document.documentElement as HTMLHtmlElement,
     body: document.body as HTMLBodyElement,
 
