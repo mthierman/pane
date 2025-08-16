@@ -25,7 +25,7 @@ window.chrome.webview.addEventListener<payload>("message", (event) => {
                 //     );
                 // }
                 if (address_bar) {
-                    address_bar.dispatchEvent(Event.new(event));
+                    address_bar.dispatchEvent(event);
                 }
             }
             break;

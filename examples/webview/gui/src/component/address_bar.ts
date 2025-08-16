@@ -1,4 +1,5 @@
 import { App } from "../app";
+import { Event } from "../event";
 
 declare global {
     interface HTMLElementTagNameMap {
@@ -54,5 +55,9 @@ export class AddressBar extends HTMLInputElement {
             // }
             // console.log(this.url);
         });
+    }
+
+    dispatchEvent<T>(event: WebViewMessageEvent<WebViewMessageEventData<T>>) {
+        return super.dispatchEvent(Event.new(event));
     }
 }
