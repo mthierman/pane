@@ -1,4 +1,4 @@
-export type ComponentEventMap<T extends Record<string, any>> = {
+export type AppEventMap<T extends Record<string, any>> = {
     [K in keyof T]: CustomEvent<T[K]>;
 };
 
@@ -12,5 +12,9 @@ export const App = {
 
     getElementById<T = HTMLElement>(elementId: string) {
         return document.getElementById(elementId) as T | null;
+    },
+
+    makeEvent<T>(event: WebViewMessageEvent<WebViewMessageEventData<T>>) {
+        return new CustomEvent(event.data.type as string, { detail: event.data.payload });
     },
 };
