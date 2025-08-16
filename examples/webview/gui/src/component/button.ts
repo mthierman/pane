@@ -5,8 +5,9 @@ declare global {
 }
 
 export class Button extends HTMLButtonElement {
-    static define(tag = "pane-button") {
-        customElements.define(tag, this, { extends: "button" });
+    static tag = "pane-address-bar";
+    static define() {
+        customElements.define(Button.tag, this, { extends: "button" });
     }
 
     connectedCallback() {

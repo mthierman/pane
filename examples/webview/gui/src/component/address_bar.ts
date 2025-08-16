@@ -5,8 +5,9 @@ declare global {
 }
 
 export class AddressBar extends HTMLInputElement {
-    static define(tag = "pane-address-bar") {
-        customElements.define(tag, this, { extends: "input" });
+    static tag = "pane-address-bar";
+    static define() {
+        customElements.define(AddressBar.tag, this, { extends: "input" });
     }
 
     url = new URL("about:blank");
