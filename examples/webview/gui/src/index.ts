@@ -23,19 +23,16 @@ declare global {
 }
 
 window.chrome.webview.addEventListener<payload>("message", (event) => {
-    // console.log(event.data);
     const element = getElements();
 
     switch (event.data.type) {
         case "init":
             {
                 if (element.address_bar) {
-                    // console.log(event.data.payload.url);
                     element.address_bar.dispatchEvent(
                         new CustomEvent("initialize", { detail: event.data.payload }),
                     );
                 }
-                // console.log(element.address_bar!.url);
             }
             break;
         case "test":
