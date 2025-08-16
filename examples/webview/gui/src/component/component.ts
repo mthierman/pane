@@ -7,6 +7,11 @@ export class Component extends HTMLElement {
         }
     }
 
+    attach<T extends Node>(element: T) {
+        const body = document.body as HTMLBodyElement;
+        return body.appendChild(element);
+    }
+
     dispatchCustomEvent<T>(event: WebViewMessageEvent<WebViewMessageEventData<T>>) {
         super.dispatchEvent(Utility.customEvent(event));
     }

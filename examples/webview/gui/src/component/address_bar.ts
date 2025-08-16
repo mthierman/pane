@@ -1,4 +1,3 @@
-import { Utility } from "../utility";
 import { Component } from "./component";
 
 declare global {
@@ -16,7 +15,7 @@ export class AddressBar extends Component {
     static new() {
         AddressBar.define(AddressBar.tag, this);
         let element = document.createElement(AddressBar.tag) as AddressBar;
-        Utility.addElement(element);
+        element.attach(element);
         return element;
     }
 

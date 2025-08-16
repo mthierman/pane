@@ -1,4 +1,3 @@
-import { Utility } from "../utility";
 import { Component } from "./component";
 
 declare global {
@@ -15,7 +14,7 @@ export class Button extends Component {
     static new() {
         Button.define(Button.tag, this);
         let element = document.createElement(Button.tag) as Button;
-        Utility.addElement(element);
+        element.attach(element);
         return element;
     }
 
