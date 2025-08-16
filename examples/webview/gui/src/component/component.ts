@@ -1,3 +1,6 @@
+import { AddressBar } from "./address_bar";
+import { Button } from "./button";
+
 export const body = document.body as HTMLBodyElement;
 
 export const html = document.documentElement as HTMLHtmlElement;
@@ -25,3 +28,5 @@ export class Component extends HTMLElement {
         );
     }
 }
+
+export { AddressBar, Button };

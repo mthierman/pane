@@ -1,4 +1,4 @@
-import { AddressBar, Button } from "./component";
+import { AddressBar, Button } from "./component/component";
 
 import "./style/index.css";
 
