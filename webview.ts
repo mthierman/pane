@@ -53,7 +53,7 @@ declare global {
 
     type WebViewEvent<T> = WebViewMessageEvent<WebViewMessageEventData<T>>;
 
-    export type WebViewEvents<T extends Record<string, any>> = {
+    type WebViewEvents<T extends Record<string, any>> = {
         [K in keyof T]: CustomEvent<T[K]>;
     };
 
