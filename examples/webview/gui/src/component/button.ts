@@ -7,6 +7,12 @@ declare global {
 }
 
 export class Button extends Component {
+    static {
+        if (!customElements.get("pane-button")) {
+            customElements.define("pane-button", Button);
+        }
+    }
+
     #button = document.createElement("button") as HTMLButtonElement;
 
     get() {
@@ -17,11 +23,5 @@ export class Button extends Component {
         this.appendChild(this.#button);
 
         this.addEventListener("click", () => {});
-    }
-
-    static {
-        if (!customElements.get("pane-button")) {
-            customElements.define("pane-button", Button);
-        }
     }
 }

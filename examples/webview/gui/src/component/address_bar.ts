@@ -7,6 +7,12 @@ declare global {
 }
 
 export class AddressBar extends Component {
+    static {
+        if (!customElements.get("pane-address-bar")) {
+            customElements.define("pane-address-bar", AddressBar);
+        }
+    }
+
     #url = new URL("about:blank");
     #input = document.createElement("input") as HTMLInputElement;
 
@@ -53,11 +59,5 @@ export class AddressBar extends Component {
                 this.#input.value = this.url.toString();
             }
         });
-    }
-
-    static {
-        if (!customElements.get("pane-address-bar")) {
-            customElements.define("pane-address-bar", AddressBar);
-        }
     }
 }
