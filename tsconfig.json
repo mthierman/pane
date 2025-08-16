@@ -1,7 +1,4 @@
 {
     "files": [],
-    "references": [
-        { "path": "./tsconfig.pane.json" },
-        { "path": "./examples/webview/gui/tsconfig.vite.json" }
-    ]
+    "references": [{ "path": "./tsconfig.pane.json" }, { "path": "./tsconfig.vite.json" }]
 }
