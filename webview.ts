@@ -51,6 +51,10 @@ declare global {
         [K in keyof T]: { type: K; payload: T[K] };
     }[keyof T];
 
+    export type WebViewEvents<T extends Record<string, any>> = {
+        [K in keyof T]: CustomEvent<T[K]>;
+    };
+
     interface SharedBufferReceivedEvent<T = unknown, U = unknown> extends Event {
         data: T;
         additionalData: U;
