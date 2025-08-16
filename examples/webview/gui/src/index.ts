@@ -1,7 +1,6 @@
-import "./index.css";
+import "./style/index.css";
 
-import { AddressBar } from "./address_bar";
-import { Button } from "./button";
+import { AddressBar, Button } from "./component";
 import { getElementById } from "./utility";
 
 export function getElements() {
