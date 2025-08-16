@@ -10,7 +10,7 @@ export class Component extends HTMLElement {
         return body.appendChild(element);
     }
 
-    dispatch<T>(event: WebViewEvent<T>) {
+    dispatch<T>(event: WebViewMessageEvent<WebViewMessageEventData<T>>) {
         super.dispatchEvent(
             new CustomEvent(event.data.type as string, {
                 detail: event.data.payload,
