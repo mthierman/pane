@@ -1,3 +1,7 @@
+export type ComponentEventMap<T extends Record<string, any>> = {
+    [K in keyof T]: CustomEvent<T[K]>;
+};
+
 export const App = {
     html: document.documentElement as HTMLHtmlElement,
     body: document.body as HTMLBodyElement,

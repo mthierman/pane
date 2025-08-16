@@ -1,4 +1,5 @@
 // import { App } from "./app";
+import type { ComponentEventMap } from "./app";
 import { AddressBar } from "./component";
 import "./style/index.css";
 
@@ -10,9 +11,7 @@ export type payload = {
 };
 
 declare global {
-    interface HTMLElementEventMap {
-        initialize: CustomEvent<payload["init"]>;
-    }
+    interface HTMLElementEventMap extends ComponentEventMap<payload> {}
 }
 
 window.chrome.webview.addEventListener<payload>("message", (event) => {
@@ -21,7 +20,7 @@ window.chrome.webview.addEventListener<payload>("message", (event) => {
             {
                 if (address_bar) {
                     address_bar.dispatchEvent(
-                        new CustomEvent("initialize", { detail: event.data.payload }),
+                        new CustomEvent("init", { detail: event.data.payload }),
                     );
                 }
             }

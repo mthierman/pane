@@ -15,8 +15,12 @@ export class AddressBar extends HTMLInputElement {
         }
     }
 
-    static new() {
+    constructor() {
+        super();
         AddressBar.define();
+    }
+
+    static new() {
         let element = document.createElement("input", { is: AddressBar.tag }) as AddressBar;
         App.addElement(element);
         return element;
@@ -32,7 +36,7 @@ export class AddressBar extends HTMLInputElement {
     connectedCallback() {
         this.type = "text";
         // this.setAttribute("is", "pane-address-bar");
-        this.addEventListener("initialize", (event) => {
+        this.addEventListener("init", (event) => {
             this.set(event.detail.url);
         });
 
