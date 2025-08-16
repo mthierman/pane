@@ -6,7 +6,7 @@ declare global {
     }
 }
 
-export class Button extends Component {
+class Button extends Component {
     static {
         if (!customElements.get("pane-button")) {
             customElements.define("pane-button", Button);
@@ -25,3 +25,5 @@ export class Button extends Component {
         this.addEventListener("click", () => {});
     }
 }
+
+export type { Button };
