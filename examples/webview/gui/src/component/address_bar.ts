@@ -15,12 +15,8 @@ export class AddressBar extends HTMLInputElement {
         }
     }
 
-    constructor() {
-        super();
-        AddressBar.define();
-    }
-
     static new() {
+        AddressBar.define();
         let element = document.createElement("input", { is: AddressBar.tag }) as AddressBar;
         App.addElement(element);
         return element;

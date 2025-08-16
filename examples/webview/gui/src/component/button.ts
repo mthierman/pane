@@ -15,12 +15,8 @@ export class Button extends HTMLButtonElement {
         }
     }
 
-    constructor() {
-        super();
-        Button.define();
-    }
-
     static new() {
+        Button.define();
         let element = document.createElement("button", { is: Button.tag }) as Button;
         App.addElement(element);
         return element;
