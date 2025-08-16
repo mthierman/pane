@@ -42,17 +42,17 @@ declare global {
         ): void;
     }
 
-    interface WebViewMessageEvent<
-        T = unknown,
-        U = {
-            [K in Extract<keyof T, string>]: { type: K; payload: T[K] };
-        }[Extract<keyof T, string>],
-    > extends MessageEvent<U> {
+    interface WebViewMessageEvent<T = unknown>
+        extends MessageEvent<
+            {
+                [K in Extract<keyof T, string>]: { type: K; payload: T[K] };
+            }[Extract<keyof T, string>]
+        > {
         additionalObjects: ArrayLike<FileSystemFileHandle | FileSystemDirectoryHandle | null>;
         source: WebView & MessageEventSource;
     }
 
-    type WebViewMessageEventMap<T extends Record<string, any>> = {
+    type WebViewMessageEventMap<T> = {
         [K in keyof T]: CustomEvent<T[K]>;
     };
 
