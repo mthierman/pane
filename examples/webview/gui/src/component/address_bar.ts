@@ -11,19 +11,36 @@ export class AddressBar extends HTMLInputElement {
 
     url = new URL("about:blank");
 
+    set(href: string) {
+        this.url.href = href;
+        this.value = this.url.href;
+    }
+
     connectedCallback() {
+        this.type = "text";
+        // this.setAttribute("is", "pane-address-bar");
         this.addEventListener("initialize", (event) => {
-            this.url.href = event.detail.url;
-            this.value = this.url.href;
+            this.set(event.detail.url);
         });
 
-        this.addEventListener("input", () => {
-            if (!this.value.startsWith("http")) {
-                this.url = new URL(`https://${this.value}`);
-            } else {
-                this.value = this.url.toString();
-            }
-            console.log(this.url);
+        this.addEventListener("submit", () => {
+            console.log(this.value);
+            this.set(this.value);
+
+            // if (!this.value.startsWith("http")) {
+            //     console.log("!http");
+            //     this.url = new URL(`https://${this.value}`);
+            // } else {
+            //     console.log(new URL(this.value));
+            //     this.value = this.url.toString();
+            // }
+
+            // if (!this.value.startsWith("http")) {
+            //     this.url = new URL(`https://${this.value}`);
+            // } else {
+            //     this.value = this.url.toString();
+            // }
+            // console.log(this.url);
         });
     }
 }
