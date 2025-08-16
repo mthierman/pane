@@ -1,4 +1,4 @@
-import { appendToBody, Component, createElement } from "./component/component";
+import { appendToBody, createElement } from "./component/component";
 
 import "./style/index.css";
 
