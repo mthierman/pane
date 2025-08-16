@@ -51,6 +51,8 @@ declare global {
         [K in keyof T]: { type: K; payload: T[K] };
     }[keyof T];
 
+    type WebViewEvent<T> = WebViewMessageEvent<WebViewMessageEventData<T>;
+
     export type WebViewEvents<T extends Record<string, any>> = {
         [K in keyof T]: CustomEvent<T[K]>;
     };

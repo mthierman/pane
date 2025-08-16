@@ -1,5 +1,3 @@
-import { Utility } from "../utility";
-
 export class Component extends HTMLElement {
     static define(name: string, constructor: CustomElementConstructor) {
         if (!customElements.get(name)) {
@@ -12,7 +10,11 @@ export class Component extends HTMLElement {
         return body.appendChild(element);
     }
 
-    dispatchCustomEvent<T>(event: WebViewMessageEvent<WebViewMessageEventData<T>>) {
-        super.dispatchEvent(Utility.customEvent(event));
+    dispatch<T>(event: WebViewEvent<T>) {
+        super.dispatchEvent(
+            new CustomEvent(event.data.type as string, {
+                detail: event.data.payload,
+            }),
+        );
     }
 }

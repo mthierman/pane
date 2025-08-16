@@ -19,7 +19,7 @@ window.chrome.webview.addEventListener<payload>("message", (event) => {
     switch (event.data.type) {
         case "init":
             {
-                address_bar.dispatchCustomEvent(event);
+                address_bar.dispatch(event);
             }
             break;
         case "test":
