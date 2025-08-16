@@ -19,8 +19,4 @@ export const App = {
     makeEvent<T>(event: WebViewMessageEvent<WebViewMessageEventData<T>>) {
         return new CustomEvent(event.data.type as string, { detail: event.data.payload });
     },
-
-    dispatchEvent<T>(event: WebViewMessageEvent<WebViewMessageEventData<T>>) {
-        return super.dispatchEvent(Event.new(event));
-    },
 };

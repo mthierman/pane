@@ -1,6 +1,4 @@
 import { App } from "../app";
-import { Event } from "../event";
-import type { payload } from "../index";
 
 declare global {
     interface HTMLElementTagNameMap {
@@ -40,20 +38,22 @@ export class AddressBar extends HTMLElement {
         this.appendChild(this.input);
 
         this.addEventListener("init", (event) => {
+            console.log("init");
             this.url = event.detail.url;
         });
 
         this.addEventListener("keydown", (event) => {
             // console.log(`keydown ${event.key}`);
-            if (event.key === "Enter") {
-                const test: WebViewMessageEventData<payload> = {
-                    type: "init",
-                    payload: {
-                        url: this.url.href,
-                    },
-                };
-                window.chrome.webview.postMessage(test);
-            }
+            // if (event.key === "Enter") {
+            //     const test: WebViewMessageEventData<payload> = {
+            //         type: "init",
+            //         payload: {
+            //             url: this.url.href,
+            //         },
+            //     };
+            //     window.chrome.webview.postMessage(test);
+            // }
+            // this.dispatchEvent();
         });
 
         this.addEventListener("submit", () => {
@@ -64,27 +64,5 @@ export class AddressBar extends HTMLElement {
                 this.input.value = this.url.toString();
             }
         });
-
-        this.addEventListener("submit", () => {
-            // console.log(this.value);
-            // this.set(this.value);
-            // if (!this.value.startsWith("http")) {
-            //     console.log("!http");
-            //     this.url = new URL(`https://${this.value}`);
-            // } else {
-            //     console.log(new URL(this.value));
-            //     this.value = this.url.toString();
-            // }
-            // if (!this.value.startsWith("http")) {
-            //     this.url = new URL(`https://${this.value}`);
-            // } else {
-            //     this.value = this.url.toString();
-            // }
-            // console.log(this.url);
-        });
-    }
-
-    dispatchEvent<T>(event: WebViewMessageEvent<WebViewMessageEventData<T>>) {
-        return super.dispatchEvent(Event.new(event));
     }
 }
