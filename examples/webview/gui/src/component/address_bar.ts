@@ -8,6 +8,7 @@ declare global {
 
 export class AddressBar extends Component {
     static {
+        let cust = customElements.get("pane-address-bar");
         if (!customElements.get("pane-address-bar")) {
             customElements.define("pane-address-bar", AddressBar);
         }
