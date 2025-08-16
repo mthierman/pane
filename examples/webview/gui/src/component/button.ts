@@ -1,6 +1,6 @@
 declare global {
     interface HTMLElementTagNameMap {
-        "pane-button": Button;
+        [Button.tag]: Button;
     }
 }
 
@@ -12,7 +12,7 @@ export class Button extends HTMLButtonElement {
     }
 
     static new() {
-        return document.createElement("pane-button", { is: Button.tag });
+        return document.createElement("button", { is: Button.tag }) as Button;
     }
 
     connectedCallback() {
