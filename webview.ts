@@ -7,6 +7,11 @@ declare global {
         };
     }
 
+    interface WebViewEventMap {
+        message: WebViewMessageEvent;
+        sharedbufferreceived: SharedBufferReceivedEvent;
+    }
+
     interface WebView extends EventTarget {
         hostObjects: HostObjectsAsyncRoot;
         addEventListener<T = unknown>(
@@ -37,23 +42,16 @@ declare global {
         ): void;
     }
 
-    interface WebViewEventMap {
-        message: WebViewMessageEvent;
-        sharedbufferreceived: SharedBufferReceivedEvent;
-    }
-
     interface WebViewMessageEvent<T = unknown> extends MessageEvent<T> {
         additionalObjects: ArrayLike<FileSystemFileHandle | FileSystemDirectoryHandle | null>;
         source: WebView & MessageEventSource;
     }
-
+    type WebViewEvent<T> = WebViewMessageEvent<WebViewMessageEventData<T>>;
     type WebViewMessageEventData<T> = {
         [K in keyof T]: { type: K; payload: T[K] };
     }[keyof T];
 
-    type WebViewEvent<T> = WebViewMessageEvent<WebViewMessageEventData<T>>;
-
-    type WebViewEvents<T extends Record<string, any>> = {
+    type WebViewMessageEventMap<T extends Record<string, any>> = {
         [K in keyof T]: CustomEvent<T[K]>;
     };
 

@@ -8,7 +8,7 @@ export type payload = {
 };
 
 declare global {
-    interface HTMLElementEventMap extends WebViewEvents<payload> {}
+    interface HTMLElementEventMap extends WebViewMessageEventMap<payload> {}
 }
 
 let address_bar = AddressBar.new();
