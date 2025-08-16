@@ -1,6 +1,6 @@
 declare global {
     interface HTMLElementTagNameMap {
-        "pane-address-bar": AddressBar;
+        [AddressBar.tag]: AddressBar;
     }
 }
 

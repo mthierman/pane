@@ -1,12 +1,20 @@
 import "./style/index.css";
 
 import { AddressBar, Button } from "./component";
-import { getElementById } from "./utility";
+import { getBody, getElementById } from "./utility";
 
-export let element = {
-    address_bar: getElementById<AddressBar>("address-bar"),
-    button: getElementById<Button>("submit-button"),
-};
+// export let element = {
+//     address_bar: getElementById<AddressBar>("address-bar"),
+//     button: getElementById<Button>("submit-button"),
+// };
+
+// let address_bar = new AddressBar();
+// let body = getBody();
+// let address_bar = document.createElement(AddressBar.tag);
+
+// if (body) {
+//     body.appendChild(address_bar);
+// }
 
 export type payload = {
     init: { url: string };
@@ -23,11 +31,11 @@ window.chrome.webview.addEventListener<payload>("message", (event) => {
     switch (event.data.type) {
         case "init":
             {
-                if (element.address_bar) {
-                    element.address_bar.dispatchEvent(
-                        new CustomEvent("initialize", { detail: event.data.payload }),
-                    );
-                }
+                // if (address_bar) {
+                //     address_bar.dispatchEvent(
+                //         new CustomEvent("initialize", { detail: event.data.payload }),
+                //     );
+                // }
             }
             break;
         case "test":

@@ -1,11 +1,11 @@
 declare global {
     interface HTMLElementTagNameMap {
-        "pane-button": Button;
+        [Button.tag]: Button;
     }
 }
 
 export class Button extends HTMLButtonElement {
-    static tag = "pane-address-bar";
+    static tag = "pane-button";
     static define() {
         customElements.define(Button.tag, this, { extends: "button" });
     }
