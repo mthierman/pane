@@ -241,6 +241,7 @@ private:
                             = static_cast<float>(window->window_handle.position.dpi)
                             / static_cast<float>(USER_DEFAULT_SCREEN_DPI);
                         window->window_handle.immersive_dark_mode(pane::system::dark_mode());
+                        SendMessageW(window_message.hwnd, WM_SETTINGCHANGE, 0, 0);
                     }
                 }
             } break;

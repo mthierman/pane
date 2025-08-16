@@ -22,9 +22,11 @@ struct webview : pane::webview<webview> {
     using pane::webview<webview>::webview;
 
     static auto config() -> config {
-        pane::window_config window_config {
-            u8"webview", pane::color { 0, 0, 0, 255 }, pane::color { 0, 0, 0, 255 }, true, nullptr
-        };
+        pane::window_config window_config { u8"webview",
+                                            pane::color { 0, 0, 0, 255 },
+                                            pane::color { 255, 255, 255, 255 },
+                                            true,
+                                            nullptr };
 
         pane::webview_config webview_config;
 

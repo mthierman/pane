@@ -1,10 +1,11 @@
 :root {
-    --bg-color: rgb(25, 25, 25);
+    --fg: rgb(100, 150, 255);
+    --bg: rgb(25, 25, 25);
     --bg-hover: rgb(45, 45, 45);
 }
 
 html {
-    background-color: red;
+    background-color: transparent;
 }
 
 body {
@@ -18,7 +19,8 @@ pane-address-bar {
 }
 
 pane-address-bar input {
-    background-color: var(--bg-color);
+    background-color: var(--bg);
+    color: var(--fg);
     border: 0;
     outline: 0;
     flex: auto;
@@ -26,7 +28,7 @@ pane-address-bar input {
 }
 
 pane-address-bar input:focus {
-    box-shadow: 0 1px 0 0 blue;
+    box-shadow: 0 1px 0 0 var(--fg);
 }
 
 pane-address-bar input:hover {
@@ -38,7 +40,8 @@ pane-button {
 }
 
 pane-button button {
-    background-color: var(--bg-color);
+    background-color: var(--bg);
+    color: var(--fg);
     border: 0;
     padding: 0.2rem;
 }
