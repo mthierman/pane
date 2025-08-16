@@ -2,25 +2,13 @@ import { Component } from "./component";
 
 declare global {
     interface HTMLElementTagNameMap {
-        [AddressBar.tag]: AddressBar;
+        "pane-address-bar": AddressBar;
     }
 }
 
 export class AddressBar extends Component {
-    static tag = "pane-address-bar";
-
     #url = new URL("about:blank");
     #input = document.createElement("input") as HTMLInputElement;
-
-    static new(id?: string) {
-        AddressBar.define(AddressBar.tag, this);
-        let element = document.createElement(AddressBar.tag) as AddressBar;
-        if (id) {
-            element.id = id;
-        }
-        element.attach(element);
-        return element;
-    }
 
     get() {
         return this.#input;
@@ -66,4 +54,8 @@ export class AddressBar extends Component {
             }
         });
     }
+}
+
+if (!customElements.get("pane-address-bar")) {
+    customElements.define("pane-address-bar", AddressBar);
 }
