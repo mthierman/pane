@@ -1,3 +1,6 @@
+import { AddressBar } from "./component/address_bar";
+import { Button } from "./component/button";
+
 export const body = document.body as HTMLBodyElement;
 
 export const html = document.documentElement as HTMLHtmlElement;
@@ -15,3 +18,5 @@ export function createElement<K extends keyof HTMLElementTagNameMap>(tagName: K,
 export function appendToBody<T extends Node>(element: T) {
     return body.appendChild(element);
 }
+
+export { AddressBar, Button };

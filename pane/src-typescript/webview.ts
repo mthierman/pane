@@ -114,5 +114,3 @@ declare global {
         ): void;
     }
 }
-
-export {};

@@ -6,7 +6,7 @@ declare global {
     }
 }
 
-class AddressBar extends Component {
+export class AddressBar extends Component {
     static {
         if (!customElements.get("pane-address-bar")) {
             customElements.define("pane-address-bar", AddressBar);
@@ -61,5 +61,3 @@ class AddressBar extends Component {
         });
     }
 }
-
-export type { AddressBar };

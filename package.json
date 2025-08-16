@@ -3,12 +3,7 @@
     "version": "0.0.0",
     "type": "module",
     "private": true,
-    "exports": {
-        ".": {
-            "import": "./pane/src-typescript/index.ts",
-            "types": "./pane/src-typescript/index.d.ts"
-        }
-    },
+    "exports": "./pane/src-typescript/index.ts",
     "scripts": {
         "check": "tsc -b",
         "webview": "vite examples/webview/gui",
