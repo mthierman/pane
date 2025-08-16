@@ -10,17 +10,11 @@ declare global {
 export class AddressBar extends Component {
     static tag = "pane-address-bar";
 
-    static define() {
-        if (!customElements.get(AddressBar.tag)) {
-            customElements.define(AddressBar.tag, this);
-        }
-    }
-
     #url = new URL("about:blank");
     input = document.createElement("input") as HTMLInputElement;
 
     static new() {
-        AddressBar.define();
+        AddressBar.define(AddressBar.tag, this);
         let element = document.createElement(AddressBar.tag) as AddressBar;
         Utility.addElement(element);
         return element;

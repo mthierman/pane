@@ -1,4 +1,5 @@
 import { Utility } from "../utility";
+import { Component } from "./component";
 
 declare global {
     interface HTMLElementTagNameMap {
@@ -6,23 +7,25 @@ declare global {
     }
 }
 
-export class Button extends HTMLButtonElement {
+export class Button extends Component {
     static tag = "pane-button";
 
-    static define() {
-        if (!customElements.get(Button.tag)) {
-            customElements.define(Button.tag, this, { extends: "button" });
-        }
+    #button = document.createElement("button") as HTMLButtonElement;
+
+    get() {
+        return this.#button;
     }
 
     static new() {
-        Button.define();
-        let element = document.createElement("button", { is: Button.tag }) as Button;
+        Button.define(Button.tag, this);
+        let element = document.createElement(Button.tag) as Button;
         Utility.addElement(element);
         return element;
     }
 
     connectedCallback() {
+        this.appendChild(this.#button);
+
         this.addEventListener("click", () => {});
     }
 }
