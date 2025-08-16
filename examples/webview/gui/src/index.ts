@@ -1,4 +1,3 @@
-// import { AddressBar, Button, elementTag } from "./component/component";
 import { appendToBody, createElement } from "./component/index";
 
 import "./style/index.css";
@@ -11,10 +10,6 @@ export type payload = {
 declare global {
     interface HTMLElementEventMap extends WebViewMessageEventMap<payload> {}
 }
-
-// let address_bar = AddressBar.new();
-// let button = Button.new();
-// button.get().innerText = "↵";
 
 let address_bar = createElement("pane-address-bar");
 let button = createElement("pane-button");
