@@ -3,12 +3,10 @@ import "./style/index.css";
 import { AddressBar, Button } from "./component";
 import { getElementById } from "./utility";
 
-export function getElements() {
-    return {
-        address_bar: getElementById<AddressBar>("address-bar"),
-        button: getElementById<Button>("submit-button"),
-    };
-}
+export let element = {
+    address_bar: getElementById<AddressBar>("address-bar"),
+    button: getElementById<Button>("submit-button"),
+};
 
 export type payload = {
     init: { url: string };
@@ -22,8 +20,6 @@ declare global {
 }
 
 window.chrome.webview.addEventListener<payload>("message", (event) => {
-    const element = getElements();
-
     switch (event.data.type) {
         case "init":
             {

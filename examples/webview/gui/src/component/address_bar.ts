@@ -27,5 +27,3 @@ export class AddressBar extends HTMLInputElement {
         });
     }
 }
-
-AddressBar.define();

@@ -1,5 +1,3 @@
-// import type { payload } from "./index";
-
 declare global {
     interface HTMLElementTagNameMap {
         "pane-button": Button;
@@ -15,5 +13,3 @@ export class Button extends HTMLButtonElement {
         this.addEventListener("click", () => {});
     }
 }
-
-Button.define();
