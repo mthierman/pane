@@ -52,14 +52,7 @@ export class AddressBar extends HTMLElement {
                         url: this.url.href,
                     },
                 };
-                window.chrome.webview.postMessage(
-                    WebViewMessageEventData<payload>({
-                        type: "init",
-                        payload: {
-                            url: this.url.href,
-                        },
-                    }),
-                );
+                window.chrome.webview.postMessage(test);
             }
         });
 
