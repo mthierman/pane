@@ -2,7 +2,6 @@
 import { AddressBar } from "./component";
 import "./style/index.css";
 
-// const app = App.new();
 let address_bar = AddressBar.new();
 
 export type payload = {
@@ -20,11 +19,11 @@ window.chrome.webview.addEventListener<payload>("message", (event) => {
     switch (event.data.type) {
         case "init":
             {
-                // if (address_bar) {
-                //     address_bar.dispatchEvent(
-                //         new CustomEvent("initialize", { detail: event.data.payload }),
-                //     );
-                // }
+                if (address_bar) {
+                    address_bar.dispatchEvent(
+                        new CustomEvent("initialize", { detail: event.data.payload }),
+                    );
+                }
             }
             break;
         case "test":
