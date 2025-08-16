@@ -7,39 +7,44 @@ declare global {
     }
 }
 
-export class AddressBar extends HTMLInputElement {
+export class AddressBar extends HTMLElement {
     static tag = "pane-address-bar";
 
     static define() {
         if (!customElements.get(AddressBar.tag)) {
-            customElements.define(AddressBar.tag, this, { extends: "input" });
+            customElements.define(AddressBar.tag, this);
         }
     }
 
+    #url = new URL("about:blank");
+    input = document.createElement("input") as HTMLInputElement;
+
     static new() {
         AddressBar.define();
-        let element = document.createElement("input", { is: AddressBar.tag }) as AddressBar;
+        let element = document.createElement(AddressBar.tag) as AddressBar;
         App.addElement(element);
         return element;
     }
 
-    url = new URL("about:blank");
+    get url(): URL {
+        return this.#url;
+    }
 
-    set(href: string) {
-        this.url.href = href;
-        this.value = this.url.href;
+    set url(href: string) {
+        this.#url.href = href;
+        this.input.value = this.#url.href;
     }
 
     connectedCallback() {
-        this.type = "text";
+        this.appendChild(this.input);
+
         this.addEventListener("init", (event) => {
-            this.set(event.detail.url);
+            this.url = event.detail.url;
         });
 
         this.addEventListener("submit", () => {
-            console.log(this.value);
-            this.set(this.value);
-
+            // console.log(this.value);
+            // this.set(this.value);
             // if (!this.value.startsWith("http")) {
             //     console.log("!http");
             //     this.url = new URL(`https://${this.value}`);
@@ -47,7 +52,6 @@ export class AddressBar extends HTMLInputElement {
             //     console.log(new URL(this.value));
             //     this.value = this.url.toString();
             // }
-
             // if (!this.value.startsWith("http")) {
             //     this.url = new URL(`https://${this.value}`);
             // } else {
