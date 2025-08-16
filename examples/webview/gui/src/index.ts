@@ -1,4 +1,4 @@
-import { appendToBody, createElement } from "../../../../pane/src-typescript/index";
+import { appendToBody, createElement } from "pane";
 
 import "./index.css";
 
