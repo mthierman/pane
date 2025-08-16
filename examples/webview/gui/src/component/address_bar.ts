@@ -1,5 +1,6 @@
 import { App } from "../app";
 import { Event } from "../event";
+import type { payload } from "../index";
 
 declare global {
     interface HTMLElementTagNameMap {
@@ -40,6 +41,35 @@ export class AddressBar extends HTMLElement {
 
         this.addEventListener("init", (event) => {
             this.url = event.detail.url;
+        });
+
+        this.addEventListener("keydown", (event) => {
+            // console.log(`keydown ${event.key}`);
+            if (event.key === "Enter") {
+                const test: WebViewMessageEventData<payload> = {
+                    type: "init",
+                    payload: {
+                        url: this.url.href,
+                    },
+                };
+                window.chrome.webview.postMessage(
+                    WebViewMessageEventData<payload>({
+                        type: "init",
+                        payload: {
+                            url: this.url.href,
+                        },
+                    }),
+                );
+            }
+        });
+
+        this.addEventListener("submit", () => {
+            if (!this.input.value.startsWith("http")) {
+                this.url = `https://${this.input.value}`;
+                console.log(this.url);
+            } else {
+                this.input.value = this.url.toString();
+            }
         });
 
         this.addEventListener("submit", () => {
