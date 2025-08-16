@@ -8,7 +8,9 @@ export class AddressBar extends HTMLInputElement {
     static tag = "pane-address-bar";
 
     static define() {
-        customElements.define(AddressBar.tag, this, { extends: "input" });
+        if (!customElements.get(AddressBar.tag)) {
+            customElements.define(AddressBar.tag, this, { extends: "input" });
+        }
     }
 
     static new() {

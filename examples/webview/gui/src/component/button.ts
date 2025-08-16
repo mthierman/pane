@@ -8,7 +8,9 @@ export class Button extends HTMLButtonElement {
     static tag = "pane-button";
 
     static define() {
-        customElements.define(Button.tag, this, { extends: "button" });
+        if (!customElements.get(Button.tag)) {
+            customElements.define(Button.tag, this, { extends: "button" });
+        }
     }
 
     static new() {

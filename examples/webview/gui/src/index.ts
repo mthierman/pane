@@ -1,4 +1,5 @@
-import { AddressBar, App } from "./component";
+import { App } from "./app";
+import { AddressBar } from "./component";
 import "./style/index.css";
 
 const app = App.new();
