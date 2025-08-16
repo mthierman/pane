@@ -16,7 +16,7 @@ declare global {
         hostObjects: HostObjectsAsyncRoot;
         addEventListener<T = unknown>(
             type: "message",
-            listener: (event: WebViewMessageEvent<WebViewMessageEventData<T>>) => void,
+            listener: (event: WebViewMessageEvent<T>) => void,
             options?: boolean | AddEventListenerOptions,
         ): void;
         addEventListener<T = unknown, U = unknown>(
@@ -42,11 +42,12 @@ declare global {
         ): void;
     }
 
-    type WebViewMessageEventData<T> = {
-        [K in keyof T]: { type: K; payload: T[K] };
-    }[keyof T];
-
-    interface WebViewMessageEvent<T = unknown> extends MessageEvent<T> {
+    interface WebViewMessageEvent<
+        T = unknown,
+        U = {
+            [K in Extract<keyof T, string>]: { type: K; payload: T[K] };
+        }[Extract<keyof T, string>],
+    > extends MessageEvent<U> {
         additionalObjects: ArrayLike<FileSystemFileHandle | FileSystemDirectoryHandle | null>;
         source: WebView & MessageEventSource;
     }

@@ -10,6 +10,7 @@ export type payload = {
 declare global {
     interface HTMLElementEventMap extends WebViewMessageEventMap<payload> {}
 }
+
 let address_bar = AddressBar.new();
 let button = Button.new();
 button.get().innerText = "↵";
