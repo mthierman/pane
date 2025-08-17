@@ -13,11 +13,7 @@ declare global {
 }
 
 let address_bar = createElement("pane-address-bar");
-let button = createElement("pane-button");
-button.get().innerText = "↵";
-
 appendToBody(address_bar);
-appendToBody(button);
 
 window.chrome.webview.addEventListener<payload>("message", (event) => {
     switch (event.data.type) {

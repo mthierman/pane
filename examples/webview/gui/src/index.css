@@ -10,20 +10,23 @@ html {
 
 body {
     background-color: transparent;
-    display: flex;
 }
 
 pane-address-bar {
+    background-color: goldenrod;
+}
+
+pane-address-bar form {
+    background-color: red;
     display: flex;
-    flex: auto;
 }
 
 pane-address-bar input {
+    flex: auto;
     background-color: var(--bg);
     color: var(--fg);
     border: 0;
     outline: 0;
-    flex: auto;
     padding: 0.2rem;
 }
 
@@ -35,17 +38,13 @@ pane-address-bar input:hover {
     background-color: var(--bg-hover);
 }
 
-pane-button {
-    flex: 0 0 auto;
-}
-
-pane-button button {
+pane-address-bar button {
     background-color: var(--bg);
     color: var(--fg);
     border: 0;
     padding: 0.2rem;
 }
 
-button:hover {
+pane-address-bar button:hover {
     background-color: var(--bg-hover);
 }

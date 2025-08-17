@@ -15,6 +15,7 @@ export class AddressBar extends Component {
 
     #form = document.createElement("form");
     #input = document.createElement("input");
+    #button = document.createElement("button");
     #url = new URL("about:blank");
 
     get() {
@@ -23,6 +24,10 @@ export class AddressBar extends Component {
 
     get input() {
         return this.#input;
+    }
+
+    get button() {
+        return this.#button;
     }
 
     get url(): URL {
@@ -37,6 +42,9 @@ export class AddressBar extends Component {
     connectedCallback() {
         this.appendChild(this.#form);
         this.#form.appendChild(this.#input);
+        this.#form.appendChild(this.#button);
+        this.#button.type = "submit";
+        this.#button.innerText = "↵";
 
         this.#form.addEventListener("submit", (event) => {
             event.preventDefault();
@@ -50,11 +58,7 @@ export class AddressBar extends Component {
                     this.#input.value = `${this.#input.value}.com`;
                 }
                 this.url = `https://${this.#input.value}`;
-            } else {
-                this.#input.value = this.url.toString();
             }
-
-            // this.url = this.#input.value;
         });
 
         // this.#input.addEventListener("change", () => {
