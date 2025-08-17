@@ -20,4 +20,4 @@ export function appendToBody<T extends Node>(element: T) {
     return body.appendChild(element);
 }
 
-export { AddressBar, Button };
+export type { AddressBar, Button };
