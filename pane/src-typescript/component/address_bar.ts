@@ -46,6 +46,10 @@ export class AddressBar extends Component {
         this.#button.type = "submit";
         this.#button.innerText = "↵";
 
+        this.addEventListener("init", (event) => {
+            this.url = event.detail.url;
+        });
+
         this.#form.addEventListener("submit", (event) => {
             event.preventDefault();
 
