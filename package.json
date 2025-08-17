@@ -5,11 +5,11 @@
     "private": true,
     "exports": "./pane/src-typescript/index.ts",
     "scripts": {
-        "check": "tsc -b",
+        "check": "tsc",
         "webview": "vite examples/webview/gui",
         "webview:host": "vite examples/webview/gui --host",
-        "webview:build": "tsc -b && vite build examples/webview/gui",
-        "webview:watch": "vite build examples/webview/gui --watch",
+        "webview:build": "tsc && vite build examples/webview/gui",
+        "webview:watch": "tsc && vite build examples/webview/gui --watch",
         "webview:preview": "tsc -b && vite build examples/webview/gui && vite preview examples/webview/gui"
     },
     "devDependencies": {
