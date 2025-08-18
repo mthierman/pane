@@ -1,5 +1,3 @@
-import { AddressBar } from "./component/address_bar";
-import { Button } from "./component/button";
 import "./webview";
 
 export const body = document.body as HTMLBodyElement;
@@ -20,4 +18,12 @@ export function appendToBody<T extends Node>(element: T) {
     return body.appendChild(element);
 }
 
-export type { AddressBar, Button };
+export class Component extends HTMLElement {
+    dispatch<T>(event: WebViewMessageEvent<T>) {
+        super.dispatchEvent(
+            new CustomEvent(event.data.type, {
+                detail: event.data.payload,
+            }),
+        );
+    }
+}

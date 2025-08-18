@@ -1,4 +1,4 @@
-import { Component } from "./component";
+import { Component } from "pane";
 
 declare global {
     interface HTMLElementTagNameMap {
@@ -6,7 +6,7 @@ declare global {
     }
 }
 
-export class AddressBar extends Component {
+class AddressBar extends Component {
     static {
         if (!customElements.get("pane-address-bar")) {
             customElements.define("pane-address-bar", AddressBar);
@@ -98,3 +98,5 @@ export class AddressBar extends Component {
         // });
     }
 }
+
+export {};
