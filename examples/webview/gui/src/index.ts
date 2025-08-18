@@ -1,6 +1,5 @@
 import { appendToBody, createElement } from "pane";
-import "./component/address_bar";
-import "./component/button";
+import "./components";
 
 import "./index.css";
 import "./reset.css";
