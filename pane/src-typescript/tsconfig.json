@@ -1,8 +1,0 @@
-{
-    "extends": "../../tsconfig.json",
-    "include": ["**/*.ts"],
-    "compilerOptions": {
-        "composite": true,
-        "tsBuildInfoFile": "../../node_modules/.tmp/pane/tsconfig.tsbuildinfo"
-    }
-}

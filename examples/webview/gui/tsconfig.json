@@ -1,8 +1,0 @@
-{
-    "extends": "../../../tsconfig.json",
-    "include": ["**/*.ts"],
-    "compilerOptions": {
-        "tsBuildInfoFile": "../../../node_modules/.tmp/examples/webview/gui/tsconfig.tsbuildinfo",
-        "types": ["vite/client"]
-    }
-}

@@ -17,5 +17,5 @@
         "noUncheckedSideEffectImports": true
     },
     "files": [],
-    "references": [{ "path": "pane/src-typescript" }, { "path": "examples/webview/gui" }]
+    "references": [{ "path": "./tsconfig.pane.json" }, { "path": "./tsconfig.vite.json" }]
 }
