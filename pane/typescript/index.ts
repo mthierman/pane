@@ -13,10 +13,6 @@ export class Page {
         return document.body as HTMLBodyElement;
     }
 
-    static appendToBody<T extends Node>(element: T) {
-        return Page.body().appendChild(element);
-    }
-
     static getElementById<T = HTMLElement>(elementId: string) {
         return document.getElementById(elementId) as T | null;
     }
