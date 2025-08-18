@@ -14,8 +14,6 @@ declare global {
 
 let address_bar = Page.createElement("pane-address-bar");
 address_bar.append(Page.body());
-// Page.appendToBody(address_bar);
-// address_bar.appendToParent(address_bar, address_bar);
 
 window.chrome.webview.addEventListener<payload>("message", (event) => {
     switch (event.data.type) {
@@ -26,7 +24,7 @@ window.chrome.webview.addEventListener<payload>("message", (event) => {
             break;
         case "test":
             {
-                // console.log(event.data);
+                console.log(event);
             }
             break;
     }
