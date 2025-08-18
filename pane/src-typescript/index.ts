@@ -1,5 +1,5 @@
 import "./webview";
-
+s
 const page = {
     html: document.documentElement as HTMLHtmlElement,
     body: document.body as HTMLBodyElement,
