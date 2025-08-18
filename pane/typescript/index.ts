@@ -29,6 +29,10 @@ export class Page {
 }
 
 export class Component extends HTMLElement {
+    append<T extends Node>(parent: T) {
+        return parent.appendChild(this);
+    }
+
     dispatch<T>(event: WebViewMessageEvent<T>) {
         super.dispatchEvent(
             new CustomEvent(event.data.type, {

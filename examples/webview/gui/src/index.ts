@@ -1,6 +1,5 @@
 import { Page } from "pane";
 import "./components";
-
 import "./index.css";
 import "./reset.css";
 
@@ -14,7 +13,9 @@ declare global {
 }
 
 let address_bar = Page.createElement("pane-address-bar");
-Page.appendToBody(address_bar);
+address_bar.append(Page.body());
+// Page.appendToBody(address_bar);
+// address_bar.appendToParent(address_bar, address_bar);
 
 window.chrome.webview.addEventListener<payload>("message", (event) => {
     switch (event.data.type) {
