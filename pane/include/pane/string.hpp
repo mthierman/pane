@@ -4,7 +4,7 @@
 #include <string>
 #include <string_view>
 #include <system_error>
-#include "../../src/icu.hpp"
+#include <pane/icu.hpp>
 
 namespace pane {
 struct hstring;

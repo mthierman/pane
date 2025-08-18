@@ -1,4 +1,4 @@
-#include "icu.hpp"
+#include <pane/icu.hpp>
 
 namespace pane {
 auto icu_error::name() const noexcept -> const char* { return "icu"; }
