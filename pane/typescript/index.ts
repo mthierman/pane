@@ -13,14 +13,14 @@ export class Page {
         return document.body as HTMLBodyElement;
     }
 
-    static getElementById<T = HTMLElement>(elementId: string) {
-        return document.getElementById(elementId) as T | null;
-    }
-
     static createElement<K extends keyof HTMLElementTagNameMap>(tagName: K, id?: string) {
         const element = document.createElement(tagName);
         element.id = id || "";
         return document.createElement(tagName);
+    }
+
+    static getElementById<T = HTMLElement>(elementId: string) {
+        return document.getElementById(elementId) as T | null;
     }
 }
 
