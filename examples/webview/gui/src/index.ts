@@ -1,4 +1,4 @@
-import { appendToBody, createElement } from "pane";
+import { Page } from "pane";
 import "./components";
 
 import "./index.css";
@@ -13,8 +13,8 @@ declare global {
     interface HTMLElementEventMap extends WebViewMessageEventMap<payload> {}
 }
 
-let address_bar = createElement("pane-address-bar");
-appendToBody(address_bar);
+let address_bar = Page.createElement("pane-address-bar");
+Page.appendToBody(address_bar);
 
 window.chrome.webview.addEventListener<payload>("message", (event) => {
     switch (event.data.type) {

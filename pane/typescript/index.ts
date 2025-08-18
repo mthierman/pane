@@ -1,22 +1,31 @@
 import "./webview";
 
-const page = {
-    html: document.documentElement as HTMLHtmlElement,
-    body: document.body as HTMLBodyElement,
-};
+export class Page {
+    static html() {
+        return document.documentElement as HTMLHtmlElement;
+    }
 
-export function getElementById<T = HTMLElement>(elementId: string) {
-    return document.getElementById(elementId) as T | null;
-}
+    static head() {
+        return document.head as HTMLHeadElement;
+    }
 
-export function createElement<K extends keyof HTMLElementTagNameMap>(tagName: K, id?: string) {
-    const element = document.createElement(tagName);
-    element.id = id || "";
-    return document.createElement(tagName);
-}
+    static body() {
+        return document.body as HTMLBodyElement;
+    }
 
-export function appendToBody<T extends Node>(element: T) {
-    return page.body.appendChild(element);
+    static appendToBody<T extends Node>(element: T) {
+        return Page.body().appendChild(element);
+    }
+
+    static getElementById<T = HTMLElement>(elementId: string) {
+        return document.getElementById(elementId) as T | null;
+    }
+
+    static createElement<K extends keyof HTMLElementTagNameMap>(tagName: K, id?: string) {
+        const element = document.createElement(tagName);
+        element.id = id || "";
+        return document.createElement(tagName);
+    }
 }
 
 export class Component extends HTMLElement {
