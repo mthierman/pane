@@ -3,7 +3,6 @@
         "target": "ESNext",
         "module": "ESNext",
         "moduleResolution": "bundler",
-        "lib": ["ESNext", "DOM", "DOM.Iterable"],
         "skipLibCheck": true,
         "strict": true,
         "noEmit": true,
@@ -17,5 +16,9 @@
         "noUncheckedSideEffectImports": true
     },
     "files": [],
-    "references": [{ "path": "./tsconfig.pane.json" }, { "path": "./tsconfig.vite.json" }]
+    "references": [
+        { "path": "./tsconfig.pane.json" },
+        { "path": "./tsconfig.vite_config.json" },
+        { "path": "./tsconfig.vite.json" }
+    ]
 }
