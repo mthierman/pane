@@ -13,7 +13,7 @@ declare global {
 }
 
 let address_bar = Page.createElement("pane-address-bar");
-address_bar.append(Page.body());
+address_bar.append(Page.body);
 
 window.chrome.webview.addEventListener<payload>("message", (event) => {
     switch (event.data.type) {
