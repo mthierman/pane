@@ -22,10 +22,8 @@ export class Page {
         document.title = title;
     }
 
-    static createElement<K extends keyof HTMLElementTagNameMap>(tagName: K, id?: string) {
-        const element = document.createElement(tagName);
-        id ? element.setAttribute("id", id) : element.removeAttribute("id");
-        return element;
+    static createElement<K extends keyof HTMLElementTagNameMap>(tagName: K) {
+        return document.createElement(tagName);
     }
 
     static getElementById<T = HTMLElement>(elementId: string) {
@@ -36,6 +34,12 @@ export class Page {
 export class Component extends HTMLElement {
     attach<T extends Node>(parent?: T) {
         return (parent ?? Page.body).appendChild(this);
+    }
+
+    with_id(id: string) {
+        this.id = id;
+
+        return this;
     }
 }
 

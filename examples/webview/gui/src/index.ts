@@ -4,17 +4,17 @@ import "./component/button";
 import "./styles/index.css";
 import "./styles/reset.css";
 
-declare global {
-    interface HTMLElementEventMap extends WebViewMessageEventMap<event_payload> {}
-}
-
 export type event_payload = {
     init: { url: string };
     test: { hello_world: string };
 };
 
+declare global {
+    interface HTMLElementEventMap extends WebViewMessageEventMap<event_payload> {}
+}
+
 const app = {
-    address_bar: Page.createElement("pane-address-bar").attach(),
+    address_bar: Page.createElement("pane-address-bar").with_id("address-bar").attach(),
 };
 
 window.chrome.webview.addEventListener<event_payload>("message", (event) => {
