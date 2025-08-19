@@ -4,8 +4,8 @@
     "type": "module",
     "private": true,
     "exports": {
-        ".": "./pane/typescript/index.ts",
-        "./webview": "./pane/typescript/webview.ts"
+        ".": "./pane/typescript/index",
+        "./webview": "./pane/typescript/webview"
     },
     "scripts": {
         "check": "tsc",
