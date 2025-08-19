@@ -1,8 +1,8 @@
 import { Page } from "pane";
 import "./component/address_bar";
 import "./component/button";
-import "./index.css";
-import "./reset.css";
+import "./styles/index.css";
+import "./styles/reset.css";
 
 declare global {
     interface HTMLElementEventMap extends WebViewMessageEventMap<event_payload> {}
