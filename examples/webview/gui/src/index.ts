@@ -17,7 +17,7 @@ const app = {
     address_bar: Page.createElement("pane-address-bar"),
 };
 
-app.address_bar.append(Page.body);
+Page.body.appendChild(app.address_bar);
 
 window.chrome.webview.addEventListener<payload>("message", (event) => {
     switch (event.data.type) {
