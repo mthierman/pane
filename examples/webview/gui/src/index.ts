@@ -21,7 +21,7 @@ window.chrome.webview.addEventListener<event_payload>("message", (event) => {
     switch (event.data.type) {
         case "init":
             {
-                app.address_bar.dispatch(event);
+                app.address_bar.dispatchWebViewEvent(event);
             }
             break;
         case "test":

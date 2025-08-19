@@ -37,8 +37,10 @@ export class Component extends HTMLElement {
     attach<T extends Node>(parent?: T) {
         return (parent ?? Page.body).appendChild(this);
     }
+}
 
-    dispatch<T = unknown>(event: WebViewMessageEvent<T>) {
+export class WebViewComponent extends Component {
+    dispatchWebViewEvent<T = unknown>(event: WebViewMessageEvent<T>) {
         super.dispatchEvent(
             new CustomEvent(event.data.type, {
                 detail: event.data.payload,

@@ -1,4 +1,4 @@
-import { Component } from "pane";
+import { WebViewComponent } from "pane";
 
 declare global {
     interface HTMLElementTagNameMap {
@@ -6,7 +6,7 @@ declare global {
     }
 }
 
-class AddressBar extends Component {
+class AddressBar extends WebViewComponent {
     static tagName = "pane-address-bar";
 
     static {
