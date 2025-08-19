@@ -15,11 +15,7 @@ declare global {
 
 export class Component extends HTMLElement {
     attach<T extends Node>(parent?: T) {
-        if (parent) {
-            return parent.appendChild(this);
-        }
-
-        return Page.body.appendChild(this);
+        return (parent ?? Page.body).appendChild(this);
     }
 
     dispatch<T = unknown>(event: WebViewMessageEvent<T>) {
