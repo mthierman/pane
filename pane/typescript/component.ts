@@ -1,3 +1,5 @@
+import { Page } from "./page";
+
 declare global {
     interface CustomElementRegistry {
         get<K extends keyof HTMLElementTagNameMap>(
@@ -12,8 +14,12 @@ declare global {
 }
 
 export class Component extends HTMLElement {
-    append<T extends Node>(parent: T) {
-        return parent.appendChild(this);
+    attach<T extends Node>(parent?: T) {
+        if (parent) {
+            return parent.appendChild(this);
+        }
+
+        return Page.body.appendChild(this);
     }
 
     dispatch<T = unknown>(event: WebViewMessageEvent<T>) {
