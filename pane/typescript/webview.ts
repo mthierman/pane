@@ -102,17 +102,6 @@ declare global {
         setHostProperty(propertyName: string, propertyValue: unknown): unknown;
         setLocalProperty(propertyName: string, propertyValue: unknown): unknown;
     }
-
-    interface CustomElementRegistry {
-        get<K extends keyof HTMLElementTagNameMap>(
-            name: K,
-        ): (new () => HTMLElementTagNameMap[K]) | undefined;
-        define<K extends keyof HTMLElementTagNameMap>(
-            name: K,
-            constructor: new () => HTMLElementTagNameMap[K],
-            options?: ElementDefinitionOptions,
-        ): void;
-    }
 }
 
 export {};
