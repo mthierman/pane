@@ -6,11 +6,11 @@
     "exports": "./pane/typescript/index.ts",
     "scripts": {
         "check": "tsc",
-        "webview": "vite examples/webview/gui",
-        "webview:host": "vite examples/webview/gui --host",
-        "webview:build": "tsc && vite build examples/webview/gui",
-        "webview:watch": "tsc && vite build examples/webview/gui --watch",
-        "webview:preview": "tsc -b && vite build examples/webview/gui && vite preview examples/webview/gui"
+        "example:dev": "vite examples/webview/gui",
+        "example:host": "vite examples/webview/gui --host",
+        "example:build": "tsc && vite build examples/webview/gui",
+        "example:watch": "tsc && vite build examples/webview/gui --watch",
+        "example:preview": "tsc -b && vite build examples/webview/gui && vite preview examples/webview/gui"
     },
     "devDependencies": {
         "@types/node": "24.3.0",
