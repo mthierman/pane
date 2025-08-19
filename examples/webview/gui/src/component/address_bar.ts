@@ -66,38 +66,6 @@ class AddressBar extends Component {
                 this.url = `https://${this.#input.value}`;
             }
         });
-
-        // this.#input.addEventListener("change", () => {
-        //     if (!this.#input.value.startsWith("http")) {
-        //         this.url = `https://${this.#input.value}`;
-        //         console.log(this.url);
-        //     } else {
-        //         this.#input.value = this.url.toString();
-        //     }
-        // });
-
-        // this.#input.addEventListener("keydown", (event) => {
-        //     console.log(`keydown ${event.key}`);
-        //     if (event.key === "Enter") {
-        //         const test: WebViewMessageEventData<payload> = {
-        //             type: "init",
-        //             payload: {
-        //                 url: this.url.href,
-        //             },
-        //         };
-        //         window.chrome.webview.postMessage(test);
-        //     }
-        //     this.dispatchEvent();
-        // });
-
-        // this.#input.addEventListener("change", () => {
-        //     if (!this.#input.value.startsWith("http")) {
-        //         this.url = `https://${this.#input.value}`;
-        //         console.log(this.url);
-        //     } else {
-        //         this.#input.value = this.url.toString();
-        //     }
-        // });
     }
 }
 
