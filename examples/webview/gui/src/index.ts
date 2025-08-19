@@ -1,5 +1,6 @@
 import { Page } from "pane";
-import "./components";
+import "./component/address_bar";
+import "./component/button";
 import "./index.css";
 import "./reset.css";
 

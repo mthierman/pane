@@ -3,7 +3,10 @@
     "version": "0.0.0",
     "type": "module",
     "private": true,
-    "exports": "./pane/typescript/index.ts",
+    "exports": {
+        ".": "./pane/typescript/index.ts",
+        "./webview": "./pane/typescript/webview.ts"
+    },
     "scripts": {
         "check": "tsc",
         "example:dev": "vite examples/webview/gui",
