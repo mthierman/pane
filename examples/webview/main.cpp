@@ -12,8 +12,7 @@ struct event_payload {
         std::u8string url;
     };
     struct test {
-        uint64_t one {};
-        uint64_t two {};
+        std::u8string hello_world { u8"hello world" };
     };
 };
 
@@ -54,6 +53,9 @@ struct webview : pane::webview<webview> {
             case +dom_content_loaded: {
                 self.post_event<pane::webview_event<event_type, event_payload::init>>(
                     { event_type::init, { self.webview_config.home_page } });
+
+                self.post_event<pane::webview_event<event_type, event_payload::test>>(
+                    { event_type::test, {} });
             } break;
 
             case +navigation_completed: {

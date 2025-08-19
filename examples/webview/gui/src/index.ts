@@ -10,7 +10,7 @@ declare global {
 
 export type payload = {
     init: { url: string };
-    test: { one: number; two: number };
+    test: { hello_world: string };
 };
 
 const app = {
@@ -27,7 +27,7 @@ window.chrome.webview.addEventListener<payload>("message", (event) => {
             break;
         case "test":
             {
-                console.log(event);
+                console.log(event.data);
             }
             break;
     }

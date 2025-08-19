@@ -639,7 +639,7 @@ template <typename T> struct webview {
         return event;
     }
 
-    template <typename U> auto post_event(this const Self& self, U&& event) -> void {
+    template <typename U> auto post_event(this const Self& self, U&& event = {}) -> void {
         std::u8string buffer;
 
         [[maybe_unused]] auto ec { glz::write_json(event, buffer) };
