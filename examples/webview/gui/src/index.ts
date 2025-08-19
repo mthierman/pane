@@ -5,29 +5,28 @@ import "./index.css";
 import "./reset.css";
 
 declare global {
-    interface HTMLElementEventMap extends WebViewMessageEventMap<payload> {}
+    interface HTMLElementEventMap extends WebViewMessageEventMap<event_payload> {}
 }
 
-export type payload = {
+export type event_payload = {
     init: { url: string };
     test: { hello_world: string };
 };
 
 const app = {
-    address_bar: Page.createElement("pane-address-bar"),
+    address_bar: Page.createElement("pane-address-bar").attach(),
 };
 
-window.chrome.webview.addEventListener<payload>("message", (event) => {
+window.chrome.webview.addEventListener<event_payload>("message", (event) => {
     switch (event.data.type) {
         case "init":
             {
-                app.address_bar.attach();
                 app.address_bar.dispatch(event);
             }
             break;
         case "test":
             {
-                console.log(event.data);
+                console.log(event.data.payload);
             }
             break;
     }

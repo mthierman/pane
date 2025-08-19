@@ -44,5 +44,7 @@ export class Component extends HTMLElement {
                 detail: event.data.payload,
             }),
         );
+
+        return this;
     }
 }
