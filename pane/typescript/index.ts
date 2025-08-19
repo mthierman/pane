@@ -18,6 +18,10 @@ export class Page {
     static head = document.head as HTMLHeadElement;
     static body = document.body as HTMLBodyElement;
 
+    static setTitle(title: string) {
+        document.title = title;
+    }
+
     static createElement<K extends keyof HTMLElementTagNameMap>(tagName: K, id?: string) {
         const element = document.createElement(tagName);
         id ? element.setAttribute("id", id) : element.removeAttribute("id");
