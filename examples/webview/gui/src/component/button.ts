@@ -7,6 +7,8 @@ declare global {
 }
 
 class Button extends Component {
+    static tagName = "pane-button";
+
     static {
         if (!customElements.get("pane-button")) {
             customElements.define("pane-button", Button);

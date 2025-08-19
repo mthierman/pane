@@ -7,6 +7,8 @@ declare global {
 }
 
 class AddressBar extends Component {
+    static tagName = "pane-address-bar";
+
     static {
         if (!customElements.get("pane-address-bar")) {
             customElements.define("pane-address-bar", AddressBar);
