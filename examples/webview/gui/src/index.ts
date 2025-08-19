@@ -13,14 +13,17 @@ declare global {
     interface HTMLElementEventMap extends WebViewMessageEventMap<payload> {}
 }
 
-let address_bar = Page.createElement("pane-address-bar");
-address_bar.append(Page.body);
+const app = {
+    address_bar: Page.createElement("pane-address-bar"),
+};
+
+app.address_bar.append(Page.body);
 
 window.chrome.webview.addEventListener<payload>("message", (event) => {
     switch (event.data.type) {
         case "init":
             {
-                address_bar.dispatch(event);
+                app.address_bar.dispatch(event);
             }
             break;
         case "test":
