@@ -4,14 +4,14 @@ import "./component/button";
 import "./index.css";
 import "./reset.css";
 
+declare global {
+    interface HTMLElementEventMap extends WebViewMessageEventMap<payload> {}
+}
+
 export type payload = {
     init: { url: string };
     test: { one: number; two: number };
 };
-
-declare global {
-    interface HTMLElementEventMap extends WebViewMessageEventMap<payload> {}
-}
 
 const app = {
     address_bar: Page.createElement("pane-address-bar"),
