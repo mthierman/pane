@@ -17,12 +17,11 @@ const app = {
     address_bar: Page.createElement("pane-address-bar"),
 };
 
-app.address_bar.attach();
-
 window.chrome.webview.addEventListener<payload>("message", (event) => {
     switch (event.data.type) {
         case "init":
             {
+                app.address_bar.attach();
                 app.address_bar.dispatch(event);
             }
             break;
