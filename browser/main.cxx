@@ -17,12 +17,21 @@ struct webview : pane::webview<webview> {
             }
         }
 
-        return { { u8"webview",
-                   pane::color { 0, 0, 0, 255 },
-                   pane::color { 0, 0, 0, 255 },
-                   true,
-                   nullptr },
-                 { home_page.value_or(u8"https://www.google.com/") } };
+        std::filesystem::path browser_data;
+        auto local_app_data { pane::filesystem::known_folder() };
+
+        if (local_app_data) {
+            browser_data = *local_app_data / u8"browser";
+        }
+
+        return {
+            { u8"webview",
+              pane::color { 0, 0, 0, 255 },
+              pane::color { 0, 0, 0, 255 },
+              true,
+              nullptr },
+            { home_page.value_or(u8"https://www.google.com/"), std::nullopt, u8"", browser_data }
+        };
     }
 
     auto handle_message(this Self& self, const pane::window_message& window_message) -> LRESULT {
