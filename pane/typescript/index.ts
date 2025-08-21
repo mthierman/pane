@@ -22,8 +22,16 @@ export class Page {
         document.title = title;
     }
 
-    static createElement<K extends keyof HTMLElementTagNameMap>(tagName: K) {
-        return document.createElement(tagName);
+    static createElement<K extends keyof HTMLElementTagNameMap, T extends Node>(config: {
+        tagName: K;
+        id?: string;
+        parent?: T;
+    }) {
+        const element = document.createElement(config.tagName);
+
+        config.id ? (element.id = config.id) : null;
+
+        return (config.parent ?? Page.body).appendChild(element);
     }
 
     static getElementById<T = HTMLElement>(elementId: string) {
@@ -31,17 +39,7 @@ export class Page {
     }
 }
 
-export class Component extends HTMLElement {
-    attach<T extends Node>(parent?: T) {
-        return (parent ?? Page.body).appendChild(this);
-    }
-
-    with_id(id: string) {
-        this.id = id;
-
-        return this;
-    }
-}
+export class Component extends HTMLElement {}
 
 export class WebViewComponent extends Component {
     dispatchWebViewEvent<T = unknown>(event: WebViewMessageEvent<T>) {
