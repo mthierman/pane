@@ -156,9 +156,6 @@ auto window_handle::cloak(this const Self& self, bool cloak) -> HRESULT {
 auto window_handle::backdrop(this const Self& self, window_backdrop window_backdrop) -> HRESULT {
     auto backdrop { DWM_SYSTEMBACKDROP_TYPE::DWMSBT_AUTO };
 
-    MARGINS margins { -1, -1, -1, -1 };
-    DwmExtendFrameIntoClientArea(self.hwnd, &margins);
-
     switch (window_backdrop) {
         case window_backdrop::automatic: {
             backdrop = DWM_SYSTEMBACKDROP_TYPE::DWMSBT_AUTO;

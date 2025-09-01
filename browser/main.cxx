@@ -25,12 +25,12 @@ struct webview : pane::webview<webview> {
         }
 
         return {
-            { u8"webview",
+            pane::window_config { u8"webview",
               pane::color { 0, 0, 0, 255 },
               pane::color { 0, 0, 0, 255 },
               true,
               nullptr },
-            { home_page.value_or(u8"https://www.google.com/"), std::nullopt, u8"", browser_data }
+            pane::webview_config { home_page.value_or(u8"https://www.google.com/"), std::nullopt, u8"", browser_data }
         };
     }
 

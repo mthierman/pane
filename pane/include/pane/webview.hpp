@@ -523,7 +523,7 @@ template <typename T> struct webview {
                 // https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-showwindow
             case WM_SHOWWINDOW: {
                 if (self.controller) {
-                    self.controller->put_IsVisible(window_message.wparam);
+                    self.controller->put_IsVisible(static_cast<bool>(window_message.wparam));
                 }
             } break;
 
