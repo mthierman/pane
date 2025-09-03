@@ -8,11 +8,11 @@
         "./webview": "./pane/typescript/webview.ts"
     },
     "scripts": {
-        "check": "tsc",
+        "check": "tsc -b",
         "example:dev": "vite examples/webview/gui",
         "example:host": "vite examples/webview/gui --host",
-        "example:build": "tsc && vite build examples/webview/gui",
-        "example:watch": "tsc && vite build examples/webview/gui --watch",
+        "example:build": "tsc -b && vite build examples/webview/gui",
+        "example:watch": "tsc -b && vite build examples/webview/gui --watch",
         "example:preview": "tsc -b && vite build examples/webview/gui && vite preview examples/webview/gui"
     },
     "devDependencies": {
