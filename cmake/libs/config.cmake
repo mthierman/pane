@@ -33,7 +33,7 @@ target_compile_options(
               /bigobj
               /diagnostics:color
               /permissive-
-              /Zc:__cplusplus,__STDC__,enumTypes,templateScope,throwingNew,preprocessor
+              /Zc:__cplusplus,enumTypes,templateScope,throwingNew,preprocessor
               >
               $<$<AND:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_FRONTEND_VARIANT:MSVC>>:
               /W4
