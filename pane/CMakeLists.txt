@@ -1,13 +1,13 @@
-add_library(pane_config INTERFACE)
-add_library(pane::config ALIAS pane_config)
-target_compile_features(pane_config INTERFACE c_std_17 cxx_std_23)
+add_library(pane EXCLUDE_FROM_ALL)
+add_library(pane::pane ALIAS pane)
+target_compile_features(pane PUBLIC c_std_17 cxx_std_23)
 target_compile_definitions(
-    pane_config
-    INTERFACE UNICODE WIN32_LEAN_AND_MEAN NOMINMAX GDIPVER=0x0110
+    pane
+    PUBLIC UNICODE WIN32_LEAN_AND_MEAN NOMINMAX GDIPVER=0x0110
 )
 target_compile_options(
-    pane_config
-    INTERFACE
+    pane
+    PUBLIC
         $<$<CXX_COMPILER_ID:MSVC>:
         /W4
         /WX
@@ -29,8 +29,8 @@ target_compile_options(
         >
 )
 target_link_options(
-    pane_config
-    INTERFACE
+    pane
+    PUBLIC
         $<$<CXX_COMPILER_ID:MSVC>:
         /WX
         >
@@ -41,9 +41,6 @@ target_link_options(
         -Wl,/WX
         >
 )
-
-add_library(pane EXCLUDE_FROM_ALL)
-add_library(pane::pane ALIAS pane)
 target_sources(
     pane
     PUBLIC FILE_SET HEADERS BASE_DIRS "include"
@@ -73,6 +70,5 @@ target_sources(
 )
 target_link_libraries(
     pane
-    PRIVATE pane::config
     PUBLIC dwmapi gdiplus Urlmon WindowsApp ada glaze webview2 wil cppwinrt
 )
