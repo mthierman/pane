@@ -9,7 +9,6 @@ if(NOT PROJECT_IS_TOP_LEVEL)
     set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH}" PARENT_SCOPE)
 endif()
 
-find_package(Config)
 find_package(WIL)
 find_package(CppWinRT)
 find_package(WebView2)
