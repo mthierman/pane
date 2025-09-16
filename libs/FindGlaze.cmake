@@ -3,7 +3,7 @@ include(FetchContent)
 FetchContent_Declare(
     glaze
     DOWNLOAD_NO_PROGRESS ON
-    URL "https://github.com/stephenberry/glaze/archive/refs/tags/v5.6.0.zip" SOURCE_SUBDIR "NULL"
+    URL "https://github.com/stephenberry/glaze/archive/refs/tags/v5.7.1.zip" SOURCE_SUBDIR "NULL"
 )
 
 FetchContent_MakeAvailable(glaze)
