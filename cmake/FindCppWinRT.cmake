@@ -13,9 +13,14 @@ FetchContent_MakeAvailable(cppwinrt)
 
 execute_process(
     COMMAND
-        "${cppwinrt_SOURCE_DIR}/bin/cppwinrt" -input sdk -output "${cppwinrt_BINARY_DIR}/include"
+        "${cppwinrt_SOURCE_DIR}/bin/cppwinrt" -input sdk -output
+        "${cppwinrt_BINARY_DIR}/include"
 )
 
 add_library(cppwinrt INTERFACE)
 
-target_include_directories(cppwinrt SYSTEM INTERFACE "${cppwinrt_BINARY_DIR}/include")
+target_include_directories(
+    cppwinrt
+    SYSTEM
+    INTERFACE "${cppwinrt_BINARY_DIR}/include"
+)

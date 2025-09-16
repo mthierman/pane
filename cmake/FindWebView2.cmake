@@ -13,8 +13,15 @@ FetchContent_MakeAvailable(webview2)
 
 add_library(webview2 INTERFACE)
 
-target_include_directories(webview2 SYSTEM INTERFACE "${webview2_SOURCE_DIR}/build/native/include")
+target_include_directories(
+    webview2
+    SYSTEM
+    INTERFACE "${webview2_SOURCE_DIR}/build/native/include"
+)
 
-target_link_directories(webview2 INTERFACE "${webview2_SOURCE_DIR}/build/native/x64")
+target_link_directories(
+    webview2
+    INTERFACE "${webview2_SOURCE_DIR}/build/native/x64"
+)
 
 target_link_libraries(webview2 INTERFACE WebView2LoaderStatic)
