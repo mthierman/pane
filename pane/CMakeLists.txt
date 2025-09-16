@@ -42,7 +42,7 @@ target_link_options(
         >
 )
 
-add_library(pane)
+add_library(pane EXCLUDE_FROM_ALL)
 add_library(pane::pane ALIAS pane)
 target_sources(
     pane
