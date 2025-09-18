@@ -1,4 +1,4 @@
-add_library(pane EXCLUDE_FROM_ALL)
+add_library(pane)
 add_library(pane::pane ALIAS pane)
 target_compile_features(pane PUBLIC c_std_17 cxx_std_23)
 target_compile_definitions(
