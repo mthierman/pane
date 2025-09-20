@@ -16,7 +16,7 @@ gh release -R stephenberry/glaze download -A zip --skip-existing | Out-Null
 7z x .\glaze*.zip -ostephenberry | Out-Null
 Rename-Item .\stephenberry\glaze-* glaze -Force
 
-Invoke-WebRequest -Uri "https://sqlite.org/2025/sqlite-src-3500400.zip" -OutFile sqlite.zip
+Invoke-WebRequest -Uri "https://sqlite.org/2025/sqlite-amalgamation-3500400.zip" -OutFile sqlite.zip
 7z x .\sqlite*.zip -osqlite | Out-Null
 Rename-Item .\sqlite\sqlite-* sqlite -Force
 
