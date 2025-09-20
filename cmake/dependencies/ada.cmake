@@ -4,6 +4,7 @@ FetchContent_Declare(
     URL
         https://github.com/ada-url/ada/releases/download/v3.2.7/singleheader.zip
         SOURCE_SUBDIR
+        NULL
 )
 
 FetchContent_MakeAvailable(ada)

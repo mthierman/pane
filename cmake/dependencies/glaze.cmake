@@ -4,6 +4,7 @@ FetchContent_Declare(
     URL
         https://github.com/stephenberry/glaze/archive/refs/tags/v5.7.1.zip
         SOURCE_SUBDIR
+        NULL
 )
 
 FetchContent_MakeAvailable(glaze)

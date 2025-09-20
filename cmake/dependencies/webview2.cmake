@@ -4,6 +4,7 @@ FetchContent_Declare(
     URL
         https://www.nuget.org/api/v2/package/Microsoft.Web.WebView2/1.0.3485.44
         SOURCE_SUBDIR
+        NULL
 )
 
 FetchContent_MakeAvailable(webview2)

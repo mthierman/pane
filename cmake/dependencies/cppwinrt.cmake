@@ -4,6 +4,7 @@ FetchContent_Declare(
     URL
         https://www.nuget.org/api/v2/package/Microsoft.Windows.CppWinRT/2.0.250303.1
         SOURCE_SUBDIR
+        NULL
 )
 
 FetchContent_MakeAvailable(cppwinrt)

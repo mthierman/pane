@@ -1,7 +1,10 @@
 FetchContent_Declare(
     sqlite
     DOWNLOAD_NO_PROGRESS ON
-    URL https://sqlite.org/2025/sqlite-amalgamation-3500400.zip SOURCE_SUBDIR
+    URL
+        https://sqlite.org/2025/sqlite-amalgamation-3500400.zip
+        SOURCE_SUBDIR
+        NULL
 )
 
 FetchContent_MakeAvailable(sqlite)
