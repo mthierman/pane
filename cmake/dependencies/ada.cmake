@@ -11,7 +11,7 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(ada)
 
-add_library(ada)
+add_library(ada EXCLUDE_FROM_ALL)
 
 add_library(ada::ada-url ALIAS ada)
 
