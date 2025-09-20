@@ -6,12 +6,14 @@ FetchContent_Declare(
     URL
         "https://github.com/ada-url/ada/releases/download/v3.2.7/singleheader.zip"
         SOURCE_SUBDIR
-        "NULL"
+        ""
 )
 
 FetchContent_MakeAvailable(ada)
 
-add_library(ada EXCLUDE_FROM_ALL)
+add_library(ada)
+
+add_library(ada::ada-url ALIAS ada)
 
 target_sources(ada PRIVATE "${ada_SOURCE_DIR}/ada.cpp")
 

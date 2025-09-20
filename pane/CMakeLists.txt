@@ -1,3 +1,4 @@
+include(dependencies)
 add_library(pane)
 add_library(pane::pane ALIAS pane)
 target_compile_features(pane PUBLIC c_std_17 cxx_std_23)
@@ -70,5 +71,14 @@ target_sources(
 )
 target_link_libraries(
     pane
-    PUBLIC dwmapi gdiplus Urlmon WindowsApp ada glaze webview2 wil cppwinrt
+    PUBLIC
+        dwmapi
+        gdiplus
+        Urlmon
+        WindowsApp
+        ada::ada-url
+        stephenberry::glaze
+        microsoft::webview2
+        microsoft::wil
+        microsoft::cppwinrt
 )

@@ -8,12 +8,6 @@ if(NOT PROJECT_IS_TOP_LEVEL)
     set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH}" PARENT_SCOPE)
 endif()
 
-find_package(WIL)
-find_package(CppWinRT)
-find_package(WebView2)
-find_package(Ada)
-find_package(Glaze)
-
 add_subdirectory("pane")
 
 if(PROJECT_IS_TOP_LEVEL)

@@ -1,0 +1,8 @@
+include(FetchContent)
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/dependencies")
+include(ada)
+include(cppwinrt)
+include(glaze)
+include(sqlite)
+include(webview2)
+include(wil)
