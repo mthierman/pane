@@ -1,5 +1,3 @@
-include(FetchContent)
-
 FetchContent_Declare(
     glaze
     DOWNLOAD_NO_PROGRESS ON

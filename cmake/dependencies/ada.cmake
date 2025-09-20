@@ -1,5 +1,3 @@
-include(FetchContent)
-
 FetchContent_Declare(
     ada
     DOWNLOAD_NO_PROGRESS ON
