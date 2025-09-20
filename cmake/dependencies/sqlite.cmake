@@ -9,7 +9,7 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(sqlite)
 
-add_library(sqlite EXCLUDE_FROM_ALL)
+add_library(sqlite)
 
 add_library(sqlite::sqlite ALIAS sqlite)
 
