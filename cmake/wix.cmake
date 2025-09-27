@@ -1,10 +1,6 @@
-find_program(WIX_EXECUTABLE wix)
+find_program(WIX_EXECUTABLE wix NO_CACHE)
 
-if(
-    NOT WIX_EXECUTABLE
-    OR "{WIX_EXECUTABLE}" MATCHES "NOTFOUND"
-    OR NOT EXISTS "${WIX_EXECUTABLE}"
-)
+if(NOT IS_EXECUTABLE "${WIX_EXECUTABLE}")
     message(STATUS "Wix not found")
 else()
     message(STATUS "Wix found: ${WIX_EXECUTABLE}")
