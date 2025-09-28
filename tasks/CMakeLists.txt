@@ -9,12 +9,6 @@ add_custom_target(
 )
 
 add_custom_target(
-    install_packages
-    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-    COMMAND pwsh -nol -nop -f ${CMAKE_CURRENT_LIST_DIR}/install_packages.ps1
-)
-
-add_custom_target(
     download_vc_redist
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
     COMMAND
