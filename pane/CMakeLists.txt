@@ -1,5 +1,7 @@
 add_subdirectory(libs)
 
+add_subdirectory(tasks)
+
 add_library(pane)
 
 add_library(pane::pane ALIAS pane)

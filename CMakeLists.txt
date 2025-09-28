@@ -14,7 +14,6 @@ add_subdirectory(pane)
 add_subdirectory(tasks)
 
 if(PROJECT_IS_TOP_LEVEL)
+    add_subdirectory(apps)
     add_subdirectory(examples)
-    add_subdirectory(task)
-    add_subdirectory(browser)
 endif()
