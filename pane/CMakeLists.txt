@@ -1,11 +1,13 @@
 include(dependencies)
+
 add_library(pane)
+
 add_library(pane::pane ALIAS pane)
+
 target_compile_features(pane PUBLIC c_std_17 cxx_std_23)
-target_compile_definitions(
-    pane
-    PUBLIC UNICODE WIN32_LEAN_AND_MEAN NOMINMAX GDIPVER=0x0110
-)
+
+target_compile_definitions(pane PUBLIC UNICODE WIN32_LEAN_AND_MEAN NOMINMAX GDIPVER=0x0110)
+
 target_compile_options(
     pane
     PUBLIC
@@ -29,6 +31,7 @@ target_compile_options(
         -Wno-braced-scalar-init
         >
 )
+
 target_link_options(
     pane
     PUBLIC
@@ -42,6 +45,7 @@ target_link_options(
         -Wl,/WX
         >
 )
+
 target_sources(
     pane
     PUBLIC FILE_SET HEADERS BASE_DIRS include
@@ -69,6 +73,7 @@ target_sources(
         src/webview.cpp
         src/window.cpp
 )
+
 target_link_libraries(
     pane
     PUBLIC

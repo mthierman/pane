@@ -3,9 +3,6 @@ if(NOT TARGET wix)
 
     if(IS_EXECUTABLE "${WIX_EXECUTABLE}")
         add_executable(wix IMPORTED GLOBAL)
-        set_target_properties(
-            wix
-            PROPERTIES IMPORTED_LOCATION "${WIX_EXECUTABLE}"
-        )
+        set_target_properties(wix PROPERTIES IMPORTED_LOCATION "${WIX_EXECUTABLE}")
     endif()
 endif()

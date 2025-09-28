@@ -10,17 +10,11 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(cppwinrt)
 
 execute_process(
-    COMMAND
-        ${cppwinrt_SOURCE_DIR}/bin/cppwinrt -input sdk -output
-        ${cppwinrt_BINARY_DIR}/include
+    COMMAND ${cppwinrt_SOURCE_DIR}/bin/cppwinrt -input sdk -output ${cppwinrt_BINARY_DIR}/include
 )
 
 add_library(cppwinrt INTERFACE)
 
 add_library(microsoft::cppwinrt ALIAS cppwinrt)
 
-target_include_directories(
-    cppwinrt
-    SYSTEM
-    INTERFACE ${cppwinrt_BINARY_DIR}/include
-)
+target_include_directories(cppwinrt SYSTEM INTERFACE ${cppwinrt_BINARY_DIR}/include)

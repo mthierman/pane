@@ -1,7 +1,9 @@
 cmake_minimum_required(VERSION 3.31)
+
 project(pane)
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/cmake)
+
 list(REMOVE_DUPLICATES CMAKE_MODULE_PATH)
 
 if(NOT PROJECT_IS_TOP_LEVEL)
