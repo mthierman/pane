@@ -1,6 +1,7 @@
 include(FetchContent)
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/dependencies)
-include(ada)
+# include(ada)
+find_package(ada)
 include(cppwinrt)
 include(glaze)
 include(sqlite)
