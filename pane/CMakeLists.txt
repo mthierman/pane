@@ -1,4 +1,4 @@
-include(dependencies)
+add_subdirectory(libs)
 
 add_library(pane)
 

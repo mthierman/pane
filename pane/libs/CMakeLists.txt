@@ -1,0 +1,8 @@
+include(FetchContent)
+add_subdirectory(ada)
+add_subdirectory(argz)
+add_subdirectory(cppwinrt)
+add_subdirectory(glaze)
+add_subdirectory(sqlite)
+add_subdirectory(webview2)
+add_subdirectory(wil)
