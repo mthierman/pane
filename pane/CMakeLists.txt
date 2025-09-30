@@ -84,8 +84,10 @@ target_link_libraries(
         Urlmon
         WindowsApp
         ada::ada-url
-        stephenberry::glaze
+        microsoft::cppwinrt
         microsoft::webview2
         microsoft::wil
-        microsoft::cppwinrt
+        sqlite::sqlite
+        stephenberry::argz
+        stephenberry::glaze
 )
