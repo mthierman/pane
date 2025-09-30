@@ -11,7 +11,6 @@ if(NOT PROJECT_IS_TOP_LEVEL)
 endif()
 
 add_subdirectory(pane)
-add_subdirectory(tasks)
 
 if(PROJECT_IS_TOP_LEVEL)
     add_subdirectory(apps)
