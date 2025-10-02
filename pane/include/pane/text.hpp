@@ -21,8 +21,22 @@ template <> struct formatter<std::u8string> : formatter<string_view> {
     }
 };
 
+template <> struct formatter<std::u8string_view> : formatter<string_view> {
+    auto format(std::u8string_view string, format_context& context) const noexcept {
+        return formatter<string_view>::format(
+            { reinterpret_cast<const char*>(string.data()), string.length() }, context);
+    }
+};
+
 template <> struct formatter<std::u16string, wchar_t> : formatter<wstring_view, wchar_t> {
     auto format(const std::u16string& string, wformat_context& context) const noexcept {
+        return formatter<wstring_view, wchar_t>::format(
+            { reinterpret_cast<const wchar_t*>(string.data()), string.length() }, context);
+    }
+};
+
+template <> struct formatter<std::u16string_view, wchar_t> : formatter<wstring_view, wchar_t> {
+    auto format(std::u16string_view string, wformat_context& context) const noexcept {
         return formatter<wstring_view, wchar_t>::format(
             { reinterpret_cast<const wchar_t*>(string.data()), string.length() }, context);
     }
