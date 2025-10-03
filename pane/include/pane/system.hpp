@@ -2,7 +2,9 @@
 #include <Windows.h>
 #include <cstdlib>
 #include <expected>
+#include <optional>
 #include <string>
+#include <string_view>
 #include <system_error>
 #include <vector>
 #include <winrt/Windows.Foundation.h>
@@ -21,6 +23,7 @@ auto resource_icon() -> std::expected<HICON, HRESULT>;
 auto ui_settings() -> winrt::Windows::UI::ViewManagement::UISettings;
 auto dark_mode() -> bool;
 auto command_line_arguments() -> std::vector<std::u8string>;
+auto get_environment_variable(std::u8string_view name) -> std::optional<std::u8string>;
 auto exit_process(unsigned int exit_code = EXIT_SUCCESS) -> void;
 auto quit(int exit_code = EXIT_SUCCESS) -> void;
 auto message_loop() -> int;
