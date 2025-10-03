@@ -14,6 +14,12 @@ auto to_u16string(std::wstring_view string) -> std::u16string;
 } // namespace pane
 
 namespace std {
+template <> struct formatter<char8_t> : formatter<char> {
+    auto format(const char8_t& c, format_context& context) const noexcept {
+        return formatter<char>::format(static_cast<char>(c), context);
+    }
+};
+
 template <> struct formatter<const char8_t*> : formatter<string_view> {
     auto format(const char8_t* string, format_context& context) const noexcept {
         return formatter<string_view>::format(reinterpret_cast<const char*>(string), context);
