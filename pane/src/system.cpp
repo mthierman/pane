@@ -103,19 +103,19 @@ auto command_line_arguments() -> std::vector<std::u8string> {
 
 auto get_environment_variable(std::u8string_view name) -> std::optional<std::u8string> {
     auto u16name { pane::to_utf16(name) };
-    auto size { GetEnvironmentVariableW(
+    auto buffer_size { GetEnvironmentVariableW(
         reinterpret_cast<const wchar_t*>(u16name.data()), nullptr, 0) };
 
-    if (size == 0) {
+    if (buffer_size == 0) {
         return std::nullopt;
     }
 
     std::u16string value;
-    value.resize(size - 1);
-    auto copied { GetEnvironmentVariableW(reinterpret_cast<const wchar_t*>(u16name.data()),
-                                          reinterpret_cast<wchar_t*>(value.data()),
-                                          size) };
-    value.resize(copied);
+    value.resize(buffer_size);
+    auto value_size { GetEnvironmentVariableW(reinterpret_cast<const wchar_t*>(u16name.data()),
+                                              reinterpret_cast<wchar_t*>(value.data()),
+                                              buffer_size) };
+    value.resize(value_size);
 
     return pane::to_utf8(value);
 }
