@@ -41,14 +41,14 @@ template <> struct formatter<std::u8string_view> : formatter<string_view> {
 };
 
 template <> struct formatter<const char16_t*> : formatter<wstring_view, wchar_t> {
-    auto format(const char16_t* string, format_context& context) const noexcept {
+    auto format(const char16_t* string, wformat_context& context) const noexcept {
         return formatter<wstring_view, wchar_t>::format(reinterpret_cast<const wchar_t*>(string),
                                                         context);
     }
 };
 
 template <size_t size> struct formatter<char16_t[size]> : formatter<wstring_view, wchar_t> {
-    auto format(const char16_t* string, format_context& context) const noexcept {
+    auto format(const char16_t* string, wformat_context& context) const noexcept {
         return formatter<wstring_view, wchar_t>::format(reinterpret_cast<const wchar_t*>(string),
                                                         context);
     }
