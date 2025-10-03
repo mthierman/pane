@@ -20,9 +20,9 @@ template <> struct formatter<const char8_t*> : formatter<string_view> {
     }
 };
 
-template <size_t size> struct formatter<char8_t[size]> : formatter<const char*> {
+template <size_t size> struct formatter<char8_t[size]> : formatter<string_view> {
     auto format(const char8_t* string, format_context& context) const noexcept {
-        return formatter<const char*, char>::format(reinterpret_cast<const char*>(string), context);
+        return formatter<string_view>::format(reinterpret_cast<const char*>(string), context);
     }
 };
 
