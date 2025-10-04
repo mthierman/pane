@@ -139,7 +139,15 @@ auto c_str(const std::u8string& string) noexcept -> const char* {
     return reinterpret_cast<const char*>(string.data());
 }
 
+auto c_str(std::u8string& string) noexcept -> char* {
+    return reinterpret_cast<char*>(string.data());
+}
+
 auto c_str(const std::u16string& string) noexcept -> const wchar_t* {
     return reinterpret_cast<const wchar_t*>(string.data());
+}
+
+auto c_str(std::u16string& string) noexcept -> wchar_t* {
+    return reinterpret_cast<wchar_t*>(string.data());
 }
 } // namespace pane

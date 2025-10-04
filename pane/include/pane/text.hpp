@@ -19,7 +19,9 @@ auto from_utf8_lossy(std::u8string_view string) -> std::u16string;
 auto from_utf8_lossy(std::string_view string) -> std::u16string;
 
 auto c_str(const std::u8string& string) noexcept -> const char*;
+auto c_str(std::u8string& string) noexcept -> char*;
 auto c_str(const std::u16string& string) noexcept -> const wchar_t*;
+auto c_str(std::u16string& string) noexcept -> wchar_t*;
 } // namespace pane
 
 namespace std {
