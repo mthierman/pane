@@ -12,5 +12,7 @@ auto wmain(int /* argc */, wchar_t* /* argv */[], wchar_t* /* envp */[]) -> int 
         std::println("{}: {}", idx, std::format("{}", arg));
     }
 
+    std::println("{}", u8'c');
+
     return EXIT_SUCCESS;
 }
