@@ -2,15 +2,11 @@
 #include "icu.h"
 
 namespace pane {
-auto to_utf8(std::u16string_view string) -> std::expected<std::u8string, UErrorCode> {
+auto from_utf16(std::u16string_view string) -> std::expected<std::u8string, UErrorCode> {
     int32_t required_length { 0 };
     auto error_code { U_ZERO_ERROR };
-    u_strToUTF8(nullptr,
-                0,
-                &required_length,
-                string.data(),
-                static_cast<int32_t>(string.length()),
-                &error_code);
+
+    u_strToUTF8(nullptr, 0, &required_length, string.data(), string.length(), &error_code);
 
     if (U_FAILURE(error_code)) {
         return std::unexpected(error_code);
@@ -22,11 +18,45 @@ auto to_utf8(std::u16string_view string) -> std::expected<std::u8string, UErrorC
     error_code = U_ZERO_ERROR;
 
     u_strToUTF8(reinterpret_cast<char*>(buffer.data()),
-                static_cast<int32_t>(buffer.size()),
+                buffer.length(),
                 &actual_length,
                 string.data(),
-                static_cast<int32_t>(string.length()),
+                string.length(),
                 &error_code);
+
+    if (U_FAILURE(error_code)) {
+        return std::unexpected(error_code);
+    }
+
+    return buffer;
+}
+
+auto from_utf8(std::u8string_view string) -> std::expected<std::u16string, UErrorCode> {
+    int32_t required_length { 0 };
+    auto error_code { U_ZERO_ERROR };
+
+    u_strFromUTF8(nullptr,
+                  0,
+                  &required_length,
+                  reinterpret_cast<const char*>(string.data()),
+                  string.length(),
+                  &error_code);
+
+    if (U_FAILURE(error_code)) {
+        return std::unexpected(error_code);
+    }
+
+    int32_t actual_length { 0 };
+    auto buffer { std::u16string() };
+    buffer.resize(required_length + 1);
+    error_code = U_ZERO_ERROR;
+
+    u_strFromUTF8(buffer.data(),
+                  buffer.length(),
+                  &actual_length,
+                  reinterpret_cast<const char*>(string.data()),
+                  string.length(),
+                  &error_code);
 
     if (U_FAILURE(error_code)) {
         return std::unexpected(error_code);

@@ -6,8 +6,8 @@
 #include <icu.h>
 
 namespace pane {
-auto to_utf8(std::u16string_view string) -> std::expected<std::u8string, UErrorCode>;
-auto to_utf16(std::u8string_view string) -> std::expected<std::u16string, UErrorCode>;
+auto from_utf16(std::u16string_view string) -> std::expected<std::u8string, UErrorCode>;
+auto from_utf8(std::u8string_view string) -> std::expected<std::u16string, UErrorCode>;
 
 // auto to_utf16(std::u8string_view string) -> std::u16string;
 // auto to_utf16(std::string_view string) -> std::u16string;
