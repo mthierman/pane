@@ -31,6 +31,10 @@ auto from_utf16(std::u16string_view string) -> std::expected<std::u8string, UErr
     return buffer;
 }
 
+auto from_utf16(std::wstring_view string) -> std::expected<std::u8string, UErrorCode> {
+    return from_utf16({ reinterpret_cast<const char16_t*>(string.data()), string.length() });
+}
+
 auto from_utf8(std::u8string_view string) -> std::expected<std::u16string, UErrorCode> {
     int32_t required_length { 0 };
     auto error_code { U_ZERO_ERROR };
@@ -65,22 +69,9 @@ auto from_utf8(std::u8string_view string) -> std::expected<std::u16string, UErro
     return buffer;
 }
 
-// auto to_utf16(std::u8string_view string) -> std::u16string {
-//     auto buffer { std::u16string() };
-//     buffer.resize(string.length());
-
-//     auto error_code { U_ZERO_ERROR };
-//     u_strFromUTF8WithSub(buffer.data(),
-//                          static_cast<int32_t>(buffer.length()),
-//                          nullptr,
-//                          reinterpret_cast<const char*>(string.data()),
-//                          static_cast<int32_t>(string.length()),
-//                          0xFFFD,
-//                          nullptr,
-//                          &error_code);
-
-//     return buffer;
-// }
+auto from_utf8(std::string_view string) -> std::expected<std::u16string, UErrorCode> {
+    return from_utf8({ reinterpret_cast<const char8_t*>(string.data()), string.length() });
+}
 
 // auto to_utf16(std::string_view string) -> std::u16string {
 //     return to_utf16(reinterpret_cast<const char8_t*>(string.data()));
