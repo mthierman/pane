@@ -4,10 +4,9 @@
 namespace pane {
 auto to_utf16(std::u8string_view string) -> std::u16string {
     auto buffer { std::u16string() };
-    auto error_code { U_ZERO_ERROR };
-
     buffer.resize(string.length());
 
+    auto error_code { U_ZERO_ERROR };
     u_strFromUTF8WithSub(buffer.data(),
                          static_cast<int32_t>(buffer.length()),
                          nullptr,
@@ -26,10 +25,9 @@ auto to_utf16(std::string_view string) -> std::u16string {
 
 auto to_utf8(std::u16string_view string) -> std::u8string {
     auto buffer { std::u8string() };
-    auto error_code { U_ZERO_ERROR };
-
     buffer.resize(string.length());
 
+    auto error_code { U_ZERO_ERROR };
     u_strToUTF8WithSub(reinterpret_cast<char*>(buffer.data()),
                        static_cast<int32_t>(buffer.length()),
                        nullptr,
