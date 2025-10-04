@@ -12,7 +12,5 @@ auto wmain(int /* argc */, wchar_t* /* argv */[], wchar_t* /* envp */[]) -> int 
         std::println("{}: {}", idx, std::format("{}", arg));
     }
 
-    auto fmt { std::format(L"{}", std::u16string { u"test" }) };
-
     return EXIT_SUCCESS;
 }
