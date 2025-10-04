@@ -2,7 +2,7 @@
 #include "icu.h"
 
 namespace pane {
-auto from_utf16(std::u16string_view string) -> std::expected<std::u8string, UErrorCode> {
+auto to_utf8(std::u16string_view string) -> std::expected<std::u8string, UErrorCode> {
     int32_t required_length { 0 };
     auto error_code { U_ZERO_ERROR };
 
@@ -31,11 +31,11 @@ auto from_utf16(std::u16string_view string) -> std::expected<std::u8string, UErr
     return buffer;
 }
 
-auto from_utf16(std::wstring_view string) -> std::expected<std::u8string, UErrorCode> {
-    return from_utf16({ reinterpret_cast<const char16_t*>(string.data()), string.length() });
+auto to_utf8(std::wstring_view string) -> std::expected<std::u8string, UErrorCode> {
+    return to_utf8({ reinterpret_cast<const char16_t*>(string.data()), string.length() });
 }
 
-auto from_utf16_lossy(std::u16string_view string, int32_t sub_char) -> std::u8string {
+auto to_utf8_lossy(std::u16string_view string, int32_t sub_char) -> std::u8string {
     int32_t required_length { 0 };
     auto error_code { U_ZERO_ERROR };
 
@@ -59,12 +59,12 @@ auto from_utf16_lossy(std::u16string_view string, int32_t sub_char) -> std::u8st
     return buffer;
 }
 
-auto from_utf16_lossy(std::wstring_view string, int32_t sub_char) -> std::u8string {
-    return from_utf16_lossy({ reinterpret_cast<const char16_t*>(string.data()), string.length() },
-                            sub_char);
+auto to_utf8_lossy(std::wstring_view string, int32_t sub_char) -> std::u8string {
+    return to_utf8_lossy({ reinterpret_cast<const char16_t*>(string.data()), string.length() },
+                         sub_char);
 }
 
-auto from_utf8(std::u8string_view string) -> std::expected<std::u16string, UErrorCode> {
+auto to_utf16(std::u8string_view string) -> std::expected<std::u16string, UErrorCode> {
     int32_t required_length { 0 };
     auto error_code { U_ZERO_ERROR };
 
@@ -98,11 +98,11 @@ auto from_utf8(std::u8string_view string) -> std::expected<std::u16string, UErro
     return buffer;
 }
 
-auto from_utf8(std::string_view string) -> std::expected<std::u16string, UErrorCode> {
-    return from_utf8({ reinterpret_cast<const char8_t*>(string.data()), string.length() });
+auto to_utf16(std::string_view string) -> std::expected<std::u16string, UErrorCode> {
+    return to_utf16({ reinterpret_cast<const char8_t*>(string.data()), string.length() });
 }
 
-auto from_utf8_lossy(std::u8string_view string, int32_t sub_char) -> std::u16string {
+auto to_utf16_lossy(std::u8string_view string, int32_t sub_char) -> std::u16string {
     int32_t required_length { 0 };
     auto error_code { U_ZERO_ERROR };
 
@@ -132,9 +132,9 @@ auto from_utf8_lossy(std::u8string_view string, int32_t sub_char) -> std::u16str
     return buffer;
 }
 
-auto from_utf8_lossy(std::string_view string, int32_t sub_char) -> std::u16string {
-    return from_utf8_lossy({ reinterpret_cast<const char8_t*>(string.data()), string.length() },
-                           sub_char);
+auto to_utf16_lossy(std::string_view string, int32_t sub_char) -> std::u16string {
+    return to_utf16_lossy({ reinterpret_cast<const char8_t*>(string.data()), string.length() },
+                          sub_char);
 }
 
 auto c_str(const std::u8string& string) noexcept -> const char* {
