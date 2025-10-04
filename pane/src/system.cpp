@@ -46,7 +46,7 @@ auto format_message(HRESULT hresult) -> std::u8string {
                    0,
                    nullptr);
 
-    return pane::to_utf8(buffer.get());
+    return pane::to_utf8_lossy(buffer.get());
 }
 
 auto null_brush() -> HBRUSH { return static_cast<HBRUSH>(GetStockObject(NULL_BRUSH)); }
@@ -95,14 +95,14 @@ auto command_line_arguments() -> std::vector<std::u8string> {
     std::vector<std::u8string> vector;
 
     for (int i = 0; i < argc; i++) {
-        vector.emplace_back(pane::to_utf8(buffer[i]));
+        vector.emplace_back(pane::to_utf8_lossy(buffer[i]));
     }
 
     return vector;
 }
 
 auto get_environment_variable(std::u8string_view name) -> std::optional<std::u8string> {
-    auto u16name { pane::to_utf16(name) };
+    auto u16name { pane::to_utf16_lossy(name) };
     auto buffer_size { GetEnvironmentVariableW(
         reinterpret_cast<const wchar_t*>(u16name.data()), nullptr, 0) };
 
@@ -117,7 +117,7 @@ auto get_environment_variable(std::u8string_view name) -> std::optional<std::u8s
                                               buffer_size) };
     value.resize(value_size);
 
-    return pane::to_utf8(value);
+    return pane::to_utf8_lossy(value);
 }
 
 auto exit_process(unsigned int exit_code) -> void { ExitProcess(exit_code); }

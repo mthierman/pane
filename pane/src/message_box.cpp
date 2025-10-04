@@ -5,15 +5,15 @@
 namespace pane::message_box {
 auto info(std::u8string_view message, std::u8string_view title) -> int {
     return MessageBoxW(nullptr,
-                       reinterpret_cast<const wchar_t*>(pane::to_utf16(message).data()),
-                       reinterpret_cast<const wchar_t*>(pane::to_utf16(title).data()),
+                       reinterpret_cast<const wchar_t*>(pane::to_utf16_lossy(message).data()),
+                       reinterpret_cast<const wchar_t*>(pane::to_utf16_lossy(title).data()),
                        MB_OK | MB_ICONASTERISK);
 }
 
 auto error(std::u8string_view message, std::u8string_view title) -> int {
     return MessageBoxW(nullptr,
-                       reinterpret_cast<const wchar_t*>(pane::to_utf16(message).data()),
-                       reinterpret_cast<const wchar_t*>(pane::to_utf16(title).data()),
+                       reinterpret_cast<const wchar_t*>(pane::to_utf16_lossy(message).data()),
+                       reinterpret_cast<const wchar_t*>(pane::to_utf16_lossy(title).data()),
                        MB_OK | MB_ICONHAND);
 }
 } // namespace pane::message_box

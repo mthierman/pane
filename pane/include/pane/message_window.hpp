@@ -10,7 +10,7 @@ template <typename T> struct message_window_class final {
     using Self = message_window_class;
 
     message_window_class(std::u8string_view name)
-        : name { to_utf16(name) },
+        : name { to_utf16_lossy(name) },
           data { sizeof(WNDCLASSEXW),
                  0,
                  procedure,

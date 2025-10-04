@@ -32,7 +32,7 @@ template <> struct formatter<GUID> : formatter<string_view> {
         buffer.resize(wil::guid_string_buffer_length);
         StringFromGUID2(guid, buffer.data(), wil::guid_string_buffer_length);
 
-        auto converted_buffer { pane::to_utf8(buffer) };
+        auto converted_buffer { pane::to_utf8_lossy(buffer) };
 
         return formatter<string_view>::format(
             { reinterpret_cast<const char*>(converted_buffer.data()), converted_buffer.length() },

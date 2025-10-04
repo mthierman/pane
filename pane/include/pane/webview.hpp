@@ -124,7 +124,7 @@ template <typename T> struct webview {
         CreateWindowExW(
             0,
             this->window_class.data.lpszClassName,
-            reinterpret_cast<const wchar_t*>(to_utf16(this->window_config.title).data()),
+            reinterpret_cast<const wchar_t*>(to_utf16_lossy(this->window_config.title).data()),
             this->window_config.parent_hwnd ? WS_CHILDWINDOW : WS_OVERLAPPEDWINDOW,
             CW_USEDEFAULT,
             CW_USEDEFAULT,
@@ -142,7 +142,7 @@ template <typename T> struct webview {
             if (!this->webview_config.environment_options.AdditionalBrowserArguments.empty()) {
                 this->environment_options->put_AdditionalBrowserArguments(
                     reinterpret_cast<const wchar_t*>(
-                        to_utf16(
+                        to_utf16_lossy(
                             this->webview_config.environment_options.AdditionalBrowserArguments)
                             .data()));
             }
@@ -152,13 +152,13 @@ template <typename T> struct webview {
 
             if (!this->webview_config.environment_options.Language.empty()) {
                 this->environment_options->put_Language(reinterpret_cast<const wchar_t*>(
-                    to_utf16(this->webview_config.environment_options.Language).data()));
+                    to_utf16_lossy(this->webview_config.environment_options.Language).data()));
             }
 
             if (!this->webview_config.environment_options.TargetCompatibleBrowserVersion.empty()) {
                 this->environment_options->put_TargetCompatibleBrowserVersion(
                     reinterpret_cast<const wchar_t*>(
-                        to_utf16(
+                        to_utf16_lossy(
                             this->webview_config.environment_options.TargetCompatibleBrowserVersion)
                             .data()));
             }
@@ -378,7 +378,7 @@ template <typename T> struct webview {
                                 }
 
                                 if (this->webview_config.virtual_host) {
-                                    const auto host_name { to_utf16(
+                                    const auto host_name { to_utf16_lossy(
                                         (*this->webview_config.virtual_host).name) };
 
                                     this->core->SetVirtualHostNameToFolderMapping(
@@ -441,7 +441,7 @@ template <typename T> struct webview {
                                             -> HRESULT {
                                     wil::unique_cotaskmem_string title;
                                     this->core->get_DocumentTitle(&title);
-                                    this->current_title = to_utf8(title.get());
+                                    this->current_title = to_utf8_lossy(title.get());
 
                                     make_window_message(this->window_handle(),
                                                         webview_messages::navigation_completed,
@@ -461,11 +461,11 @@ template <typename T> struct webview {
                                             -> HRESULT {
                                     wil::unique_cotaskmem_string source;
                                     args->get_Source(&source);
-                                    this->current_message_source = to_utf8(source.get());
+                                    this->current_message_source = to_utf8_lossy(source.get());
 
                                     wil::unique_cotaskmem_string buffer;
                                     args->get_WebMessageAsJson(&buffer);
-                                    this->current_message = to_utf8(buffer.get());
+                                    this->current_message = to_utf8_lossy(buffer.get());
 
                                     make_window_message(this->window_handle(),
                                                         webview_messages::web_message_received,
@@ -495,7 +495,7 @@ template <typename T> struct webview {
     ~webview() {
         if (this->webview_config.virtual_host) {
             this->core->ClearVirtualHostNameToFolderMapping(reinterpret_cast<const wchar_t*>(
-                to_utf16((*this->webview_config.virtual_host).name).data()));
+                to_utf16_lossy((*this->webview_config.virtual_host).name).data()));
         }
 
         this->core->remove_WebMessageReceived(*this->token.web_message_received());
@@ -576,7 +576,7 @@ template <typename T> struct webview {
     }
 
     // auto navigate(this const Self& self, std::u8string_view url) -> void {
-    //     const auto u16string { to_utf16(url) };
+    //     const auto u16string { to_utf16_lossy(url) };
 
     //     if (self.core) {
     //         self.core->Navigate(reinterpret_cast<const wchar_t*>(u16string.data()));
@@ -585,7 +585,7 @@ template <typename T> struct webview {
 
     auto navigate(this Self& self, const ada::url& url) -> void {
         self.current_url = url;
-        const auto u16string { to_utf16(url.get_href()) };
+        const auto u16string { to_utf16_lossy(url.get_href()) };
 
         if (self.core) {
             self.core->Navigate(reinterpret_cast<const wchar_t*>(u16string.data()));
@@ -608,7 +608,7 @@ template <typename T> struct webview {
             self.current_url = parse.value();
         }
 
-        const auto u16string { to_utf16(string) };
+        const auto u16string { to_utf16_lossy(string) };
 
         if (self.core) {
             self.core->NavigateToString(reinterpret_cast<const wchar_t*>(u16string.c_str()));
@@ -616,7 +616,7 @@ template <typename T> struct webview {
     }
 
     // auto post_json(this const Self& self, std::u8string_view message) -> void {
-    //     auto conv { to_utf16(message) };
+    //     auto conv { to_utf16_lossy(message) };
 
     //     if (self.core) {
     //         self.core->PostWebMessageAsJson(reinterpret_cast<wchar_t*>(conv.data()));
@@ -644,7 +644,7 @@ template <typename T> struct webview {
 
         [[maybe_unused]] auto ec { glz::write_json(event, buffer) };
 
-        auto conv { to_utf16(buffer) };
+        auto conv { to_utf16_lossy(buffer) };
 
         if (self.core) {
             self.core->PostWebMessageAsJson(reinterpret_cast<wchar_t*>(conv.data()));
@@ -652,7 +652,7 @@ template <typename T> struct webview {
     }
 
     auto post_string(this const Self& self, std::u8string_view message) -> void {
-        auto conv { to_utf16(message) };
+        auto conv { to_utf16_lossy(message) };
 
         if (self.core) {
             self.core->PostWebMessageAsString(reinterpret_cast<wchar_t*>(conv.data()));

@@ -12,7 +12,7 @@ process::process(const std::filesystem::path& path, std::u8string_view command_l
     pi.hThread = thread_handle.get();
 
     CreateProcessW(path.c_str(),
-                   reinterpret_cast<wchar_t*>(pane::to_utf16(command_line).data()),
+                   reinterpret_cast<wchar_t*>(pane::to_utf16_lossy(command_line).data()),
                    nullptr,
                    nullptr,
                    FALSE,

@@ -38,7 +38,7 @@ template <> struct formatter<std::error_code> : formatter<string_view> {
 
 template <> struct formatter<std::error_code, wchar_t> : formatter<wstring_view, wchar_t> {
     auto format(const std::error_code& error_code, wformat_context& context) const noexcept {
-        auto converted_message { pane::to_utf16(error_code.message()) };
+        auto converted_message { pane::to_utf16_lossy(error_code.message()) };
 
         return formatter<wstring_view, wchar_t>::format(
             { reinterpret_cast<const wchar_t*>(converted_message.data()),

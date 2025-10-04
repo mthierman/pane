@@ -73,7 +73,7 @@ auto window_handle::show(this const Self& self) -> bool { return ShowWindow(self
 auto window_handle::hide(this const Self& self) -> bool { return ShowWindow(self.hwnd, SW_HIDE); }
 
 auto window_handle::title(this const Self& self, std::u8string_view title) -> bool {
-    return SetWindowTextW(self.hwnd, reinterpret_cast<const wchar_t*>(to_utf16(title).data()));
+    return SetWindowTextW(self.hwnd, reinterpret_cast<const wchar_t*>(to_utf16_lossy(title).data()));
 }
 
 auto window_handle::icon(this const Self& self, HICON icon) -> void {

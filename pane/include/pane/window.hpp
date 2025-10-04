@@ -198,7 +198,7 @@ template <typename T> struct window_class final {
     using Self = window_class;
 
     window_class(std::u8string_view name)
-        : name { to_utf16(name) },
+        : name { to_utf16_lossy(name) },
           data { sizeof(WNDCLASSEXW),
                  0,
                  procedure,
@@ -371,7 +371,7 @@ template <typename T> struct window {
         CreateWindowExW(
             0,
             this->window_class.data.lpszClassName,
-            reinterpret_cast<const wchar_t*>(to_utf16(this->window_config.title).data()),
+            reinterpret_cast<const wchar_t*>(to_utf16_lossy(this->window_config.title).data()),
             this->window_config.parent_hwnd ? WS_CHILDWINDOW | WS_CLIPSIBLINGS
                                             : WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN,
             CW_USEDEFAULT,
