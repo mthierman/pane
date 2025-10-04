@@ -18,7 +18,7 @@ auto to_utf8(std::u16string_view string) -> std::expected<std::u8string, UErrorC
     buffer.resize(required_length + 1);
     error_code = U_ZERO_ERROR;
 
-    result = u_strToUTF8(c_str(buffer),
+    result = u_strToUTF8(reinterpret_cast<char*>(buffer.data()),
                          buffer.length(),
                          &actual_length,
                          string.data(),
