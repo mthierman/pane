@@ -15,6 +15,9 @@ auto from_utf16_lossy(std::wstring_view string) -> std::u8string;
 auto from_utf8(std::u8string_view string) -> std::expected<std::u16string, UErrorCode>;
 auto from_utf8(std::string_view string) -> std::expected<std::u16string, UErrorCode>;
 
+auto from_utf8_lossy(std::u8string_view string) -> std::u16string;
+auto from_utf8_lossy(std::string_view string) -> std::u16string;
+
 auto c_str(const std::u8string& string) noexcept -> const char*;
 auto c_str(const std::u16string& string) noexcept -> const wchar_t*;
 } // namespace pane

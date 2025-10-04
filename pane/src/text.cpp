@@ -101,6 +101,40 @@ auto from_utf8(std::string_view string) -> std::expected<std::u16string, UErrorC
     return from_utf8({ reinterpret_cast<const char8_t*>(string.data()), string.length() });
 }
 
+auto from_utf8_lossy(std::u8string_view string) -> std::u16string {
+    int32_t required_length { 0 };
+    auto error_code { U_ZERO_ERROR };
+
+    u_strFromUTF8WithSub(nullptr,
+                         0,
+                         &required_length,
+                         reinterpret_cast<const char*>(string.data()),
+                         string.length(),
+                         0xFFFD,
+                         nullptr,
+                         &error_code);
+
+    int32_t actual_length { 0 };
+    auto buffer { std::u16string() };
+    buffer.resize(required_length + 1);
+    error_code = U_ZERO_ERROR;
+
+    u_strFromUTF8WithSub(buffer.data(),
+                         buffer.length(),
+                         &actual_length,
+                         reinterpret_cast<const char*>(string.data()),
+                         string.length(),
+                         0xFFFD,
+                         nullptr,
+                         &error_code);
+
+    return buffer;
+}
+
+auto from_utf8_lossy(std::string_view string) -> std::u16string {
+    return from_utf8_lossy({ reinterpret_cast<const char8_t*>(string.data()), string.length() });
+}
+
 auto c_str(const std::u8string& string) noexcept -> const char* {
     return reinterpret_cast<const char*>(string.data());
 }
