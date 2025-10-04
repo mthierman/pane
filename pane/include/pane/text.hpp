@@ -11,13 +11,8 @@ auto from_utf16(std::wstring_view string) -> std::expected<std::u8string, UError
 auto from_utf8(std::u8string_view string) -> std::expected<std::u16string, UErrorCode>;
 auto from_utf8(std::string_view string) -> std::expected<std::u16string, UErrorCode>;
 
-// auto to_utf16(std::u8string_view string) -> std::u16string;
-// auto to_utf16(std::string_view string) -> std::u16string;
-// auto to_utf8(std::u16string_view string) -> std::u8string;
-// auto to_utf8(std::wstring_view string) -> std::u8string;
-
-// auto to_u8string(std::string_view string) -> std::u8string;
-// auto to_u16string(std::wstring_view string) -> std::u16string;
+auto c_str(const std::u8string& string) noexcept -> const char*;
+auto c_str(const std::u16string& string) noexcept -> const wchar_t*;
 } // namespace pane
 
 namespace std {
