@@ -12,14 +12,14 @@ auto guid() -> std::optional<GUID>;
 
 namespace std {
 template <> struct hash<GUID> {
-    auto operator()(const GUID& guid) const noexcept {
+    auto operator()(const GUID& guid) const {
         RPC_STATUS status { RPC_S_OK };
         return static_cast<size_t>(UuidHash(&const_cast<GUID&>(guid), &status));
     }
 };
 
 template <> struct less<GUID> {
-    auto operator()(const GUID& lhs, const GUID& rhs) const noexcept {
+    auto operator()(const GUID& lhs, const GUID& rhs) const {
         RPC_STATUS status { RPC_S_OK };
         return UuidCompare(&const_cast<GUID&>(lhs), &const_cast<GUID&>(rhs), &status) == -1 ? true
                                                                                             : false;
@@ -27,7 +27,7 @@ template <> struct less<GUID> {
 };
 
 template <> struct formatter<GUID> : formatter<string_view> {
-    auto format(const GUID& guid, format_context& context) const noexcept {
+    auto format(const GUID& guid, format_context& context) const {
         std::wstring buffer;
         buffer.resize(wil::guid_string_buffer_length);
         StringFromGUID2(guid, buffer.data(), wil::guid_string_buffer_length);
@@ -41,7 +41,7 @@ template <> struct formatter<GUID> : formatter<string_view> {
 };
 
 template <> struct formatter<GUID, wchar_t> : formatter<wstring_view, wchar_t> {
-    auto format(const GUID& guid, wformat_context& context) const noexcept {
+    auto format(const GUID& guid, wformat_context& context) const {
         std::wstring buffer;
         buffer.resize(wil::guid_string_buffer_length);
         StringFromGUID2(guid, buffer.data(), wil::guid_string_buffer_length);
