@@ -15,5 +15,11 @@ auto wmain(int /* argc */, wchar_t* /* argv */[], wchar_t* /* envp */[]) -> int 
     std::println("{}, v{}", pane::project_name, pane::project_version);
     std::println("{}, v{}", pane::os_name, pane::os_version);
 
+    // std::println("{}", u8"test");
+    // auto fmt { std::format("{}", u8"test", u8"unicode") };
+    // auto u8fmt { std::u8string { fmt.begin(), fmt.end() } };
+    // auto u8view { std::u8string_view { reinterpret_cast<const char8_t*>(fmt.data()), fmt.size() }
+    // };
+
     return EXIT_SUCCESS;
 }
