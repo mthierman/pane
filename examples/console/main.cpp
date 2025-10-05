@@ -15,5 +15,8 @@ auto wmain(int /* argc */, wchar_t* /* argv */[], wchar_t* /* envp */[]) -> int 
     std::println("{}, v{}", pane::project_name, pane::project_version);
     std::println("{}, v{}", pane::os_name, pane::os_version);
 
+    pane::color color { 42, 42, 164 };
+    std::println("{}", color);
+
     return EXIT_SUCCESS;
 }

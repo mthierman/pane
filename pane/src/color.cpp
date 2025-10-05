@@ -56,9 +56,9 @@ color::color(const COREWEBVIEW2_COLOR& webview2_color, uint8_t alpha)
       a { alpha } { }
 
 auto color::to_hex(this const Self& self) -> std::u8string {
-    auto formatted { std::format("#{:0>2x}{:0>2x}{:0>2x}{:0>2x}", self.r, self.g, self.b, self.a) };
+    auto fmt { std::format("#{:0>2x}{:0>2x}{:0>2x}{:0>2x}", self.r, self.g, self.b, self.a) };
 
-    return { formatted.begin(), formatted.end() };
+    return std::u8string { fmt.begin(), fmt.end() };
 }
 
 auto color::to_colorref(this const Self& self) -> COLORREF { return RGB(self.r, self.g, self.b); }
