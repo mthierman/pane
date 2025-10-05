@@ -13,7 +13,9 @@ auto debug_print(std::format_string<Args...> format_string, Args&&... args) -> v
 
 template <typename... Args>
 auto debug_println(std::format_string<Args...> format_string, Args&&... args) -> void {
-    debug_print("{}\n", std::format(format_string, std::forward<Args>(args)...));
+    auto msg { to_utf16_lossy(std::format(format_string, std::forward<Args>(args)...)) };
+    OutputDebugStringW(as_c_str(msg.data()));
+    OutputDebugStringW(L"\n");
 }
 
 // auto debug(const std::string& string) -> void;
