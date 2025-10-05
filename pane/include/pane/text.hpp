@@ -33,7 +33,7 @@ auto validate_utf16(std::u16string_view string) -> bool;
 } // namespace pane
 
 namespace std {
-template <> struct formatter<char8_t*> : formatter<string_view> {
+template <> struct formatter<const char8_t*> : formatter<string_view> {
     auto format(const char8_t* string, format_context& context) const noexcept {
         return formatter<string_view>::format(
             std::string_view { reinterpret_cast<const char*>(string) }, context);
@@ -63,12 +63,18 @@ template <> struct formatter<std::u8string_view> : formatter<string_view> {
     }
 };
 
-template <> struct formatter<char16_t*> : formatter<wstring_view, wchar_t> {
-    auto format(const char16_t* string, format_context& context) const noexcept {
-        return formatter<wstring_view, wchar_t>::format(
-            std::wstring_view { reinterpret_cast<const wchar_t*>(string) }, context);
-    }
-};
+// template <> struct formatter<char8_t*> : formatter<u8string_view> {
+//     auto format(const char8_t* string, format_context& context) const noexcept {
+//         return formatter<u8string_view>::format(std::u8string_view { string }, context);
+//     }
+// };
+
+// template <> struct formatter<char16_t*, wchar_t> : formatter<wstring_view, wchar_t> {
+//     auto format(const char16_t* string, format_context& context) const noexcept {
+//         return formatter<wstring_view, wchar_t>::format(
+//             std::wstring_view { reinterpret_cast<const wchar_t*>(string) }, context);
+//     }
+// };
 
 template <size_t size>
 struct formatter<char16_t[size], wchar_t> : formatter<wstring_view, wchar_t> {

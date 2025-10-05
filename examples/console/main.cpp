@@ -16,9 +16,10 @@ auto wmain(int /* argc */, wchar_t* /* argv */[], wchar_t* /* envp */[]) -> int 
     std::println("{}, v{}", pane::os_name, pane::os_version);
 
     auto raw_u8string { u8"test" };
-    std::u8string u8string { raw_u8string };
+    std::println("{}", u8"tes");
+    std::println("{}", raw_u8string);
 
-    std::println("{}", std::u8string_view { raw_u8string });
+    std::u8string u8string { raw_u8string };
     std::println("{}", u8string);
     std::println("{}", std::u8string_view { u8string });
 
