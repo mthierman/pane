@@ -5,12 +5,6 @@
 #include <pane/text.hpp>
 
 namespace pane {
-#ifdef DEBUG_MODE
-constexpr bool debug_mode { true };
-#else
-constexpr bool debug_mode { false };
-#endif
-
 auto debug(const std::string& string) -> void;
 auto debug(const std::u8string& string) -> void;
 auto debug(const std::wstring& string) -> void;

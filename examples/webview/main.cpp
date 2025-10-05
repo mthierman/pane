@@ -29,15 +29,17 @@ struct webview : pane::webview<webview> {
 
         pane::webview_config webview_config;
 
-        if constexpr (pane::debug_mode) {
-            return { window_config, pane::webview_config { u8"http://localhost:5173/" } };
-        } else {
-            return { window_config,
-                     pane::webview_config {
-                         u8"https://pane.internal/index.html",
-                         pane::virtual_host { u8"pane.internal",
-                                              u8"D:/mthierman/pane/examples/webview/gui/dist" } } };
-        }
+        // if constexpr (pane::debug_mode) {
+        //     return { window_config, pane::webview_config { u8"http://localhost:5173/" } };
+        // } else {
+        //     return { window_config,
+        //              pane::webview_config {
+        //                  u8"https://pane.internal/index.html",
+        //                  pane::virtual_host { u8"pane.internal",
+        //                                       u8"D:/mthierman/pane/examples/webview/gui/dist" } }
+        //                                       };
+        // }
+        return { window_config, pane::webview_config { u8"http://localhost:5173/" } };
     }
 
     auto handle_message(this Self& self, const pane::window_message& window_message) -> LRESULT {
@@ -45,9 +47,9 @@ struct webview : pane::webview<webview> {
             using enum pane::webview_messages;
 
             case +created: {
-                if (pane::debug_mode) {
-                    self.devtools();
-                }
+                // if (pane::debug_mode) {
+                //     self.devtools();
+                // }
             } break;
 
             case +dom_content_loaded: {
