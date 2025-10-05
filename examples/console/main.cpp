@@ -22,5 +22,7 @@ auto wmain(int /* argc */, wchar_t* /* argv */[], wchar_t* /* envp */[]) -> int 
     pane::debug_println("{}", u8"println");
     pane::debug_println("{}", u8"println");
 
+    pane::messagebox("{}", u8"test");
+
     return EXIT_SUCCESS;
 }
