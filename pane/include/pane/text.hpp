@@ -7,7 +7,10 @@
 
 namespace pane {
 auto as_u8string_view(const std::string& string) -> std::u8string_view;
+auto as_string_view(std::u8string_view string) -> std::string_view;
 auto as_u16string_view(const std::wstring& string) -> std::u16string_view;
+auto as_wstring_view(std::u16string_view string) -> std::wstring_view;
+
 auto as_c_str(const std::u8string& string) noexcept -> const char*;
 auto as_c_str(std::u8string& string) noexcept -> char*;
 auto as_c_str(const std::u16string& string) noexcept -> const wchar_t*;
