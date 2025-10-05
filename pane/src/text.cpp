@@ -175,4 +175,28 @@ auto to_utf16_lossy(std::u8string_view string, int32_t sub_char) -> std::u16stri
 auto to_utf16_lossy(std::string_view string, int32_t sub_char) -> std::u16string {
     return to_utf16_lossy(as_u8string_view(string));
 }
+
+auto validate_utf8(std::u8string_view string) -> bool {
+    int32_t required_length { 0 };
+    auto error_code { U_ZERO_ERROR };
+
+    [[maybe_unused]] auto result { u_strFromUTF8(nullptr,
+                                                 0,
+                                                 &required_length,
+                                                 reinterpret_cast<const char*>(string.data()),
+                                                 string.length(),
+                                                 &error_code) };
+
+    return U_SUCCESS(error_code);
+}
+
+auto validate_utf16(std::u16string_view string) -> bool {
+    int32_t required_length { 0 };
+    auto error_code { U_ZERO_ERROR };
+
+    [[maybe_unused]] auto result { u_strToUTF8(
+        nullptr, 0, &required_length, string.data(), string.length(), &error_code) };
+
+    return U_SUCCESS(error_code);
+}
 } // namespace pane
