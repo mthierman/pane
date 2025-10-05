@@ -8,7 +8,7 @@ add_library(pane::pane ALIAS pane)
 
 target_compile_features(pane PUBLIC c_std_17 cxx_std_23)
 
-target_compile_definitions(pane PUBLIC UNICODE WIN32_LEAN_AND_MEAN NOMINMAX GDIPVER=0x0110 $<$<CONFIG:Debug>:DEBUG_MODE>)
+target_compile_definitions(pane PUBLIC UNICODE WIN32_LEAN_AND_MEAN NOMINMAX GDIPVER=0x0110)
 
 target_compile_options(
     pane
@@ -47,6 +47,14 @@ target_link_options(
         -Wl,/WX
         >
 )
+
+configure_file(
+    ${CMAKE_CURRENT_LIST_DIR}/generated/project.hpp.in
+    ${CMAKE_CURRENT_BINARY_DIR}/generated/pane/project.hpp
+    @ONLY
+)
+
+target_include_directories(pane PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/generated)
 
 target_sources(
     pane

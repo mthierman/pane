@@ -1,0 +1,10 @@
+#pragma once
+#include <string_view>
+
+namespace pane {
+constexpr std::u8string_view OS_NAME = u8"@CMAKE_SYSTEM_NAME@";
+constexpr std::u8string_view OS_VERSION = u8"@CMAKE_SYSTEM_VERSION@";
+constexpr std::u8string_view PROJECT_NAME = u8"@PROJECT_NAME@";
+constexpr std::u8string_view PROJECT_VERSION = u8"@PROJECT_VERSION@";
+constexpr std::u8string_view PROJECT_DESCRIPTION = u8"@PROJECT_DESCRIPTION@";
+} // namespace pane

@@ -1,4 +1,5 @@
 #include <pane/pane.hpp>
+#include "project.hpp"
 #include <cstdlib>
 #include <format>
 #include <print>
@@ -11,6 +12,8 @@ auto wmain(int /* argc */, wchar_t* /* argv */[], wchar_t* /* envp */[]) -> int 
     for (auto [idx, arg] : std::views::enumerate(args) | std::views::as_const) {
         std::println("{}: {}", idx, std::format("{}", arg));
     }
+
+    std::println("{}, v{}", pane::PROJECT_NAME, pane::PROJECT_VERSION);
 
     return EXIT_SUCCESS;
 }
