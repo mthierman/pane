@@ -13,6 +13,7 @@ auto wmain(int /* argc */, wchar_t* /* argv */[], wchar_t* /* envp */[]) -> int 
     }
 
     std::println("{}, v{}", pane::PROJECT_NAME, pane::PROJECT_VERSION);
+    std::println("{}, v{}", pane::OS_NAME, pane::OS_VERSION);
 
     return EXIT_SUCCESS;
 }
