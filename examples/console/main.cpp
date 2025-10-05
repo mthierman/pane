@@ -12,9 +12,5 @@ auto wmain(int /* argc */, wchar_t* /* argv */[], wchar_t* /* envp */[]) -> int 
         std::println("{}: {}", idx, std::format("{}", arg));
     }
 
-    if (pane::debug_mode) {
-        std::println("debug_mode");
-    }
-
     return EXIT_SUCCESS;
 }
