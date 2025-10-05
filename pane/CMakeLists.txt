@@ -62,7 +62,6 @@ target_sources(
         src/color.cpp
         src/config.cpp
         src/console.cpp
-        src/debug.cpp
         src/error.cpp
         src/file_picker.cpp
         src/filesystem.cpp
@@ -72,7 +71,7 @@ target_sources(
         src/icu.cpp
         src/input.cpp
         src/math.cpp
-        src/message_box.cpp
+        src/print.cpp
         src/process.cpp
         src/string.cpp
         src/system.cpp

@@ -1,3 +1,3 @@
-#include <pane/debug.hpp>
+#include <pane/print.hpp>
 
 namespace pane { } // namespace pane
