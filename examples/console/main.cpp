@@ -12,8 +12,8 @@ auto wmain(int /* argc */, wchar_t* /* argv */[], wchar_t* /* envp */[]) -> int 
         std::println("{}: {}", idx, std::format("{}", arg));
     }
 
-    std::println("{}, v{}", pane::PROJECT_NAME, pane::PROJECT_VERSION);
-    std::println("{}, v{}", pane::OS_NAME, pane::OS_VERSION);
+    std::println("{}, v{}", pane::project_name, pane::project_version);
+    std::println("{}, v{}", pane::os_name, pane::os_version);
 
     return EXIT_SUCCESS;
 }
