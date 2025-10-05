@@ -54,11 +54,9 @@ configure_file(
     @ONLY
 )
 
-target_include_directories(pane PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/generated)
-
 target_sources(
     pane
-    PUBLIC FILE_SET HEADERS BASE_DIRS include
+    PUBLIC FILE_SET HEADERS BASE_DIRS include ${CMAKE_CURRENT_BINARY_DIR}/generated
     PRIVATE
         src/co_init.cpp
         src/color.cpp

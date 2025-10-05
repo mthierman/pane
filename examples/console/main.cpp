@@ -1,5 +1,4 @@
 #include <pane/pane.hpp>
-#include "project.hpp"
 #include <cstdlib>
 #include <format>
 #include <print>
