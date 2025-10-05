@@ -33,29 +33,26 @@ auto validate_utf16(std::u16string_view string) -> bool;
 } // namespace pane
 
 namespace std {
-template <> struct formatter<const char8_t*> : formatter<string_view> {
-    auto format(const char8_t* string, format_context& context) const noexcept {
-        return formatter<string_view>::format(reinterpret_cast<const char*>(string), context);
-    }
-};
-
 template <size_t size> struct formatter<char8_t[size]> : formatter<string_view> {
     auto format(const char8_t* string, format_context& context) const noexcept {
-        return formatter<string_view>::format(reinterpret_cast<const char*>(string), context);
+        return formatter<string_view>::format(
+            std::string_view { reinterpret_cast<const char*>(string), (size - 1) }, context);
     }
 };
 
 template <> struct formatter<std::u8string> : formatter<string_view> {
     auto format(const std::u8string& string, format_context& context) const noexcept {
         return formatter<string_view>::format(
-            { reinterpret_cast<const char*>(string.data()), string.length() }, context);
+            std::string_view { reinterpret_cast<const char*>(string.data()), string.length() },
+            context);
     }
 };
 
 template <> struct formatter<std::u8string_view> : formatter<string_view> {
     auto format(std::u8string_view string, format_context& context) const noexcept {
         return formatter<string_view>::format(
-            { reinterpret_cast<const char*>(string.data()), string.length() }, context);
+            std::string_view { reinterpret_cast<const char*>(string.data()), string.length() },
+            context);
     }
 };
 
