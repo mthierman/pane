@@ -6,8 +6,12 @@
 #include <icu.h>
 
 namespace pane {
-auto u8string_view(const std::string& string) -> std::u8string_view;
-auto u16string_view(const std::wstring& string) -> std::u16string_view;
+auto as_u8string_view(const std::string& string) -> std::u8string_view;
+auto as_u16string_view(const std::wstring& string) -> std::u16string_view;
+auto as_c_str(const std::u8string& string) noexcept -> const char*;
+auto as_c_str(std::u8string& string) noexcept -> char*;
+auto as_c_str(const std::u16string& string) noexcept -> const wchar_t*;
+auto as_c_str(std::u16string& string) noexcept -> wchar_t*;
 
 auto to_utf8(std::u16string_view string) -> std::expected<std::u8string, UErrorCode>;
 auto to_utf8(std::wstring_view string) -> std::expected<std::u8string, UErrorCode>;
@@ -20,11 +24,6 @@ auto to_utf16(std::string_view string) -> std::expected<std::u16string, UErrorCo
 
 auto to_utf16_lossy(std::u8string_view string, int32_t sub_char = 0xFFFD) -> std::u16string;
 auto to_utf16_lossy(std::string_view string, int32_t sub_char = 0xFFFD) -> std::u16string;
-
-auto c_str(const std::u8string& string) noexcept -> const char*;
-auto c_str(std::u8string& string) noexcept -> char*;
-auto c_str(const std::u16string& string) noexcept -> const wchar_t*;
-auto c_str(std::u16string& string) noexcept -> wchar_t*;
 } // namespace pane
 
 namespace std {
