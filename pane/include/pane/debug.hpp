@@ -18,6 +18,19 @@ auto debug_println(std::format_string<Args...> format_string, Args&&... args) ->
     OutputDebugStringW(L"\n");
 }
 
+template <typename... Args>
+auto debug_print(std::wformat_string<Args...> format_string, Args&&... args) -> void {
+    auto msg { std::format(format_string, std::forward<Args>(args)...) };
+    OutputDebugStringW(as_c_str(msg.data()));
+}
+
+template <typename... Args>
+auto debug_println(std::wformat_string<Args...> format_string, Args&&... args) -> void {
+    auto msg { std::format(format_string, std::forward<Args>(args)...) };
+    OutputDebugStringW(as_c_str(msg.data()));
+    OutputDebugStringW(L"\n");
+}
+
 // auto debug(const std::string& string) -> void;
 // auto debug(const std::u8string& string) -> void;
 // auto debug(const std::wstring& string) -> void;
