@@ -100,9 +100,7 @@ auto to_utf8_lossy(std::u16string_view string, int32_t sub_char) -> std::u8strin
 }
 
 auto to_utf8_lossy(std::wstring_view string, int32_t sub_char) -> std::u8string {
-    return to_utf8_lossy(
-        std::u16string_view { reinterpret_cast<const char16_t*>(string.data()), string.length() },
-        sub_char);
+    return to_utf8_lossy(as_u16string_view(string));
 }
 
 auto to_utf16(std::u8string_view string) -> std::expected<std::u16string, UErrorCode> {
@@ -140,8 +138,7 @@ auto to_utf16(std::u8string_view string) -> std::expected<std::u16string, UError
 }
 
 auto to_utf16(std::string_view string) -> std::expected<std::u16string, UErrorCode> {
-    return to_utf16(
-        std::u8string_view { reinterpret_cast<const char8_t*>(string.data()), string.length() });
+    return to_utf16(as_u8string_view(string));
 }
 
 auto to_utf16_lossy(std::u8string_view string, int32_t sub_char) -> std::u16string {
@@ -176,8 +173,6 @@ auto to_utf16_lossy(std::u8string_view string, int32_t sub_char) -> std::u16stri
 }
 
 auto to_utf16_lossy(std::string_view string, int32_t sub_char) -> std::u16string {
-    return to_utf16_lossy(
-        std::u8string_view { reinterpret_cast<const char8_t*>(string.data()), string.length() },
-        sub_char);
+    return to_utf16_lossy(as_u8string_view(string));
 }
 } // namespace pane
