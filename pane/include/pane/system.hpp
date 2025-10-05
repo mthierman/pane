@@ -30,20 +30,20 @@ auto message_loop() -> int;
 } // namespace pane::system
 
 namespace std {
-template <> struct formatter<std::error_code> : formatter<string_view> {
-    auto format(const std::error_code& error_code, format_context& context) const noexcept {
-        return formatter<string_view>::format(error_code.message(), context);
-    }
-};
+// template <> struct formatter<std::error_code> : formatter<string_view> {
+//     auto format(const std::error_code& error_code, format_context& context) const noexcept {
+//         return formatter<string_view>::format(error_code.message(), context);
+//     }
+// };
 
-template <> struct formatter<std::error_code, wchar_t> : formatter<wstring_view, wchar_t> {
-    auto format(const std::error_code& error_code, wformat_context& context) const {
-        auto converted_message { pane::to_utf16_lossy(error_code.message()) };
+// template <> struct formatter<std::error_code, wchar_t> : formatter<wstring_view, wchar_t> {
+//     auto format(const std::error_code& error_code, wformat_context& context) const {
+//         auto converted_message { pane::to_utf16_lossy(error_code.message()) };
 
-        return formatter<wstring_view, wchar_t>::format(
-            { reinterpret_cast<const wchar_t*>(converted_message.data()),
-              converted_message.length() },
-            context);
-    }
-};
+//         return formatter<wstring_view, wchar_t>::format(
+//             { reinterpret_cast<const wchar_t*>(converted_message.data()),
+//               converted_message.length() },
+//             context);
+//     }
+// };
 } // namespace std
