@@ -28,25 +28,25 @@ template <> struct less<GUID> {
 
 template <> struct formatter<GUID> : formatter<string_view> {
     auto format(const GUID& guid, format_context& context) const {
-        std::wstring buffer;
-        buffer.resize(wil::guid_string_buffer_length);
-        StringFromGUID2(guid, buffer.data(), wil::guid_string_buffer_length);
+        wchar_t wbuffer[wil::guid_string_buffer_length];
+        StringFromGUID2(guid, wbuffer, wil::guid_string_buffer_length);
 
-        auto converted_buffer { pane::to_utf8_lossy(buffer) };
+        char buffer[wil::guid_string_buffer_length];
+        auto length { WideCharToMultiByte(
+            CP_UTF8, 0, wbuffer, -1, buffer, sizeof(buffer), nullptr, nullptr) };
 
         return formatter<string_view>::format(
-            { reinterpret_cast<const char*>(converted_buffer.data()), converted_buffer.length() },
+            std::string_view { buffer, static_cast<std::string_view::size_type>(length - 1) },
             context);
     }
 };
 
 template <> struct formatter<GUID, wchar_t> : formatter<wstring_view, wchar_t> {
     auto format(const GUID& guid, wformat_context& context) const {
-        std::wstring buffer;
-        buffer.resize(wil::guid_string_buffer_length);
-        StringFromGUID2(guid, buffer.data(), wil::guid_string_buffer_length);
+        wchar_t wbuffer[wil::guid_string_buffer_length];
+        StringFromGUID2(guid, wbuffer, wil::guid_string_buffer_length);
 
-        return formatter<wstring_view, wchar_t>::format(buffer, context);
+        return formatter<wstring_view, wchar_t>::format(wbuffer, context);
     }
 };
 } // namespace std
