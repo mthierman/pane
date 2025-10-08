@@ -1,3 +1,11 @@
+set(ADA_VERSION "3.3.0" CACHE STRING "Ada version")
+set(ARGZ_VERSION "0.2.1" CACHE STRING "Argz version")
+set(CPPWINRT_VERSION "2.0.250303.1" CACHE STRING "C++/WinRT version")
+set(GLAZE_VERSION "5.7.2" CACHE STRING "Glaze version")
+set(SQLITE_VERSION "3500400" CACHE STRING "SQLite version")
+set(WEBVIEW2_VERSION "1.0.3485.44" CACHE STRING "WebView2 version")
+set(WIL_VERSION "1.0.250325.1" CACHE STRING "WIL Version")
+
 include(FetchContent)
 add_subdirectory(ada)
 add_subdirectory(argz)

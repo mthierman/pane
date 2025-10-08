@@ -1,7 +1,10 @@
 FetchContent_Declare(
     argz
     DOWNLOAD_NO_PROGRESS ON
-    URL https://github.com/stephenberry/argz/archive/refs/tags/v0.2.1.zip SOURCE_SUBDIR NULL
+    URL
+        https://github.com/stephenberry/argz/archive/refs/tags/v${ARGZ_VERSION}.zip
+        SOURCE_SUBDIR
+        NULL
 )
 
 FetchContent_MakeAvailable(argz)

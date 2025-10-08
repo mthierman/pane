@@ -2,7 +2,7 @@ FetchContent_Declare(
     cppwinrt
     DOWNLOAD_NO_PROGRESS ON
     URL
-        https://www.nuget.org/api/v2/package/Microsoft.Windows.CppWinRT/2.0.250303.1
+        https://www.nuget.org/api/v2/package/Microsoft.Windows.CppWinRT/${CPPWINRT_VERSION}
         SOURCE_SUBDIR
         NULL
 )
