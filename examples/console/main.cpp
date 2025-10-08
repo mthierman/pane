@@ -15,7 +15,7 @@ auto wmain(int /* argc */, wchar_t* /* argv */[], wchar_t* /* envp */[]) -> int 
     auto argv { pane::system::get_argv() };
     auto args { pane::system::get_argv_u8(argv) };
 
-    for (auto arg : args) {
+    for (auto& arg : args) {
         auto wide = std::wstring(arg.begin(), arg.end());
 
         OutputDebugStringW(wide.data());
@@ -24,9 +24,7 @@ auto wmain(int /* argc */, wchar_t* /* argv */[], wchar_t* /* envp */[]) -> int 
         std::println("{}", pane::to_utf8_lossy(wide));
     }
 
-    for (auto [idx, arg] : std::views::enumerate(args) | std::views::as_const) {
-        std::println("{}: {}", idx, arg);
-    }
+    std::ranges::for_each(args, [idx = 0](const auto& arg) { std::println("{}: {}", idx, arg); });
 
     return EXIT_SUCCESS;
 }
