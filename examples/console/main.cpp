@@ -1,7 +1,6 @@
 #include <pane/pane.hpp>
 #include <algorithm>
 #include <cstdlib>
-#include <format>
 #include <print>
 
 // https://learn.microsoft.com/en-us/cpp/c-language/using-wmain
