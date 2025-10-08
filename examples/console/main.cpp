@@ -8,15 +8,15 @@
 auto wmain(int /* argc */, wchar_t* /* argv */[], wchar_t* /* envp */[]) -> int {
     auto args { pane::system::command_line_arguments() };
 
-    for (auto [idx, arg] : std::views::enumerate(args) | std::views::as_const) {
-        std::println("{}: {}", idx, std::format("{}", arg));
-    }
-
-    std::println("{}, v{} for {} {}",
+    std::println("{} v{} {} v{}",
                  pane::project_name,
                  pane::project_version,
                  pane::os_name,
                  pane::os_version);
+
+    for (auto [idx, arg] : std::views::enumerate(args) | std::views::as_const) {
+        std::println("{}: {}", idx, arg);
+    }
 
     return EXIT_SUCCESS;
 }
