@@ -1,5 +1,5 @@
 {
     "name": "@PROJECT_NAME@",
     "version": "@PROJECT_VERSION@",
-    "description: "@PROJECT_DESCRIPTION@",
+    "description": "@PROJECT_DESCRIPTION@",
 }
