@@ -54,6 +54,12 @@ configure_file(
     @ONLY
 )
 
+configure_file(
+    ${CMAKE_CURRENT_LIST_DIR}/generated/project.json.in
+    ${CMAKE_CURRENT_BINARY_DIR}/generated/pane/project.json
+    @ONLY
+)
+
 target_sources(
     pane
     PUBLIC FILE_SET HEADERS BASE_DIRS include ${CMAKE_CURRENT_BINARY_DIR}/generated
