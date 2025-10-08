@@ -47,8 +47,7 @@ auto to_utf8(std::u16string_view string) -> std::expected<std::u8string, UErrorC
     }
 
     int32_t actual_length { 0 };
-    auto buffer { std::u8string() };
-    buffer.resize(required_length + 1);
+    std::u8string buffer(required_length, 0);
     error_code = U_ZERO_ERROR;
 
     result = u_strToUTF8(as_c_str(buffer),
@@ -83,8 +82,7 @@ auto to_utf8_lossy(std::u16string_view string, int32_t sub_char) -> std::u8strin
                                                       &error_code) };
 
     int32_t actual_length { 0 };
-    auto buffer { std::u8string() };
-    buffer.resize(required_length + 1);
+    std::u8string buffer(required_length, 0);
     error_code = U_ZERO_ERROR;
 
     result = u_strToUTF8WithSub(reinterpret_cast<char*>(buffer.data()),
@@ -119,8 +117,7 @@ auto to_utf16(std::u8string_view string) -> std::expected<std::u16string, UError
     }
 
     int32_t actual_length { 0 };
-    auto buffer { std::u16string() };
-    buffer.resize(required_length + 1);
+    std::u16string buffer(required_length, 0);
     error_code = U_ZERO_ERROR;
 
     result = u_strFromUTF8(buffer.data(),
@@ -156,8 +153,7 @@ auto to_utf16_lossy(std::u8string_view string, int32_t sub_char) -> std::u16stri
         &error_code) };
 
     int32_t actual_length { 0 };
-    auto buffer { std::u16string() };
-    buffer.resize(required_length + 1);
+    std::u16string buffer(required_length, 0);
     error_code = U_ZERO_ERROR;
 
     result = u_strFromUTF8WithSub(buffer.data(),
