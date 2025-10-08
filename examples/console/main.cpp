@@ -1,8 +1,8 @@
 #include <pane/pane.hpp>
+#include <algorithm>
 #include <cstdlib>
 #include <format>
 #include <print>
-#include <ranges>
 
 // https://learn.microsoft.com/en-us/cpp/c-language/using-wmain
 auto wmain(int /* argc */, wchar_t* /* argv */[], wchar_t* /* envp */[]) -> int {
