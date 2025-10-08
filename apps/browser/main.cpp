@@ -6,7 +6,8 @@ struct webview : pane::webview<webview> {
     using pane::webview<webview>::webview;
 
     static auto config() -> config {
-        auto args { pane::system::get_argv_u8() };
+        auto argv { pane::system::get_argv() };
+        auto args { pane::system::get_argv_u8(argv) };
         std::optional<std::u8string> home_page { std::nullopt };
 
         if (args.size() == 2) {

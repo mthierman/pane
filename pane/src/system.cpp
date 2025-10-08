@@ -102,9 +102,7 @@ auto get_argv() -> std::vector<std::u16string> {
     return args;
 }
 
-auto get_argv_u8() -> std::vector<std::u8string> {
-    auto argv { get_argv() };
-
+auto get_argv_u8(std::span<const std::u16string> argv) -> std::vector<std::u8string> {
     std::vector<std::u8string> args;
     args.reserve(argv.size());
 
