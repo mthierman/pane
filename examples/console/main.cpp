@@ -6,7 +6,7 @@
 
 // https://learn.microsoft.com/en-us/cpp/c-language/using-wmain
 auto wmain(int /* argc */, wchar_t* /* argv */[], wchar_t* /* envp */[]) -> int {
-    auto args { pane::system::command_line_arguments_native() };
+    auto args { pane::system::get_argv() };
 
     for (auto arg : args) {
         auto wide = std::wstring(arg.begin(), arg.end());

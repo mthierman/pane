@@ -87,21 +87,7 @@ auto dark_mode() -> bool {
     return pane::color { winrt::Windows::UI::ViewManagement::UIColorType::Background }.is_dark();
 }
 
-auto command_line_arguments() -> std::vector<std::u8string> {
-    int argc { 0 };
-    wil::unique_hlocal_ptr<wchar_t*[]> buffer;
-    buffer.reset(CommandLineToArgvW(GetCommandLineW(), &argc));
-
-    std::vector<std::u8string> vector;
-
-    for (int i = 0; i < argc; i++) {
-        vector.emplace_back(pane::to_utf8_lossy(buffer[i]));
-    }
-
-    return vector;
-}
-
-auto command_line_arguments_native() -> std::vector<std::u16string> {
+auto get_argv() -> std::vector<std::u16string> {
     int argc { 0 };
     wil::unique_hlocal_ptr<wchar_t*[]> argv { CommandLineToArgvW(GetCommandLineW(), &argc) };
 
@@ -111,6 +97,19 @@ auto command_line_arguments_native() -> std::vector<std::u16string> {
     for (auto warg : std::span(argv.get(), argc)) {
         std::wstring buffer { warg };
         args.emplace_back(buffer.begin(), buffer.end());
+    }
+
+    return args;
+}
+
+auto get_argv_u8() -> std::vector<std::u8string> {
+    auto argv { get_argv() };
+
+    std::vector<std::u8string> args;
+    args.reserve(argv.size());
+
+    for (auto& arg : argv) {
+        args.emplace_back(pane::to_utf8_lossy(arg));
     }
 
     return args;

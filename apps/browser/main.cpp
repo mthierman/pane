@@ -6,7 +6,7 @@ struct webview : pane::webview<webview> {
     using pane::webview<webview>::webview;
 
     static auto config() -> config {
-        auto args { pane::system::command_line_arguments() };
+        auto args { pane::system::get_argv_u8() };
         std::optional<std::u8string> home_page { std::nullopt };
 
         if (args.size() == 2) {
@@ -24,14 +24,15 @@ struct webview : pane::webview<webview> {
             browser_data = *local_app_data / u8"browser";
         }
 
-        return {
-            pane::window_config { u8"webview",
-              pane::color { 0, 0, 0, 255 },
-              pane::color { 0, 0, 0, 255 },
-              true,
-              nullptr },
-            pane::webview_config { home_page.value_or(u8"https://www.google.com/"), std::nullopt, u8"", browser_data }
-        };
+        return { pane::window_config { u8"webview",
+                                       pane::color { 0, 0, 0, 255 },
+                                       pane::color { 0, 0, 0, 255 },
+                                       true,
+                                       nullptr },
+                 pane::webview_config { home_page.value_or(u8"https://www.google.com/"),
+                                        std::nullopt,
+                                        u8"",
+                                        browser_data } };
     }
 
     auto handle_message(this Self& self, const pane::window_message& window_message) -> LRESULT {
