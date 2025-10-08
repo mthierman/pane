@@ -11,8 +11,8 @@ auto wmain(int /* argc */, wchar_t* /* argv */[], wchar_t* /* envp */[]) -> int 
                  pane::os_name,
                  pane::os_version);
 
-    pane::system::argv argv;
-    auto args { argv.as_u8string() };
+    pane::argv argv;
+    auto args { argv.u8string() };
     std::ranges::for_each(args, [idx = 0](const auto& arg) { std::println("{}: {}", idx, arg); });
 
     return EXIT_SUCCESS;

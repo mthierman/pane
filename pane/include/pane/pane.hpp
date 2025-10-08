@@ -1,4 +1,5 @@
 #pragma once
+#include <pane/argv.hpp>
 #include <pane/co_init.hpp>
 #include <pane/color.hpp>
 #include <pane/config.hpp>

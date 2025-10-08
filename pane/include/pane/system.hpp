@@ -28,12 +28,6 @@ auto get_environment_variable(std::u8string_view name) -> std::optional<std::u8s
 auto exit_process(unsigned int exit_code = EXIT_SUCCESS) -> void;
 auto quit(int exit_code = EXIT_SUCCESS) -> void;
 auto message_loop() -> int;
-
-struct argv final {
-    auto as_u8string() -> std::vector<std::u8string>;
-
-    std::vector<std::u16string> argv { get_argv() };
-};
 } // namespace pane::system
 
 namespace std {
