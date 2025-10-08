@@ -30,6 +30,7 @@ jobs:
         with:
           repository: mthierman/mthierman.pages.dev
           path: "web"
+          token: ${{ secrets.WEBSITE }}
 
       - name: Cache
         uses: actions/cache@v4
