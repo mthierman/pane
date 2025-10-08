@@ -1,5 +1,10 @@
 {
     "name": "@PROJECT_NAME@",
+    "description": "@PROJECT_DESCRIPTION@",
     "version": "@PROJECT_VERSION@",
-    "description": "@PROJECT_DESCRIPTION@"
+    "date": "",
+    "hash": "",
+    "symbol": "",
+    "github": "",
+    "download": ""
 }
