@@ -101,6 +101,21 @@ auto command_line_arguments() -> std::vector<std::u8string> {
     return vector;
 }
 
+auto command_line_arguments_native() -> std::vector<std::u16string> {
+    int argc { 0 };
+    wil::unique_hlocal_ptr<wchar_t*[]> argv { CommandLineToArgvW(GetCommandLineW(), &argc) };
+
+    std::vector<std::u16string> args;
+    args.reserve(argc);
+
+    for (auto warg : std::span(argv.get(), argc)) {
+        std::wstring buffer { warg };
+        args.emplace_back(buffer.begin(), buffer.end());
+    }
+
+    return args;
+}
+
 auto get_environment_variable(std::u8string_view name) -> std::optional<std::u8string> {
     auto u16name { pane::to_utf16_lossy(name) };
     auto buffer_size { GetEnvironmentVariableW(

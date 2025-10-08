@@ -22,6 +22,7 @@ auto application_icon() -> HICON;
 auto resource_icon() -> std::expected<HICON, HRESULT>;
 auto ui_settings() -> winrt::Windows::UI::ViewManagement::UISettings;
 auto dark_mode() -> bool;
+auto command_line_arguments_native() -> std::vector<std::u16string>;
 auto command_line_arguments() -> std::vector<std::u8string>;
 auto get_environment_variable(std::u8string_view name) -> std::optional<std::u8string>;
 auto exit_process(unsigned int exit_code = EXIT_SUCCESS) -> void;
