@@ -11,6 +11,11 @@ jobs:
         with:
           path: repo
 
+      - uses: actions/checkout@v5
+        with:
+          repository: mthierman/powershell-scripts
+          path: scripts
+
       - uses: actions/cache@v4
         id: deps
         with:
@@ -19,6 +24,7 @@ jobs:
           key: deps-${{ hashFiles('repo/pane/libs/CMakeLists.txt') }}
 
       - run: |
+          .\scripts\dev
           Set-Location ${{ github.workspace }}/repo
           cmake -S . -B build
 
