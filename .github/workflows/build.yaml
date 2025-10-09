@@ -36,7 +36,7 @@ jobs:
           name: project-json
 
       - env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.WEBSITE }}
         run: |
           gh api repos/mthierman/mthierman.pages.dev/dispatches \
           --method POST \
