@@ -1,5 +1,5 @@
 {
-    "event_type:" "build-website",
+    "event_type": "build-website",
     "client_payload": {
         "name": "@PROJECT_NAME@",
         "description": "@PROJECT_DESCRIPTION@",
