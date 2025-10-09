@@ -13,35 +13,41 @@ jobs:
   cmake:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v5
+      - name: Checkout repo
+        uses: actions/checkout@v5
         with:
           path: repo
 
-      - uses: actions/checkout@v5
+      - name: Checkout scripts
+        uses: actions/checkout@v5
         with:
           repository: mthierman/powershell-scripts
           path: scripts
 
-      - uses: actions/checkout@v5
+      - name: Checkout web
+        uses: actions/checkout@v5
         with:
           repository: mthierman/mthierman.pages.dev
           path: web
           token: ${{ secrets.WEBSITE }}
 
-      - uses: actions/cache@v4
+      - name: Cache
+        uses: actions/cache@v4
         id: deps
         with:
           path: |
             ${{ github.workspace }}/repo/build/_deps
           key: deps-${{ hashFiles('repo/pane/libs/CMakeLists.txt') }}
 
-      - run: |
+      - name: CMake
+        run: |
           .\scripts\dev.ps1
           Set-Location ${{ github.workspace }}\repo
           cmake --version
           cmake -S . -B build
 
-      - run: |
+      - name: Web
+        run: |
           Set-Location ${{ github.workspace }}\web
           Copy-Item "${{ github.workspace }}\repo\build\pane\generated\pane\project.json" -Destination "${{ github.workspace }}\web\src\content\projects\pane.json"
           git config user.name github-actions
