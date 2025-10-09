@@ -11,9 +11,11 @@ env:
 
 jobs:
   notify:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     steps:
       - env:
           GH_TOKEN: ${{ secrets.WEBSITE }}
         run: |
-          gh api repos/mthierman/mthierman.pages.dev/dispatches --method POST --field event_type=build-website
+          gh api repos/mthierman/mthierman.pages.dev/dispatches \
+          --method POST \
+          --field event_type=build-website
