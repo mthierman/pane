@@ -35,15 +35,13 @@ jobs:
             ${{ github.workspace }}/repo/build/_deps
           key: deps-${{ hashFiles('repo/pane/libs/CMakeLists.txt') }}
 
-      - name: CMake
-        run: |
+      - run: |
           .\scripts\dev.ps1
           Set-Location ${{ github.workspace }}\repo
           cmake --version
           cmake -S . -B build
 
-      - name: Update website
-        run: |
+      - run: |
           Set-Location ${{ github.workspace }}\web
           Copy-Item "${{ github.workspace }}\repo\build\pane\generated\pane\project.json" -Destination "${{ github.workspace }}\web\src\content\projects\pane.json"
           git config user.name github-actions
