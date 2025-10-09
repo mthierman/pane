@@ -1,10 +1,13 @@
 {
-    "name": "@PROJECT_NAME@",
-    "description": "@PROJECT_DESCRIPTION@",
-    "version": "@PROJECT_VERSION@",
-    "date": "@PROJECT_DATE@",
-    "hash": "@PROJECT_GIT_HASH@",
-    "symbol": "@PROJECT_SYMBOL@",
-    "github": "@PROJECT_GITHUB@",
-    "download": ""
+    "event_type:" "build-website",
+    "client_payload": {
+        "name": "@PROJECT_NAME@",
+        "description": "@PROJECT_DESCRIPTION@",
+        "version": "@PROJECT_VERSION@",
+        "date": "@PROJECT_DATE@",
+        "hash": "@PROJECT_GIT_HASH@",
+        "symbol": "@PROJECT_SYMBOL@",
+        "github": "@PROJECT_GITHUB@",
+        "download": ""
+    }
 }

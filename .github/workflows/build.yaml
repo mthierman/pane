@@ -1,13 +1,7 @@
 on:
   workflow_dispatch:
-  # push:
-  #   branches: [main]
-
-permissions:
-  contents: write
-
-env:
-  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  push:
+    branches: [main]
 
 jobs:
   cmake:
@@ -24,13 +18,6 @@ jobs:
           repository: mthierman/powershell-scripts
           path: scripts
 
-      - name: Checkout web
-        uses: actions/checkout@v5
-        with:
-          repository: mthierman/mthierman.pages.dev
-          path: web
-          token: ${{ secrets.WEBSITE }}
-
       - name: Cache
         uses: actions/cache@v4
         id: deps
@@ -41,17 +28,16 @@ jobs:
 
       - name: CMake
         run: |
-          .\scripts\dev.ps1
-          Set-Location ${{ github.workspace }}\repo
-          cmake --version
+          Set-Location ${{ github.workspace }}/repo
           cmake -S . -B build
 
-      - name: Web
+  notify:
+    needs: [cmake]
+    runs-on: ubuntu-latest
+    steps:
+      - env:
+          GH_TOKEN: ${{ secrets.WEBSITE }}
         run: |
-          Set-Location ${{ github.workspace }}\web
-          Copy-Item "${{ github.workspace }}\repo\build\pane\generated\pane\project.json" -Destination "${{ github.workspace }}\web\src\content\projects\pane.json"
-          git config user.name github-actions
-          git config user.email github-actions@github.com
-          git add -A
-          git commit -m 'Pane: auto-commit'
-          git push
+          gh api repos/mthierman/mthierman.pages.dev/dispatches \
+          --method POST \
+          --input "${{ github.workspace }}\repo\build\pane\generated\pane\project.json"
