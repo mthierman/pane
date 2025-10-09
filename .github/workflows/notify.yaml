@@ -16,6 +16,6 @@ jobs:
       - env:
           GH_TOKEN: ${{ secrets.WEBSITE }}
         run: |
-          gh api repos/surge-synthesizer/surge-synthesizer.github.io/dispatches \
+          gh api repos/mthierman/mthierman.pages.dev/dispatches \
           --method POST \
           --field event_type=build-website
