@@ -1,5 +1,3 @@
-name: Build
-
 on:
   workflow_dispatch:
   push:
@@ -8,32 +6,29 @@ on:
 permissions:
   contents: write
 
-jobs:
-  release:
-    runs-on: windows-latest
-    env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v5
-        with:
-          path: "repo"
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Checkout scripts
-        uses: actions/checkout@v5
+jobs:
+  cmake:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          path: repo
+
+      - uses: actions/checkout@v5
         with:
           repository: mthierman/powershell-scripts
-          path: powershell-scripts
+          path: scripts
 
-      - name: Checkout web
-        uses: actions/checkout@v5
+      - uses: actions/checkout@v5
         with:
           repository: mthierman/mthierman.pages.dev
-          path: "web"
+          path: web
           token: ${{ secrets.WEBSITE }}
 
-      - name: Cache
-        uses: actions/cache@v4
+      - uses: actions/cache@v4
         id: deps
         with:
           path: |
@@ -42,7 +37,7 @@ jobs:
 
       - name: CMake
         run: |
-          .\powershell-scripts\dev.ps1
+          .\scripts\dev.ps1
           Set-Location ${{ github.workspace }}\repo
           cmake --version
           cmake -S . -B build
