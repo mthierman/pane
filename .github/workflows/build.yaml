@@ -10,31 +10,37 @@ jobs:
   build:
     runs-on: windows-latest
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v5
+      - uses: actions/checkout@v5
         with:
           path: repo
 
-      - name: Cache
-        uses: actions/cache@v4
+      - uses: actions/cache@v4
         id: deps
         with:
           path: |
             ${{ github.workspace }}/repo/build/_deps
           key: deps-${{ hashFiles('repo/pane/libs/CMakeLists.txt') }}
 
-      - name: CMake
-        run: |
+      - run: |
           Set-Location ${{ github.workspace }}/repo
           cmake -S . -B build
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: project-json
+          path: ${{ github.workspace }}/repo/build/pane/generated/pane/project.json
 
   notify:
     needs: [build]
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/download-artifact@v5
+        with:
+          name: project-json
+
       - env:
           GH_TOKEN: ${{ secrets.WEBSITE }}
         run: |
           gh api repos/mthierman/mthierman.pages.dev/dispatches \
           --method POST \
-          --input "${{ github.workspace }}/repo/build/pane/generated/pane/project.json"
+          --input project.json
