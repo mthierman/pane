@@ -4,7 +4,7 @@ on:
     branches: [main]
 
 jobs:
-  cmake:
+  build:
     runs-on: windows-latest
     steps:
       - name: Checkout repo
@@ -26,7 +26,7 @@ jobs:
           cmake -S . -B build
 
   notify:
-    needs: [cmake]
+    needs: [build]
     runs-on: ubuntu-latest
     steps:
       - env:
