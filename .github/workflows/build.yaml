@@ -3,9 +3,6 @@ on:
   push:
     branches: [main]
 
-env:
-  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
 jobs:
   build:
     runs-on: windows-latest
@@ -39,7 +36,7 @@ jobs:
           name: project-json
 
       - env:
-          GH_TOKEN: ${{ secrets.WEBSITE }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh api repos/mthierman/mthierman.pages.dev/dispatches \
           --method POST \
