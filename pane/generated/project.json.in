@@ -2,9 +2,9 @@
     "name": "@PROJECT_NAME@",
     "description": "@PROJECT_DESCRIPTION@",
     "version": "@PROJECT_VERSION@",
-    "date": "",
-    "hash": "",
-    "symbol": "",
-    "github": "",
+    "date": "@PROJECT_DATE@",
+    "hash": "@PROJECT_GIT_HASH@",
+    "symbol": "@PROJECT_SYMBOL@",
+    "github": "@PROJECT_GITHUB@",
     "download": ""
 }

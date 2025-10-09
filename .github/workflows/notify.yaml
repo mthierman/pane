@@ -1,0 +1,26 @@
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+jobs:
+  cmake:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v5
+        with:
+          path: repo
+
+      - name: Checkout web
+        uses: actions/checkout@v5
+        with:
+          repository: mthierman/mthierman.pages.dev
+          path: web
+          token: ${{ secrets.WEBSITE }}
