@@ -1,8 +1,9 @@
 {
     "name": "pane",
+    "private": true,
     "version": "0.0.0",
     "type": "module",
-    "private": true,
+    "packageManager": "pnpm@10.18.2",
     "exports": {
         ".": "./pane/typescript/index.ts",
         "./webview": "./pane/typescript/webview.ts"
