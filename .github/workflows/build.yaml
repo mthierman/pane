@@ -25,6 +25,7 @@ jobs:
         with:
           node-version: 22.20.0
           cache: pnpm
+          cache-dependency-path: "repo/pnpm-lock.yaml"
 
       - uses: actions/setup-python@v6
         with:
