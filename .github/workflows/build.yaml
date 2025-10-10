@@ -17,10 +17,6 @@ jobs:
           repository: mthierman/powershell-scripts
           path: scripts
 
-      - uses: pnpm/action-setup@v4
-        with:
-          version: 10.18.2
-
       - uses: actions/setup-node@v5
         with:
           node-version: 22.20.0
