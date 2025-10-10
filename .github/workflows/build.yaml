@@ -1,7 +1,8 @@
 on:
   workflow_dispatch:
   push:
-    branches: [main]
+    branches:
+      - main
 
 jobs:
   build:
@@ -11,14 +12,20 @@ jobs:
         with:
           path: repo
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-
-      - name: Setup node
-        uses: actions/setup-node@v5
+      - uses: actions/checkout@v5
         with:
-          node-version: "22.20.0"
-          cache: "pnpm"
+          repository: mthierman/powershell-scripts
+          path: scripts
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.18.2
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22.20.0
+          cache: pnpm
+          cache-dependency-path: repo/pnpm-lock.yaml
 
       - uses: actions/setup-python@v6
         with:
@@ -32,11 +39,6 @@ jobs:
 
       - run: |
           uv tool install gersemi
-
-      - uses: actions/checkout@v5
-        with:
-          repository: mthierman/powershell-scripts
-          path: scripts
 
       - uses: actions/cache@v4
         id: deps
