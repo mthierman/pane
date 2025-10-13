@@ -9,7 +9,7 @@ add_subdirectory(argz)
 set(CPPWINRT_VERSION "2.0.250303.1" CACHE STRING "C++/WinRT version")
 add_subdirectory(cppwinrt)
 
-set(GLAZE_VERSION "5.7.2" CACHE STRING "Glaze version")
+set(GLAZE_VERSION "6.0.0" CACHE STRING "Glaze version")
 add_subdirectory(glaze)
 
 set(SQLITE_VERSION "3500400" CACHE STRING "SQLite version")

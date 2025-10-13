@@ -100,7 +100,7 @@ enum struct webview_messages : int {
     web_message_received
 };
 
-template <typename T, typename U = glz::json_t> struct webview_event {
+template <typename T, typename U = glz::generic> struct webview_event {
     using Self = webview_event;
 
     T type;
