@@ -18,7 +18,7 @@ target_compile_options(
         /WX
         /utf-8
         /bigobj
-        /diagnostics:color
+        /diagnostics:caret
         /permissive-
         /Zc:__cplusplus,enumTypes,templateScope,throwingNew,preprocessor
         >
