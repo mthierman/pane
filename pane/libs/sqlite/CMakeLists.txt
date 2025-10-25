@@ -1,7 +1,7 @@
 FetchContent_Declare(
     sqlite
     DOWNLOAD_NO_PROGRESS ON
-    URL https://sqlite.org/2025/sqlite-amalgamation-${SQLITE_VERSION}.zip SOURCE_SUBDIR NULL
+    URL https://sqlite.org/2025/sqlite-amalgamation-${PANE_SQLITE_VERSION}.zip SOURCE_SUBDIR NULL
 )
 
 FetchContent_MakeAvailable(sqlite)

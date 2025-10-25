@@ -2,7 +2,7 @@ FetchContent_Declare(
     argz
     DOWNLOAD_NO_PROGRESS ON
     URL
-        https://github.com/stephenberry/argz/archive/refs/tags/v${ARGZ_VERSION}.zip
+        https://github.com/stephenberry/argz/archive/refs/tags/v${PANE_ARGZ_VERSION}.zip
         SOURCE_SUBDIR
         NULL
 )

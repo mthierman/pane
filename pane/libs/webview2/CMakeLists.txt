@@ -2,7 +2,7 @@ FetchContent_Declare(
     webview2
     DOWNLOAD_NO_PROGRESS ON
     URL
-        https://www.nuget.org/api/v2/package/Microsoft.Web.WebView2/${WEBVIEW2_VERSION}
+        https://www.nuget.org/api/v2/package/Microsoft.Web.WebView2/${PANE_WEBVIEW2_VERSION}
         SOURCE_SUBDIR
         NULL
 )

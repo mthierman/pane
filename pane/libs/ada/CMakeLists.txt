@@ -2,7 +2,7 @@ FetchContent_Declare(
     ada
     DOWNLOAD_NO_PROGRESS ON
     URL
-        https://github.com/ada-url/ada/releases/download/v${ADA_VERSION}/singleheader.zip
+        https://github.com/ada-url/ada/releases/download/v${PANE_ADA_VERSION}/singleheader.zip
         SOURCE_SUBDIR
         NULL
 )

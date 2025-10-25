@@ -2,7 +2,7 @@ FetchContent_Declare(
     glaze
     DOWNLOAD_NO_PROGRESS ON
     URL
-        https://github.com/stephenberry/glaze/archive/refs/tags/v${GLAZE_VERSION}.zip
+        https://github.com/stephenberry/glaze/archive/refs/tags/v${PANE_GLAZE_VERSION}.zip
         SOURCE_SUBDIR
         NULL
 )
