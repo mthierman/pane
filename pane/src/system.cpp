@@ -99,6 +99,17 @@ auto get_argv(int argc, wchar_t** argv) -> std::vector<std::u16string> {
     return args;
 }
 
+auto get_argv_u8(int argc, wchar_t** argv) -> std::vector<std::u8string> {
+    std::vector<std::u8string> args;
+    args.reserve(argc);
+
+    for (auto warg : std::span(argv, argc)) {
+        args.emplace_back(pane::to_utf8_lossy(warg));
+    }
+
+    return args;
+}
+
 auto get_argv() -> std::vector<std::u16string> {
     int argc { 0 };
     wil::unique_hlocal_ptr<wchar_t*[]> argv { CommandLineToArgvW(GetCommandLineW(), &argc) };
