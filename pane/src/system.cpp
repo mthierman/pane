@@ -87,6 +87,19 @@ auto dark_mode() -> bool {
     return pane::color { winrt::Windows::UI::ViewManagement::UIColorType::Background }.is_dark();
 }
 
+// https://randomascii.wordpress.com/2018/12/03/a-not-called-function-can-cause-a-5x-slowdown/
+auto get_argv(int argc, wchar_t** argv) -> std::vector<std::u16string> {
+    std::vector<std::u16string> args;
+    args.reserve(argc);
+
+    for (auto warg : std::span(argv, argc)) {
+        std::wstring buffer { warg };
+        args.emplace_back(buffer.begin(), buffer.end());
+    }
+
+    return args;
+}
+
 auto get_argv() -> std::vector<std::u16string> {
     int argc { 0 };
     wil::unique_hlocal_ptr<wchar_t*[]> argv { CommandLineToArgvW(GetCommandLineW(), &argc) };

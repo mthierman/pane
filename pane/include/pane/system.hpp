@@ -22,6 +22,7 @@ auto application_icon() -> HICON;
 auto resource_icon() -> std::expected<HICON, HRESULT>;
 auto ui_settings() -> winrt::Windows::UI::ViewManagement::UISettings;
 auto dark_mode() -> bool;
+auto get_argv(int argc, wchar_t** argv) -> std::vector<std::u16string>;
 auto get_argv() -> std::vector<std::u16string>;
 auto get_argv_u8() -> std::vector<std::u8string>;
 auto get_environment_variable(std::u8string_view name) -> std::optional<std::u8string>;
