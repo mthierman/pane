@@ -1,7 +1,7 @@
-#include <pane/system.hpp>
-#include <shellapi.h>
 #include <pane/color.hpp>
+#include <pane/system.hpp>
 #include <pane/text.hpp>
+#include <shellapi.h>
 #include <wil/resource.h>
 
 namespace pane::system {
@@ -102,7 +102,9 @@ auto get_argv() -> std::vector<std::u16string> {
     return args;
 }
 
-auto get_argv_u8(std::span<const std::u16string> argv) -> std::vector<std::u8string> {
+auto get_argv_u8() -> std::vector<std::u8string> {
+    auto argv { get_argv() };
+
     std::vector<std::u8string> args;
     args.reserve(argv.size());
 
