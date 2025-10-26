@@ -75,7 +75,6 @@ target_sources(
     pane
     PUBLIC FILE_SET HEADERS BASE_DIRS include ${CMAKE_CURRENT_BINARY_DIR}/generated
     PRIVATE
-        src/argv.cpp
         src/co_init.cpp
         src/color.cpp
         src/config.cpp
