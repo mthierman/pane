@@ -93,8 +93,7 @@ auto get_argv(int argc, wchar_t** argv) -> std::vector<std::u16string> {
     args.reserve(argc);
 
     for (auto warg : std::span(argv, argc)) {
-        std::wstring buffer { warg };
-        args.emplace_back(buffer.begin(), buffer.end());
+        args.emplace_back(reinterpret_cast<char16_t*>(warg));
     }
 
     return args;
