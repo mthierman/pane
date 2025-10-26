@@ -118,21 +118,21 @@ auto get_argv() -> std::vector<std::u16string> {
     args.reserve(argc);
 
     for (auto warg : std::span(argv.get(), argc)) {
-        std::wstring buffer { warg };
-        args.emplace_back(buffer.begin(), buffer.end());
+        args.emplace_back(reinterpret_cast<char16_t*>(warg));
     }
 
     return args;
 }
 
 auto get_argv_u8() -> std::vector<std::u8string> {
-    auto argv { get_argv() };
+    int argc { 0 };
+    wil::unique_hlocal_ptr<wchar_t*[]> argv { CommandLineToArgvW(GetCommandLineW(), &argc) };
 
     std::vector<std::u8string> args;
-    args.reserve(argv.size());
+    args.reserve(argc);
 
-    for (auto& arg : argv) {
-        args.emplace_back(pane::to_utf8_lossy(arg));
+    for (auto warg : std::span(argv.get(), argc)) {
+        args.emplace_back(pane::to_utf8_lossy(warg));
     }
 
     return args;
