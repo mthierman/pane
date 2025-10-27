@@ -12,4 +12,5 @@ const commits = git_output
         return { commit, author, date, message };
     });
 
-console.log(JSON.stringify(commits, null, 2));
+console.log(commits);
+// console.log(JSON.stringify(commits, null, 2));

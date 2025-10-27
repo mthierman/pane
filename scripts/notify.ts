@@ -1,5 +1,6 @@
 import { Temporal } from "@js-temporal/polyfill";
 import { Octokit } from "@octokit/rest";
+import { execSync } from "node:child_process";
 import package_json from "../package.json" with { type: "json" };
 
 // https://docs.github.com/en/rest/guides/scripting-with-the-rest-api-and-javascript?apiVersion=2022-11-28
@@ -17,5 +18,14 @@ await octokit.repos.createDispatchEvent({
         symbol: "🪟",
         github: "https://github.com/mthierman/pane",
         download: "https://github.com/mthierman/pane/releases",
+        commits: execSync(`git log -5 --pretty=format:%h%x00%an%x00%aI%x00%s%x00`, {
+            encoding: "utf-8",
+        })
+            .split("\n")
+            .filter(Boolean)
+            .map((line) => {
+                const [commit, author, date, message] = line.split("\x00");
+                return { commit, author, date, message };
+            }),
     },
 });
