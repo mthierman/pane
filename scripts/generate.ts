@@ -1,12 +1,6 @@
-import { Intl, Temporal, toTemporalInstant } from "@js-temporal/polyfill";
-import { mkdir } from "fs";
+import { Temporal } from "@js-temporal/polyfill";
 import { writeFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
-import { fileURLToPath } from "node:url";
-
-const data = join(dirname(import.meta.dirname), "data");
-
-console.log(data);
 
 const config = {
     event_type: "pane-notify",
@@ -22,4 +16,5 @@ const config = {
     },
 };
 
-await writeFile(join(data, "dispatch.json"), JSON.stringify(config, null, 2), "utf8");
+const data = join(dirname(import.meta.dirname), "data");
+await writeFile(join(data, "dispatch.json"), JSON.stringify(config, null, 4), "utf8");
