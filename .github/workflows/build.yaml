@@ -38,12 +38,11 @@ jobs:
             ${{ github.workspace }}/build/_deps
           key: deps-${{ hashFiles('libs/CMakeLists.txt') }}
 
+      - run: |
+          cmake --preset default
+          cmake --build --preset release
+
       - env:
           GH_TOKEN: ${{ secrets.WEB }}
         run: |
-          $vswhere = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
-          $vspath = & $vswhere -products * -latest -property installationPath
-          & "$vspath\Common7\Tools\Launch-VsDevShell.ps1" -Arch amd64 -HostArch amd64 -SkipAutomaticLocation
-          cmake --preset default
-          cmake --build --preset release
           pnpm notify
