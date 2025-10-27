@@ -10,51 +10,51 @@ jobs:
         with:
           path: repo
 
+      - uses: actions/checkout@v5
+        with:
+          repository: mthierman/powershell-scripts
+          path: scripts
+
+      - uses: pnpm/action-setup@v4
+        with:
+          package_json_file: repo/package.json
+          run_install: |
+            - cwd: repo
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22.21.0
+          cache: pnpm
+          cache-dependency-path: repo/pnpm-lock.yaml
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: 3.14
+
+      - uses: astral-sh/setup-uv@v7
+        with:
+          working-directory: repo
+          python-version: 3.14
+          enable-cache: true
+
+      - run: |
+          uv tool install gersemi
+
+      - uses: actions/cache@v4
+        id: deps
+        with:
+          path: |
+            ${{ github.workspace }}/repo/build/_deps
+          key: deps-${{ hashFiles('repo/libs/CMakeLists.txt') }}
+
+      # - run: |
+      #     .\scripts\dev
+      #     Set-Location ${{ github.workspace }}/repo
+      #     cmake -S . -B build
+
       - env:
           GH_TOKEN: ${{ secrets.WEB }}
         run: |
           gh api repos/mthierman/mthierman.pages.dev/dispatches `
           --method POST `
           --input repo/dispatch.json
-
-      # - uses: actions/checkout@v5
-      #   with:
-      #     repository: mthierman/powershell-scripts
-      #     path: scripts
-
-      # - uses: pnpm/action-setup@v4
-      #   with:
-      #     package_json_file: repo/package.json
-      #     run_install: |
-      #       - cwd: repo
-
-      # - uses: actions/setup-node@v5
-      #   with:
-      #     node-version: 22.21.0
-      #     cache: pnpm
-      #     cache-dependency-path: repo/pnpm-lock.yaml
-
-      # - uses: actions/setup-python@v6
-      #   with:
-      #     python-version: 3.14
-
-      # - uses: astral-sh/setup-uv@v7
-      #   with:
-      #     working-directory: repo
-      #     python-version: 3.14
-      #     enable-cache: true
-
-      # - run: |
-      #     uv tool install gersemi
-
-      # - uses: actions/cache@v4
-      #   id: deps
-      #   with:
-      #     path: |
-      #       ${{ github.workspace }}/repo/build/_deps
-      #     key: deps-${{ hashFiles('repo/libs/CMakeLists.txt') }}
-
-      # - run: |
-      #     .\scripts\dev
-      #     Set-Location ${{ github.workspace }}/repo
-      #     cmake -S . -B build
