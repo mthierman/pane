@@ -10,7 +10,7 @@
         "./webview": "./pane/typescript/webview.ts"
     },
     "scripts": {
-        "generate": "node ./scripts/generate.ts",
+        "notify": "node ./scripts/notify.ts",
         "check": "tsc -b",
         "example:dev": "vite examples/webview/gui",
         "example:host": "vite examples/webview/gui --host",

@@ -1,10 +1,12 @@
 import { Temporal } from "@js-temporal/polyfill";
-import { writeFile } from "node:fs/promises";
+import { mkdir, writeFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import package_json from "../package.json" with { type: "json" };
 
-const config = {
-    event_type: "pane-notify",
+const event_type = "pane-notify";
+
+const event = {
+    event_type: event_type,
     client_payload: {
         name: package_json.name,
         version: package_json.version,
@@ -17,5 +19,8 @@ const config = {
     },
 };
 
-const data = join(dirname(import.meta.dirname), "data");
-await writeFile(join(data, "dispatch.json"), JSON.stringify(config, null, 4), "utf8");
+const build_dir = join(dirname(import.meta.dirname), "build");
+
+mkdir(build_dir, { recursive: true });
+
+await writeFile(join(build_dir, `${event_type}.json`), JSON.stringify(event, null, 4), "utf8");

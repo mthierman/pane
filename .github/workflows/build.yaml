@@ -47,10 +47,11 @@ jobs:
             ${{ github.workspace }}/repo/build/_deps
           key: deps-${{ hashFiles('repo/libs/CMakeLists.txt') }}
 
-      # - run: |
-      #     .\scripts\dev
-      #     Set-Location ${{ github.workspace }}/repo
-      #     cmake -S . -B build
+      - run: |
+          .\scripts\dev
+          Set-Location ${{ github.workspace }}/repo
+          cmake -S . -B build
+          pnpm generate
 
       - env:
           GH_TOKEN: ${{ secrets.WEB }}
