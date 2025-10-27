@@ -1,5 +1,7 @@
 # https://til.simonwillison.net/jq/git-log-json
 
+Get-ChildItem
+
 # if (-not (Test-Path "build/generated"))
 # {
 #   New-Item -ItemType Directory -Path "build/generated" | Out-Null
