@@ -5,12 +5,17 @@ on:
 jobs:
   build:
     runs-on: windows-latest
-    env:
-      GH_TOKEN: ${{ secrets.WEB }}
     steps:
       - uses: actions/checkout@v5
         with:
           path: repo
+
+      - env:
+          GH_TOKEN: ${{ secrets.WEB }}
+        run: |
+          gh api repos/mthierman/mthierman.pages.dev/dispatches `
+          --method POST `
+          --input repo/dispatch.json
 
       # - uses: actions/checkout@v5
       #   with:
@@ -53,8 +58,3 @@ jobs:
       #     .\scripts\dev
       #     Set-Location ${{ github.workspace }}/repo
       #     cmake -S . -B build
-
-      - run: |
-          gh api repos/mthierman/mthierman.pages.dev/dispatches `
-          --method POST `
-          --input repo/dispatch.json
