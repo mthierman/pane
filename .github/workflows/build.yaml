@@ -51,7 +51,7 @@ jobs:
           .\scripts\dev
           Set-Location ${{ github.workspace }}/repo
           cmake -S . -B build
-          pnpm generate
+          pnpm notify
 
       - env:
           GH_TOKEN: ${{ secrets.WEB }}
