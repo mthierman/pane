@@ -16,6 +16,7 @@
         "url": "https://github.com/mthierman/pane.git"
     },
     "pane": {
+        "owner": "mthierman",
         "web_repo": "mthierman.pages.dev",
         "releases": "https://github.com/mthierman/pane/releases",
         "event_types": {

@@ -6,7 +6,7 @@ import package_json from "../package.json" with { type: "json" };
 // https://docs.github.com/en/rest/guides/scripting-with-the-rest-api-and-javascript?apiVersion=2022-11-28
 const octokit = new Octokit({ auth: process.env.GH_TOKEN });
 await octokit.repos.createDispatchEvent({
-    owner: package_json.author,
+    owner: package_json.pane.owner,
     repo: package_json.pane.web_repo,
     event_type: package_json.pane.event_types.notify,
     client_payload: {
