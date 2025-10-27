@@ -1,7 +1,0 @@
-{
-    "event_type": "pane-notify",
-    "client_payload": {
-        "name": "pane",
-        "version": "0.0.0"
-    }
-}
