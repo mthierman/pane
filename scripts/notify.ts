@@ -6,9 +6,9 @@ import package_json from "../package.json" with { type: "json" };
 // https://docs.github.com/en/rest/guides/scripting-with-the-rest-api-and-javascript?apiVersion=2022-11-28
 const octokit = new Octokit({ auth: process.env.GH_TOKEN });
 await octokit.repos.createDispatchEvent({
-    owner: "mthierman",
-    repo: "mthierman.pages.dev",
-    event_type: "pane-notify",
+    owner: package_json.author,
+    repo: package_json.pane.web_repo,
+    event_type: package_json.pane.event_types.notify,
     client_payload: {
         name: package_json.name,
         version: package_json.version,
@@ -16,8 +16,8 @@ await octokit.repos.createDispatchEvent({
         date: Temporal.Now.plainDateTimeISO(),
         hash: "a4d0cb71-cdee-48c0-bfd4-4dedbb007027",
         symbol: "🪟",
-        github: "https://github.com/mthierman/pane",
-        download: "https://github.com/mthierman/pane/releases",
+        github: package_json.homepage,
+        download: package_json.pane.releases,
         commits: execSync(`git log -5 --pretty=format:%h%x00%an%x00%aI%x00%s%x00`, {
             encoding: "utf-8",
         })
