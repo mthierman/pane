@@ -47,15 +47,13 @@ jobs:
             ${{ github.workspace }}/repo/build/_deps
           key: deps-${{ hashFiles('repo/libs/CMakeLists.txt') }}
 
-      - working-directory: repo
+      - env:
+          GH_TOKEN: ${{ secrets.WEB }}
+        working-directory: repo
         run: |
           .\scripts\dev
           cmake -S . -B build
           pnpm notify
-
-      - env:
-          GH_TOKEN: ${{ secrets.WEB }}
-        run: |
           gh api repos/mthierman/mthierman.pages.dev/dispatches `
           --method POST `
           --input repo/build/pane-notify.json
