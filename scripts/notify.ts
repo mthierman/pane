@@ -3,8 +3,10 @@ import { mkdir, writeFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import package_json from "../package.json" with { type: "json" };
 
+// https://docs.github.com/en/rest/guides/scripting-with-the-rest-api-and-javascript?apiVersion=2022-11-28
+const build_dir = join(dirname(import.meta.dirname), "build");
+mkdir(build_dir, { recursive: true });
 const event_type = "pane-notify";
-
 const event = {
     event_type: event_type,
     client_payload: {
@@ -18,9 +20,4 @@ const event = {
         download: "https://github.com/mthierman/pane/releases",
     },
 };
-
-const build_dir = join(dirname(import.meta.dirname), "build");
-
-mkdir(build_dir, { recursive: true });
-
 await writeFile(join(build_dir, `${event_type}.json`), JSON.stringify(event, null, 4), "utf8");
