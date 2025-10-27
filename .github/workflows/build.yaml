@@ -56,8 +56,8 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          name: project-json
-          path: ${{ github.workspace }}/repo/build/pane/generated/pane/project.json
+          name: package-json
+          path: ${{ github.workspace }}/repo/package.json
 
   notify:
     needs: [build]
@@ -65,7 +65,7 @@ jobs:
     steps:
       - uses: actions/download-artifact@v5
         with:
-          name: project-json
+          name: package-json
 
       - run: |
           ./scripts/jq.ps1
@@ -75,4 +75,4 @@ jobs:
         run: |
           gh api repos/mthierman/mthierman.pages.dev/dispatches \
           --method POST \
-          --input project.json
+          --input package.json
