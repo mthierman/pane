@@ -54,6 +54,3 @@ jobs:
           ..\scripts\dev
           cmake -S . -B build
           pnpm notify
-          gh api repos/mthierman/mthierman.pages.dev/dispatches `
-          --method POST `
-          --input repo/build/pane-notify.json
