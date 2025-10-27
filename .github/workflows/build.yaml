@@ -1,8 +1,7 @@
 on:
   workflow_dispatch:
   push:
-    branches:
-      - main
+    branches: [main]
 
 jobs:
   build:
@@ -25,18 +24,18 @@ jobs:
 
       - uses: actions/setup-node@v5
         with:
-          node-version: 22.20.0
+          node-version: 22.21.0
           cache: pnpm
           cache-dependency-path: repo/pnpm-lock.yaml
 
       - uses: actions/setup-python@v6
         with:
-          python-version: 3.13
+          python-version: 3.14
 
       - uses: astral-sh/setup-uv@v7
         with:
           working-directory: repo
-          python-version: 3.13
+          python-version: 3.14
           enable-cache: true
 
       - run: |
@@ -47,7 +46,7 @@ jobs:
         with:
           path: |
             ${{ github.workspace }}/repo/build/_deps
-          key: deps-${{ hashFiles('repo/pane/libs/CMakeLists.txt') }}
+          key: deps-${{ hashFiles('repo/libs/CMakeLists.txt') }}
 
       - run: |
           .\scripts\dev
