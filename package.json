@@ -19,8 +19,8 @@
         "url": "https://github.com/mthierman/pane.git"
     },
     "exports": {
-        ".": "./pane/typescript/index.ts",
-        "./webview": "./pane/typescript/webview.ts"
+        ".": "./src/index.ts",
+        "./webview": "./src/webview.ts"
     },
     "scripts": {
         "notify": "node ./scripts/notify.ts",
