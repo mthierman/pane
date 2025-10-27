@@ -52,7 +52,8 @@ jobs:
           Set-Location ${{ github.workspace }}/repo
           cmake -S . -B build
 
-      - env:
+      - name: notify
+        env:
           GH_TOKEN: ${{ secrets.WEB }}
         run: |
           gh api repos/mthierman/mthierman.pages.dev/dispatches `
