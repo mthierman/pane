@@ -83,7 +83,7 @@ auto to_utf8_lossy(std::wstring_view string) -> std::u8string {
 }
 
 // https://learn.microsoft.com/en-us/cpp/c-language/using-wmain
-auto wmain(int argc, wchar_t** argv, wchar_t** /* envp */) -> int {
+auto wmain(int argc, wchar_t* argv[], [[maybe_unused]] wchar_t* envp[]) -> int {
     // auto args { pane::system::get_argv_u8(argc, argv) };
 
     std::vector<std::u8string> args;
