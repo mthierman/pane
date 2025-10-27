@@ -5,7 +5,7 @@ on:
     branches: [main]
 
 jobs:
-  build:
+  release:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v5
@@ -19,15 +19,15 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version: "25"
-          cache: pnpm
+          cache: "pnpm"
 
       - uses: actions/setup-python@v6
         with:
-          python-version: 3.14
+          python-version: "3.14"
 
       - uses: astral-sh/setup-uv@v7
         with:
-          python-version: 3.14
+          python-version: "3.14"
           enable-cache: true
 
       - run: |
@@ -37,8 +37,8 @@ jobs:
         id: deps
         with:
           path: |
-            ${{ github.workspace }}/build/_deps
-          key: deps-${{ hashFiles('libs/CMakeLists.txt') }}
+            "${{ github.workspace }}/build/_deps"
+          key: "deps-${{ hashFiles('libs/CMakeLists.txt') }}"
 
       - run: |
           cmake --preset default
