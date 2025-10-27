@@ -15,7 +15,7 @@
 #include <pane/message_window.hpp>
 #include <pane/print.hpp>
 #include <pane/process.hpp>
-#include <pane/project.hpp>
+// #include <pane/project.hpp>
 // #include <pane/string.hpp>
 #include <pane/system.hpp>
 #include <pane/text.hpp>
