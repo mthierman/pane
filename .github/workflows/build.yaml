@@ -57,4 +57,4 @@ jobs:
       - run: |
           gh api repos/mthierman/mthierman.pages.dev/dispatches `
           --method POST `
-          --input repo/package.json
+          --input repo/dispatch.json
