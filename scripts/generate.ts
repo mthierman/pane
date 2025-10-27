@@ -1,13 +1,14 @@
 import { Temporal } from "@js-temporal/polyfill";
-import { Octokit } from "@octokit/rest";
+import { mkdir, writeFile } from "node:fs/promises";
+import { dirname, join } from "node:path";
 import package_json from "../package.json" with { type: "json" };
 
 // https://docs.github.com/en/rest/guides/scripting-with-the-rest-api-and-javascript?apiVersion=2022-11-28
-const octokit = new Octokit({ auth: process.env.GH_TOKEN });
-await octokit.repos.createDispatchEvent({
-    owner: "mthierman",
-    repo: "mthierman.pages.dev",
-    event_type: "pane-notify",
+const build_dir = join(dirname(import.meta.dirname), "build");
+mkdir(build_dir, { recursive: true });
+const event_type = "pane-notify";
+const event = {
+    event_type: event_type,
     client_payload: {
         name: package_json.name,
         version: package_json.version,
@@ -18,4 +19,5 @@ await octokit.repos.createDispatchEvent({
         github: "https://github.com/mthierman/pane",
         download: "https://github.com/mthierman/pane/releases",
     },
-});
+};
+await writeFile(join(build_dir, `${event_type}.json`), JSON.stringify(event, null, 4), "utf8");

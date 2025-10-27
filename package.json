@@ -11,6 +11,7 @@
     },
     "scripts": {
         "notify": "node ./scripts/notify.ts",
+        "generate": "node ./scripts/generate.ts",
         "check": "tsc -b",
         "example:dev": "vite examples/webview/gui",
         "example:host": "vite examples/webview/gui --host",
@@ -20,7 +21,9 @@
     },
     "devDependencies": {
         "@js-temporal/polyfill": "^0.5.1",
+        "@octokit/rest": "^22.0.0",
         "@types/node": "^24.9.1",
+        "octokit": "^5.0.4",
         "prettier": "^3.6.2",
         "typescript": "^5.9.3",
         "vite": "^7.1.12",
