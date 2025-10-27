@@ -1,26 +1,26 @@
 {
     "name": "pane",
-    "author": "mthierman",
-    "private": true,
-    "version": "0.0.0",
     "description": "C++ library for Windows",
-    "type": "module",
+    "version": "0.0.0",
+    "author": "mthierman",
     "packageManager": "pnpm@10.19.0",
-    "pane": {
-        "web_repo": "mthierman.pages.dev",
-        "releases": "https://github.com/mthierman/pane/releases",
-        "event_types": {
-            "notify": "pane-notify"
-        }
+    "private": true,
+    "type": "module",
+    "exports": {
+        ".": "./src/index.ts",
+        "./webview": "./src/webview.ts"
     },
     "homepage": "https://github.com/mthierman/pane",
     "repository": {
         "type": "git",
         "url": "https://github.com/mthierman/pane.git"
     },
-    "exports": {
-        ".": "./src/index.ts",
-        "./webview": "./src/webview.ts"
+    "pane": {
+        "web_repo": "mthierman.pages.dev",
+        "releases": "https://github.com/mthierman/pane/releases",
+        "event_types": {
+            "notify": "pane-notify"
+        }
     },
     "scripts": {
         "notify": "node ./scripts/notify.ts",
