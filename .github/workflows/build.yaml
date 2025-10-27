@@ -8,25 +8,16 @@ jobs:
     steps:
       - uses: actions/checkout@v5
         with:
-          path: repo
           fetch-depth: 5
-
-      - uses: actions/checkout@v5
-        with:
-          repository: mthierman/powershell-scripts
-          path: scripts
 
       - uses: pnpm/action-setup@v4
         with:
-          package_json_file: repo/package.json
-          run_install: |
-            - cwd: repo
+          run_install: true
 
       - uses: actions/setup-node@v6
         with:
           node-version: "25"
           cache: pnpm
-          cache-dependency-path: repo/pnpm-lock.yaml
 
       - uses: actions/setup-python@v6
         with:
@@ -34,7 +25,6 @@ jobs:
 
       - uses: astral-sh/setup-uv@v7
         with:
-          working-directory: repo
           python-version: 3.14
           enable-cache: true
 
@@ -45,14 +35,15 @@ jobs:
         id: deps
         with:
           path: |
-            ${{ github.workspace }}/repo/build/_deps
-          key: deps-${{ hashFiles('repo/libs/CMakeLists.txt') }}
+            ${{ github.workspace }}/build/_deps
+          key: deps-${{ hashFiles('libs/CMakeLists.txt') }}
 
       - env:
           GH_TOKEN: ${{ secrets.WEB }}
-        working-directory: repo
         run: |
-          ..\scripts\dev
+          $vswhere = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
+          $vspath = & $vswhere -products * -latest -property installationPath
+          & "$vspath\Common7\Tools\Launch-VsDevShell.ps1" -Arch amd64 -HostArch amd64 -SkipAutomaticLocation
           cmake --preset default
           cmake --build --preset release
           pnpm notify
