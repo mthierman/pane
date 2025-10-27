@@ -55,6 +55,6 @@ jobs:
       - env:
           GITHUB_TOKEN: ${{ secrets.WEB }}
         run: |
-          gh api repos/mthierman/mthierman.pages.dev/dispatches \
-          --method POST \
+          gh api repos/mthierman/mthierman.pages.dev/dispatches `
+          --method POST `
           --input package.json
