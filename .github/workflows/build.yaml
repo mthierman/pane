@@ -47,9 +47,9 @@ jobs:
             ${{ github.workspace }}/repo/build/_deps
           key: deps-${{ hashFiles('repo/libs/CMakeLists.txt') }}
 
-      - run: |
+      - working-directory: repo
+        run: |
           .\scripts\dev
-          Set-Location ${{ github.workspace }}/repo
           cmake -S . -B build
           pnpm notify
 
@@ -58,4 +58,4 @@ jobs:
         run: |
           gh api repos/mthierman/mthierman.pages.dev/dispatches `
           --method POST `
-          --input repo/dispatch.json
+          --input repo/build/pane-notify.json
