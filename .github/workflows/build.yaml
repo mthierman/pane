@@ -53,7 +53,7 @@ jobs:
           cmake -S . -B build
 
       - env:
-          GITHUB_TOKEN: ${{ secrets.WEB }}
+          GH_TOKEN: ${{ secrets.WEB }}
         run: |
           gh api repos/mthierman/mthierman.pages.dev/dispatches `
           --method POST `
