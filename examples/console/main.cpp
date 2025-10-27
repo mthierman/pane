@@ -1,11 +1,119 @@
-#include <pane/pane.hpp>
+// #include <pane/pane.hpp>
+
+#include <Windows.h>
+#include <icu.h>
 #include <cstdlib>
 #include <print>
 #include <ranges>
+#include <vector>
+#include <string>
+
+namespace std {
+template <> struct formatter<std::u8string_view> : formatter<string_view> {
+    auto format(std::u8string_view string, format_context& context) const noexcept {
+        return formatter<string_view>::format(
+            std::string_view { reinterpret_cast<const char*>(string.data()), string.length() },
+            context);
+    }
+};
+
+template <size_t size> struct formatter<char8_t[size]> : formatter<u8string_view> {
+    auto format(const char8_t* string, format_context& context) const noexcept {
+        return formatter<u8string_view>::format(std::u8string_view { string, (size - 1) }, context);
+    }
+};
+
+template <> struct formatter<const char8_t*> : formatter<u8string_view> {
+    auto format(const char8_t* string, format_context& context) const noexcept {
+        return formatter<u8string_view>::format(std::u8string_view { string }, context);
+    }
+};
+
+template <> struct formatter<std::u8string> : formatter<u8string_view> {
+    auto format(const std::u8string& string, format_context& context) const noexcept {
+        return formatter<u8string_view>::format(
+            std::u8string_view { string.data(), string.length() }, context);
+    }
+};
+
+template <> struct formatter<std::u16string_view, wchar_t> : formatter<wstring_view, wchar_t> {
+    auto format(std::u16string_view string, wformat_context& context) const {
+        return formatter<wstring_view, wchar_t>::format(
+            std::wstring_view { reinterpret_cast<const wchar_t*>(string.data()), string.length() },
+            context);
+    }
+};
+
+template <size_t size>
+struct formatter<char16_t[size], wchar_t> : formatter<u16string_view, wchar_t> {
+    auto format(const char16_t* string, wformat_context& context) const {
+        return formatter<u16string_view, wchar_t>::format(
+            std::u16string_view { string, (size - 1) }, context);
+    }
+};
+
+template <> struct formatter<const char16_t*, wchar_t> : formatter<u16string_view, wchar_t> {
+    auto format(const char16_t* string, wformat_context& context) const noexcept {
+        return formatter<u16string_view, wchar_t>::format(std::u16string_view { string }, context);
+    }
+};
+
+template <> struct formatter<std::u16string, wchar_t> : formatter<u16string_view, wchar_t> {
+    auto format(const std::u16string& string, wformat_context& context) const {
+        return formatter<u16string_view, wchar_t>::format(
+            std::u16string_view { string.data(), string.length() }, context);
+    }
+};
+} // namespace std
+
+auto as_u16string_view(std::wstring_view string) -> std::u16string_view {
+    return std::u16string_view { reinterpret_cast<const char16_t*>(string.data()),
+                                 string.length() };
+}
+
+auto to_utf8_lossy(std::u16string_view string) -> std::u8string {
+    int32_t required_length { 0 };
+    auto error_code { U_ZERO_ERROR };
+
+    [[maybe_unused]] auto result { u_strToUTF8WithSub(nullptr,
+                                                      0,
+                                                      &required_length,
+                                                      string.data(),
+                                                      string.length(),
+                                                      0xFFFD,
+                                                      nullptr,
+                                                      &error_code) };
+
+    int32_t actual_length { 0 };
+    std::u8string buffer(required_length, 0);
+    error_code = U_ZERO_ERROR;
+
+    result = u_strToUTF8WithSub(reinterpret_cast<char*>(buffer.data()),
+                                buffer.length(),
+                                &actual_length,
+                                string.data(),
+                                string.length(),
+                                0xFFFD,
+                                nullptr,
+                                &error_code);
+
+    return buffer;
+}
+
+auto to_utf8_lossy(std::wstring_view string) -> std::u8string {
+    return to_utf8_lossy(as_u16string_view(string));
+}
 
 // https://learn.microsoft.com/en-us/cpp/c-language/using-wmain
 auto wmain(int argc, wchar_t** argv, wchar_t** /* envp */) -> int {
-    auto args { pane::system::get_argv_u8(argc, argv) };
+    // auto args { pane::system::get_argv_u8(argc, argv) };
+
+    std::vector<std::u8string> args;
+    args.reserve(argc);
+
+    for (auto warg : std::span(argv, argc)) {
+        args.emplace_back(to_utf8_lossy(warg));
+    }
 
     for (auto [idx, arg] : std::views::enumerate(args)) {
         std::println("{}: {}", idx, arg);
