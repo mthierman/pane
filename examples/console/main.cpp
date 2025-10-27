@@ -66,10 +66,8 @@ template <> struct formatter<std::u16string, wchar_t> : formatter<u16string_view
 auto to_utf8_lossy(std::wstring_view string) -> std::u8string {
     auto length { WideCharToMultiByte(
         CP_UTF8, 0, string.data(), string.size(), nullptr, 0, nullptr, nullptr) };
-
     std::u8string buffer;
     buffer.resize(length);
-
     WideCharToMultiByte(CP_UTF8,
                         0,
                         string.data(),
