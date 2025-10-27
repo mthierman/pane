@@ -10,7 +10,7 @@ set_target_properties(
 )
 
 # target_link_libraries(console PRIVATE pane::pane)
-target_link_libraries(console PRIVATE icu)
+# target_link_libraries(console PRIVATE icu)
 # target_link_libraries(
 #     pane
 #     PUBLIC

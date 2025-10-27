@@ -1,7 +1,6 @@
 // #include <pane/pane.hpp>
 
 #include <Windows.h>
-#include <icu.h>
 #include <cstdlib>
 #include <print>
 #include <ranges>
@@ -66,42 +65,23 @@ template <> struct formatter<std::u16string, wchar_t> : formatter<u16string_view
 };
 } // namespace std
 
-auto as_u16string_view(std::wstring_view string) -> std::u16string_view {
-    return std::u16string_view { reinterpret_cast<const char16_t*>(string.data()),
-                                 string.length() };
-}
+auto to_utf8_lossy(std::wstring_view string) -> std::u8string {
+    auto length { WideCharToMultiByte(
+        CP_UTF8, 0, string.data(), string.size(), nullptr, 0, nullptr, nullptr) };
 
-auto to_utf8_lossy(std::u16string_view string) -> std::u8string {
-    int32_t required_length { 0 };
-    auto error_code { U_ZERO_ERROR };
+    std::u8string buffer;
+    buffer.resize(length);
 
-    [[maybe_unused]] auto result { u_strToUTF8WithSub(nullptr,
-                                                      0,
-                                                      &required_length,
-                                                      string.data(),
-                                                      string.length(),
-                                                      0xFFFD,
-                                                      nullptr,
-                                                      &error_code) };
-
-    int32_t actual_length { 0 };
-    std::u8string buffer(required_length, 0);
-    error_code = U_ZERO_ERROR;
-
-    result = u_strToUTF8WithSub(reinterpret_cast<char*>(buffer.data()),
-                                buffer.length(),
-                                &actual_length,
-                                string.data(),
-                                string.length(),
-                                0xFFFD,
-                                nullptr,
-                                &error_code);
+    WideCharToMultiByte(CP_UTF8,
+                        0,
+                        string.data(),
+                        string.size(),
+                        reinterpret_cast<char*>(buffer.data()),
+                        length,
+                        nullptr,
+                        nullptr);
 
     return buffer;
-}
-
-auto to_utf8_lossy(std::wstring_view string) -> std::u8string {
-    return to_utf8_lossy(as_u16string_view(string));
 }
 
 // https://learn.microsoft.com/en-us/cpp/c-language/using-wmain
