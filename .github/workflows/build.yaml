@@ -13,7 +13,9 @@ jobs:
       - env:
           GH_TOKEN: ${{ secrets.WEB }}
         run: |
-          gh api repos/mthierman/mthierman.pages.dev/dispatches --method POST --input repo/dispatch.json
+          gh api repos/mthierman/mthierman.pages.dev/dispatches `
+          --method POST `
+          --input repo/dispatch.json
 
       # - uses: actions/checkout@v5
       #   with:
