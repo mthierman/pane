@@ -87,25 +87,25 @@
             "name": "msbuild-msvc-debug",
             "inherits": ["msbuild-options"],
             "configuration": "Debug",
-            "configurePreset": "msvc"
+            "configurePreset": "msbuild-msvc"
         },
         {
             "name": "msbuild-msvc-release",
             "inherits": ["msbuild-options"],
             "configuration": "Release",
-            "configurePreset": "msvc"
+            "configurePreset": "msbuild-msvc"
         },
         {
             "name": "msbuild-clangcl-debug",
             "inherits": ["msbuild-options"],
             "configuration": "Debug",
-            "configurePreset": "clangcl"
+            "configurePreset": "msbuild-clangcl"
         },
         {
             "name": "msbuild-clangcl-release",
             "inherits": ["msbuild-options"],
             "configuration": "Release",
-            "configurePreset": "clangcl"
+            "configurePreset": "msbuild-clangcl"
         },
         {
             "name": "ninja-msvc-debug",
