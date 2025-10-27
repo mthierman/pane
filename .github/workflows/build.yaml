@@ -53,5 +53,6 @@ jobs:
         working-directory: repo
         run: |
           ..\scripts\dev
-          cmake -S . -B build
+          cmake --preset default
+          cmake --build --preset release
           pnpm notify

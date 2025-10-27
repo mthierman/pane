@@ -8,16 +8,6 @@
     },
     "configurePresets": [
         {
-            "name": "unity",
-            "hidden": true,
-            "cacheVariables": {
-                "CMAKE_UNITY_BUILD": {
-                    "type": "BOOL",
-                    "value": "ON"
-                }
-            }
-        },
-        {
             "name": "msbuild",
             "hidden": true,
             "generator": "Visual Studio 17 2022",
@@ -32,6 +22,16 @@
             "hidden": true,
             "generator": "Ninja Multi-Config",
             "binaryDir": "${sourceDir}/build"
+        },
+        {
+            "name": "unity",
+            "hidden": true,
+            "cacheVariables": {
+                "CMAKE_UNITY_BUILD": {
+                    "type": "BOOL",
+                    "value": "ON"
+                }
+            }
         },
         {
             "name": "msbuild-msvc",
@@ -72,9 +72,23 @@
                 "CMAKE_C_COMPILER": "clang",
                 "CMAKE_CXX_COMPILER": "clang++"
             }
+        },
+        {
+            "name": "default",
+            "inherits": ["ninja-clang"]
         }
     ],
     "buildPresets": [
+        {
+            "name": "debug",
+            "configuration": "Debug",
+            "configurePreset": "default"
+        },
+        {
+            "name": "release",
+            "configuration": "Release",
+            "configurePreset": "default"
+        },
         {
             "name": "msbuild-options",
             "hidden": true,
