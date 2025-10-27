@@ -65,9 +65,6 @@ jobs:
         with:
           name: package-json
 
-      - run: |
-          ./scripts/jq.ps1
-
       - env:
           GITHUB_TOKEN: ${{ secrets.WEB }}
         run: |
