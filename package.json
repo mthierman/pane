@@ -1,5 +1,6 @@
 {
     "name": "pane",
+    "event_type": "pane-notify",
     "private": true,
     "version": "0.0.0",
     "type": "module",
