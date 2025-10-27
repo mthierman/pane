@@ -51,7 +51,7 @@ jobs:
           GH_TOKEN: ${{ secrets.WEB }}
         working-directory: repo
         run: |
-          .\scripts\dev
+          ..\scripts\dev
           cmake -S . -B build
           pnpm notify
           gh api repos/mthierman/mthierman.pages.dev/dispatches `
