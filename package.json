@@ -11,8 +11,6 @@
     },
     "scripts": {
         "notify": "node ./scripts/notify.ts",
-        "jq": "node ./scripts/jq.ts",
-        "generate": "node ./scripts/generate.ts",
         "check": "tsc -b",
         "example:dev": "vite examples/webview/gui",
         "example:host": "vite examples/webview/gui --host",
