@@ -1,3 +1,4 @@
+import { Intl, Temporal, toTemporalInstant } from "@js-temporal/polyfill";
 import { mkdir } from "fs";
 import { writeFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
@@ -13,7 +14,7 @@ const config = {
         name: "pane",
         version: "0.0.0",
         description: "C++ library for Windows",
-        date: "10/07/24 20:59:51",
+        date: Temporal.Now.plainDateTimeISO(),
         hash: "a4d0cb71-cdee-48c0-bfd4-4dedbb007027",
         symbol: "🪟",
         github: "https://github.com/mthierman/pane",
