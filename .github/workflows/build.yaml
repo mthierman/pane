@@ -53,8 +53,6 @@ jobs:
           cmake -S . -B build
 
       - name: notify
-        env:
-          GH_TOKEN: ${{ secrets.WEB }}
         run: |
           gh api repos/mthierman/mthierman.pages.dev/dispatches `
           --method POST `
