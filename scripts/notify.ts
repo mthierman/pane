@@ -1,6 +1,6 @@
 import { Temporal } from "@js-temporal/polyfill";
 import { Octokit } from "@octokit/rest";
-import { execSync } from "node:child_process";
+import { spawnSync } from "node:child_process";
 import package_json from "../package.json" with { type: "json" };
 
 const client_payload = {
@@ -8,14 +8,14 @@ const client_payload = {
     version: package_json.version,
     description: package_json.description,
     date: Temporal.Now.plainDateTimeISO().toString(),
-    hash: execSync(`git rev-parse HEAD`, { encoding: "utf-8" }).trim(),
+    hash: spawnSync("git", ["rev-parse", "HEAD"], { encoding: "utf-8" }).stdout.trim(),
     symbol: "🪟",
     github: package_json.homepage,
     download: package_json.pane.releases,
-    commits: execSync(`git log -5 --pretty=format:%h%x00%an%x00%aI%x00%s%x00`, {
+    commits: spawnSync("git", ["log", "-5", "--pretty=format:%h%x00%an%x00%aI%x00%s%x00"], {
         encoding: "utf-8",
     })
-        .split("\n")
+        .stdout.split("\n")
         .filter(Boolean)
         .map((line) => {
             const [commit, author, date, message] = line.split("\x00");
