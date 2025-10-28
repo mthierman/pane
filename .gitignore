@@ -6,3 +6,4 @@ node_modules
 packages
 
 CMakeUserPresets.json
+compile_commands.json
