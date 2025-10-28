@@ -41,8 +41,7 @@ jobs:
           key: "deps-${{ hashFiles('libs/CMakeLists.txt') }}"
 
       - run: |
-          cmake --preset release
-          cmake --build --preset release
+          pnpm cmake-release
 
       - env:
           GH_TOKEN: ${{ secrets.WEB }}

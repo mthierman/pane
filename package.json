@@ -24,6 +24,8 @@
         }
     },
     "scripts": {
+        "cmake-debug": "cmake --preset debug && cmake --build --preset debug",
+        "cmake-release": "cmake --preset release && cmake --build --preset release",
         "notify": "node ./scripts/notify.ts",
         "check": "tsc -b",
         "example:dev": "vite examples/webview/gui",
