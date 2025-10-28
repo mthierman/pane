@@ -17,6 +17,7 @@
     },
     "pane": {
         "owner": "mthierman",
+        "repo": "https://github.com/mthierman/pane",
         "web_repo": "mthierman.pages.dev",
         "releases": "https://github.com/mthierman/pane/releases",
         "event_types": {
@@ -26,7 +27,7 @@
     "scripts": {
         "cmake-debug": "cmake --preset debug && cmake --build --preset debug",
         "cmake-release": "cmake --preset release && cmake --build --preset release",
-        "notify": "node ./scripts/notify.ts",
+        "notify": "node --harmony-temporal ./scripts/notify.ts",
         "check": "tsc -b",
         "example:dev": "vite examples/webview/gui",
         "example:host": "vite examples/webview/gui --host",
