@@ -44,5 +44,10 @@ jobs:
 
       - env:
           GH_TOKEN: ${{ secrets.WEB }}
-        run: |
-          pnpm notify
+        uses: mthierman/github-actions/notify-web@main
+        with:
+          name: "pane"
+          description: "C++ library for Windows"
+          version: "0.0.0"
+          repo: "https://github.com/mthierman/pane.git"
+          event_type: "pane-notify"
