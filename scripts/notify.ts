@@ -24,7 +24,7 @@ const client_payload = {
 };
 
 // https://docs.github.com/en/rest/guides/scripting-with-the-rest-api-and-javascript?apiVersion=2022-11-28
-if (process.env.GH_TOKEN) {
+if (process.env.CI) {
     const octokit = new Octokit({ auth: process.env.GH_TOKEN });
     await octokit.repos.createDispatchEvent({
         owner: package_json.pane.owner,
