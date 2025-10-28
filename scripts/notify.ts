@@ -33,5 +33,11 @@ if (process.env.CI) {
         client_payload: client_payload,
     });
 } else {
-    console.log(client_payload);
+    console.dir(
+        {
+            event_type: package_json.pane.event_types.notify,
+            client_payload: client_payload,
+        },
+        { depth: null },
+    );
 }
