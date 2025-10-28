@@ -14,7 +14,7 @@ await octokit.repos.createDispatchEvent({
         version: package_json.version,
         description: package_json.description,
         date: Temporal.Now.plainDateTimeISO(),
-        hash: "a4d0cb71-cdee-48c0-bfd4-4dedbb007027",
+        hash: execSync(`git rev-parse HEAD`, { encoding: "utf-8" }),
         symbol: "🪟",
         github: package_json.homepage,
         download: package_json.pane.releases,

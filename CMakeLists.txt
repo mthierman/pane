@@ -10,8 +10,6 @@ endif()
 
 add_subdirectory(libs)
 
-# add_subdirectory(tasks)
-
 add_library(pane)
 
 add_library(pane::pane ALIAS pane)
@@ -101,34 +99,8 @@ target_link_options(
         >
 )
 
-# string(TIMESTAMP PROJECT_DATE "%m/%d/%y %H:%M:%S")
-
-# execute_process(
-#     COMMAND git rev-parse HEAD
-#     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-#     OUTPUT_VARIABLE PROJECT_GIT_HASH
-#     OUTPUT_STRIP_TRAILING_WHITESPACE
-# )
-
-# set(PROJECT_SYMBOL "🪟")
-
-# configure_file(
-#     ${CMAKE_CURRENT_LIST_DIR}/generated/project.hpp.in
-#     ${CMAKE_CURRENT_BINARY_DIR}/generated/pane/project.hpp
-#     @ONLY
-# )
-
-# configure_file(
-#     ${CMAKE_CURRENT_LIST_DIR}/generated/project.json.in
-#     ${CMAKE_CURRENT_BINARY_DIR}/generated/pane/project.json
-#     @ONLY
-# )
-
 if(PROJECT_IS_TOP_LEVEL)
-    if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
-        set_property(CACHE CMAKE_INSTALL_PREFIX PROPERTY VALUE "C:/Programs")
-    endif()
-
+    # add_subdirectory(tasks)
     add_subdirectory(apps)
     add_subdirectory(examples)
 endif()
