@@ -1,6 +1,6 @@
 .vscode
 .wix
-build
+build*/
 dist
 node_modules
 packages

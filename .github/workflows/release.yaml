@@ -41,7 +41,7 @@ jobs:
           key: "deps-${{ hashFiles('libs/CMakeLists.txt') }}"
 
       - run: |
-          cmake --preset default
+          cmake --preset release
           cmake --build --preset release
 
       - env:
