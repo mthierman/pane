@@ -9,13 +9,13 @@ struct webview : pane::webview<webview> {
         auto args { pane::system::get_argv_u8() };
         std::optional<std::u8string> home_page { std::nullopt };
 
-        // if (args.size() == 2) {
-        //     if (args.at(1).starts_with(u8"https://")) {
-        //         home_page = args.at(1);
-        //     } else {
-        //         home_page = args.at(1).insert(0, u8"https://");
-        //     }
-        // }
+        if (args.size() == 2) {
+            if (args.at(1).starts_with(u8"https://")) {
+                home_page = args.at(1);
+            } else {
+                home_page = args.at(1).insert(0, u8"https://");
+            }
+        }
 
         std::filesystem::path browser_data;
         auto local_app_data { pane::filesystem::known_folder() };
