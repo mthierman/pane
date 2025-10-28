@@ -100,8 +100,8 @@ target_link_options(
 )
 
 if(PROJECT_IS_TOP_LEVEL)
-    # include(download_vc_redist)
-    # include(install_wix)
-    # add_subdirectory(apps)
-    # add_subdirectory(examples)
+    include(download_vc_redist)
+    include(install_wix)
+    add_subdirectory(apps)
+    add_subdirectory(examples)
 endif()
