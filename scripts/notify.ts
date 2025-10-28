@@ -12,7 +12,7 @@ const client_payload = {
     symbol: "🪟",
     github: package_json.homepage,
     download: package_json.pane.releases,
-    commits: spawnSync("git", ["log", "-5", "--pretty=format:%h%x00%an%x00%aI%x00%s%x00"], {
+    recent_commits: spawnSync("git", ["log", "-5", "--pretty=format:%h%x00%an%x00%aI%x00%s%x00"], {
         encoding: "utf-8",
     })
         .stdout.split("\n")
