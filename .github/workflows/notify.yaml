@@ -1,0 +1,29 @@
+on:
+  workflow_dispatch:
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 5
+
+      - uses: pnpm/action-setup@v4
+        with:
+          run_install: true
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: "25"
+          cache: "pnpm"
+
+      - env:
+          GH_TOKEN: ${{ secrets.WEB }}
+        uses: mthierman/github-actions/notify-web@main
+        with:
+          name: "pane"
+          description: "C++ library for Windows"
+          version: "0.0.0"
+          repo: "https://github.com/mthierman/pane.git"
+          event_type: "pane-notify"
