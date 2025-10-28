@@ -26,4 +26,5 @@ jobs:
           description: "C++ library for Windows"
           version: "0.0.0"
           repo: "https://github.com/mthierman/pane.git"
+          releases: "https://github.com/mthierman/pane/releases"
           event_type: "pane-notify"
