@@ -25,6 +25,7 @@ set(PANE_SQLITE_VERSION "3500400")
 add_subdirectory(sqlite)
 
 # https://www.nuget.org/packages/Microsoft.Web.WebView2
+# https://learn.microsoft.com/en-us/microsoft-edge/webview2/landing/
 set(PANE_WEBVIEW2_VERSION "1.0.3537.50")
 add_subdirectory(webview2)
 
