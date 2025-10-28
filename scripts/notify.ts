@@ -11,6 +11,8 @@ const client_payload = {
     hash: spawnSync("git", ["rev-parse", "HEAD"], { encoding: "utf-8" }).stdout.trim(),
     symbol: "🪟",
     github: package_json.homepage,
+    repo: package_json.repository.url,
+    releases: package_json.pane.releases,
     download: package_json.pane.releases,
     recent_commits: spawnSync("git", ["log", "-5", "--pretty=format:%h%x00%an%x00%aI%x00%s%x00"], {
         encoding: "utf-8",
