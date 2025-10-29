@@ -28,7 +28,6 @@
     },
     "devDependencies": {
         "@js-temporal/polyfill": "^0.5.1",
-        "@octokit/rest": "^22.0.0",
         "@types/node": "^24.9.1",
         "octokit": "^5.0.4",
         "prettier": "^3.6.2",
