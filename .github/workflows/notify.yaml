@@ -14,4 +14,4 @@ jobs:
           GH_TOKEN: ${{ secrets.WEB }}
         uses: mthierman/github-actions/notify-web@main
         with:
-          event_type: "pane-notify"
+          event_type: "pane-release"
