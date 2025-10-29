@@ -7,17 +7,14 @@ struct webview : pane::webview<webview> {
 
     static auto config() -> config {
         auto args { pane::system::get_argv_u8() };
+
         std::optional<std::u8string> home_page { std::nullopt };
 
-        if (args.size() == 2) {
-            if (args.at(1).starts_with(u8"https://")) {
-                home_page = args.at(1);
-            } else {
-                home_page = args.at(1).insert(0, u8"https://");
-            }
+        if (args.size() >= 2) {
+            home_page = args.at(1);
         }
 
-        std::filesystem::path browser_data;
+        auto browser_data { std::filesystem::path() };
         auto local_app_data { pane::filesystem::known_folder() };
 
         if (local_app_data) {
@@ -25,8 +22,8 @@ struct webview : pane::webview<webview> {
         }
 
         return { pane::window_config { u8"webview",
-                                       pane::color { 0, 0, 0, 255 },
-                                       pane::color { 0, 0, 0, 255 },
+                                       pane::color { 255, 255, 255, 255 },
+                                       pane::color { 255, 255, 255, 255 },
                                        true,
                                        nullptr },
                  pane::webview_config { home_page.value_or(u8"http://localhost:4321/"),
