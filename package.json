@@ -1,4 +1,6 @@
 {
+    "private": true,
+    "author": "mthierman",
     "name": "pane",
     "version": "0.0.0",
     "description": "C++ library for Windows",
@@ -8,9 +10,7 @@
         "type": "git",
         "url": "https://github.com/mthierman/pane.git"
     },
-    "author": "mthierman",
     "packageManager": "pnpm@10.19.0",
-    "private": true,
     "type": "module",
     "exports": {
         ".": "./src/index.ts",
@@ -19,7 +19,6 @@
     "scripts": {
         "cmake-debug": "cmake --preset debug && cmake --build --preset debug",
         "cmake-release": "cmake --preset release && cmake --build --preset release",
-        "notify": "node --harmony-temporal ./scripts/notify.ts",
         "check": "tsc -b",
         "example:dev": "vite examples/webview/gui",
         "example:host": "vite examples/webview/gui --host",
