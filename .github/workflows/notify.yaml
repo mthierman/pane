@@ -1,8 +1,9 @@
 on:
   workflow_dispatch:
+  workflow_call:
 
 jobs:
-  release:
+  notify:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
@@ -14,8 +15,9 @@ jobs:
         uses: mthierman/github-actions/notify-web@main
         with:
           name: "pane"
-          description: "C++ library for Windows"
           version: "0.0.0"
+          description: "C++ library for Windows"
+          symbol: "🪟"
           repo: "https://github.com/mthierman/pane.git"
           releases: "https://github.com/mthierman/pane/releases"
           event_type: "pane-notify"

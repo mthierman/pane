@@ -42,14 +42,6 @@ jobs:
       - run: |
           pnpm cmake-release
 
-      - env:
-          GH_TOKEN: ${{ secrets.WEB }}
-        uses: mthierman/github-actions/notify-web@main
-        with:
-          name: "pane"
-          version: "0.0.0"
-          description: "C++ library for Windows"
-          symbol: "🪟"
-          repo: "https://github.com/mthierman/pane.git"
-          releases: "https://github.com/mthierman/pane/releases"
-          event_type: "pane-notify"
+  notify:
+    needs: release
+    uses: ./.github/workflows/notify.yaml
