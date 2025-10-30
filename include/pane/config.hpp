@@ -63,7 +63,7 @@ template <typename T> struct config final {
     }
 
     std::filesystem::path config_file {
-        pane::filesystem::known_folder()
+        pane::filesystem::known_folder(FOLDERID_LocalAppData)
             .transform([](const std::filesystem::path& path) -> std::filesystem::path {
         return path / u"Phosphor" / u"config.json";
     }).value_or(u"")

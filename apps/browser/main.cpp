@@ -15,7 +15,7 @@ struct webview : pane::webview<webview> {
         }
 
         auto browser_data { std::filesystem::path() };
-        auto local_app_data { pane::filesystem::known_folder() };
+        auto local_app_data { pane::filesystem::known_folder(FOLDERID_LocalAppData) };
 
         if (local_app_data) {
             browser_data = *local_app_data / u8"browser";

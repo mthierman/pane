@@ -12,8 +12,7 @@
 #include <ada.h>
 
 namespace pane::filesystem {
-auto known_folder(KNOWNFOLDERID known_folder = FOLDERID_LocalAppData)
-    -> std::expected<std::filesystem::path, HRESULT>;
+auto known_folder(KNOWNFOLDERID known_folder) -> std::expected<std::filesystem::path, HRESULT>;
 auto temp_folder() -> std::expected<std::filesystem::path, HRESULT>;
 
 auto create_directory(const std::filesystem::path& path) -> std::expected<void, HRESULT>;
