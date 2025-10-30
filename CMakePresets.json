@@ -20,13 +20,29 @@
         },
         {
             "name": "debug",
+            "inherits": ["settings"],
             "binaryDir": "${sourceDir}/build-debug",
-            "inherits": ["settings"]
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug"
+            }
         },
         {
             "name": "release",
+            "inherits": ["settings"],
             "binaryDir": "${sourceDir}/build-release",
-            "inherits": ["settings"]
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release"
+            }
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "debug",
+            "configurePreset": "debug"
+        },
+        {
+            "name": "release",
+            "configurePreset": "release"
         }
     ]
 }
