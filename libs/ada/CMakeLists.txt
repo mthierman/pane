@@ -15,6 +15,6 @@ add_library(ada::ada-url ALIAS ada)
 
 target_sources(ada PRIVATE ${ada_SOURCE_DIR}/ada.cpp)
 
-target_include_directories(ada SYSTEM INTERFACE ${ada_SOURCE_DIR})
+target_include_directories(ada SYSTEM PUBLIC ${ada_SOURCE_DIR})
 
 target_compile_features(ada PRIVATE c_std_17 cxx_std_23)
