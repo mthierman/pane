@@ -18,22 +18,22 @@ auto known_folder(KNOWNFOLDERID known_folder) -> std::expected<std::filesystem::
 auto temp_folder() -> std::expected<std::filesystem::path, HRESULT> {
     std::wstring buffer;
 
-    if (auto length { GetTempPath2W(0, nullptr) }; length == 0) {
+    DWORD length;
+    length = GetTempPath2W(0, nullptr);
+
+    if (length == 0) {
         auto last_error { GetLastError() };
         return std::unexpected(HRESULT_FROM_WIN32(last_error));
     } else {
         buffer.resize(length);
+
+        if (GetTempPath2W(length, buffer.data()) == 0) {
+            auto last_error { GetLastError() };
+            return std::unexpected(HRESULT_FROM_WIN32(last_error));
+        }
     }
 
-    if (auto length { GetTempPath2W(static_cast<DWORD>(buffer.length()), buffer.data()) };
-        length == 0) {
-        auto last_error { GetLastError() };
-        return std::unexpected(HRESULT_FROM_WIN32(last_error));
-    } else {
-        buffer.resize(buffer.size() - 2);
-    }
-
-    return buffer;
+    return std::filesystem::path { buffer }.parent_path();
 }
 
 auto create_directory(const std::filesystem::path& path) -> std::expected<void, HRESULT> {
