@@ -7,7 +7,7 @@ namespace pane::filesystem {
 auto known_folder(KNOWNFOLDERID known_folder) -> std::expected<std::filesystem::path, HRESULT> {
     wil::unique_cotaskmem_string buffer;
 
-    if (auto hresult { SHGetKnownFolderPath(known_folder, KF_FLAG_DONT_VERIFY, nullptr, &buffer) };
+    if (auto hresult { SHGetKnownFolderPath(known_folder, KF_FLAG_DEFAULT, nullptr, &buffer) };
         hresult != S_OK) {
         return std::unexpected(hresult);
     }
