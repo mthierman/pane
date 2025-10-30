@@ -27,7 +27,6 @@ jobs:
       - uses: astral-sh/setup-uv@v7
         with:
           python-version: "3.14"
-          enable-cache: true
 
       - run: |
           uv tool install gersemi
@@ -36,11 +35,14 @@ jobs:
         id: deps
         with:
           path: |
-            "${{ github.workspace }}/build/_deps"
+            "${{ github.workspace }}/build-release/_deps"
           key: "deps-${{ hashFiles('libs/CMakeLists.txt') }}"
 
       - run: |
-          pnpm cmake-release
+          cmake --preset release
+
+      - run: |
+          cmake --build --preset release
 
   notify:
     needs: release
