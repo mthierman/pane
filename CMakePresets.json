@@ -8,34 +8,25 @@
     },
     "configurePresets": [
         {
-            "name": "debug",
+            "name": "settings",
+            "hidden": true,
             "generator": "Ninja",
+            "cacheVariables": {
+                "CMAKE_C_COMPILER": "clang",
+                "CMAKE_CXX_COMPILER": "clang++",
+                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
+                "FETCHCONTENT_BASE_DIR": "${sourceDir}/packages"
+            }
+        },
+        {
+            "name": "debug",
             "binaryDir": "${sourceDir}/build-debug",
-            "cacheVariables": {
-                "CMAKE_C_COMPILER": "clang",
-                "CMAKE_CXX_COMPILER": "clang++"
-            }
+            "inherits": ["settings"]
         },
         {
             "name": "release",
-            "generator": "Ninja",
             "binaryDir": "${sourceDir}/build-release",
-            "cacheVariables": {
-                "CMAKE_C_COMPILER": "clang",
-                "CMAKE_CXX_COMPILER": "clang++"
-            }
-        }
-    ],
-    "buildPresets": [
-        {
-            "name": "debug",
-            "configuration": "Debug",
-            "configurePreset": "debug"
-        },
-        {
-            "name": "release",
-            "configuration": "Release",
-            "configurePreset": "release"
+            "inherits": ["settings"]
         }
     ]
 }
