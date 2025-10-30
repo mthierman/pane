@@ -18,7 +18,7 @@ auto known_folder(KNOWNFOLDERID known_folder) -> std::expected<std::filesystem::
 auto temp_folder() -> std::expected<std::filesystem::path, HRESULT> {
     std::wstring buffer;
 
-    if (auto length { GetTempPath2W(0, buffer.data()) }; length == 0) {
+    if (auto length { GetTempPath2W(0, nullptr) }; length == 0) {
         auto last_error { GetLastError() };
         return std::unexpected(HRESULT_FROM_WIN32(last_error));
     } else {
