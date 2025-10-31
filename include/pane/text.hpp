@@ -6,10 +6,10 @@
 #include <icu.h>
 
 namespace pane {
-auto as_u8string_view(const std::string& string) -> std::u8string_view;
-auto as_string_view(std::u8string_view string) -> std::string_view;
-auto as_u16string_view(const std::wstring& string) -> std::u16string_view;
-auto as_wstring_view(std::u16string_view string) -> std::wstring_view;
+// auto as_u8string_view(std::string_view string) -> std::u8string_view;
+// auto as_string_view(std::u8string_view string) -> std::string_view;
+// auto as_u16string_view(std::wstring_view string) -> std::u16string_view;
+// auto as_wstring_view(std::u16string_view string) -> std::wstring_view;
 
 auto as_c_str(const std::u8string& string) noexcept -> const char*;
 auto as_c_str(std::u8string& string) noexcept -> char*;
@@ -35,7 +35,8 @@ auto validate_utf16(std::u16string_view string) -> bool;
 namespace std {
 template <> struct formatter<std::u8string_view> : formatter<string_view> {
     auto format(std::u8string_view string, format_context& context) const noexcept {
-        return formatter<string_view>::format(pane::as_string_view(string), context);
+        return formatter<string_view>::format(
+            { reinterpret_cast<const char*>(string.data()), string.length() }, context);
     }
 };
 
@@ -59,7 +60,8 @@ template <> struct formatter<std::u8string> : formatter<u8string_view> {
 
 template <> struct formatter<std::u16string_view, wchar_t> : formatter<wstring_view, wchar_t> {
     auto format(std::u16string_view string, wformat_context& context) const {
-        return formatter<wstring_view, wchar_t>::format(pane::as_wstring_view(string), context);
+        return formatter<wstring_view, wchar_t>::format(
+            { reinterpret_cast<const wchar_t*>(string.data()), string.length() }, context);
     }
 };
 
