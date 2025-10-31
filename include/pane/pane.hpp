@@ -9,14 +9,11 @@
 #include <pane/gdi_plus.hpp>
 #include <pane/glaze.hpp>
 #include <pane/guid.hpp>
-// #include <pane/hstring.hpp>
 #include <pane/input.hpp>
 #include <pane/math.hpp>
 #include <pane/message_window.hpp>
 #include <pane/print.hpp>
 #include <pane/process.hpp>
-// #include <pane/project.hpp>
-// #include <pane/string.hpp>
 #include <pane/system.hpp>
 #include <pane/text.hpp>
 #include <pane/url.hpp>

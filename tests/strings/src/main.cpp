@@ -1,6 +1,5 @@
 #include <pane/pane.hpp>
 #include <print>
-#include <filesystem>
 
 auto wmain(int argc, wchar_t* argv[], [[maybe_unused]] wchar_t* envp[]) -> int {
     auto test { u8"test" };
