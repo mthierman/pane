@@ -14,7 +14,7 @@ struct co_init final {
     co_init(Self&&) noexcept = delete;
     auto operator=(Self&&) noexcept -> Self& = delete;
 
-    operator HRESULT(this Self & self);
+    operator HRESULT(this Self& self);
 
     static auto apartment_threaded() -> co_init;
     static auto multi_threaded() -> co_init;

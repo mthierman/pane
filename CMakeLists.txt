@@ -20,8 +20,9 @@ target_compile_definitions(pane PUBLIC UNICODE WIN32_LEAN_AND_MEAN NOMINMAX GDIP
 
 target_sources(
     pane
-    PUBLIC FILE_SET HEADERS BASE_DIRS include ${CMAKE_CURRENT_BINARY_DIR}/generated
+    PUBLIC FILE_SET HEADERS BASE_DIRS include public
     PRIVATE
+        src/pane.cpp
         src/co_init.cpp
         src/color.cpp
         src/config.cpp
