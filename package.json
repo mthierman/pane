@@ -13,8 +13,8 @@
     "packageManager": "pnpm@10.19.0",
     "type": "module",
     "exports": {
-        ".": "./src/index.ts",
-        "./webview": "./src/webview.ts"
+        ".": "./node/index.ts",
+        "./webview": "./node/webview.ts"
     },
     "scripts": {
         "cmake-debug": "cmake --preset debug && cmake --build --preset debug",
