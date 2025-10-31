@@ -6,12 +6,12 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(sqlite)
 
-add_library(sqlite)
+add_library(libs_sqlite)
 
-add_library(sqlite::sqlite ALIAS sqlite)
+add_library(sqlite::sqlite ALIAS libs_sqlite)
 
-target_sources(sqlite PRIVATE ${sqlite_SOURCE_DIR}/sqlite3.c)
+target_sources(libs_sqlite PRIVATE ${sqlite_SOURCE_DIR}/sqlite3.c)
 
-target_include_directories(sqlite SYSTEM PUBLIC ${sqlite_SOURCE_DIR})
+target_include_directories(libs_sqlite SYSTEM PUBLIC ${sqlite_SOURCE_DIR})
 
-target_compile_features(sqlite PRIVATE c_std_17 cxx_std_23)
+target_compile_features(libs_sqlite PRIVATE c_std_17 cxx_std_23)

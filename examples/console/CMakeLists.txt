@@ -1,10 +1,10 @@
-add_executable(console)
+add_executable(example_console)
 
-target_sources(console PRIVATE main.cpp ${PROJECT_SOURCE_DIR}/data/app.manifest)
+target_sources(example_console PRIVATE main.cpp ${PROJECT_SOURCE_DIR}/data/app.manifest)
 
-target_compile_features(console PRIVATE c_std_17 cxx_std_23)
+target_compile_features(example_console PRIVATE c_std_17 cxx_std_23)
 
 set_target_properties(
-    console
+    example_console
     PROPERTIES MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>"
 )

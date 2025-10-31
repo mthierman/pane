@@ -9,12 +9,12 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(ada)
 
-add_library(ada)
+add_library(libs_ada)
 
-add_library(ada::ada-url ALIAS ada)
+add_library(ada::ada-url ALIAS libs_ada)
 
-target_sources(ada PRIVATE ${ada_SOURCE_DIR}/ada.cpp)
+target_sources(libs_ada PRIVATE ${ada_SOURCE_DIR}/ada.cpp)
 
-target_include_directories(ada SYSTEM PUBLIC ${ada_SOURCE_DIR})
+target_include_directories(libs_ada SYSTEM PUBLIC ${ada_SOURCE_DIR})
 
-target_compile_features(ada PRIVATE c_std_17 cxx_std_23)
+target_compile_features(libs_ada PRIVATE c_std_17 cxx_std_23)

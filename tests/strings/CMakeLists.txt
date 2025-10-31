@@ -1,7 +1,7 @@
-add_executable(strings_test)
+add_executable(test_strings)
 
-target_sources(strings_test PRIVATE src/main.cpp ${PROJECT_SOURCE_DIR}/data/app.manifest)
+target_sources(test_strings PRIVATE src/main.cpp ${PROJECT_SOURCE_DIR}/data/app.manifest)
 
-target_compile_features(strings_test PRIVATE c_std_17 cxx_std_23)
+target_compile_features(test_strings PRIVATE c_std_17 cxx_std_23)
 
-target_link_libraries(strings_test PRIVATE pane::pane)
+target_link_libraries(test_strings PRIVATE pane::pane)

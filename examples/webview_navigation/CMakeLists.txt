@@ -1,5 +1,5 @@
-add_executable(webview WIN32)
+add_executable(example_webview_navigation WIN32)
 
-target_sources(webview PRIVATE main.cpp ${PROJECT_SOURCE_DIR}/data/app.manifest)
+target_sources(example_webview_navigation PRIVATE main.cpp ${PROJECT_SOURCE_DIR}/data/app.manifest)
 
-target_link_libraries(webview PRIVATE pane::pane pane::config)
+target_link_libraries(example_webview_navigation PRIVATE pane::pane pane::config)
