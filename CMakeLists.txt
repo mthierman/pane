@@ -31,13 +31,11 @@ target_sources(
         src/filesystem.cpp
         src/gdi_plus.cpp
         src/guid.cpp
-        src/hstring.cpp
         src/icu.cpp
         src/input.cpp
         src/math.cpp
         src/print.cpp
         src/process.cpp
-        src/string.cpp
         src/system.cpp
         src/text.cpp
         src/url.cpp
