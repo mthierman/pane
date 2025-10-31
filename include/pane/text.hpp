@@ -23,8 +23,8 @@ auto to_utf16(std::string_view string) -> std::expected<std::u16string, UErrorCo
 auto to_utf16_lossy(std::u8string_view string, int32_t sub_char = 0xFFFD) -> std::u16string;
 auto to_utf16_lossy(std::string_view string, int32_t sub_char = 0xFFFD) -> std::u16string;
 
-auto validate_utf8(std::u8string_view string) -> std::expected<int32_t, UErrorCode>;
-auto validate_utf16(std::u16string_view string) -> std::expected<int32_t, UErrorCode>;
+auto validate_utf8(std::u8string_view string) -> std::expected<void, UErrorCode>;
+auto validate_utf16(std::u16string_view string) -> std::expected<void, UErrorCode>;
 } // namespace pane
 
 namespace std {

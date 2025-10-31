@@ -141,7 +141,7 @@ auto to_utf16_lossy(std::string_view string, int32_t sub_char) -> std::u16string
     return to_utf16_lossy({ reinterpret_cast<const char8_t*>(string.data()), string.length() });
 }
 
-auto validate_utf8(std::u8string_view string) -> std::expected<int32_t, UErrorCode> {
+auto validate_utf8(std::u8string_view string) -> std::expected<void, UErrorCode> {
     int32_t length { 0 };
     auto error_code { U_ZERO_ERROR };
 
@@ -153,13 +153,13 @@ auto validate_utf8(std::u8string_view string) -> std::expected<int32_t, UErrorCo
                                                  &error_code) };
 
     if (U_FAILURE(error_code)) {
-        return error_code;
+        return std::unexpected(error_code);
     }
 
-    return length;
+    return {};
 }
 
-auto validate_utf16(std::u16string_view string) -> std::expected<int32_t, UErrorCode> {
+auto validate_utf16(std::u16string_view string) -> std::expected<void, UErrorCode> {
     int32_t length { 0 };
     auto error_code { U_ZERO_ERROR };
 
@@ -167,9 +167,9 @@ auto validate_utf16(std::u16string_view string) -> std::expected<int32_t, UError
         nullptr, 0, &length, string.data(), string.length(), &error_code) };
 
     if (U_FAILURE(error_code)) {
-        return error_code;
+        return std::unexpected(error_code);
     }
 
-    return length;
+    return {};
 }
 } // namespace pane
