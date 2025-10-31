@@ -1,6 +1,6 @@
 {
     "extends": "./tsconfig.json",
-    "include": ["./pane/typescript/**/*.ts", "node/index.ts", "node/webview.ts"],
+    "include": ["npde/**/*.ts"],
     "compilerOptions": {
         "lib": ["ESNext", "DOM", "DOM.Iterable"],
         "composite": true,
