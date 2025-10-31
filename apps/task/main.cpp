@@ -10,7 +10,7 @@ struct Settings {
 };
 
 auto wmain(int /* argc */, wchar_t* /* argv */[], wchar_t* /* envp */[]) -> int {
-    auto args { pane::system::command_line_arguments() };
+    auto args { pane::system::get_argv_u8() };
 
     auto task = [&](std::u8string_view cmp) -> bool { return args.at(1).compare(cmp) == 0; };
 
