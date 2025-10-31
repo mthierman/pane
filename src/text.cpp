@@ -2,22 +2,6 @@
 #include "icu.h"
 
 namespace pane {
-// auto as_u8string_view(std::string_view string) -> std::u8string_view {
-//     return { reinterpret_cast<const char8_t*>(string.data()), string.length() };
-// }
-
-// auto as_string_view(std::u8string_view string) -> std::string_view {
-//     return { reinterpret_cast<const char*>(string.data()), string.length() };
-// }
-
-// auto as_u16string_view(std::wstring_view string) -> std::u16string_view {
-//     return { reinterpret_cast<const char16_t*>(string.data()), string.length() };
-// }
-
-// auto as_wstring_view(std::u16string_view string) -> std::wstring_view {
-//     return { reinterpret_cast<const wchar_t*>(string.data()), string.length() };
-// }
-
 auto as_c_str(const std::u8string& string) noexcept -> const char* {
     return reinterpret_cast<const char*>(string.data());
 }
