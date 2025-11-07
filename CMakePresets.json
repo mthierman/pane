@@ -15,7 +15,7 @@
             }
         },
         {
-            "name": "debug",
+            "name": "debug-config",
             "hidden": true,
             "inherits": ["settings"],
             "binaryDir": "${sourceDir}/build-debug",
@@ -24,7 +24,7 @@
             }
         },
         {
-            "name": "release",
+            "name": "release-config",
             "hidden": true,
             "inherits": ["settings"],
             "binaryDir": "${sourceDir}/build-release",
@@ -95,17 +95,9 @@
                 "value": "ClangCL,host=x64"
             }
         },
-        { "name": "default", "inherits": ["release", "ninja-clang"] }
+        { "name": "default", "inherits": ["release-config", "ninja-clang"] }
     ],
     "buildPresets": [
-        {
-            "name": "build-msbuild-options",
-            "hidden": true,
-            "nativeToolOptions": [
-                "/p:UseMultiToolTask=true",
-                "/p:EnforceProcessCountAcrossBuilds=true"
-            ]
-        },
         {
             "name": "default",
             "configurePreset": "default"
