@@ -43,31 +43,28 @@
                 "value": "ClangCL,host=x64"
             }
         },
-        { "name": "ninja", "hidden": true, "generator": "Ninja" },
         {
-            "name": "ninja-mc",
+            "name": "ninja-clang",
             "hidden": true,
-            "generator": "Ninja Multi-Config"
-        },
-        {
-            "name": "clang",
-            "hidden": true,
+            "generator": "Ninja",
             "cacheVariables": {
                 "CMAKE_C_COMPILER": "clang",
                 "CMAKE_CXX_COMPILER": "clang++"
             }
         },
         {
-            "name": "clang-cl",
+            "name": "ninja-clang-cl",
             "hidden": true,
+            "generator": "Ninja",
             "cacheVariables": {
                 "CMAKE_C_COMPILER": "clang-cl",
                 "CMAKE_CXX_COMPILER": "clang-cl"
             }
         },
         {
-            "name": "msvc",
+            "name": "ninja-msvc",
             "hidden": true,
+            "generator": "Ninja",
             "cacheVariables": {
                 "CMAKE_C_COMPILER": "cl",
                 "CMAKE_CXX_COMPILER": "cl"
