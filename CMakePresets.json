@@ -8,32 +8,7 @@
     },
     "configurePresets": [
         {
-            "name": "config",
-            "hidden": true,
-            "cacheVariables": {
-                "FETCHCONTENT_BASE_DIR": "${sourceDir}/packages"
-            }
-        },
-        {
-            "name": "debug-config",
-            "hidden": true,
-            "inherits": ["config"],
-            "binaryDir": "${sourceDir}/build-debug",
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Debug"
-            }
-        },
-        {
-            "name": "release-config",
-            "hidden": true,
-            "inherits": ["config"],
-            "binaryDir": "${sourceDir}/build-release",
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Release"
-            }
-        },
-        {
-            "name": "unity-config",
+            "name": "unity",
             "hidden": true,
             "cacheVariables": {
                 "CMAKE_UNITY_BUILD": {
