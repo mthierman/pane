@@ -56,6 +56,16 @@
             }
         },
         {
+            "name": "unity-build",
+            "hidden": true,
+            "cacheVariables": {
+                "CMAKE_UNITY_BUILD": {
+                    "type": "BOOL",
+                    "value": "ON"
+                }
+            }
+        },
+        {
             "name": "settings",
             "hidden": true,
             "inherits": ["ninja-clang"],
@@ -83,11 +93,21 @@
     ],
     "buildPresets": [
         {
+            "name": "msbuild-options",
+            "hidden": true,
+            "nativeToolOptions": [
+                "/p:UseMultiToolTask=true",
+                "/p:EnforceProcessCountAcrossBuilds=true"
+            ]
+        },
+        {
             "name": "debug",
+            "configuration": "Debug",
             "configurePreset": "debug"
         },
         {
             "name": "release",
+            "configuration": "Release",
             "configurePreset": "release"
         }
     ]
