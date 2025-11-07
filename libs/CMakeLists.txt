@@ -21,12 +21,12 @@ add_subdirectory(glaze)
 
 # https://sqlite.org/
 # https://sqlite.org/download.html
-set(PANE_SQLITE_VERSION "3500400")
+set(PANE_SQLITE_VERSION "3510000")
 add_subdirectory(sqlite)
 
 # https://www.nuget.org/packages/Microsoft.Web.WebView2
 # https://learn.microsoft.com/en-us/microsoft-edge/webview2/landing/
-set(PANE_WEBVIEW2_VERSION "1.0.3537.50")
+set(PANE_WEBVIEW2_VERSION "1.0.3595.46")
 add_subdirectory(webview2)
 
 # https://www.nuget.org/packages/Microsoft.Windows.ImplementationLibrary
