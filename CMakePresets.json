@@ -95,12 +95,12 @@
                 "value": "ClangCL,host=x64"
             }
         },
-        { "name": "default", "inherits": ["release-config", "ninja-clang"] }
+        { "name": "publish", "inherits": ["release-config", "ninja-clang"] }
     ],
     "buildPresets": [
         {
-            "name": "default",
-            "configurePreset": "default"
+            "name": "publish",
+            "configurePreset": "publish"
         }
     ]
 }
