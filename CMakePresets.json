@@ -8,7 +8,7 @@
     },
     "configurePresets": [
         {
-            "name": "settings",
+            "name": "config",
             "hidden": true,
             "cacheVariables": {
                 "FETCHCONTENT_BASE_DIR": "${sourceDir}/packages"
@@ -17,7 +17,7 @@
         {
             "name": "debug-config",
             "hidden": true,
-            "inherits": ["settings"],
+            "inherits": ["config"],
             "binaryDir": "${sourceDir}/build-debug",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Debug"
@@ -26,47 +26,20 @@
         {
             "name": "release-config",
             "hidden": true,
-            "inherits": ["settings"],
+            "inherits": ["config"],
             "binaryDir": "${sourceDir}/build-release",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Release"
             }
         },
         {
-            "name": "unity-build",
+            "name": "unity-config",
             "hidden": true,
             "cacheVariables": {
                 "CMAKE_UNITY_BUILD": {
                     "type": "BOOL",
                     "value": "ON"
                 }
-            }
-        },
-        {
-            "name": "ninja-clang",
-            "hidden": true,
-            "generator": "Ninja",
-            "cacheVariables": {
-                "CMAKE_C_COMPILER": "clang",
-                "CMAKE_CXX_COMPILER": "clang++"
-            }
-        },
-        {
-            "name": "ninja-clang-cl",
-            "hidden": true,
-            "generator": "Ninja",
-            "cacheVariables": {
-                "CMAKE_C_COMPILER": "clang-cl",
-                "CMAKE_CXX_COMPILER": "clang-cl"
-            }
-        },
-        {
-            "name": "ninja-msvc",
-            "hidden": true,
-            "generator": "Ninja",
-            "cacheVariables": {
-                "CMAKE_C_COMPILER": "cl",
-                "CMAKE_CXX_COMPILER": "cl"
             }
         },
         {
@@ -95,12 +68,36 @@
                 "value": "ClangCL,host=x64"
             }
         },
-        { "name": "publish", "inherits": ["release-config", "ninja-clang"] }
-    ],
-    "buildPresets": [
+        { "name": "ninja", "hidden": true, "generator": "Ninja" },
         {
-            "name": "publish",
-            "configurePreset": "publish"
+            "name": "ninja-mc",
+            "hidden": true,
+            "generator": "Ninja Multi-Config"
+        },
+        {
+            "name": "clang",
+            "hidden": true,
+            "cacheVariables": {
+                "CMAKE_C_COMPILER": "clang",
+                "CMAKE_CXX_COMPILER": "clang++"
+            }
+        },
+        {
+            "name": "clang-cl",
+            "hidden": true,
+            "cacheVariables": {
+                "CMAKE_C_COMPILER": "clang-cl",
+                "CMAKE_CXX_COMPILER": "clang-cl"
+            }
+        },
+        {
+            "name": "msvc",
+            "hidden": true,
+            "cacheVariables": {
+                "CMAKE_C_COMPILER": "cl",
+                "CMAKE_CXX_COMPILER": "cl"
+            }
         }
-    ]
+    ],
+    "buildPresets": []
 }
