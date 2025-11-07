@@ -73,7 +73,6 @@
         {
             "name": "settings",
             "hidden": true,
-            "inherits": ["ninja-clang"],
             "cacheVariables": {
                 "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
                 "FETCHCONTENT_BASE_DIR": "${sourceDir}/packages"
