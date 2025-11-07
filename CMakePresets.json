@@ -8,12 +8,58 @@
     },
     "configurePresets": [
         {
-            "name": "settings",
-            "hidden": true,
+            "name": "ninja-clang",
             "generator": "Ninja",
             "cacheVariables": {
                 "CMAKE_C_COMPILER": "clang",
-                "CMAKE_CXX_COMPILER": "clang++",
+                "CMAKE_CXX_COMPILER": "clang++"
+            }
+        },
+        {
+            "name": "ninja-clang-cl",
+            "generator": "Ninja",
+            "cacheVariables": {
+                "CMAKE_C_COMPILER": "clang-cl",
+                "CMAKE_CXX_COMPILER": "clang-cl"
+            }
+        },
+        {
+            "name": "ninja-msvc",
+            "generator": "Ninja",
+            "cacheVariables": {
+                "CMAKE_C_COMPILER": "cl",
+                "CMAKE_CXX_COMPILER": "cl"
+            }
+        },
+        {
+            "name": "msbuild-msvc",
+            "generator": "Visual Studio 17 2022",
+            "architecture": {
+                "strategy": "set",
+                "value": "x64"
+            },
+            "toolset": {
+                "strategy": "set",
+                "value": "host=x64"
+            }
+        },
+        {
+            "name": "msbuild-clang-cl",
+            "generator": "Visual Studio 17 2022",
+            "architecture": {
+                "strategy": "set",
+                "value": "x64"
+            },
+            "toolset": {
+                "strategy": "set",
+                "value": "ClangCL,host=x64"
+            }
+        },
+        {
+            "name": "settings",
+            "hidden": true,
+            "inherits": ["ninja-clang"],
+            "cacheVariables": {
                 "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
                 "FETCHCONTENT_BASE_DIR": "${sourceDir}/packages"
             }
