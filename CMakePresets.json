@@ -8,6 +8,41 @@
     },
     "configurePresets": [
         {
+            "name": "settings",
+            "hidden": true,
+            "cacheVariables": {
+                "FETCHCONTENT_BASE_DIR": "${sourceDir}/packages"
+            }
+        },
+        {
+            "name": "debug",
+            "hidden": true,
+            "inherits": ["settings"],
+            "binaryDir": "${sourceDir}/build-debug",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug"
+            }
+        },
+        {
+            "name": "release",
+            "hidden": true,
+            "inherits": ["settings"],
+            "binaryDir": "${sourceDir}/build-release",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release"
+            }
+        },
+        {
+            "name": "unity-build",
+            "hidden": true,
+            "cacheVariables": {
+                "CMAKE_UNITY_BUILD": {
+                    "type": "BOOL",
+                    "value": "ON"
+                }
+            }
+        },
+        {
             "name": "ninja-clang",
             "hidden": true,
             "generator": "Ninja",
@@ -60,44 +95,11 @@
                 "value": "ClangCL,host=x64"
             }
         },
-        {
-            "name": "unity-build",
-            "hidden": true,
-            "cacheVariables": {
-                "CMAKE_UNITY_BUILD": {
-                    "type": "BOOL",
-                    "value": "ON"
-                }
-            }
-        },
-        {
-            "name": "settings",
-            "hidden": true,
-            "cacheVariables": {
-                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
-                "FETCHCONTENT_BASE_DIR": "${sourceDir}/packages"
-            }
-        },
-        {
-            "name": "debug",
-            "inherits": ["settings"],
-            "binaryDir": "${sourceDir}/build-debug",
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Debug"
-            }
-        },
-        {
-            "name": "release",
-            "inherits": ["settings"],
-            "binaryDir": "${sourceDir}/build-release",
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Release"
-            }
-        }
+        { "name": "default", "inherits": ["release", "ninja-clang"] }
     ],
     "buildPresets": [
         {
-            "name": "msbuild-options",
+            "name": "build-msbuild-options",
             "hidden": true,
             "nativeToolOptions": [
                 "/p:UseMultiToolTask=true",
@@ -105,14 +107,8 @@
             ]
         },
         {
-            "name": "debug",
-            "configuration": "Debug",
-            "configurePreset": "debug"
-        },
-        {
-            "name": "release",
-            "configuration": "Release",
-            "configurePreset": "release"
+            "name": "default",
+            "configurePreset": "default"
         }
     ]
 }
