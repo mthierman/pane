@@ -20,7 +20,7 @@
         {
             "name": "msbuild-msvc",
             "hidden": true,
-            "generator": "Visual Studio 18 2026",
+            "generator": "Visual Studio 17 2022",
             "architecture": {
                 "strategy": "set",
                 "value": "x64"
@@ -33,7 +33,7 @@
         {
             "name": "msbuild-clang-cl",
             "hidden": true,
-            "generator": "Visual Studio 18 2026",
+            "generator": "Visual Studio 17 2022",
             "architecture": {
                 "strategy": "set",
                 "value": "x64"
