@@ -8,23 +8,23 @@
 // https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2019/p1423r3.html
 namespace pane {
 [[nodiscard]]
-inline constexpr auto string_view_cast(std::string_view string) -> std::u8string_view {
+constexpr auto string_view_cast(std::string_view string) -> std::u8string_view {
     return { reinterpret_cast<const char8_t*>(string.data()), string.length() };
 }
 
 [[nodiscard]]
-inline constexpr auto string_view_cast(std::u8string_view string) -> std::string_view {
+constexpr auto string_view_cast(std::u8string_view string) -> std::string_view {
     return { reinterpret_cast<const char*>(string.data()), string.length() };
 }
 
 [[nodiscard]]
-inline constexpr auto string_view_cast(std::wstring_view string) -> std::u16string_view {
+constexpr auto string_view_cast(std::wstring_view string) -> std::u16string_view {
     static_assert(sizeof(wchar_t) == 2, "wchar_t must be 16-bit for this cast");
     return { reinterpret_cast<const char16_t*>(string.data()), string.length() };
 }
 
 [[nodiscard]]
-inline constexpr auto string_view_cast(std::u16string_view string) -> std::wstring_view {
+constexpr auto string_view_cast(std::u16string_view string) -> std::wstring_view {
     static_assert(sizeof(wchar_t) == 2, "wchar_t must be 16-bit for this cast");
     return { reinterpret_cast<const wchar_t*>(string.data()), string.length() };
 }
