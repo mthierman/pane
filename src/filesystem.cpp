@@ -23,14 +23,14 @@ auto temp_folder() -> std::expected<std::filesystem::path, HRESULT> {
         return std::unexpected(HRESULT_FROM_WIN32(last_error));
     }
 
-    auto buffer { std::wstring(length, L'\0') };
+    std::vector<wchar_t> buffer(length);
 
-    if (GetTempPath2W(length, buffer.data()) == 0) {
+    if (auto written { GetTempPath2W(length, buffer.data()) }; written == 0 || written >= length) {
         auto last_error { GetLastError() };
         return std::unexpected(HRESULT_FROM_WIN32(last_error));
     }
 
-    return std::filesystem::path { std::move(buffer) }.parent_path();
+    return std::filesystem::path { buffer.data() }.parent_path();
 }
 
 auto create_directory(const std::filesystem::path& path) -> std::expected<void, HRESULT> {
