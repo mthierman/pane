@@ -62,11 +62,11 @@ auto to_utf8_lossy(std::u16string_view string, int32_t sub_char) -> std::u8strin
         return {};
     }
 
-    std::u8string buffer(length, 0);
+    std::vector<char> buffer(length);
     error_code = U_ZERO_ERROR;
 
-    u_strToUTF8WithSub(reinterpret_cast<char*>(buffer.data()),
-                       static_cast<int32_t>(buffer.length()),
+    u_strToUTF8WithSub(buffer.data(),
+                       static_cast<int32_t>(buffer.size()),
                        &length,
                        string.data(),
                        static_cast<int32_t>(string.length()),
@@ -80,7 +80,7 @@ auto to_utf8_lossy(std::u16string_view string, int32_t sub_char) -> std::u8strin
 
     buffer.resize(length);
 
-    return buffer;
+    return std::u8string { reinterpret_cast<const char8_t*>(buffer.data()), buffer.size() };
 }
 
 auto to_utf8_lossy(std::wstring_view string, int32_t sub_char) -> std::u8string {
