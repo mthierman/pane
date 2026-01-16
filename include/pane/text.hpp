@@ -1,16 +1,12 @@
 #pragma once
 #include <format>
 #include <expected>
-#include <string_view>
 #include <string>
+#include <string_view>
 #include <icu.h>
 
+// https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2019/p1423r3.html
 namespace pane {
-auto as_c_str(const std::u8string& string) noexcept -> const char*;
-auto as_c_str(std::u8string& string) noexcept -> char*;
-auto as_c_str(const std::u16string& string) noexcept -> const wchar_t*;
-auto as_c_str(std::u16string& string) noexcept -> wchar_t*;
-
 auto to_utf8(std::u16string_view string) -> std::expected<std::u8string, UErrorCode>;
 auto to_utf8(std::wstring_view string) -> std::expected<std::u8string, UErrorCode>;
 
