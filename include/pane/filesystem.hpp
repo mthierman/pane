@@ -38,5 +38,6 @@ auto open_library(const wil::com_ptr<IShellItem>& item)
     -> std::expected<wil::com_ptr<IShellLibrary>, HRESULT>;
 auto library_directories(const wil::com_ptr<IShellLibrary>& lib)
     -> std::expected<std::vector<std::filesystem::path>, HRESULT>;
-auto get_path(const wil::com_ptr<IShellItem>& item) -> std::expected<std::u8string, HRESULT>;
+auto get_path(const wil::com_ptr<IShellItem>& item)
+    -> std::expected<std::filesystem::path, HRESULT>;
 } // namespace pane::filesystem

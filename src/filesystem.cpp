@@ -190,7 +190,8 @@ auto library_directories(const wil::com_ptr<IShellLibrary>& lib)
     return files;
 }
 
-auto get_path(const wil::com_ptr<IShellItem>& item) -> std::expected<std::u8string, HRESULT> {
+auto get_path(const wil::com_ptr<IShellItem>& item)
+    -> std::expected<std::filesystem::path, HRESULT> {
     SFGAOF attributes;
 
     if (auto hresult { item->GetAttributes(SFGAO_FILESYSTEM, &attributes) }; hresult != S_OK) {
@@ -205,6 +206,6 @@ auto get_path(const wil::com_ptr<IShellItem>& item) -> std::expected<std::u8stri
         item->GetDisplayName(SIGDN_DESKTOPABSOLUTEPARSING, &buffer);
     }
 
-    return pane::to_utf8(buffer.get());
+    return buffer.get();
 }
 } // namespace pane::filesystem
