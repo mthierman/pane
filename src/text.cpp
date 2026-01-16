@@ -38,7 +38,7 @@ auto to_utf8(std::u16string_view string) -> std::expected<std::u8string, UErrorC
 }
 
 auto to_utf8(std::wstring_view string) -> std::expected<std::u8string, UErrorCode> {
-    return to_utf8(string_view_cast(string));
+    return to_utf8(reinterpret_string_view(string));
 }
 
 auto to_utf8_lossy(std::u16string_view string, int32_t sub_char) -> std::u8string {
@@ -84,7 +84,7 @@ auto to_utf8_lossy(std::u16string_view string, int32_t sub_char) -> std::u8strin
 }
 
 auto to_utf8_lossy(std::wstring_view string, int32_t sub_char) -> std::u8string {
-    return to_utf8_lossy(string_view_cast(string), sub_char);
+    return to_utf8_lossy(reinterpret_string_view(string), sub_char);
 }
 
 auto to_utf16(std::u8string_view string) -> std::expected<std::u16string, UErrorCode> {
@@ -112,7 +112,7 @@ auto to_utf16(std::u8string_view string) -> std::expected<std::u16string, UError
     u_strFromUTF8(buffer.data(),
                   static_cast<int32_t>(buffer.size()),
                   &length,
-                  string_view_cast(string).data(),
+                  reinterpret_string_view(string).data(),
                   static_cast<int32_t>(string.length()),
                   &error_code);
 
@@ -126,7 +126,7 @@ auto to_utf16(std::u8string_view string) -> std::expected<std::u16string, UError
 }
 
 auto to_utf16(std::string_view string) -> std::expected<std::u16string, UErrorCode> {
-    return to_utf16(string_view_cast(string));
+    return to_utf16(reinterpret_string_view(string));
 }
 
 auto to_utf16_lossy(std::u8string_view string, int32_t sub_char) -> std::u16string {
@@ -156,7 +156,7 @@ auto to_utf16_lossy(std::u8string_view string, int32_t sub_char) -> std::u16stri
     u_strFromUTF8WithSub(buffer.data(),
                          static_cast<int32_t>(buffer.size()),
                          &length,
-                         string_view_cast(string).data(),
+                         reinterpret_string_view(string).data(),
                          static_cast<int32_t>(string.length()),
                          sub_char,
                          nullptr,
@@ -172,7 +172,7 @@ auto to_utf16_lossy(std::u8string_view string, int32_t sub_char) -> std::u16stri
 }
 
 auto to_utf16_lossy(std::string_view string, int32_t sub_char) -> std::u16string {
-    return to_utf16_lossy(string_view_cast(string), sub_char);
+    return to_utf16_lossy(reinterpret_string_view(string), sub_char);
 }
 
 auto validate_utf8(std::u8string_view string) -> std::expected<void, UErrorCode> {
@@ -186,7 +186,7 @@ auto validate_utf8(std::u8string_view string) -> std::expected<void, UErrorCode>
     u_strFromUTF8(nullptr,
                   0,
                   &length,
-                  string_view_cast(string).data(),
+                  reinterpret_string_view(string).data(),
                   static_cast<int32_t>(string.length()),
                   &error_code);
 
@@ -198,7 +198,7 @@ auto validate_utf8(std::u8string_view string) -> std::expected<void, UErrorCode>
 }
 
 auto validate_utf8(std::string_view string) -> std::expected<void, UErrorCode> {
-    return validate_utf8(string_view_cast(string));
+    return validate_utf8(reinterpret_string_view(string));
 }
 
 auto validate_utf16(std::u16string_view string) -> std::expected<void, UErrorCode> {
@@ -220,6 +220,6 @@ auto validate_utf16(std::u16string_view string) -> std::expected<void, UErrorCod
 }
 
 auto validate_utf16(std::wstring_view string) -> std::expected<void, UErrorCode> {
-    return validate_utf16(string_view_cast(string));
+    return validate_utf16(reinterpret_string_view(string));
 }
 } // namespace pane
