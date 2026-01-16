@@ -109,7 +109,7 @@ auto download_file(const std::filesystem::path& path, ada::url url)
     auto u16_url = pane::to_utf16_lossy(url.get_href());
 
     if (auto hresult { URLDownloadToFileW(
-            nullptr, string_view_cast(u16_url).data(), path.c_str(), 0, nullptr) };
+            nullptr, reinterpret_string_view(u16_url).data(), path.c_str(), 0, nullptr) };
         hresult != S_OK) {
         return std::unexpected(hresult);
     }
