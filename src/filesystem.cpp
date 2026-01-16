@@ -30,7 +30,7 @@ auto temp_folder() -> std::expected<std::filesystem::path, HRESULT> {
         return std::unexpected(HRESULT_FROM_WIN32(last_error));
     }
 
-    return std::filesystem::path { buffer }.parent_path();
+    return std::filesystem::path { std::move(buffer) }.parent_path();
 }
 
 auto create_directory(const std::filesystem::path& path) -> std::expected<void, HRESULT> {
@@ -106,11 +106,10 @@ auto erase_file(const std::filesystem::path& path) -> std::expected<void, HRESUL
 
 auto download_file(const std::filesystem::path& path, ada::url url)
     -> std::expected<void, HRESULT> {
-    if (auto hresult { URLDownloadToFileW(nullptr,
-                                          pane::as_c_str(pane::to_utf16_lossy(url.get_href())),
-                                          path.c_str(),
-                                          0,
-                                          nullptr) };
+    auto u16_url = pane::to_utf16_lossy(url.get_href());
+
+    if (auto hresult { URLDownloadToFileW(
+            nullptr, string_view_cast(u16_url).data(), path.c_str(), 0, nullptr) };
         hresult != S_OK) {
         return std::unexpected(hresult);
     }
