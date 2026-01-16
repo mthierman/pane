@@ -10,7 +10,7 @@
         "type": "git",
         "url": "https://github.com/mthierman/pane.git"
     },
-    "packageManager": "pnpm@10.19.0",
+    "packageManager": "pnpm@10.28.0",
     "type": "module",
     "exports": {
         ".": "./node/index.ts",
@@ -28,11 +28,11 @@
     },
     "devDependencies": {
         "@js-temporal/polyfill": "^0.5.1",
-        "@types/node": "^25.0.3",
+        "@types/node": "^25.0.9",
         "octokit": "^5.0.5",
-        "prettier": "^3.7.4",
+        "prettier": "^3.8.0",
         "typescript": "^5.9.3",
-        "vite": "^7.3.0",
+        "vite": "^7.3.1",
         "vite-plugin-singlefile": "^2.3.0"
     }
 }
