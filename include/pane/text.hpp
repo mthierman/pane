@@ -8,25 +8,25 @@
 // https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2019/p1423r3.html
 namespace pane {
 [[nodiscard]]
-inline constexpr auto string_view_cast(std::string_view s) -> std::u8string_view {
-    return { reinterpret_cast<const char8_t*>(s.data()), s.size() };
+inline constexpr auto string_view_cast(std::string_view string) -> std::u8string_view {
+    return { reinterpret_cast<const char8_t*>(string.data()), string.length() };
 }
 
 [[nodiscard]]
-inline constexpr auto string_view_cast(std::u8string_view s) -> std::string_view {
-    return { reinterpret_cast<const char*>(s.data()), s.size() };
+inline constexpr auto string_view_cast(std::u8string_view string) -> std::string_view {
+    return { reinterpret_cast<const char*>(string.data()), string.length() };
 }
 
 [[nodiscard]]
-inline constexpr auto string_view_cast(std::wstring_view s) -> std::u16string_view {
+inline constexpr auto string_view_cast(std::wstring_view string) -> std::u16string_view {
     static_assert(sizeof(wchar_t) == 2, "wchar_t must be 16-bit for this cast");
-    return { reinterpret_cast<const char16_t*>(s.data()), s.size() };
+    return { reinterpret_cast<const char16_t*>(string.data()), string.length() };
 }
 
 [[nodiscard]]
-inline constexpr auto string_view_cast(std::u16string_view s) -> std::wstring_view {
+inline constexpr auto string_view_cast(std::u16string_view string) -> std::wstring_view {
     static_assert(sizeof(wchar_t) == 2, "wchar_t must be 16-bit for this cast");
-    return { reinterpret_cast<const wchar_t*>(s.data()), s.size() };
+    return { reinterpret_cast<const wchar_t*>(string.data()), string.length() };
 }
 
 auto to_utf8(std::u16string_view string) -> std::expected<std::u8string, UErrorCode>;
@@ -51,8 +51,7 @@ auto validate_utf16(std::wstring_view string) -> std::expected<void, UErrorCode>
 namespace std {
 template <> struct formatter<std::u8string_view> : formatter<string_view> {
     auto format(std::u8string_view string, format_context& context) const noexcept {
-        return formatter<string_view>::format(
-            { reinterpret_cast<const char*>(string.data()), string.length() }, context);
+        return formatter<string_view>::format(pane::string_view_cast(string), context);
     }
 };
 
@@ -76,8 +75,7 @@ template <> struct formatter<std::u8string> : formatter<u8string_view> {
 
 template <> struct formatter<std::u16string_view, wchar_t> : formatter<wstring_view, wchar_t> {
     auto format(std::u16string_view string, wformat_context& context) const {
-        return formatter<wstring_view, wchar_t>::format(
-            { reinterpret_cast<const wchar_t*>(string.data()), string.length() }, context);
+        return formatter<wstring_view, wchar_t>::format(pane::string_view_cast(string), context);
     }
 };
 
