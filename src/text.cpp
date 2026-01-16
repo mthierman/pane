@@ -1,8 +1,13 @@
 #include <pane/text.hpp>
 #include "icu.h"
+#include <vector>
 
 namespace pane {
 auto to_utf8(std::u16string_view string) -> std::expected<std::u8string, UErrorCode> {
+    if (string.empty()) {
+        return {};
+    }
+
     int32_t length { 0 };
     auto error_code { U_ZERO_ERROR };
 
@@ -13,11 +18,11 @@ auto to_utf8(std::u16string_view string) -> std::expected<std::u8string, UErrorC
         return std::unexpected(error_code);
     }
 
-    std::u8string buffer(length, u8'\0');
+    std::vector<char> buffer(length);
     error_code = U_ZERO_ERROR;
 
-    u_strToUTF8(reinterpret_cast<char*>(buffer.data()),
-                static_cast<int32_t>(buffer.length()),
+    u_strToUTF8(buffer.data(),
+                static_cast<int32_t>(buffer.size()),
                 &length,
                 string.data(),
                 static_cast<int32_t>(string.length()),
@@ -29,7 +34,7 @@ auto to_utf8(std::u16string_view string) -> std::expected<std::u8string, UErrorC
 
     buffer.resize(length);
 
-    return buffer;
+    return std::u8string { reinterpret_cast<const char8_t*>(buffer.data()), buffer.size() };
 }
 
 auto to_utf8(std::wstring_view string) -> std::expected<std::u8string, UErrorCode> {
@@ -37,6 +42,10 @@ auto to_utf8(std::wstring_view string) -> std::expected<std::u8string, UErrorCod
 }
 
 auto to_utf8_lossy(std::u16string_view string, int32_t sub_char) -> std::u8string {
+    if (string.empty()) {
+        return {};
+    }
+
     int32_t length { 0 };
     auto error_code { U_ZERO_ERROR };
 
@@ -79,6 +88,10 @@ auto to_utf8_lossy(std::wstring_view string, int32_t sub_char) -> std::u8string 
 }
 
 auto to_utf16(std::u8string_view string) -> std::expected<std::u16string, UErrorCode> {
+    if (string.empty()) {
+        return {};
+    }
+
     int32_t length { 0 };
     auto error_code { U_ZERO_ERROR };
 
@@ -117,6 +130,10 @@ auto to_utf16(std::string_view string) -> std::expected<std::u16string, UErrorCo
 }
 
 auto to_utf16_lossy(std::u8string_view string, int32_t sub_char) -> std::u16string {
+    if (string.empty()) {
+        return {};
+    }
+
     int32_t length { 0 };
     auto error_code { U_ZERO_ERROR };
 
@@ -159,6 +176,10 @@ auto to_utf16_lossy(std::string_view string, int32_t sub_char) -> std::u16string
 }
 
 auto validate_utf8(std::u8string_view string) -> std::expected<void, UErrorCode> {
+    if (string.empty()) {
+        return {};
+    }
+
     int32_t length { 0 };
     auto error_code { U_ZERO_ERROR };
 
@@ -181,6 +202,10 @@ auto validate_utf8(std::string_view string) -> std::expected<void, UErrorCode> {
 }
 
 auto validate_utf16(std::u16string_view string) -> std::expected<void, UErrorCode> {
+    if (string.empty()) {
+        return {};
+    }
+
     int32_t length { 0 };
     auto error_code { U_ZERO_ERROR };
 
