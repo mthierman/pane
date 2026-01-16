@@ -176,6 +176,10 @@ auto validate_utf8(std::u8string_view string) -> std::expected<void, UErrorCode>
     return {};
 }
 
+auto validate_utf8(std::string_view string) -> std::expected<void, UErrorCode> {
+    return validate_utf8(string_view_cast(string));
+}
+
 auto validate_utf16(std::u16string_view string) -> std::expected<void, UErrorCode> {
     int32_t length { 0 };
     auto error_code { U_ZERO_ERROR };
@@ -188,5 +192,9 @@ auto validate_utf16(std::u16string_view string) -> std::expected<void, UErrorCod
     }
 
     return {};
+}
+
+auto validate_utf16(std::wstring_view string) -> std::expected<void, UErrorCode> {
+    return validate_utf16(string_view_cast(string));
 }
 } // namespace pane
