@@ -2,28 +2,6 @@
 #include "icu.h"
 
 namespace pane {
-[[nodiscard]]
-constexpr auto string_view_cast(std::string_view s) -> std::u8string_view {
-    return { reinterpret_cast<const char8_t*>(s.data()), s.size() };
-}
-
-[[nodiscard]]
-constexpr auto string_view_cast(std::u8string_view s) -> std::string_view {
-    return { reinterpret_cast<const char*>(s.data()), s.size() };
-}
-
-[[nodiscard]]
-constexpr auto string_view_cast(std::wstring_view s) -> std::u16string_view {
-    static_assert(sizeof(wchar_t) == 2, "wchar_t must be 16-bit for this cast");
-    return { reinterpret_cast<const char16_t*>(s.data()), s.size() };
-}
-
-[[nodiscard]]
-constexpr auto string_view_cast(std::u16string_view s) -> std::wstring_view {
-    static_assert(sizeof(wchar_t) == 2, "wchar_t must be 16-bit for this cast");
-    return { reinterpret_cast<const wchar_t*>(s.data()), s.size() };
-}
-
 auto to_utf8(std::u16string_view string) -> std::expected<std::u8string, UErrorCode> {
     int32_t length { 0 };
     auto error_code { U_ZERO_ERROR };
@@ -96,8 +74,8 @@ auto to_utf8_lossy(std::u16string_view string, int32_t sub_char) -> std::u8strin
     return buffer;
 }
 
-auto to_utf8_lossy(std::wstring_view string, int32_t /* sub_char */) -> std::u8string {
-    return to_utf8_lossy(string_view_cast(string));
+auto to_utf8_lossy(std::wstring_view string, int32_t sub_char) -> std::u8string {
+    return to_utf8_lossy(string_view_cast(string), sub_char);
 }
 
 auto to_utf16(std::u8string_view string) -> std::expected<std::u16string, UErrorCode> {
@@ -176,8 +154,8 @@ auto to_utf16_lossy(std::u8string_view string, int32_t sub_char) -> std::u16stri
     return buffer;
 }
 
-auto to_utf16_lossy(std::string_view string, int32_t /* sub_char */) -> std::u16string {
-    return to_utf16_lossy(string_view_cast(string));
+auto to_utf16_lossy(std::string_view string, int32_t sub_char) -> std::u16string {
+    return to_utf16_lossy(string_view_cast(string), sub_char);
 }
 
 auto validate_utf8(std::u8string_view string) -> std::expected<void, UErrorCode> {

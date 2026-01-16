@@ -7,6 +7,28 @@
 
 // https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2019/p1423r3.html
 namespace pane {
+[[nodiscard]]
+inline constexpr auto string_view_cast(std::string_view s) -> std::u8string_view {
+    return { reinterpret_cast<const char8_t*>(s.data()), s.size() };
+}
+
+[[nodiscard]]
+inline constexpr auto string_view_cast(std::u8string_view s) -> std::string_view {
+    return { reinterpret_cast<const char*>(s.data()), s.size() };
+}
+
+[[nodiscard]]
+inline constexpr auto string_view_cast(std::wstring_view s) -> std::u16string_view {
+    static_assert(sizeof(wchar_t) == 2, "wchar_t must be 16-bit for this cast");
+    return { reinterpret_cast<const char16_t*>(s.data()), s.size() };
+}
+
+[[nodiscard]]
+inline constexpr auto string_view_cast(std::u16string_view s) -> std::wstring_view {
+    static_assert(sizeof(wchar_t) == 2, "wchar_t must be 16-bit for this cast");
+    return { reinterpret_cast<const wchar_t*>(s.data()), s.size() };
+}
+
 auto to_utf8(std::u16string_view string) -> std::expected<std::u8string, UErrorCode>;
 auto to_utf8(std::wstring_view string) -> std::expected<std::u8string, UErrorCode>;
 
