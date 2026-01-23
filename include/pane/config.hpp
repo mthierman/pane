@@ -40,21 +40,21 @@ template <typename T> struct config final {
             std::string {}) };
     }
 
-    auto to_json(this const Self& self) -> std::expected<std::u8string, std::error_code> {
+    auto to_json(this const Self& self) -> std::expected<std::u8string, glz::error_code> {
         auto buffer { glz::write_json(self.settings) };
 
         if (!buffer) {
-            return std::unexpected(make_error_code(buffer.error().ec));
+            return std::unexpected(buffer.error().ec);
         }
 
         return std::u8string { buffer.value().begin(), buffer.value().end() };
     }
 
-    auto from_json(this Self& self, std::u8string json) -> std::expected<void, std::error_code> {
+    auto from_json(this Self& self, std::u8string json) -> std::expected<void, glz::error_code> {
         auto buffer { glz::read_json<T>(json) };
 
         if (!buffer) {
-            return std::unexpected(make_error_code(buffer.error().ec));
+            return std::unexpected(buffer.error().ec);
         }
 
         self.settings = buffer.value();
