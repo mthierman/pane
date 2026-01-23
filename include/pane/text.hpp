@@ -29,23 +29,47 @@ constexpr auto reinterpret_string_view(std::u16string_view string) noexcept -> s
     return { reinterpret_cast<const wchar_t*>(string.data()), string.length() };
 }
 
-auto to_utf8(std::u16string_view string) -> std::expected<std::u8string, UErrorCode>;
-auto to_utf8(std::wstring_view string) -> std::expected<std::u8string, UErrorCode>;
+[[nodiscard]]
+constexpr auto reinterpret_string(std::string_view string) -> std::u8string {
+    return { reinterpret_cast<const char8_t*>(string.data()), string.size() };
+}
 
-auto to_utf8_lossy(std::u16string_view string, int32_t sub_char = 0xFFFD) -> std::u8string;
-auto to_utf8_lossy(std::wstring_view string, int32_t sub_char = 0xFFFD) -> std::u8string;
+[[nodiscard]]
+constexpr auto reinterpret_string(std::u8string_view string) -> std::string {
+    return std::string { reinterpret_cast<const char*>(string.data()), string.size() };
+}
 
-auto to_utf16(std::u8string_view string) -> std::expected<std::u16string, UErrorCode>;
-auto to_utf16(std::string_view string) -> std::expected<std::u16string, UErrorCode>;
+[[nodiscard]]
+constexpr auto reinterpret_string(std::wstring_view string) -> std::u16string {
+    static_assert(sizeof(wchar_t) == 2, "wchar_t must be 16-bit (Windows only)");
 
-auto to_utf16_lossy(std::u8string_view string, int32_t sub_char = 0xFFFD) -> std::u16string;
-auto to_utf16_lossy(std::string_view string, int32_t sub_char = 0xFFFD) -> std::u16string;
+    return std::u16string { reinterpret_cast<const char16_t*>(string.data()), string.size() };
+}
 
-auto validate_utf8(std::u8string_view string) -> std::expected<void, UErrorCode>;
-auto validate_utf8(std::string_view string) -> std::expected<void, UErrorCode>;
+[[nodiscard]]
+constexpr auto reinterpret_string(std::u16string_view string) -> std::wstring {
+    static_assert(sizeof(wchar_t) == 2, "wchar_t must be 16-bit (Windows only)");
 
-auto validate_utf16(std::u16string_view string) -> std::expected<void, UErrorCode>;
-auto validate_utf16(std::wstring_view string) -> std::expected<void, UErrorCode>;
+    return std::wstring { reinterpret_cast<const wchar_t*>(string.data()), string.size() };
+}
+
+auto utf16_to_utf8(std::u16string_view string) -> std::expected<std::u8string, UErrorCode>;
+auto utf16_to_utf8(std::wstring_view string) -> std::expected<std::u8string, UErrorCode>;
+
+auto utf16_to_utf8_replace(std::u16string_view string, int32_t sub_char = 0xFFFD) -> std::u8string;
+auto utf16_to_utf8_replace(std::wstring_view string, int32_t sub_char = 0xFFFD) -> std::u8string;
+
+auto utf8_to_utf16(std::u8string_view string) -> std::expected<std::u16string, UErrorCode>;
+auto utf8_to_utf16(std::string_view string) -> std::expected<std::u16string, UErrorCode>;
+
+auto utf8_to_utf16_replace(std::u8string_view string, int32_t sub_char = 0xFFFD) -> std::u16string;
+auto utf8_to_utf16_replace(std::string_view string, int32_t sub_char = 0xFFFD) -> std::u16string;
+
+auto check_utf8(std::u8string_view string) -> std::expected<void, UErrorCode>;
+auto check_utf8(std::string_view string) -> std::expected<void, UErrorCode>;
+
+auto check_utf16(std::u16string_view string) -> std::expected<void, UErrorCode>;
+auto check_utf16(std::wstring_view string) -> std::expected<void, UErrorCode>;
 } // namespace pane
 
 namespace std {

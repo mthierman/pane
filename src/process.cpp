@@ -11,16 +11,10 @@ process::process(const std::filesystem::path& path, std::u8string_view command_l
     pi.hProcess = process_handle.get();
     pi.hThread = thread_handle.get();
 
-    CreateProcessW(path.c_str(),
-                   reinterpret_cast<wchar_t*>(pane::to_utf16_lossy(command_line).data()),
-                   nullptr,
-                   nullptr,
-                   FALSE,
-                   0,
-                   nullptr,
-                   nullptr,
-                   &si,
-                   &pi);
+    auto cmd = pane::reinterpret_string(pane::utf8_to_utf16_replace(command_line));
+
+    CreateProcessW(
+        path.c_str(), cmd.data(), nullptr, nullptr, FALSE, 0, nullptr, nullptr, &si, &pi);
     WaitForSingleObject(pi.hProcess, INFINITE);
 }
 } // namespace pane

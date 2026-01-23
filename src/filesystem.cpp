@@ -106,7 +106,7 @@ auto erase_file(const std::filesystem::path& path) -> std::expected<void, HRESUL
 
 auto download_file(const std::filesystem::path& path, ada::url url)
     -> std::expected<void, HRESULT> {
-    auto u16_url = pane::to_utf16_lossy(url.get_href());
+    auto u16_url = pane::utf8_to_utf16_replace(url.get_href());
 
     if (auto hresult { URLDownloadToFileW(
             nullptr, reinterpret_string_view(u16_url).data(), path.c_str(), 0, nullptr) };

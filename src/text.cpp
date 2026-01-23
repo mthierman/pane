@@ -3,7 +3,7 @@
 #include <vector>
 
 namespace pane {
-auto to_utf8(std::u16string_view string) -> std::expected<std::u8string, UErrorCode> {
+auto utf16_to_utf8(std::u16string_view string) -> std::expected<std::u8string, UErrorCode> {
     if (string.empty()) {
         return {};
     }
@@ -37,11 +37,11 @@ auto to_utf8(std::u16string_view string) -> std::expected<std::u8string, UErrorC
     return std::u8string { reinterpret_cast<const char8_t*>(buffer.data()), buffer.size() };
 }
 
-auto to_utf8(std::wstring_view string) -> std::expected<std::u8string, UErrorCode> {
-    return to_utf8(reinterpret_string_view(string));
+auto utf16_to_utf8(std::wstring_view string) -> std::expected<std::u8string, UErrorCode> {
+    return utf16_to_utf8(reinterpret_string_view(string));
 }
 
-auto to_utf8_lossy(std::u16string_view string, int32_t sub_char) -> std::u8string {
+auto utf16_to_utf8_replace(std::u16string_view string, int32_t sub_char) -> std::u8string {
     if (string.empty()) {
         return {};
     }
@@ -83,11 +83,11 @@ auto to_utf8_lossy(std::u16string_view string, int32_t sub_char) -> std::u8strin
     return std::u8string { reinterpret_cast<const char8_t*>(buffer.data()), buffer.size() };
 }
 
-auto to_utf8_lossy(std::wstring_view string, int32_t sub_char) -> std::u8string {
-    return to_utf8_lossy(reinterpret_string_view(string), sub_char);
+auto utf16_to_utf8_replace(std::wstring_view string, int32_t sub_char) -> std::u8string {
+    return utf16_to_utf8_replace(reinterpret_string_view(string), sub_char);
 }
 
-auto to_utf16(std::u8string_view string) -> std::expected<std::u16string, UErrorCode> {
+auto utf8_to_utf16(std::u8string_view string) -> std::expected<std::u16string, UErrorCode> {
     if (string.empty()) {
         return {};
     }
@@ -125,11 +125,11 @@ auto to_utf16(std::u8string_view string) -> std::expected<std::u16string, UError
     return std::u16string { buffer.data(), buffer.size() };
 }
 
-auto to_utf16(std::string_view string) -> std::expected<std::u16string, UErrorCode> {
-    return to_utf16(reinterpret_string_view(string));
+auto utf8_to_utf16(std::string_view string) -> std::expected<std::u16string, UErrorCode> {
+    return utf8_to_utf16(reinterpret_string_view(string));
 }
 
-auto to_utf16_lossy(std::u8string_view string, int32_t sub_char) -> std::u16string {
+auto utf8_to_utf16_replace(std::u8string_view string, int32_t sub_char) -> std::u16string {
     if (string.empty()) {
         return {};
     }
@@ -171,11 +171,11 @@ auto to_utf16_lossy(std::u8string_view string, int32_t sub_char) -> std::u16stri
     return std::u16string { buffer.data(), buffer.size() };
 }
 
-auto to_utf16_lossy(std::string_view string, int32_t sub_char) -> std::u16string {
-    return to_utf16_lossy(reinterpret_string_view(string), sub_char);
+auto utf8_to_utf16_replace(std::string_view string, int32_t sub_char) -> std::u16string {
+    return utf8_to_utf16_replace(reinterpret_string_view(string), sub_char);
 }
 
-auto validate_utf8(std::u8string_view string) -> std::expected<void, UErrorCode> {
+auto check_utf8(std::u8string_view string) -> std::expected<void, UErrorCode> {
     if (string.empty()) {
         return {};
     }
@@ -197,11 +197,11 @@ auto validate_utf8(std::u8string_view string) -> std::expected<void, UErrorCode>
     return {};
 }
 
-auto validate_utf8(std::string_view string) -> std::expected<void, UErrorCode> {
-    return validate_utf8(reinterpret_string_view(string));
+auto check_utf8(std::string_view string) -> std::expected<void, UErrorCode> {
+    return check_utf8(reinterpret_string_view(string));
 }
 
-auto validate_utf16(std::u16string_view string) -> std::expected<void, UErrorCode> {
+auto check_utf16(std::u16string_view string) -> std::expected<void, UErrorCode> {
     if (string.empty()) {
         return {};
     }
@@ -219,7 +219,7 @@ auto validate_utf16(std::u16string_view string) -> std::expected<void, UErrorCod
     return {};
 }
 
-auto validate_utf16(std::wstring_view string) -> std::expected<void, UErrorCode> {
-    return validate_utf16(reinterpret_string_view(string));
+auto check_utf16(std::wstring_view string) -> std::expected<void, UErrorCode> {
+    return check_utf16(reinterpret_string_view(string));
 }
 } // namespace pane
