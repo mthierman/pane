@@ -16,7 +16,7 @@ add_subdirectory(cppwinrt)
 
 # https://github.com/stephenberry/glaze
 # https://github.com/stephenberry/glaze/releases
-set(PANE_GLAZE_VERSION "7.0.0")
+set(PANE_GLAZE_VERSION "7.0.1")
 add_subdirectory(glaze)
 
 # https://sqlite.org/
