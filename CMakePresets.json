@@ -31,7 +31,7 @@
             }
         },
         {
-            "name": "msbuild-clang-cl",
+            "name": "msbuild-clangcl",
             "hidden": true,
             "generator": "Visual Studio 18 2026",
             "architecture": {
@@ -53,7 +53,7 @@
             }
         },
         {
-            "name": "ninja-clang-cl",
+            "name": "ninja-clangcl",
             "hidden": true,
             "generator": "Ninja",
             "cacheVariables": {
@@ -69,7 +69,20 @@
                 "CMAKE_C_COMPILER": "cl",
                 "CMAKE_CXX_COMPILER": "cl"
             }
+        },
+        {
+            "name": "release",
+            "inherits": ["ninja-clang"],
+            "binaryDir": "${sourceDir}/build",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release"
+            }
         }
     ],
-    "buildPresets": []
+    "buildPresets": [
+        {
+            "name": "release",
+            "configurePreset": "release"
+        }
+    ]
 }
