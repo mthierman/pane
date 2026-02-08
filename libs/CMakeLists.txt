@@ -2,7 +2,7 @@ include(FetchContent)
 
 # https://github.com/ada-url/ada
 # https://github.com/ada-url/ada/releases
-set(PANE_ADA_VERSION "3.4.1")
+set(PANE_ADA_VERSION "3.4.2")
 add_subdirectory(ada)
 
 # https://github.com/stephenberry/argz
@@ -16,7 +16,7 @@ add_subdirectory(cppwinrt)
 
 # https://github.com/stephenberry/glaze
 # https://github.com/stephenberry/glaze/releases
-set(PANE_GLAZE_VERSION "7.0.1")
+set(PANE_GLAZE_VERSION "7.0.2")
 add_subdirectory(glaze)
 
 # https://sqlite.org/
@@ -26,9 +26,9 @@ add_subdirectory(sqlite)
 
 # https://www.nuget.org/packages/Microsoft.Web.WebView2
 # https://learn.microsoft.com/en-us/microsoft-edge/webview2/landing/
-set(PANE_WEBVIEW2_VERSION "1.0.3650.58")
+set(PANE_WEBVIEW2_VERSION "1.0.3719.77")
 add_subdirectory(webview2)
 
 # https://www.nuget.org/packages/Microsoft.Windows.ImplementationLibrary
-set(PANE_WIL_VERSION "1.0.250325.1")
+set(PANE_WIL_VERSION "1.0.260126.7")
 add_subdirectory(wil)
