@@ -3,7 +3,6 @@
     "include": ["./examples/webview/gui/src/**/*.ts"],
     "compilerOptions": {
         "lib": ["ESNext", "DOM", "DOM.Iterable"],
-        "types": ["vite/client"],
-        "tsBuildInfoFile": "./node_modules/.tmp/vite/tsconfig.tsbuildinfo"
+        "types": ["vite/client"]
     }
 }

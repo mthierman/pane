@@ -3,7 +3,6 @@
     "include": ["./examples/webview/gui/vite.config.ts"],
     "compilerOptions": {
         "lib": ["ESNext"],
-        "types": ["node", "vite/client"],
-        "tsBuildInfoFile": "./node_modules/.tmp/vite/tsconfig.tsbuildinfo"
+        "types": ["node", "vite/client"]
     }
 }

@@ -3,7 +3,6 @@
     "include": ["npde/**/*.ts"],
     "compilerOptions": {
         "lib": ["ESNext", "DOM", "DOM.Iterable"],
-        "composite": true,
-        "tsBuildInfoFile": "./node_modules/.tmp/pane/tsconfig.tsbuildinfo"
+        "composite": true
     }
 }
