@@ -5,7 +5,7 @@ import { viteSingleFile } from "vite-plugin-singlefile";
 export default defineConfig(({ command }) => {
     const userConfig: UserConfig = {
         base: "./",
-        plugins: [viteSingleFile()]
+        plugins: [viteSingleFile()],
     };
 
     const commonServerOptions: CommonServerOptions = {};
@@ -15,12 +15,12 @@ export default defineConfig(({ command }) => {
             return {
                 ...userConfig,
                 server: { ...commonServerOptions },
-                preview: { ...commonServerOptions }
+                preview: { ...commonServerOptions },
             };
         }
         case "build": {
             return {
-                ...userConfig
+                ...userConfig,
             };
         }
     }

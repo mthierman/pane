@@ -3,12 +3,12 @@ import "./webview";
 declare global {
     interface CustomElementRegistry {
         get<K extends keyof HTMLElementTagNameMap>(
-            name: K
+            name: K,
         ): (new () => HTMLElementTagNameMap[K]) | undefined;
         define<K extends keyof HTMLElementTagNameMap>(
             name: K,
             constructor: new () => HTMLElementTagNameMap[K],
-            options?: ElementDefinitionOptions
+            options?: ElementDefinitionOptions,
         ): void;
     }
 }
@@ -45,8 +45,8 @@ export class WebViewComponent extends Component {
     dispatchWebViewEvent<T = unknown>(event: WebViewMessageEvent<T>) {
         super.dispatchEvent(
             new CustomEvent(event.data.type, {
-                detail: event.data.payload
-            })
+                detail: event.data.payload,
+            }),
         );
 
         return this;
