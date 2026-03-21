@@ -12,37 +12,36 @@ declare global {
         addEventListener<T = unknown>(
             type: "message",
             listener: (event: WebViewMessageEvent<T>) => void,
-            options?: boolean | AddEventListenerOptions,
+            options?: boolean | AddEventListenerOptions
         ): void;
         addEventListener<T = unknown, U = unknown>(
             type: "sharedbufferreceived",
             listener: (event: SharedBufferReceivedEvent<T, U>) => void,
-            options?: boolean | AddEventListenerOptions,
+            options?: boolean | AddEventListenerOptions
         ): void;
         addEventListener(
             type: string,
             listener: EventListenerOrEventListenerObject,
-            options?: boolean | AddEventListenerOptions,
+            options?: boolean | AddEventListenerOptions
         ): void;
         postMessage(message: unknown): void;
         postMessageWithAdditionalObjects(
             message: unknown,
-            additionalObjects: ArrayLike<unknown>,
+            additionalObjects: ArrayLike<unknown>
         ): void;
         releaseBuffer(buffer: ArrayBuffer): void;
         removeEventListener(
             type: string,
             listener: EventListenerOrEventListenerObject,
-            options?: boolean | EventListenerOptions,
+            options?: boolean | EventListenerOptions
         ): void;
     }
 
-    interface WebViewMessageEvent<T = unknown>
-        extends MessageEvent<
-            {
-                [K in Extract<keyof T, string>]: { type: K; payload: T[K] };
-            }[Extract<keyof T, string>]
-        > {
+    interface WebViewMessageEvent<T = unknown> extends MessageEvent<
+        {
+            [K in Extract<keyof T, string>]: { type: K; payload: T[K] };
+        }[Extract<keyof T, string>]
+    > {
         additionalObjects: ArrayLike<FileSystemFileHandle | FileSystemDirectoryHandle | null>;
         source: WebView & MessageEventSource;
     }

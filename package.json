@@ -1,22 +1,22 @@
 {
-    "private": true,
-    "author": "mthierman",
     "name": "pane",
     "version": "0.0.0",
+    "private": true,
     "description": "C++ library for Windows",
-    "symbol": "🪟",
     "homepage": "https://github.com/mthierman/pane",
+    "author": "mthierman",
     "repository": {
         "type": "git",
         "url": "https://github.com/mthierman/pane.git"
     },
-    "packageManager": "pnpm@10.32.1",
     "type": "module",
     "exports": {
         ".": "./node/index.ts",
         "./webview": "./node/webview.ts"
     },
     "scripts": {
+        "fmt": "oxfmt",
+        "fmt:check": "oxfmt --check",
         "cmake-debug": "cmake --preset debug && cmake --build --preset debug",
         "cmake-release": "cmake --preset release && cmake --build --preset release",
         "check": "tsc -b",
@@ -34,5 +34,7 @@
         "typescript": "^5.9.3",
         "vite": "^8.0.1",
         "vite-plugin-singlefile": "^2.3.2"
-    }
+    },
+    "packageManager": "pnpm@10.32.1",
+    "symbol": "🪟"
 }

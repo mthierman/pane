@@ -14,7 +14,7 @@ declare global {
 }
 
 const app = {
-    address_bar: Page.createElement({ tagName: "pane-address-bar", id: "address-bar" }),
+    address_bar: Page.createElement({ tagName: "pane-address-bar", id: "address-bar" })
 };
 
 window.chrome.webview.addEventListener<event_payload>("message", (event) => {
